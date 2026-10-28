@@ -108,7 +108,7 @@ function bindPond() {
 let activeCircle = null;
 function exampleCircle() {
   const k = dayKey();
-  return { example: true, name: 'FWS310 study circle', members: {
+  return { example: true, name: 'Library study circle', members: {
     me: meAsMember(), 'ex-lina': { name: 'Lina', animal: 'otter', pet: 'Miso', day: k, mins: 50 }, 'ex-sami': { name: 'Sami', animal: 'capybara', pet: 'Biscuit', day: k, mins: 90 }, 'ex-noor': { name: 'Noor', animal: 'rabbit', pet: 'Clover', day: '', mins: 0 } } };
 }
 function lotusSVG(members) {

@@ -45,7 +45,7 @@
   <aside class="side" aria-label="Main">
     <a class="brand" href="#focus" data-go="focus" aria-label="Grind home">
       <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 24l15.5-7.5A17 12 0 1 1 31 9z" fill="var(--pad)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M14 22c3-3.2 7-4.6 11-4.3" fill="none" stroke="var(--pad-2)" stroke-width="2" stroke-linecap="round"/><circle cx="33" cy="30" r="5.5" fill="var(--bloom)" stroke="var(--ink)" stroke-width="2"/><circle cx="33" cy="30" r="1.8" fill="var(--glow)"/></svg>
-      <span><b>Grind</b><small>FWS310 study pond</small></span>
+      <span><b>Grind</b><small>Study pond</small></span>
     </a>
     <nav class="nav" id="nav">
       <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
@@ -189,7 +189,7 @@
         <div class="row"><div class="circle-tabs" id="circleTabs"></div></div>
         <div id="circleView"></div>
         <div class="grid g-2">
-          <form class="card" id="createCircle"><h2>Start a circle</h2><p class="muted" style="margin:6px 0 12px">You get a code to share with your study friends.</p><div class="add-peb"><input class="inp" id="circleName" maxlength="40" placeholder="FWS310 study group" required><button class="btn primary" type="submit">Create</button></div></form>
+          <form class="card" id="createCircle"><h2>Start a circle</h2><p class="muted" style="margin:6px 0 12px">You get a code to share with your study friends.</p><div class="add-peb"><input class="inp" id="circleName" maxlength="40" placeholder="Weekend study group" required><button class="btn primary" type="submit">Create</button></div></form>
           <form class="card" id="joinCircle"><h2>Join with a code</h2><p class="muted" style="margin:6px 0 12px">Ask a friend for their six-letter circle code.</p><div class="add-peb"><input class="inp" id="circleCode" maxlength="6" placeholder="LOTUS7" required style="text-transform:uppercase; letter-spacing:.12em"><button class="btn" type="submit">Join</button></div></form>
         </div>
       </section>
@@ -241,7 +241,7 @@
           <div class="g-hero-txt">
             <span class="hand" style="color:var(--rose); font-size:1.5rem">About three minutes to read</span>
             <h2>Everything Grind can do, step by step</h2>
-            <p class="muted">Grind is a calm study space for FWS310. Time your focus, split big tasks into small pebbles, and study next to your classmates' animals. Read it top to bottom, or tap a step to jump straight to it.</p>
+            <p class="muted">Grind is a calm space to study. Time your focus, split big tasks into small pebbles, and study next to your classmates' animals. Read it top to bottom, or tap a step to jump straight to it.</p>
             <div class="g-toc" id="gToc">
               <a href="#g-1" data-gjump="1"><b>1</b>Get started</a>
               <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
@@ -275,7 +275,7 @@
           </article>
           <article class="card g-sec" id="g-4">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pebble"/></svg></span><div><span class="eyebrow">Step 4</span><h2>Break big tasks into pebbles</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
+            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
           <article class="card g-sec" id="g-5">
@@ -318,7 +318,7 @@
       </section>
 
       <section class="view" id="v-feedback">
-        <p class="muted" style="max-width:62ch">Grind is a student project for FWS310. Tell us what helps you study and what gets in the way. It takes about a minute, and you do not need to sign in.</p>
+        <p class="muted" style="max-width:62ch">Grind is a student project. Tell us what helps you study and what gets in the way. It takes about a minute, and you do not need to sign in.</p>
         <div class="grid g-focus">
           <form class="card" id="fbForm">
             <div class="stack" style="gap:20px">
