@@ -240,7 +240,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback' };
+const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -258,6 +258,7 @@ function go(v) {
   if (v === 'profile') { renderProfile(); renderFriends(); }
   if (v === 'pebbles') renderRocks();
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
+  if (v === 'guide') renderGuide();
   window.scrollTo({ top: 0 });
 }
 function renderChips() {
@@ -313,7 +314,7 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback();
+  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide();
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();
@@ -327,3 +328,26 @@ function boot() {
   initNet();
 }
 boot();
+
+/* guide */
+function renderGuide() {
+  $('#gHeroPic').innerHTML = avatarSVG(S.active, 'happy');
+  $('#gLink').textContent = (location.host + location.pathname).replace(/\/(index\.html)?$/, '');
+}
+function bindGuide() {
+  $('#v-guide').addEventListener('click', async e => {
+    const j = e.target.closest('[data-gjump]');
+    if (j) {
+      e.preventDefault();
+      const el = $('#g-' + j.dataset.gjump);
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1400);
+      return;
+    }
+    if (e.target.closest('[data-guide-custom]')) { openDrawer(true); return; }
+    if (e.target.closest('#gCopy')) {
+      try { await navigator.clipboard.writeText(location.origin + location.pathname.replace(/index\.html$/, '')); toast('Link copied. Send it to your classmates.'); }
+      catch (err) { toast('Copy is not available here. Select the link and copy it.'); }
+    }
+  });
+}

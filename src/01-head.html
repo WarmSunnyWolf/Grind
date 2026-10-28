@@ -451,4 +451,29 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{animation:none!important; transition:none!important}
 }
+
+/* guide */
+.g-hero{display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:24px; align-items:center; padding:28px}
+.g-hero h2{font-size:clamp(1.5rem,2.6vw,2.1rem); margin:2px 0 8px}
+.g-hero-pic svg{width:100%; height:auto; overflow:visible}
+.g-toc{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+.g-toc a{display:inline-flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border:1px solid var(--line); border-radius:999px; background:var(--surface-2); color:var(--ink); text-decoration:none; font-size:.86rem; font-weight:600}
+.g-toc a b{display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-size:.74rem}
+.g-toc a:hover{border-color:var(--accent)}
+.g-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:16px}
+.g-sec{display:flex; flex-direction:column; gap:12px; scroll-margin-top:20px}
+.g-sec.flash{box-shadow:0 0 0 3px var(--accent)}
+.g-head{display:flex; gap:12px; align-items:center}
+.g-head h2{font-size:1.25rem}
+.g-ic{flex:none; display:grid; place-items:center; width:44px; height:44px; border-radius:14px; background:var(--surface-2); color:var(--pad)}
+.g-ic svg{width:22px; height:22px}
+.g-steps{margin:0; padding:0; list-style:none; counter-reset:g; display:flex; flex-direction:column; gap:9px}
+.g-steps li{counter-increment:g; position:relative; padding-left:32px; font-size:.93rem; line-height:1.5}
+.g-steps li::before{content:counter(g); position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%; border:1.5px solid var(--line); display:grid; place-items:center; font-size:.72rem; font-weight:700; color:var(--muted)}
+.g-tip{font-size:.86rem; color:var(--ink-2); background:var(--surface-2); border-radius:12px; padding:10px 12px}
+.g-sec .row{margin-top:auto}
+.g-share{grid-column:1/-1}
+.g-link{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.g-link code{font-size:.95rem; padding:8px 12px; border-radius:10px; background:var(--surface-2); overflow-wrap:anywhere}
+@media (max-width:860px){.g-list{grid-template-columns:minmax(0,1fr)} .g-hero{grid-template-columns:minmax(0,1fr); padding:20px} .g-hero-pic{display:none}}
 </style>

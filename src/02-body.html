@@ -58,6 +58,7 @@
     </nav>
     <div class="side-foot">
       <button class="me-mini" data-go="profile" id="meMini"><span class="av" id="meMiniAv"></span><span><b id="meMiniName">Student</b><span id="meMiniSub">Profile and courses</span></span></button>
+      <button class="ghost-btn" data-go="guide"><svg><use href="#i-info"/></svg>How to use Grind</button>
       <button class="ghost-btn" data-go="feedback"><svg><use href="#i-comment"/></svg>Send feedback</button>
       <button class="ghost-btn" id="openCustomize"><svg><use href="#i-gear"/></svg>Customize</button>
     </div>
@@ -75,7 +76,7 @@
           <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
           <span class="chip" title="Coins"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></span>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
-          <span class="mobile-top"><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
+          <span class="mobile-top"><button class="icon-btn" data-go="guide" aria-label="How to use Grind"><svg><use href="#i-info"/></svg></button><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
       </header>
 
@@ -235,6 +236,87 @@
       </section>
 
       <!-- FEEDBACK -->
+      <section class="view" id="v-guide">
+        <div class="card g-hero">
+          <div class="g-hero-txt">
+            <span class="hand" style="color:var(--rose); font-size:1.5rem">About three minutes to read</span>
+            <h2>Everything Grind can do, step by step</h2>
+            <p class="muted">Grind is a calm study space for FWS310. Time your focus, split big tasks into small pebbles, and study next to your classmates' animals. Read it top to bottom, or tap a step to jump straight to it.</p>
+            <div class="g-toc" id="gToc">
+              <a href="#g-1" data-gjump="1"><b>1</b>Get started</a>
+              <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
+              <a href="#g-3" data-gjump="3"><b>3</b>Time a study session</a>
+              <a href="#g-4" data-gjump="4"><b>4</b>Break big tasks into pebbles</a>
+              <a href="#g-5" data-gjump="5"><b>5</b>Meet people in the pond</a>
+              <a href="#g-6" data-gjump="6"><b>6</b>Study with friends in a circle</a>
+              <a href="#g-7" data-gjump="7"><b>7</b>Share notes in the Commons</a>
+              <a href="#g-8" data-gjump="8"><b>8</b>Earn coins and new animals</a>
+              <a href="#g-9" data-gjump="9"><b>9</b>See your progress</a>
+              <a href="#g-10" data-gjump="10"><b>10</b>Make it yours</a>
+            </div>
+          </div>
+          <div class="g-hero-pic" id="gHeroPic" aria-hidden="true"></div>
+        </div>
+        <div class="g-list">
+          <article class="card g-sec" id="g-1">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-user"/></svg></span><div><span class="eyebrow">Step 1</span><h2>Get started</h2></div></div>
+            <ol class="g-steps"><li>Pick an animal, give it a name, and add your university and major. You can change all of this later.</li><li>Click <b>Sign in to join the pond</b> at the top right and choose your Google account.</li><li>Signed in, your progress follows you to any phone or laptop and your animal appears in the shared pond. Without signing in, everything stays in this browser only.</li></ol>
+            <div class="row"><button class="btn small primary" data-signin>Sign in with Google</button></div>
+          </article>
+          <article class="card g-sec" id="g-2">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-file"/></svg></span><div><span class="eyebrow">Step 2</span><h2>Add your courses</h2></div></div>
+            <ol class="g-steps"><li>Click your name card at the bottom of the menu (on a phone, the person icon at the top).</li><li>Under <b>Semesters and courses</b>, type a course like AIRE410 and click <b>Add</b>. Each course gets its own colour.</li><li>Starting a new term? Click <b>Add semester</b>, rename it, and click <b>Make current</b>. Old semesters stay in your journal.</li></ol>
+            <div class="row"><button class="btn small" data-go="profile">Show me courses</button></div>
+          </article>
+          <article class="card g-sec" id="g-3">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Slide <b>Focus length</b> (1 to 120 minutes) and <b>Rest length</b> (1 to 30), or tap a quick pick like 25 · 5.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves.</p>
+            <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
+          </article>
+          <article class="card g-sec" id="g-4">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-pebble"/></svg></span><div><span class="eyebrow">Step 4</span><h2>Break big tasks into pebbles</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
+            <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
+          </article>
+          <article class="card g-sec" id="g-5">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company.</li></ol>
+            <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
+          </article>
+          <article class="card g-sec" id="g-6">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-lotus"/></svg></span><div><span class="eyebrow">Step 6</span><h2>Study with friends in a circle</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Together</b>, name a circle under <b>Start a circle</b>, and click <b>Create</b>.</li><li>You get a six-letter code. Send it, with the site link, to your study friends.</li><li>They sign in, open Together, and type it under <b>Join with a code</b>. The lotus opens fully on days when everyone has studied.</li></ol>
+            <div class="row"><button class="btn small" data-go="together">Show me circles</button></div>
+          </article>
+          <article class="card g-sec" id="g-7">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 7</span><h2>Share notes in the Commons</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and your notes. You can paste a Google Drive link to a file.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
+            <div class="row"><button class="btn small" data-go="commons">Show me the Commons</button></div>
+          </article>
+          <article class="card g-sec" id="g-8">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Earn coins and new animals</h2></div></div>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt the rabbit (40), otter (80) or fox (120). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
+            <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
+          </article>
+          <article class="card g-sec" id="g-9">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 9</span><h2>See your progress</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li>Pick a semester at the top to look back at one term.</li></ol>
+            <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
+          </article>
+          <article class="card g-sec" id="g-10">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 10</span><h2>Make it yours</h2></div></div>
+            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off. <b>Demo speed</b> makes one minute pass in one second, for presenting.</li><li>Export your data or sign out from the same panel.</li></ol>
+            <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
+          </article>
+          <article class="card g-sec g-share" id="g-11">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-ripple"/></svg></span><div><span class="eyebrow">Last step</span><h2>Invite classmates and tell us what you think</h2></div></div>
+            <p class="muted">Send this link to anyone. It works on phones and laptops, with nothing to install.</p>
+            <div class="g-link"><code id="gLink">warmsunnywolf.github.io/Grind</code><button class="btn small primary" id="gCopy">Copy link</button></div>
+            <div class="row"><button class="btn small" data-go="feedback">Send feedback</button></div>
+          </article>
+        </div>
+      </section>
+
       <section class="view" id="v-feedback">
         <p class="muted" style="max-width:62ch">Grind is a student project for FWS310. Tell us what helps you study and what gets in the way. It takes about a minute, and you do not need to sign in.</p>
         <div class="grid g-focus">
