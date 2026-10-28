@@ -86,6 +86,14 @@ function renderRipples() {
   $('#rippleMini').innerHTML = items.length ? items.slice(0, 3).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
     : `<li class="muted">No ripples yet. Send one to someone in the pond, it makes their day.</li>`;
 }
+function likedBy(p, me) {
+  const names = p.likes.map(id => id === me ? 'you' : ((p.likeNames || {})[id] || (NET.pond.find(r => r.id === id) || {}).name || 'a classmate'));
+  names.sort((a, b) => (b === 'you') - (a === 'you'));
+  const shown = names.slice(0, 3).map(n => n === 'you' ? 'you' : `<b>${esc(n)}</b>`);
+  const more = names.length - shown.length;
+  const list = more > 0 ? `${shown.join(', ')} and ${more} ${more === 1 ? 'other' : 'others'}` : shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}` : shown[0];
+  return `Liked by ${list}`;
+}
 function toggleFriend(id) {
   const adding = !S.friends.includes(id);
   S.friends = adding ? [...S.friends, id] : S.friends.filter(x => x !== id);
@@ -203,6 +211,7 @@ function renderFeed() {
       ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
       ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
       ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
+      ${p.likes.length ? `<p class="liked-by">${icon('i-heart')}<span>${likedBy(p, me)}</span></p>` : ''}
       <div class="post-a"><button class="btn small ${liked ? 'liked' : ''}" data-like aria-pressed="${liked}">${icon('i-heart')}<span class="num">${p.likes.length || ''}</span> ${liked ? 'Liked' : 'Like'}</button><button class="btn small" data-cm>${icon('i-comment')}${p.comments.length || ''} Comment</button></div>
       ${openComments.has(p.id) ? `<div class="comments">${p.comments.map(c => `<p class="cm"><b>${esc(c.by === me ? 'You' : c.name)}</b> ${esc(c.text)} <span class="muted" style="font-size:.75rem">${ago(c.at)}</span></p>`).join('')}
         <form class="add-peb" data-cform><input class="inp" name="t" maxlength="500" placeholder="Say something kind" aria-label="Comment"><button class="btn small" type="submit">Send</button></form></div>` : ''}
@@ -240,7 +249,7 @@ function bindCommons() {
   $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
   $('#feed').addEventListener('click', e => {
     const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
-    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likes = p.likes.includes(me) ? p.likes.filter(x => x !== me) : [...p.likes, me]; }); return; }
+    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); } }); return; }
     if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
     if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
     if (e.target.closest('[data-delpno]')) { renderFeed(); return; }

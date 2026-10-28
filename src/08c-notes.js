@@ -8,7 +8,7 @@ function collectNotes() {
   if (me) (NET.posts || []).filter(p => p.by === me).forEach(p => {
     p.comments.filter(c => c.by !== me).forEach(c => out.push({ at: c.at, kind: 'comment', who: c.name, animal: 'frog', text: `commented on “${p.title}”: “${c.text}”` }));
     const n = p.likes.filter(x => x !== me).length, seen = (S.seenLikes || {})[p.id] || 0;
-    if (n > seen) out.push({ at: Date.now(), kind: 'like', unread: true, who: '', animal: S.active, text: `${n - seen} new ${n - seen === 1 ? 'like' : 'likes'} on “${p.title}”. ${n} in total.` });
+    if (n > seen) { const who = p.likes.filter(x => x !== me).slice(-(n - seen)).map(id => (p.likeNames || {})[id] || 'A classmate'); out.push({ at: Date.now(), kind: 'like', unread: true, who: '', animal: S.active, text: `${who.length > 2 ? `${who.slice(0, 2).join(', ')} and ${who.length - 2} more` : who.join(' and ')} liked “${p.title}”. ${n} ${n === 1 ? 'like' : 'likes'} in total.` }); }
   });
   out.forEach(n => { if (n.unread === undefined) n.unread = n.at > (S.seenNote || 0); });
   return out.sort((a, b) => b.at - a.at).slice(0, 40);

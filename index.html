@@ -519,6 +519,9 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .note-t small{display:block; color:var(--muted); font-size:.76rem}
 .note-empty{font-size:.9rem; color:var(--muted); display:flex; flex-direction:column; gap:10px; align-items:flex-start}
 @media (max-width:640px){.note-panel{position:fixed; top:70px; left:16px; right:16px; width:auto}}
+
+.liked-by{display:flex; align-items:center; gap:6px; font-size:.84rem; color:var(--ink-2); margin:2px 0 -2px}
+.liked-by svg{width:15px; height:15px; color:var(--rose); flex:none}
 </style>
 </head>
 <body>
@@ -1765,6 +1768,7 @@ function cleanPost(id, d) {
     id, by: clampStr(d.by, 80), name: clampStr(d.name, 40) || 'Someone', animal: ANIMAL_OK(d.animal), kind: ['note', 'done', 'win'].includes(d.kind) ? d.kind : 'note',
     course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 2000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
     at: +d.at || 0, likes: Array.isArray(d.likes) ? d.likes.slice(0, 500).map(x => clampStr(x, 80)) : [],
+    likeNames: Object.fromEntries(Object.entries(d.likeNames && typeof d.likeNames === 'object' ? d.likeNames : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), clampStr(v, 40)])),
     comments: Array.isArray(d.comments) ? d.comments.slice(-100).map(c => ({ by: clampStr(c.by, 80), name: clampStr(c.name, 40) || 'Someone', text: clampStr(c.text, 500), at: +c.at || 0 })) : []
   };
 }
@@ -2391,6 +2395,14 @@ function renderRipples() {
   $('#rippleMini').innerHTML = items.length ? items.slice(0, 3).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
     : `<li class="muted">No ripples yet. Send one to someone in the pond, it makes their day.</li>`;
 }
+function likedBy(p, me) {
+  const names = p.likes.map(id => id === me ? 'you' : ((p.likeNames || {})[id] || (NET.pond.find(r => r.id === id) || {}).name || 'a classmate'));
+  names.sort((a, b) => (b === 'you') - (a === 'you'));
+  const shown = names.slice(0, 3).map(n => n === 'you' ? 'you' : `<b>${esc(n)}</b>`);
+  const more = names.length - shown.length;
+  const list = more > 0 ? `${shown.join(', ')} and ${more} ${more === 1 ? 'other' : 'others'}` : shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}` : shown[0];
+  return `Liked by ${list}`;
+}
 function toggleFriend(id) {
   const adding = !S.friends.includes(id);
   S.friends = adding ? [...S.friends, id] : S.friends.filter(x => x !== id);
@@ -2508,6 +2520,7 @@ function renderFeed() {
       ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
       ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
       ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
+      ${p.likes.length ? `<p class="liked-by">${icon('i-heart')}<span>${likedBy(p, me)}</span></p>` : ''}
       <div class="post-a"><button class="btn small ${liked ? 'liked' : ''}" data-like aria-pressed="${liked}">${icon('i-heart')}<span class="num">${p.likes.length || ''}</span> ${liked ? 'Liked' : 'Like'}</button><button class="btn small" data-cm>${icon('i-comment')}${p.comments.length || ''} Comment</button></div>
       ${openComments.has(p.id) ? `<div class="comments">${p.comments.map(c => `<p class="cm"><b>${esc(c.by === me ? 'You' : c.name)}</b> ${esc(c.text)} <span class="muted" style="font-size:.75rem">${ago(c.at)}</span></p>`).join('')}
         <form class="add-peb" data-cform><input class="inp" name="t" maxlength="500" placeholder="Say something kind" aria-label="Comment"><button class="btn small" type="submit">Send</button></form></div>` : ''}
@@ -2545,7 +2558,7 @@ function bindCommons() {
   $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
   $('#feed').addEventListener('click', e => {
     const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
-    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likes = p.likes.includes(me) ? p.likes.filter(x => x !== me) : [...p.likes, me]; }); return; }
+    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); } }); return; }
     if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
     if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
     if (e.target.closest('[data-delpno]')) { renderFeed(); return; }
@@ -2640,7 +2653,7 @@ function collectNotes() {
   if (me) (NET.posts || []).filter(p => p.by === me).forEach(p => {
     p.comments.filter(c => c.by !== me).forEach(c => out.push({ at: c.at, kind: 'comment', who: c.name, animal: 'frog', text: `commented on “${p.title}”: “${c.text}”` }));
     const n = p.likes.filter(x => x !== me).length, seen = (S.seenLikes || {})[p.id] || 0;
-    if (n > seen) out.push({ at: Date.now(), kind: 'like', unread: true, who: '', animal: S.active, text: `${n - seen} new ${n - seen === 1 ? 'like' : 'likes'} on “${p.title}”. ${n} in total.` });
+    if (n > seen) { const who = p.likes.filter(x => x !== me).slice(-(n - seen)).map(id => (p.likeNames || {})[id] || 'A classmate'); out.push({ at: Date.now(), kind: 'like', unread: true, who: '', animal: S.active, text: `${who.length > 2 ? `${who.slice(0, 2).join(', ')} and ${who.length - 2} more` : who.join(' and ')} liked “${p.title}”. ${n} ${n === 1 ? 'like' : 'likes'} in total.` }); }
   });
   out.forEach(n => { if (n.unread === undefined) n.unread = n.at > (S.seenNote || 0); });
   return out.sort((a, b) => b.at - a.at).slice(0, 40);

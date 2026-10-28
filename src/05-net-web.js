@@ -171,6 +171,7 @@ function cleanPost(id, d) {
     id, by: clampStr(d.by, 80), name: clampStr(d.name, 40) || 'Someone', animal: ANIMAL_OK(d.animal), kind: ['note', 'done', 'win'].includes(d.kind) ? d.kind : 'note',
     course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 2000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
     at: +d.at || 0, likes: Array.isArray(d.likes) ? d.likes.slice(0, 500).map(x => clampStr(x, 80)) : [],
+    likeNames: Object.fromEntries(Object.entries(d.likeNames && typeof d.likeNames === 'object' ? d.likeNames : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), clampStr(v, 40)])),
     comments: Array.isArray(d.comments) ? d.comments.slice(-100).map(c => ({ by: clampStr(c.by, 80), name: clampStr(c.name, 40) || 'Someone', text: clampStr(c.text, 500), at: +c.at || 0 })) : []
   };
 }
