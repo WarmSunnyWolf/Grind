@@ -171,7 +171,7 @@
         <div class="row" style="justify-content:space-between">
           <p class="muted" style="max-width:60ch">A big task is a rock. Split it into pebbles small enough to start right now. Every pebble you finish lays a stepping stone across the pond.</p>
           <div class="row">
-            <label class="btn" for="icsFile"><svg><use href="#i-upload"/></svg>Import Blackboard calendar</label>
+            <button type="button" class="btn" data-icsopen><svg><use href="#i-upload"/></svg>Import Blackboard calendar</button>
             <input type="file" id="icsFile" accept=".ics,text/calendar" class="sr">
             <button class="btn primary" id="newRockBtn"><svg><use href="#i-plus"/></svg>New rock</button>
           </div>
@@ -197,7 +197,7 @@
       <section class="view" id="v-cal">
         <div class="row" style="justify-content:space-between">
           <p class="muted" style="max-width:60ch">Every deadline, exam and lab in one month. Click a day to see it, double click to add. Grind reminds you before things are due, and rocks with a due date from Pebbles show up here too.</p>
-          <div class="row"><label class="btn" for="icsFile"><svg><use href="#i-upload"/></svg>Import Blackboard calendar</label><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
+          <div class="row"><button type="button" class="btn" data-icsopen><svg><use href="#i-upload"/></svg>Import Blackboard calendar</button><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
         </div>
         <form class="card" id="evForm" hidden>
           <div class="card-h"><h2 id="evFormTitle">Add to your calendar</h2><button type="button" class="icon-btn" id="evCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
@@ -330,7 +330,7 @@
           </article>
           <article class="card g-sec" id="g-4">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pebble"/></svg></span><div><span class="eyebrow">Step 4</span><h2>Break big tasks into pebbles</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Bring in all your Blackboard due dates at once: in Blackboard open <b>Calendar</b>, click the settings gear, choose <b>Share Calendar</b> (or <b>Get external calendar link</b>), copy the link, and paste it into your browser to download the .ics file. Then click <b>Import Blackboard calendar</b> here or on the Calendar page and choose that file.</p>
+            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Bring in all your Blackboard due dates at once: in Blackboard open <b>Calendar</b>, click the gear, choose <b>Share Calendar</b> and click <b>Copy</b>. Then click <b>Import Blackboard calendar</b> here or on the Calendar page and paste the link. Past events are skipped.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
           <article class="card g-sec" id="g-4b">
@@ -466,6 +466,13 @@
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="icsModal" role="dialog" aria-modal="true" aria-labelledby="icsTitle"><div class="modal-box">
+  <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><h2 id="icsTitle">Import from Blackboard</h2><button class="icon-btn" data-icsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <ol class="g-steps"><li>In Blackboard, open <b>Calendar</b>, click the gear, and choose <b>Share Calendar</b>. Click <b>Copy</b>.</li><li>Paste the link below and click <b>Import</b>.</li></ol>
+  <form class="row" id="icsLinkForm" style="flex-wrap:nowrap"><input class="inp" id="icsLink" type="url" placeholder="https://blackboard.../calendar/..." aria-label="Blackboard calendar link" style="flex:1; min-width:0" required><button class="btn primary" type="submit">Import</button></form>
+  <div id="icsHelp"></div>
+  <p class="muted" style="font-size:.84rem">Already have the .ics file? <label for="icsFile" style="text-decoration:underline; cursor:pointer; color:var(--ink)">Choose the file</label>. Your link stays on this device. Do not share it, since anyone with it can see your Blackboard calendar.</p>
+</div></div>
 <div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Picture"><div class="modal-box img-box" id="imgBox"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="tip" id="tip"></div>

@@ -137,8 +137,26 @@ function bindPebbles() {
     save(); renderRocks(); renderNextPebble();
     const nf = $(`[data-rock="${CSS.escape(r.id)}"] [data-addpeb] input`); nf && nf.focus();
   });
+  const icsDone = n => { $('#icsModal').classList.remove('on'); toast(n ? `Imported ${n} deadlines from your calendar. They are in Pebbles and on your Calendar.` : 'No upcoming deadlines found. Past events are skipped.'); renderRocks(); renderNextPebble(); renderCal(); renderCalDot(); };
+  document.addEventListener('click', e => { if (e.target.closest('[data-icsopen]')) { $('#icsHelp').innerHTML = ''; $('#icsModal').classList.add('on'); setTimeout(() => $('#icsLink').focus(), 50); } });
+  $('#icsModal').onclick = e => { if (e.target.id === 'icsModal' || e.target.closest('[data-icsclose]')) $('#icsModal').classList.remove('on'); };
+  $('#icsLinkForm').onsubmit = async e => {
+    e.preventDefault();
+    const url = $('#icsLink').value.trim().replace(/^webcal:\/\//i, 'https://');
+    if (!/^https:\/\//i.test(url)) { $('#icsHelp').innerHTML = '<p class="muted">That does not look like a link. It should start with https://</p>'; return; }
+    $('#icsHelp').innerHTML = '<p class="muted">Reading your calendar...</p>';
+    try {
+      const r = await fetch(url); const t = await r.text();
+      if (!/BEGIN:VCALENDAR/.test(t)) throw new Error('not ics');
+      icsDone(importICS(t));
+    } catch (err) {
+      // most universities block other sites from reading the link directly, so let the browser download it
+      $('#icsHelp').innerHTML = `<div class="card flat" style="padding:14px"><p style="margin:0 0 10px">Blackboard did not let Grind read the link directly. Two quick steps instead:</p><div class="row"><a class="btn small primary" href="${esc(url)}" target="_blank" rel="noopener noreferrer">1. Download the file</a><label class="btn small" for="icsFile">2. Choose the downloaded file</label></div></div>`;
+    }
+  };
   $('#icsFile').onchange = async e => {
     const f = e.target.files[0]; if (!f) return;
+    if ($('#icsModal').classList.contains('on')) { try { icsDone(importICS(await f.text())); } catch (err) { toast('That file could not be read. Make sure it ends in .ics and try again.'); } e.target.value = ''; return; }
     try { const n = importICS(await f.text()); toast(n ? `Imported ${n} deadlines from your calendar. They are in Pebbles and on your Calendar.` : 'No upcoming assignments found in that file.'); }
     catch (err) { toast('That file could not be read. Export the calendar from Blackboard as an .ics file and try again.'); }
     e.target.value = ''; renderRocks(); renderNextPebble(); renderCal(); renderCalDot();
