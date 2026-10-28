@@ -52,7 +52,15 @@ function signIn() {
   if (!FB) { toast('Sign-in is still loading. Try again in a moment.'); return; }
   FB.authM.signInWithPopup(FB.auth, new FB.authM.GoogleAuthProvider()).catch(e => {
     if (e && e.code === 'auth/popup-closed-by-user') return;
-    toast('Sign-in did not finish. Check that pop-ups are allowed and try again.');
+    const code = (e && e.code) || '';
+    const why = {
+      'auth/unauthorized-domain': 'This web address is not on the Authorized domains list in Firebase yet.',
+      'auth/operation-not-allowed': 'Google sign-in is not switched on in Firebase yet.',
+      'auth/popup-blocked': 'The browser blocked the sign-in window. Allow pop-ups for this site and try again.',
+      'auth/cancelled-popup-request': 'Another sign-in window is already open.',
+      'auth/network-request-failed': 'The connection dropped. Check your internet and try again.'
+    }[code] || 'Please try again in a moment.';
+    toast(`Sign-in did not finish. ${why}${code ? ` <span style="opacity:.6">(${esc(code)})</span>` : ''}`);
   });
 }
 function signOut() { if (FB) FB.authM.signOut(FB.auth); }
