@@ -1,0 +1,2416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Cpath d=%22M24 24l15.5-7.5A17 12 0 1 1 31 9z%22 fill=%22%236f8f4e%22 stroke=%22%2322352a%22 stroke-width=%222%22/%3E%3Ccircle cx=%2233%22 cy=%2230%22 r=%225.5%22 fill=%22%23e9bcb3%22 stroke=%22%2322352a%22 stroke-width=%222%22/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Grind</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Grind is a calm study companion for FWS310. Focus with a pond animal, split rocks into pebbles, and study alongside friends.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Nanum+Pen+Script&display=swap">
+<style>
+/* Layout: a field-journal desk. Pinned left spine of navigation, a wide pond "stage" per view,
+   with paper cards beside it. On phones the spine becomes a bottom tab bar. */
+:root{
+  --bg:#efe6d5; --bg-2:#e6dac4; --surface:#f8f2e7; --surface-2:#eee4d2; --line:#d6c7ab; --line-2:#c4b291;
+  --ink:#22352a; --ink-2:#4b5a4a; --muted:#7a7d69;
+  --accent:#2f5a3f; --accent-ink:#f8f2e7; --moss:#7f8f55; --rose:#b07a6e; --rose-soft:#ecd5cc; --gold:#c39a43;
+  --sky:#eadfc8; --water:#a2baa6; --water-2:#86a48f; --water-hi:#cbdbc8; --pad:#6f8f4e; --pad-2:#57763d;
+  --bank:#cdb995; --reed:#5d6d3c; --bloom:#e9bcb3; --glow:#f4e3a3; --shadow:rgba(52,40,24,.14);
+  --f-display:"Young Serif", "Iowan Old Style", Georgia, serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-hand:"Nanum Pen Script", "Comic Sans MS", cursive;
+  --r-s:10px; --r-m:16px; --r-l:26px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#131b16; --bg-2:#18221c; --surface:#1d2922; --surface-2:#24332a; --line:#32443a; --line-2:#435a4c;
+  --ink:#ede4d1; --ink-2:#c3bca8; --muted:#8f9481;
+  --accent:#a9c48b; --accent-ink:#14201a; --moss:#93a468; --rose:#d29b8e; --rose-soft:#47312d; --gold:#d9b65f;
+  --sky:#17241e; --water:#2a463b; --water-2:#20392f; --water-hi:#3e5f51; --pad:#4d6e3b; --pad-2:#3b5631;
+  --bank:#29352a; --reed:#3d4c31; --bloom:#d7a3a0; --glow:#f3e49c; --shadow:rgba(0,0,0,.35);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#131b16; --bg-2:#18221c; --surface:#1d2922; --surface-2:#24332a; --line:#32443a; --line-2:#435a4c;
+  --ink:#ede4d1; --ink-2:#c3bca8; --muted:#8f9481;
+  --accent:#a9c48b; --accent-ink:#14201a; --moss:#93a468; --rose:#d29b8e; --rose-soft:#47312d; --gold:#d9b65f;
+  --sky:#17241e; --water:#2a463b; --water-2:#20392f; --water-hi:#3e5f51; --pad:#4d6e3b; --pad-2:#3b5631;
+  --bank:#29352a; --reed:#3d4c31; --bloom:#d7a3a0; --glow:#f3e49c; --shadow:rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{min-height:100%}
+body{background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--moss) 10%, transparent) 0, transparent 40%),
+                   radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--rose) 10%, transparent) 0, transparent 45%);
+  min-height:100vh;}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:50; background:var(--bg)}
+button,input,select,textarea{font:inherit; color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2.5px solid var(--rose); outline-offset:2px; border-radius:8px}
+h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; margin:0; text-wrap:balance; letter-spacing:-.005em}
+h1{font-size:clamp(1.6rem,1.2rem + 1.4vw,2.3rem); line-height:1.1}
+h2{font-size:1.35rem; line-height:1.2}
+h3{font-size:1.08rem; line-height:1.25}
+p{margin:0}
+.hand{font-family:var(--f-hand); font-size:1.35em; line-height:1; letter-spacing:.01em}
+.eyebrow{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute!important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* ---------- shell ---------- */
+.app{display:grid; grid-template-columns:236px minmax(0,1fr); min-height:100%}
+.side{position:sticky; top:env(safe-area-inset-top,0px); height:calc(100vh - env(safe-area-inset-top,0px)); display:flex; flex-direction:column; gap:22px;
+  padding:26px 16px 20px max(16px, env(safe-area-inset-left,0px)); border-right:1px solid var(--line); background:color-mix(in srgb, var(--surface) 55%, transparent)}
+.brand{display:flex; align-items:center; gap:10px; padding:0 8px; text-decoration:none; color:var(--ink)}
+.brand svg{width:40px; height:40px; flex:none}
+.brand b{font-family:var(--f-display); font-weight:400; font-size:1.7rem; line-height:1}
+.brand small{display:block; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:3px}
+.nav{display:flex; flex-direction:column; gap:3px}
+.nav button{display:flex; align-items:center; gap:12px; border:0; background:none; padding:10px 12px; border-radius:12px; color:var(--ink-2); font-weight:500; text-align:left; position:relative}
+.nav button svg{width:21px; height:21px; flex:none}
+.nav button:hover{background:var(--surface-2); color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--accent); color:var(--accent-ink)}
+.nav .dot{position:absolute; right:12px; width:8px; height:8px; border-radius:50%; background:var(--rose)}
+.side-foot{margin-top:auto; display:flex; flex-direction:column; gap:10px}
+.me-mini{display:flex; align-items:center; gap:10px; padding:8px; border-radius:14px; border:1px solid var(--line); background:var(--surface); text-align:left; width:100%}
+.me-mini .av{width:40px; height:40px; border-radius:50%; background:var(--water-hi); flex:none; overflow:hidden}
+.me-mini .av svg{width:100%; height:100%}
+.me-mini b{display:block; font-weight:600; font-size:.92rem; line-height:1.2}
+.me-mini span{font-size:.78rem; color:var(--muted)}
+.ghost-btn{display:flex; align-items:center; gap:10px; border:0; background:none; color:var(--ink-2); padding:8px 12px; border-radius:10px; font-weight:500}
+.ghost-btn:hover{background:var(--surface-2)}
+.ghost-btn svg{width:19px; height:19px}
+
+.main{min-width:0; padding-block:22px 60px; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+.main-in{max-width:1180px; margin:0 auto; display:flex; flex-direction:column; gap:22px; padding-inline:clamp(0px,2vw,18px)}
+.top{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.top .greet .hand{color:var(--rose); font-size:1.6rem; display:block; margin-bottom:2px}
+.chips{display:flex; gap:8px; flex-wrap:wrap}
+.chip{display:inline-flex; align-items:center; gap:7px; padding:7px 12px 7px 9px; border-radius:999px; background:var(--surface); border:1px solid var(--line); font-weight:600; font-size:.88rem; white-space:nowrap}
+.chip svg{width:20px; height:20px}
+.chip.sync{font-weight:500; color:var(--muted)}
+.chip.sync i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block}
+.chip.sync.on i{background:var(--moss); box-shadow:0 0 0 3px color-mix(in srgb,var(--moss) 25%,transparent)}
+.chip.demo{background:var(--rose); color:#fff; border-color:transparent}
+
+.view{display:none; flex-direction:column; gap:22px; animation:viewin .35s ease}
+.view.on{display:flex}
+@keyframes viewin{from{transform:translateY(6px)}to{transform:none}}
+
+/* ---------- cards & controls ---------- */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); padding:20px; min-width:0}
+.card.flat{background:transparent; border-style:dashed}
+.card-h{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap}
+.grid{display:grid; gap:18px}
+.g-focus{grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr)}
+.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stack{display:flex; flex-direction:column; gap:18px; min-width:0}
+.row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--line-2); background:var(--surface); color:var(--ink); padding:9px 16px; border-radius:999px; font-weight:600; font-size:.92rem; transition:transform .12s, background .15s}
+.btn:hover{background:var(--surface-2)}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:18px; height:18px}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.btn.primary:hover{background:color-mix(in srgb, var(--accent) 88%, var(--ink))}
+.btn.rose{background:var(--rose); border-color:var(--rose); color:#fff}
+.btn.big{padding:13px 26px; font-size:1.02rem}
+.btn.small{padding:6px 12px; font-size:.84rem}
+.btn.quiet{border-color:transparent; background:transparent}
+.btn.quiet:hover{background:var(--surface-2)}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+.icon-btn{width:36px; height:36px; display:inline-grid; place-items:center; border-radius:50%; border:1px solid var(--line); background:var(--surface); color:var(--ink-2)}
+.icon-btn:hover{background:var(--surface-2); color:var(--ink)}
+.icon-btn svg{width:18px; height:18px}
+label.f{display:flex; flex-direction:column; gap:6px; font-size:.82rem; font-weight:600; color:var(--ink-2); min-width:0}
+.inp, select.inp, textarea.inp{width:100%; border:1px solid var(--line-2); background:var(--bg); border-radius:12px; padding:9px 12px; font-size:.95rem; font-weight:400; color:var(--ink)}
+textarea.inp{resize:vertical; min-height:84px}
+.inp:focus{outline:2px solid var(--moss); outline-offset:0; border-color:transparent}
+.seg{display:inline-flex; padding:4px; border-radius:999px; background:var(--surface-2); border:1px solid var(--line); gap:2px; flex-wrap:wrap}
+.seg button{border:0; background:none; padding:7px 14px; border-radius:999px; font-weight:600; font-size:.86rem; color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 3px var(--shadow)}
+.pill{display:inline-flex; align-items:center; gap:6px; font-size:.75rem; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--surface-2); color:var(--ink-2); white-space:nowrap}
+.pill i{width:8px; height:8px; border-radius:50%; display:inline-block}
+.pill.example{background:transparent; border:1px dashed var(--line-2); color:var(--muted)}
+.empty{padding:22px; text-align:center; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:8px}
+.empty .hand{color:var(--ink-2)}
+input[type=range]{accent-color:var(--accent); width:100%}
+
+/* ---------- pond stage ---------- */
+.stage{position:relative; border-radius:var(--r-l); overflow:hidden; border:1px solid var(--line); background:var(--sky); isolation:isolate}
+.stage > svg.scene{display:block; width:100%; height:auto}
+.stage canvas.fx{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:3}
+.stage .over{position:absolute; inset:0; z-index:4; pointer-events:none}
+.stage .over > *{pointer-events:auto}
+
+.stage .stars, .stage .moon{display:none}
+.stage[data-sky="night"] .stars, .stage[data-sky="night"] .moon{display:inline}
+.stage[data-sky="night"] .sun{display:none}
+.stage[data-sky="night"] .tint{opacity:.34}
+.stage[data-sky="dusk"] .tint{fill:#b5624c; opacity:.14}
+.stage[data-sky="night"] .timer-ov, .stage[data-sky="night"] .pet-tag{color:#f4ecda}
+.stage[data-sky="night"] .timer-ov .sub, .stage[data-sky="night"] .pet-tag span{color:#ddd3bf}
+.stage[data-sky="night"] .timer-ov .phase{color:#f1c6b8}
+.stage[data-sky="night"] .prog{background:rgba(255,255,255,.18)}
+.stage[data-sky="dusk"] .sun{fill:#f0b27a}
+.focus-stage{aspect-ratio:16/10; max-width:100%}
+.focus-stage > svg.scene{position:absolute; inset:0; height:100%; width:100%}
+.hero-pet{position:absolute; left:50%; top:58%; width:34%; max-width:300px; transform:translate(-50%,-50%); z-index:2; transition:filter .6s}
+.hero-pet > svg{width:100%; height:auto; display:block; overflow:visible}
+.hero-pet.focus::before{content:""; position:absolute; inset:8% 4% 2%; border-radius:50%; background:radial-gradient(closest-side, color-mix(in srgb,var(--glow) 55%,transparent), transparent); z-index:-1; animation:aura 3.2s ease-in-out infinite}
+@keyframes aura{50%{transform:scale(1.08); opacity:.7}}
+.timer-ov{position:absolute; left:clamp(14px,3vw,28px); top:clamp(12px,3vw,24px); z-index:5; display:flex; flex-direction:column; gap:2px; color:var(--ink)}
+.timer-ov .phase{font-family:var(--f-hand); font-size:1.6rem; color:var(--rose); line-height:1}
+.timer-ov .clock{font-family:var(--f-display); font-size:clamp(2.6rem,1.6rem + 4vw,4.8rem); line-height:1; font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+.timer-ov .sub{font-size:.86rem; color:var(--ink-2); font-weight:500; max-width:28ch}
+.pet-tag{position:absolute; right:clamp(14px,3vw,24px); top:clamp(12px,3vw,22px); z-index:5; text-align:right}
+.pet-tag b{font-family:var(--f-display); font-weight:400; font-size:1.25rem; display:block}
+.pet-tag span{font-size:.8rem; color:var(--ink-2)}
+.prog{position:absolute; left:6%; right:6%; bottom:6%; height:6px; border-radius:6px; background:color-mix(in srgb, var(--ink) 12%, transparent); z-index:5; overflow:visible}
+.prog i{position:absolute; left:0; top:0; bottom:0; border-radius:6px; background:var(--accent); width:0}
+.prog b{position:absolute; top:50%; width:16px; height:16px; border-radius:50%; background:var(--surface); border:3px solid var(--accent); transform:translate(-50%,-50%); left:0}
+.speech{position:absolute; left:68%; top:30%; transform:translateX(-50%); z-index:6; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:8px 14px; font-family:var(--f-hand); font-size:1.45rem; line-height:1.1; max-width:80%; text-align:center; box-shadow:0 6px 18px var(--shadow); opacity:0; transition:opacity .35s, transform .35s; pointer-events:none}
+.speech.show{opacity:1; transform:translate(-50%,-4px)}
+
+.controls{display:flex; flex-direction:column; gap:16px}
+.dur-row{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px}
+.dur{display:flex; flex-direction:column; gap:8px}
+.dur-top{display:flex; justify-content:space-between; align-items:baseline}
+.dur-top b{font-family:var(--f-display); font-weight:400; font-size:1.5rem}
+.dur-top b small{font-family:var(--f-body); font-size:.8rem; color:var(--muted); margin-left:3px}
+.stepper{display:flex; gap:6px; align-items:center}
+.stepper input[type=number]{width:64px; text-align:center}
+
+/* next pebble */
+.next-peb{display:flex; gap:14px; align-items:flex-start}
+.peb-shape{flex:none; width:44px; height:34px}
+.next-peb h3{margin-bottom:4px}
+.done-list{display:flex; flex-direction:column; gap:2px; list-style:none; margin:0; padding:0}
+.done-list li{display:flex; align-items:center; gap:10px; padding:8px 2px; border-bottom:1px dashed var(--line); font-size:.9rem}
+.done-list li:last-child{border-bottom:0}
+.done-list svg{width:18px; height:18px; flex:none; color:var(--moss)}
+.done-list .t{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.mini-stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.mini-stats div{background:var(--surface-2); border-radius:14px; padding:10px 12px}
+.mini-stats b{font-family:var(--f-display); font-weight:400; font-size:1.5rem; display:block; line-height:1.1}
+.mini-stats span{font-size:.75rem; color:var(--muted); font-weight:600}
+
+/* ---------- pebbles ---------- */
+.rock-list{display:flex; flex-direction:column; gap:16px}
+.rock{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden}
+.rock-head{display:flex; gap:14px; align-items:center; padding:16px 18px; cursor:pointer}
+.rock-head .rk{width:52px; height:42px; flex:none}
+.rock-head .meta{flex:1; min-width:0}
+.rock-head h3{overflow-wrap:anywhere}
+.rock-head .sub{display:flex; gap:8px; flex-wrap:wrap; margin-top:5px; align-items:center}
+.rock-body{padding:0 18px 18px; display:flex; flex-direction:column; gap:14px}
+.crossing{border-radius:18px; overflow:hidden; border:1px solid var(--line)}
+.crossing > svg{display:block; width:100%; height:auto}
+.peb-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+.peb{display:flex; gap:12px; align-items:center; padding:8px 10px; border-radius:12px; background:var(--bg)}
+.peb.done .tx{text-decoration:line-through; text-decoration-color:var(--moss); color:var(--muted)}
+.peb .tx{flex:1; min-width:0; overflow-wrap:anywhere}
+.peb .mins{font-size:.78rem; color:var(--muted); white-space:nowrap}
+.chk{width:26px; height:26px; flex:none; border-radius:50% 46% 52% 48%; border:2px solid var(--line-2); background:var(--surface); display:grid; place-items:center; padding:0}
+.chk svg{width:16px; height:16px; opacity:0; color:var(--accent-ink)}
+.peb.done .chk{background:var(--moss); border-color:var(--moss)}
+.peb.done .chk svg{opacity:1}
+.add-peb{display:flex; gap:8px}
+.add-peb .inp{flex:1}
+.ai-box{border:1px dashed var(--line-2); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; background:color-mix(in srgb, var(--water-hi) 30%, transparent)}
+.ai-box ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:4px}
+.due{font-size:.78rem; font-weight:600; color:var(--ink-2)}
+.prog-bar{height:6px; border-radius:6px; background:var(--surface-2); overflow:hidden; width:100%; max-width:220px}
+.prog-bar i{display:block; height:100%; background:var(--moss); border-radius:6px}
+
+/* ---------- community pond ---------- */
+.pond-stage{aspect-ratio:16/9}
+.pond-stage > svg.scene{position:absolute; inset:0; width:100%; height:100%}
+.resident{position:absolute; width:clamp(64px,11%,118px); transform:translate(-50%,-62%); border:0; background:none; padding:0; display:flex; flex-direction:column; align-items:center; gap:2px; z-index:4}
+.resident > svg{width:100%; height:auto; overflow:visible; display:block}
+.resident .plate{font-size:.72rem; font-weight:700; background:var(--surface); border:1px solid var(--line); padding:2px 8px; border-radius:999px; white-space:nowrap; max-width:140px; overflow:hidden; text-overflow:ellipsis; box-shadow:0 2px 6px var(--shadow)}
+.resident .plate.focus{background:var(--accent); color:var(--accent-ink); border-color:transparent}
+.resident.me .plate{outline:2px solid var(--rose); outline-offset:1px}
+.resident:hover > svg{transform:translateY(-3px)}
+.resident > svg{transition:transform .2s}
+.ripple-ring{position:absolute; width:20px; height:10px; border:2.5px solid color-mix(in srgb,var(--surface) 85%,transparent); border-radius:50%; transform:translate(-50%,-50%); z-index:3; pointer-events:none; animation:ripple 1.8s ease-out forwards}
+@keyframes ripple{to{width:260px; height:90px; opacity:0; border-width:1px}}
+.pop{position:absolute; z-index:20; width:min(300px,86vw); background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:0 14px 40px var(--shadow); padding:16px; display:flex; flex-direction:column; gap:10px}
+.pop .ph{display:flex; gap:12px; align-items:center}
+.pop .ph .av{width:56px; height:56px; border-radius:50%; background:var(--water-hi); flex:none; overflow:hidden}
+.pop .ph .av svg{width:100%; height:100%}
+.pop .msgs{display:flex; flex-wrap:wrap; gap:6px}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:.82rem; color:var(--ink-2)}
+.legend span{display:inline-flex; gap:6px; align-items:center}
+.legend i{width:10px; height:10px; border-radius:50%; display:inline-block}
+.ripple-feed{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+.ripple-feed li{display:flex; gap:10px; align-items:center; font-size:.9rem}
+.ripple-feed .av{width:34px; height:34px; border-radius:50%; background:var(--water-hi); flex:none; overflow:hidden}
+.ripple-feed .av svg{width:100%; height:100%}
+.ripple-feed q{font-family:var(--f-hand); font-size:1.3rem; quotes:none}
+.ripple-feed small{color:var(--muted); display:block; font-size:.75rem}
+
+/* ---------- together ---------- */
+.lotus-wrap{display:grid; grid-template-columns:minmax(220px,320px) minmax(0,1fr); gap:20px; align-items:center}
+.lotus-wrap svg{width:100%; height:auto}
+.member-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+.member-list li{display:flex; gap:12px; align-items:center; padding:8px 10px; border-radius:14px; background:var(--bg)}
+.member-list .av{width:38px; height:38px; border-radius:50%; background:var(--water-hi); flex:none; overflow:hidden}
+.member-list .av svg{width:100%; height:100%}
+.member-list .nm{flex:1; min-width:0}
+.member-list .nm b{display:block; font-weight:600; font-size:.92rem}
+.member-list .nm span{font-size:.78rem; color:var(--muted)}
+.code{font-family:var(--f-display); font-size:1.1rem; letter-spacing:.14em; padding:4px 10px; border-radius:10px; background:var(--surface-2); border:1px dashed var(--line-2); user-select:all}
+.circle-tabs{display:flex; gap:8px; flex-wrap:wrap}
+
+/* ---------- commons ---------- */
+.composer{display:flex; flex-direction:column; gap:12px}
+.feed{display:flex; flex-direction:column; gap:14px}
+.post{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); padding:18px; display:flex; flex-direction:column; gap:10px}
+.post-h{display:flex; gap:12px; align-items:center}
+.post-h .av{width:42px; height:42px; border-radius:50%; background:var(--water-hi); overflow:hidden; flex:none}
+.post-h .av svg{width:100%; height:100%}
+.post-h .who{flex:1; min-width:0}
+.post-h .who b{font-weight:600; display:block; line-height:1.2}
+.post-h .who span{font-size:.78rem; color:var(--muted)}
+.post .body{white-space:pre-wrap; overflow-wrap:anywhere}
+.post .attach{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:var(--bg); border:1px solid var(--line); font-size:.88rem; overflow-wrap:anywhere}
+.post .attach svg{width:20px; height:20px; flex:none; color:var(--rose)}
+.post-a{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.post-a .btn svg{width:17px}
+.post-a .btn.liked{color:var(--rose); border-color:var(--rose)}
+.post-a .btn.liked svg path{fill:var(--rose)}
+.comments{display:flex; flex-direction:column; gap:8px; border-top:1px dashed var(--line); padding-top:10px}
+.cm{font-size:.88rem; overflow-wrap:anywhere}
+.cm b{font-weight:600}
+.achv{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:16px; background:color-mix(in srgb, var(--glow) 35%, var(--surface)); border:1px solid color-mix(in srgb, var(--gold) 40%, transparent)}
+.achv svg{width:34px; height:34px; flex:none}
+.achv b{font-family:var(--f-display); font-weight:400; font-size:1.05rem}
+
+/* ---------- sanctuary ---------- */
+.zoo{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+@media (max-width:760px){.zoo{grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}}
+.beast{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px; position:relative}
+.beast .pic{border-radius:18px; background:radial-gradient(ellipse 40% 9% at 50% 89%, var(--pad) 96%, transparent 100%), linear-gradient(var(--water-hi), var(--water)); aspect-ratio:5/4; display:grid; place-items:center; overflow:hidden; cursor:pointer}
+.beast .pic > svg{width:64%; height:auto; overflow:visible}
+.beast.locked .pic svg{filter:grayscale(1) brightness(.75) contrast(.8); opacity:.45}
+.beast.active{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent) inset}
+.beast h3{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.beast .sp{font-size:.8rem; color:var(--muted)}
+.beast .lore{font-size:.84rem; color:var(--ink-2); min-height:2.6em}
+.bond{display:flex; gap:3px; align-items:center}
+.bond svg{width:14px; height:14px}
+.state-row{display:flex; gap:6px}
+.state-row button{flex:1}
+.lock{position:absolute; top:22px; right:22px; background:var(--surface); border-radius:999px; padding:4px 10px; font-size:.74rem; font-weight:700; border:1px solid var(--line); display:flex; gap:5px; align-items:center}
+.lock svg{width:13px; height:13px}
+
+/* ---------- stats ---------- */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px 16px}
+.kpi b{font-family:var(--f-display); font-weight:400; font-size:1.9rem; line-height:1.1; display:block; font-variant-numeric:tabular-nums}
+.kpi b small{font-family:var(--f-body); font-size:.85rem; color:var(--muted); margin-left:3px}
+.kpi span{font-size:.78rem; font-weight:600; color:var(--muted)}
+.chart{position:relative}
+.chart svg{display:block; width:100%; height:auto; overflow:visible}
+.chart text{fill:var(--muted); font-family:var(--f-body); font-size:11px}
+.tip{position:absolute; pointer-events:none; background:var(--ink); color:var(--bg); padding:6px 10px; border-radius:10px; font-size:.8rem; font-weight:600; white-space:nowrap; transform:translate(-50%,-115%); z-index:5; opacity:0; transition:opacity .12s}
+.tip.show{opacity:1}
+.hbar{display:grid; grid-template-columns:minmax(80px,160px) minmax(0,1fr) 64px; gap:10px; align-items:center; font-size:.88rem; padding:5px 0}
+.hbar .nm{display:flex; gap:8px; align-items:center; min-width:0}
+.hbar .nm span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.hbar .nm i{width:10px; height:10px; border-radius:3px; flex:none}
+.hbar .tr{height:12px; background:var(--surface-2); border-radius:6px; overflow:hidden}
+.hbar .tr b{display:block; height:100%; border-radius:0 4px 4px 0}
+.hbar .v{text-align:right; font-variant-numeric:tabular-nums; color:var(--ink-2)}
+.heat{display:grid; grid-auto-flow:column; grid-template-rows:repeat(7,1fr); gap:4px; overflow-x:auto; padding-bottom:4px}
+.heat i{width:15px; height:15px; border-radius:4px; background:var(--surface-2); display:block}
+.heat-wrap{overflow-x:auto}
+.table-toggle{font-size:.8rem}
+table.data{width:100%; border-collapse:collapse; font-size:.86rem}
+table.data th, table.data td{text-align:left; padding:6px 8px; border-bottom:1px solid var(--line)}
+table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
+
+/* ---------- profile ---------- */
+.prof-hero{display:flex; gap:20px; align-items:center; flex-wrap:wrap}
+.prof-hero .av{width:110px; height:110px; border-radius:50%; background:radial-gradient(ellipse 38% 10% at 50% 90%, var(--pad) 96%, transparent 100%), var(--water-hi); overflow:hidden; flex:none; border:3px solid var(--surface)}
+.prof-hero .av svg{width:100%; height:100%}
+.form-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+.sem{border:1px solid var(--line); border-radius:18px; padding:14px; display:flex; flex-direction:column; gap:10px; background:var(--bg)}
+.sem-h{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.course-chips{display:flex; gap:8px; flex-wrap:wrap}
+.cchip{display:inline-flex; align-items:center; gap:7px; padding:5px 6px 5px 11px; border-radius:999px; background:var(--surface); border:1px solid var(--line); font-size:.86rem; font-weight:600}
+.cchip i{width:10px; height:10px; border-radius:50%}
+.cchip button{border:0; background:none; width:22px; height:22px; border-radius:50%; display:grid; place-items:center; color:var(--muted); padding:0}
+.cchip button:hover{background:var(--surface-2)}
+.cchip button svg{width:13px; height:13px}
+.friends{display:flex; gap:12px; flex-wrap:wrap}
+.friend{display:flex; flex-direction:column; align-items:center; gap:4px; width:84px; text-align:center; font-size:.8rem; font-weight:600}
+.friend .av{width:62px; height:62px; border-radius:50%; background:var(--water-hi); overflow:hidden}
+.friend .av svg{width:100%; height:100%}
+
+/* ---------- drawer, modal, toast ---------- */
+.scrim{position:fixed; inset:0; background:rgba(20,26,22,.4); z-index:60; display:none}
+.scrim.on{display:block}
+.drawer{position:fixed; top:0; right:0; bottom:0; width:min(420px,100%); background:var(--surface); z-index:61; border-left:1px solid var(--line); transform:translateX(102%); transition:transform .3s ease; display:flex; flex-direction:column;
+  padding:calc(20px + env(safe-area-inset-top,0px)) max(20px, env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) 20px; overflow-y:auto; gap:22px}
+.drawer.on{transform:none}
+.drawer section{display:flex; flex-direction:column; gap:10px}
+.presets{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.preset{border:1px solid var(--line); border-radius:16px; padding:8px; background:var(--bg); display:flex; flex-direction:column; gap:6px; text-align:left; font-weight:600; font-size:.85rem}
+.preset[aria-pressed="true"]{outline:2.5px solid var(--accent); outline-offset:1px}
+.preset .sw{height:46px; border-radius:10px; display:flex; overflow:hidden}
+.preset .sw i{flex:1}
+.colors{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.colors label{display:flex; flex-direction:column; gap:4px; font-size:.78rem; font-weight:600; color:var(--ink-2)}
+.colors input[type=color]{width:100%; height:38px; border:1px solid var(--line); border-radius:10px; background:var(--bg); padding:3px}
+.toggle{display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:.92rem}
+.switch{width:46px; height:26px; border-radius:999px; border:0; background:var(--line-2); position:relative; flex:none; padding:0}
+.switch::after{content:""; position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background:var(--surface); transition:left .18s}
+.switch[aria-checked="true"]{background:var(--accent)}
+.switch[aria-checked="true"]::after{left:23px}
+.modal{position:fixed; inset:0; z-index:70; display:none; place-items:center; padding:20px max(16px, env(safe-area-inset-right,0px)) 20px max(16px, env(safe-area-inset-left,0px)); background:rgba(20,26,22,.45)}
+.modal.on{display:grid}
+.modal-box{background:var(--surface); border-radius:28px; border:1px solid var(--line); width:min(620px,100%); max-height:calc(100vh - 40px); overflow-y:auto; padding:26px; display:flex; flex-direction:column; gap:18px; box-shadow:0 30px 80px rgba(0,0,0,.25)}
+.starter{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+.starter button{border:1px solid var(--line); background:var(--bg); border-radius:20px; padding:10px; display:flex; flex-direction:column; align-items:center; gap:4px; font-weight:600}
+.starter button[aria-pressed="true"]{outline:2.5px solid var(--accent); background:var(--surface-2)}
+.starter svg{width:100%; max-width:120px; height:auto; overflow:visible}
+.toasts{position:fixed; z-index:80; left:50%; transform:translateX(-50%); bottom:calc(22px + env(safe-area-inset-bottom,0px)); display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; width:min(440px, calc(100% - 32px))}
+.toast{background:var(--ink); color:var(--bg); padding:11px 16px; border-radius:16px; font-weight:500; font-size:.9rem; display:flex; gap:10px; align-items:center; box-shadow:0 10px 30px rgba(0,0,0,.25); animation:toast .3s ease; pointer-events:auto}
+.toast svg{width:30px; height:30px; flex:none}
+@keyframes toast{from{transform:translateY(10px); opacity:0}}
+.notice{display:flex; gap:12px; align-items:flex-start; padding:12px 16px; border-radius:16px; background:color-mix(in srgb, var(--water-hi) 45%, var(--surface)); border:1px solid var(--line); font-size:.88rem}
+.notice svg{width:20px; height:20px; flex:none; margin-top:1px; color:var(--accent)}
+.confirm{display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:.86rem}
+
+/* ---------- animal art ---------- */
+.ga .bod{transform-box:view-box; transform-origin:100px 180px; animation:breathe 3.6s ease-in-out infinite}
+.ga.sleeping .bod{animation:breathe-s 5.2s ease-in-out infinite}
+.ga.happy .bod{animation:hop .62s ease-in-out 3}
+.ga .eyes{transform-box:fill-box; transform-origin:center; animation:blink 6.5s infinite}
+.ga.sleeping .eyes, .ga.happy .eyes{animation:none}
+.ga .zz text{font-family:var(--f-hand); fill:var(--ink-2); animation:zz 3.4s ease-in-out infinite; opacity:0}
+.ga .zz text:nth-child(2){animation-delay:1.1s}
+.ga .zz text:nth-child(3){animation-delay:2.2s}
+.ga .spark{animation:spark 1.4s ease-in-out infinite; transform-box:fill-box; transform-origin:center}
+.ga .spark:nth-of-type(2){animation-delay:.4s}
+.ga .spark:nth-of-type(3){animation-delay:.8s}
+@keyframes breathe{50%{transform:scale(1.015,.985)}}
+@keyframes breathe-s{50%{transform:scale(1.03,.96)}}
+@keyframes hop{40%{transform:translateY(-14px) scale(.98,1.03)} 70%{transform:translateY(0) scale(1.04,.96)}}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)} 96%{transform:scaleY(.1)}}
+@keyframes zz{0%{opacity:0; transform:translate(0,6px)} 30%{opacity:1} 100%{opacity:0; transform:translate(12px,-22px)}}
+@keyframes spark{50%{transform:scale(.4) rotate(30deg); opacity:.4}}
+.water-line{animation:drift 7s ease-in-out infinite}
+@keyframes drift{50%{transform:translateX(14px)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1020px){
+  .g-focus{grid-template-columns:minmax(0,1fr)}
+  .g-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed; top:auto; bottom:0; left:0; right:0; height:auto; z-index:40; flex-direction:row; padding:6px max(6px, env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px, env(safe-area-inset-left,0px)); border-right:0; border-top:1px solid var(--line); background:var(--surface); gap:0}
+  .brand, .side-foot{display:none}
+  .nav{flex-direction:row; width:100%; justify-content:space-between; gap:0}
+  .nav button{flex-direction:column; gap:2px; padding:6px 2px; font-size:.64rem; flex:1; align-items:center; text-align:center; border-radius:10px}
+  .nav button .dot{right:22%; top:4px}
+  .main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .toasts{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .mobile-top{display:flex!important}
+}
+@media (max-width:640px){
+  .g-2,.g-3,.form-grid,.dur-row{grid-template-columns:minmax(0,1fr)}
+  .lotus-wrap{grid-template-columns:minmax(0,1fr)}
+  .lotus-wrap svg{max-width:280px; margin:0 auto}
+  .focus-stage{aspect-ratio:4/5}
+  .hero-pet{width:62%; top:60%}
+  .speech{left:60%; top:36%; max-width:70%}
+  .pond-stage{aspect-ratio:3/4}
+  .resident{width:clamp(58px,19%,96px)}
+  .starter{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hbar{grid-template-columns:minmax(70px,110px) minmax(0,1fr) 54px}
+  .card{padding:16px}
+}
+.mobile-top{display:none; gap:8px}
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{animation:none!important; transition:none!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="gr-wob" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="gr-soft"><feGaussianBlur stdDeviation="6"/></filter>
+    <radialGradient id="gr-glow"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".35" stop-color="#f4e39a" stop-opacity=".55"/><stop offset="1" stop-color="#f4e39a" stop-opacity="0"/></radialGradient>
+  </defs>
+  <symbol id="i-timer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.6M9.5 2.8h5M18.4 6.6l1.3-1.3"/></g></symbol>
+  <symbol id="i-pebble" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 15.6c-.9-3.6 1.8-7.4 6.3-8.2 4.3-.8 8.6.9 9.3 4.6.7 3.6-2.4 6.3-7.2 6.8-4.1.4-7.6-.4-8.4-3.2z"/><path d="M8.5 11.2c1.2-1 2.7-1.4 4.2-1.3"/></g></symbol>
+  <symbol id="i-pond" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12l6.8-3.2A7.6 5.2 0 1 1 15 7.1z"/><path d="M3 19.5c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/></g></symbol>
+  <symbol id="i-lotus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4.5c2.4 2.4 3 5.8 0 10.5-3-4.7-2.4-8.1 0-10.5z"/><path d="M12 15C9.4 15 5.8 13.8 4 10.2c3.2-.6 6 .9 8 4.8zM12 15c2.6 0 6.2-1.2 8-4.8-3.2-.6-6 .9-8 4.8z"/><path d="M5 18.5c4.5 1.6 9.5 1.6 14 0"/></g></symbol>
+  <symbol id="i-commons" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h11a2 2 0 0 1 2 2V13a2 2 0 0 1-2 2H9l-4 3.2V15H4a2 2 0 0 1-2-2V7.5a2 2 0 0 1 2-2z" transform="translate(1 0)"/><path d="M8 9.5h6M8 12h3.5"/></g></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19C4 11 9 5 19.5 4.5 20 14 14 20 5 19z"/><path d="M5 19c3.5-4.5 6.5-7.5 10-10"/></g></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M6.5 16.5V12M11 16.5V7.5M15.5 16.5v-6M20 16.5V4.5" transform="translate(-1 0)"/></g></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></g></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 14H3.5a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.2.8z"/></g></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#d9b25a" stroke="#8a6a2a" stroke-width="1.4"/><circle cx="12" cy="12" r="6.8" fill="none" stroke="#a98236" stroke-width="1" stroke-dasharray="1.6 1.4"/><path d="M8.6 14.8c.1-4 2.6-6.4 6.8-6.7.1 4.1-2.5 6.6-6.8 6.7zM8.6 14.8l3.8-3.6" fill="#f3dc95" stroke="#8a6a2a" stroke-width="1.1" stroke-linecap="round"/></symbol>
+  <symbol id="i-firefly" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="8" fill="url(#gr-glow)"/><ellipse cx="9.3" cy="9.3" rx="3.2" ry="2" transform="rotate(-35 9.3 9.3)" fill="#e8ecef" stroke="#3a2e26" stroke-width="1"/><ellipse cx="14.7" cy="9.3" rx="3.2" ry="2" transform="rotate(35 14.7 9.3)" fill="#e8ecef" stroke="#3a2e26" stroke-width="1"/><ellipse cx="12" cy="12" rx="2.4" ry="3.4" fill="#4a3b2c" stroke="#3a2e26" stroke-width="1"/><ellipse cx="12" cy="15.6" rx="2.6" ry="2.8" fill="#f2df7a" stroke="#3a2e26" stroke-width="1"/><path d="M11 8.2l-1.3-2.2M13 8.2l1.3-2.2" stroke="#3a2e26" stroke-width="1" stroke-linecap="round"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.6 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20 11.5c0 4-3.6 7-8 7-1.2 0-2.3-.2-3.3-.6L4 19.5l1.3-3.6A6.7 6.7 0 0 1 4 11.5c0-4 3.6-7 8-7s8 3 8 7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5c.6 4.8 2.4 7 7.5 9.5-5.1 2.5-6.9 4.7-7.5 9.5-.6-4.8-2.4-7-7.5-9.5 5.1-2.5 6.9-4.7 7.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-ripple" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="2.6" ry="1.2"/><path d="M5.5 14c0-1.9 2.9-3.4 6.5-3.4s6.5 1.5 6.5 3.4-2.9 3.4-6.5 3.4"/><path d="M2 14c0-3.3 4.5-5.9 10-5.9S22 10.7 22 14" opacity=".6"/></g></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5.5v13M16 5.5v13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="3" fill="currentColor"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24"><path d="M6 6l8 6-8 6zM17.5 6v12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4.5M7.5 8.5L12 4l4.5 4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15"/></g></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10.5M7.5 10l4.5 4.5 4.5-4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15"/></g></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7h15M9.5 7V4.8h5V7M6.5 7l.9 12.2a1.5 1.5 0 0 0 1.5 1.3h6.2a1.5 1.5 0 0 0 1.5-1.3L17.5 7"/></g></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></g></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h8l4.5 4.5v12.5H6z"/><path d="M13.5 3.5V8.5h5M9 13h6M9 16.5h4"/></g></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L15 9M13.5 7.5l3 3"/><path d="M18 3v3M16.5 4.5h3M20.5 9.5v2M19.5 10.5h2M10 3.5v2M9 4.5h2"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-friend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19c1-3.2 3.3-4.8 6.2-4.8s5.2 1.6 6.2 4.8M17.5 8v6M14.5 11h6"/></g></symbol>
+  <symbol id="i-leafpip" viewBox="0 0 24 24"><path d="M4 20C3 11 9 4.5 20 4c.6 10-5.6 16.4-16 16z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" aria-label="Main">
+    <a class="brand" href="#focus" data-go="focus" aria-label="Grind home">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 24l15.5-7.5A17 12 0 1 1 31 9z" fill="var(--pad)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M14 22c3-3.2 7-4.6 11-4.3" fill="none" stroke="var(--pad-2)" stroke-width="2" stroke-linecap="round"/><circle cx="33" cy="30" r="5.5" fill="var(--bloom)" stroke="var(--ink)" stroke-width="2"/><circle cx="33" cy="30" r="1.8" fill="var(--glow)"/></svg>
+      <span><b>Grind</b><small>FWS310 study pond</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
+      <button data-go="pebbles"><svg><use href="#i-pebble"/></svg><span>Pebbles</span></button>
+      <button data-go="pond"><svg><use href="#i-pond"/></svg><span>The Pond</span><i class="dot" id="pondDot" hidden></i></button>
+      <button data-go="together"><svg><use href="#i-lotus"/></svg><span>Together</span></button>
+      <button data-go="commons"><svg><use href="#i-commons"/></svg><span>Commons</span></button>
+      <button data-go="sanctuary"><svg><use href="#i-leaf"/></svg><span>Sanctuary</span></button>
+      <button data-go="stats"><svg><use href="#i-chart"/></svg><span>Journal</span></button>
+    </nav>
+    <div class="side-foot">
+      <button class="me-mini" data-go="profile" id="meMini"><span class="av" id="meMiniAv"></span><span><b id="meMiniName">Student</b><span id="meMiniSub">Profile and courses</span></span></button>
+      <button class="ghost-btn" id="openCustomize"><svg><use href="#i-gear"/></svg>Customize</button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="main-in">
+      <header class="top">
+        <div class="greet">
+          <span class="hand" id="greetHand">Good evening</span>
+          <h1 id="viewTitle">Focus</h1>
+        </div>
+        <div class="chips">
+          <span class="chip demo" id="demoChip" hidden>Demo speed</span>
+          <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
+          <span class="chip" title="Coins"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></span>
+          <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
+          <span class="mobile-top"><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
+        </div>
+      </header>
+
+      <!-- FOCUS -->
+      <section class="view on" id="v-focus" aria-labelledby="viewTitle">
+        <div class="grid g-focus">
+          <div class="stack">
+            <div class="stage focus-stage" id="focusStage">
+              <div class="timer-ov">
+                <span class="phase" id="phaseLabel">Ready when you are</span>
+                <span class="clock" id="clock" aria-live="off">25:00</span>
+                <span class="sub" id="clockSub">Pick one small pebble and start. That is enough.</span>
+              </div>
+              <div class="pet-tag"><b id="petName">Pip</b><span id="petSpecies">Frog</span></div>
+              <div class="hero-pet" id="heroPet"></div>
+              <div class="speech" id="speech"></div>
+              <div class="prog" aria-hidden="true"><i id="progFill"></i><b id="progDot"></b></div>
+            </div>
+            <div class="card controls">
+              <div class="row" style="justify-content:space-between">
+                <div class="seg" role="group" aria-label="Session type">
+                  <button id="modeFocus" aria-pressed="true">Focus</button>
+                  <button id="modeRest" aria-pressed="false">Rest</button>
+                </div>
+                <label class="f" style="flex-direction:row; align-items:center; gap:8px; font-weight:500">
+                  <span>Studying</span>
+                  <select class="inp" id="courseSel" style="width:auto; min-width:150px"></select>
+                </label>
+              </div>
+              <div class="dur-row">
+                <div class="dur">
+                  <div class="dur-top"><span class="eyebrow">Focus length</span><b><span class="num" id="focusVal">25</span><small>min</small></b></div>
+                  <input type="range" id="focusRange" min="1" max="120" value="25" aria-label="Focus length in minutes">
+                </div>
+                <div class="dur">
+                  <div class="dur-top"><span class="eyebrow">Rest length</span><b><span class="num" id="restVal">5</span><small>min</small></b></div>
+                  <input type="range" id="restRange" min="1" max="30" value="5" aria-label="Rest length in minutes">
+                </div>
+              </div>
+              <div class="row" id="presetRow"></div>
+              <div class="row">
+                <button class="btn primary big" id="startBtn"><svg><use href="#i-play"/></svg><span>Start focusing</span></button>
+                <button class="btn big" id="pauseBtn" hidden><svg><use href="#i-pause"/></svg><span>Pause</span></button>
+                <button class="btn big quiet" id="stopBtn" hidden><svg><use href="#i-stop"/></svg><span>Stop and nap</span></button>
+                <button class="btn big quiet" id="skipBtn" hidden><svg><use href="#i-skip"/></svg><span>Skip rest</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="card">
+              <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
+              <div id="nextPebble"></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>What you did today</h2><span class="hand muted" id="todayDate"></span></div>
+              <div class="mini-stats" id="todayStats"></div>
+              <ul class="done-list" id="todayList" style="margin-top:12px"></ul>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
+              <ul class="ripple-feed" id="rippleMini"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEBBLES -->
+      <section class="view" id="v-pebbles">
+        <div class="row" style="justify-content:space-between">
+          <p class="muted" style="max-width:60ch">A big task is a rock. Split it into pebbles small enough to start right now. Every pebble you finish lays a stepping stone across the pond.</p>
+          <div class="row">
+            <label class="btn" for="icsFile"><svg><use href="#i-upload"/></svg>Import Blackboard calendar</label>
+            <input type="file" id="icsFile" accept=".ics,text/calendar" class="sr">
+            <button class="btn primary" id="newRockBtn"><svg><use href="#i-plus"/></svg>New rock</button>
+          </div>
+        </div>
+        <form class="card" id="rockForm" hidden>
+          <div class="card-h"><h2>A new rock</h2><button type="button" class="icon-btn" id="rockCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+          <div class="form-grid">
+            <label class="f" style="grid-column:1/-1">What is the big task?<input class="inp" id="rockTitle" required maxlength="120" placeholder="Deep Learning quiz on CNNs"></label>
+            <label class="f">Course<select class="inp" id="rockCourse"></select></label>
+            <label class="f">Due date (optional)<input class="inp" type="date" id="rockDue"></label>
+            <label class="f" style="grid-column:1/-1">Anything Claude should know when splitting it? (optional)<input class="inp" id="rockNotes" maxlength="300" placeholder="Covers lectures 4 to 6, 20 multiple choice questions"></label>
+          </div>
+          <div class="row" style="margin-top:14px">
+            <button class="btn primary" type="submit"><svg><use href="#i-plus"/></svg>Add rock</button>
+            <button class="btn" type="button" id="rockAddSplit"><svg><use href="#i-wand"/></svg>Add and break it down</button>
+          </div>
+        </form>
+        <div class="row" id="rockFilter"></div>
+        <div class="rock-list" id="rockList"></div>
+      </section>
+
+      <!-- POND -->
+      <section class="view" id="v-pond">
+        <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement. There are no rankings in this pond.</p>
+        <div id="pondNotice"></div>
+        <div class="stage pond-stage" id="pondStage"><div class="over" id="pondOver"></div></div>
+        <div class="legend"><span><i style="background:var(--accent)"></i>Focusing now</span><span><i style="background:var(--rose)"></i>You</span><span><i style="background:var(--line-2)"></i>Napping or away</span></div>
+        <div class="grid g-2">
+          <div class="card"><div class="card-h"><h2>In the pond</h2><div class="seg" role="group" aria-label="Who to show"><button id="pondAll" aria-pressed="true">Everyone</button><button id="pondFriends" aria-pressed="false">Friends</button></div></div><ul class="member-list" id="pondList"></ul></div>
+          <div class="card"><div class="card-h"><h2>Ripples you received</h2></div><ul class="ripple-feed" id="rippleFeed"></ul></div>
+        </div>
+      </section>
+
+      <!-- TOGETHER -->
+      <section class="view" id="v-together">
+        <p class="muted" style="max-width:62ch">Grind Together is a small circle of friends who study on the same days. Each person is a pair of petals. The lotus only opens fully when everyone in the circle has studied today.</p>
+        <div id="togetherNotice"></div>
+        <div class="row"><div class="circle-tabs" id="circleTabs"></div></div>
+        <div id="circleView"></div>
+        <div class="grid g-2">
+          <form class="card" id="createCircle"><h2>Start a circle</h2><p class="muted" style="margin:6px 0 12px">You get a code to share with your study friends.</p><div class="add-peb"><input class="inp" id="circleName" maxlength="40" placeholder="FWS310 study group" required><button class="btn primary" type="submit">Create</button></div></form>
+          <form class="card" id="joinCircle"><h2>Join with a code</h2><p class="muted" style="margin:6px 0 12px">Ask a friend for their six-letter circle code.</p><div class="add-peb"><input class="inp" id="circleCode" maxlength="6" placeholder="LOTUS7" required style="text-transform:uppercase; letter-spacing:.12em"><button class="btn" type="submit">Join</button></div></form>
+        </div>
+      </section>
+
+      <!-- COMMONS -->
+      <section class="view" id="v-commons">
+        <div class="grid g-focus">
+          <div class="stack">
+            <form class="card composer" id="composer">
+              <div class="seg" role="group" aria-label="Post type"><button type="button" data-kind="note" aria-pressed="true">Notes</button><button type="button" data-kind="done" aria-pressed="false">Finished work</button><button type="button" data-kind="win" aria-pressed="false">Achievement</button></div>
+              <div class="form-grid">
+                <label class="f" style="grid-column:1/-1">Title<input class="inp" id="postTitle" maxlength="100" required placeholder="My summary of lecture 5: backpropagation"></label>
+                <label class="f">Course<select class="inp" id="postCourse"></select></label>
+                <label class="f">Link to file (optional)<input class="inp" id="postLink" type="url" maxlength="300" placeholder="https://drive.google.com/..."></label>
+                <label class="f" style="grid-column:1/-1">Write something<textarea class="inp" id="postBody" maxlength="2000" placeholder="Key ideas, a tip that helped, or what you are proud of."></textarea></label>
+              </div>
+              <div class="row"><button class="btn primary" type="submit">Share to the Commons</button><span class="muted" id="composerNote" style="font-size:.82rem"></span></div>
+            </form>
+            <div class="feed" id="feed"></div>
+          </div>
+          <div class="stack">
+            <div class="card"><div class="card-h"><h2>Worth sharing</h2></div><div id="milestones" class="stack" style="gap:10px"></div></div>
+            <div class="card"><div class="card-h"><h2>Filter</h2></div><div class="seg" role="group" aria-label="Filter posts" id="feedFilter"><button data-f="all" aria-pressed="true">All</button><button data-f="note" aria-pressed="false">Notes</button><button data-f="done" aria-pressed="false">Finished</button><button data-f="win" aria-pressed="false">Wins</button></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SANCTUARY -->
+      <section class="view" id="v-sanctuary">
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Nine animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
+        <div class="zoo" id="zoo"></div>
+      </section>
+
+      <!-- STATS -->
+      <section class="view" id="v-stats">
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:60ch">Everything you have already done, in one place.</p><label class="f" style="flex-direction:row; align-items:center; gap:8px; font-weight:500">Semester<select class="inp" id="statSem" style="width:auto"></select></label></div>
+        <div class="kpis" id="kpis"></div>
+        <div class="card"><div class="card-h"><h2>Focus minutes, last 14 days</h2><button class="btn small quiet table-toggle" id="dailyTableBtn">Show as table</button></div><div class="chart" id="dailyChart"></div><div id="dailyTable" hidden></div></div>
+        <div class="grid g-2">
+          <div class="card"><div class="card-h"><h2>By course</h2></div><div id="courseBars"></div></div>
+          <div class="card"><div class="card-h"><h2>Moss calendar</h2><span class="muted" style="font-size:.8rem">Last 16 weeks</span></div><div class="heat-wrap"><div class="heat" id="heat"></div></div><div class="legend" style="margin-top:10px" id="heatLegend"></div></div>
+        </div>
+        <div class="card"><div class="card-h"><h2>Recent sessions</h2></div><div style="overflow-x:auto"><table class="data" id="sessTable"></table></div></div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="view" id="v-profile">
+        <div class="card prof-hero"><div class="av" id="profAv"></div><div style="flex:1; min-width:200px"><h2 id="profName">Student</h2><p class="muted" id="profLine"></p><p class="hand" id="profPet" style="color:var(--rose); margin-top:6px"></p></div><button class="btn" data-go="sanctuary">Change companion</button></div>
+        <form class="card" id="profForm">
+          <div class="card-h"><h2>About you</h2><span class="muted" id="profSaved" style="font-size:.82rem"></span></div>
+          <div class="form-grid">
+            <label class="f">Your name<input class="inp" id="pfName" maxlength="40"></label>
+            <label class="f">Your animal's name<input class="inp" id="pfPet" maxlength="30"></label>
+            <label class="f">University<input class="inp" id="pfUni" maxlength="60" placeholder="ADU"></label>
+            <label class="f">Major<input class="inp" id="pfMajor" maxlength="60" placeholder="Computer Engineering"></label>
+            <label class="f" style="grid-column:1/-1">A line about you<input class="inp" id="pfBio" maxlength="140" placeholder="Night owl trying to become a morning frog."></label>
+          </div>
+          <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
+        </form>
+        <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
+        <div class="card"><div class="card-h"><h2>Friends</h2><button class="btn small quiet" data-go="pond">Find friends in the pond</button></div><div class="friends" id="friendList"></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Customize" aria-hidden="true">
+  <div class="row" style="justify-content:space-between"><h2>Make it yours</h2><button class="icon-btn" id="closeDrawer" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <section><span class="eyebrow">Theme</span><div class="presets" id="presets"></div></section>
+  <section><span class="eyebrow">Your own colors</span><div class="colors"><label>Accent<input type="color" id="cAccent"></label><label>Paper<input type="color" id="cBg"></label><label>Water<input type="color" id="cWater"></label></div><button class="btn small quiet" id="cReset" style="align-self:flex-start">Clear my colors</button></section>
+  <section><span class="eyebrow">Pond weather</span><div class="seg" role="group" id="fxSeg"><button data-fx="fireflies">Fireflies</button><button data-fx="rain">Rain</button><button data-fx="petals">Petals</button><button data-fx="still">Still</button></div></section>
+  <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
+  <section><span class="eyebrow">Session</span>
+    <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
+    <div class="toggle"><span>Start rest automatically after focus</span><button class="switch" role="switch" id="swAuto" aria-checked="true" aria-label="Auto rest"></button></div>
+    <div class="toggle"><span><b>Demo speed</b><br><span class="muted" style="font-size:.82rem">One minute passes in one second. For presenting.</span></span><button class="switch" role="switch" id="swDemo" aria-checked="false" aria-label="Demo speed"></button></div>
+  </section>
+  <section><span class="eyebrow">Your data</span>
+    <p class="muted" style="font-size:.84rem" id="dataWhere"></p>
+    <div id="acctRow" class="row"></div>
+    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button><button class="btn small" id="sampleBtn">Add a sample week</button></div>
+    <div id="resetWrap"><button class="btn small quiet" id="resetBtn"><svg><use href="#i-trash"/></svg>Start over</button></div>
+  </section>
+</aside>
+
+<div class="modal" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+  <form class="modal-box" id="welcomeForm">
+    <div><span class="hand" style="color:var(--rose); font-size:1.7rem">Welcome to the pond</span><h2 id="wTitle" style="font-size:1.7rem">Pick a companion to study with</h2><p class="muted" style="margin-top:6px">It stays awake while you focus and naps while you rest. If you stop early it just takes a nap. It never gets hurt.</p></div>
+    <div class="starter" id="starter"></div>
+    <div class="form-grid">
+      <label class="f">Your name<input class="inp" id="wName" maxlength="40" required placeholder="Lina"></label>
+      <label class="f">Name your animal<input class="inp" id="wPet" maxlength="30" required placeholder="Pip"></label>
+      <label class="f">University<input class="inp" id="wUni" maxlength="60" placeholder="ADU"></label>
+      <label class="f">Major<input class="inp" id="wMajor" maxlength="60" placeholder="Computer Engineering"></label>
+    </div>
+    <div class="row"><button class="btn primary big" type="submit">Into the pond</button><button class="btn quiet" type="button" id="wSkip">Look around first</button></div>
+  </form>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="tip" id="tip"></div>
+<script src="firebase-config.js"></script>
+<script>
+/* Grind animal illustrations. Every animal is drawn in SVG with three faces: awake, sleeping, happy. */
+const INK = '#3b2f27';
+const O = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
+const O2 = `stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"`;
+
+const ANIMALS = {
+  frog: {
+    label: 'Frog', lore: 'Hums quietly on a lily pad. Starts any task with one small hop.', unlock: { type: 'free' }, defaultName: 'Pip',
+    face: { eyes: [[68, 85], [132, 85]], er: 7, whites: [[68, 84, 14], [132, 84, 14]], lid: '#8fb069', mouth: { x: 100, y: 124, type: 'wide', w: 22 }, blush: [[56, 116], [144, 116]], zz: [150, 52] },
+    art: () => {
+      const b = '#8fb069', d = '#6d8c4c', l = '#d9e3a8';
+      return `<ellipse cx="54" cy="160" rx="24" ry="15" fill="${d}" ${O}/><ellipse cx="146" cy="160" rx="24" ry="15" fill="${d}" ${O}/>
+      <circle cx="68" cy="88" r="24" fill="${b}" ${O}/><circle cx="132" cy="88" r="24" fill="${b}" ${O}/>
+      <path d="M38 150 C36 112 62 94 100 94 C138 94 164 112 162 150 C161 172 136 180 100 180 C64 180 39 172 38 150 Z" fill="${b}" ${O}/>
+      <path d="M50 102 C58 98 62 98 68 100 M132 100 C138 98 142 98 150 102" fill="none" stroke="${b}" stroke-width="5"/>
+      <ellipse cx="100" cy="152" rx="42" ry="23" fill="${l}"/>
+      <circle cx="60" cy="134" r="5" fill="${d}"/><circle cx="142" cy="130" r="6" fill="${d}"/><circle cx="150" cy="146" r="3.5" fill="${d}"/><circle cx="118" cy="104" r="3" fill="${d}"/>
+      <ellipse cx="76" cy="177" rx="14" ry="6" fill="${b}" ${O}/><ellipse cx="124" cy="177" rx="14" ry="6" fill="${b}" ${O}/>`;
+    }
+  },
+  duckling: {
+    label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: 'Sunny',
+    face: { eyes: [[76, 86], [106, 86]], er: 5.5, mouth: null, blush: [[64, 100], [118, 100]], zz: [128, 50] },
+    art: (st) => {
+      const y = '#f4d06f', s = '#e3b552', bk = '#e8894a';
+      const beak = st === 'happy'
+        ? `<path d="M76 102 C84 92 102 92 110 102 Z" fill="${bk}" ${O}/><path d="M78 103 Q93 117 108 103 Z" fill="#7a3b33" ${O2}/><ellipse cx="93" cy="109" rx="6" ry="3" fill="#e58b86"/>`
+        : `<path d="M76 104 C84 96 102 96 110 104 C102 112 84 112 76 104 Z" fill="${bk}" ${O}/><path d="M79 104 H107" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`;
+      return `<ellipse cx="84" cy="178" rx="13" ry="5" fill="${bk}" ${O2}/><ellipse cx="116" cy="178" rx="13" ry="5" fill="${bk}" ${O2}/>
+      <path d="M148 132 L174 116 L162 148 Z" fill="${y}" ${O}/>
+      <ellipse cx="106" cy="146" rx="54" ry="34" fill="${y}" ${O}/>
+      <path d="M112 136 C128 130 148 136 150 150 C138 160 120 160 110 152 Z" fill="${s}" ${O2}/>
+      <circle cx="90" cy="90" r="36" fill="${y}" ${O}/>
+      <path d="M86 56 C83 44 92 40 96 49 C98 38 110 41 104 54" fill="none" ${O}/>
+      ${beak}`;
+    }
+  },
+  capybara: {
+    label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: 'Yuzu',
+    face: { eyes: [[62, 82], [108, 82]], er: 4.8, mouth: { x: 85, y: 121, type: 'cat' }, blush: [[52, 100], [120, 100]], zz: [140, 58] },
+    art: () => {
+      const b = '#b98b63', d = '#94694a', l = '#d2ab85';
+      return `<rect x="56" y="158" width="20" height="22" rx="9" fill="${d}" ${O}/><rect x="132" y="158" width="20" height="22" rx="9" fill="${d}" ${O}/>
+      <path d="M40 142 C38 110 64 98 106 98 C148 98 170 114 168 146 C167 170 148 180 106 180 C64 180 41 170 40 142 Z" fill="${b}" ${O}/>
+      <path d="M136 120 C146 124 152 132 154 142" fill="none" stroke="${d}" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="54" cy="52" rx="9" ry="8" fill="${d}" ${O}/><ellipse cx="116" cy="52" rx="9" ry="8" fill="${d}" ${O}/>
+      <path d="M42 78 C42 56 60 46 86 46 C114 46 128 58 128 80 L128 108 C128 128 112 138 86 138 C58 138 42 128 42 108 Z" fill="${b}" ${O}/>
+      <ellipse cx="85" cy="113" rx="32" ry="20" fill="${l}" ${O2}/>
+      <ellipse cx="76" cy="107" rx="3.6" ry="2.6" fill="${INK}"/><ellipse cx="94" cy="107" rx="3.6" ry="2.6" fill="${INK}"/>
+      <circle cx="86" cy="40" r="12" fill="#efb24a" ${O}/><circle cx="82" cy="36" r="2.2" fill="#f8d68a"/>
+      <path d="M87 28 C91 20 100 19 103 23 C99 28 92 29 87 28 Z" fill="#7d9a52" ${O2}/>`;
+    }
+  },
+  rabbit: {
+    label: 'Rabbit', lore: 'Quick bursts of focus, then a good long rest in the clover.', unlock: { type: 'coins', n: 40 }, defaultName: 'Clover',
+    face: { eyes: [[84, 96], [116, 96]], er: 5.5, mouth: { x: 100, y: 113, type: 'cat' }, blush: [[72, 108], [128, 108]], zz: [142, 62] },
+    art: () => {
+      const b = '#efe6d8', p = '#eab4ad';
+      return `<path d="M74 72 C62 34 64 12 77 11 C90 10 93 36 90 72 Z" fill="${b}" ${O}/><path d="M78 64 C71 38 72 23 77 22 C83 22 85 40 84 64 Z" fill="${p}"/>
+      <path d="M110 70 C116 36 128 20 140 25 C151 30 138 54 124 76 Z" fill="${b}" ${O}/><path d="M116 64 C121 42 130 32 137 35 C142 39 132 54 122 68 Z" fill="${p}"/>
+      <circle cx="148" cy="156" r="12" fill="#ffffff" ${O}/>
+      <ellipse cx="100" cy="150" rx="48" ry="31" fill="${b}" ${O}/>
+      <ellipse cx="78" cy="178" rx="16" ry="6" fill="${b}" ${O}/><ellipse cx="122" cy="178" rx="16" ry="6" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="98" rx="40" ry="33" fill="${b}" ${O}/>
+      <path d="M95 105 H105 L100 110 Z" fill="${p}" ${O2}/>`;
+    }
+  },
+  otter: {
+    label: 'Otter', lore: 'Holds its favourite pebble in its paws, the way you keep your best notes.', unlock: { type: 'coins', n: 80 }, defaultName: 'Miso',
+    face: { eyes: [[83, 80], [117, 80]], er: 5.5, mouth: { x: 100, y: 103, type: 'cat' }, blush: [[71, 94], [129, 94]], zz: [144, 50] },
+    art: () => {
+      const b = '#8c6549', d = '#6c4b34', l = '#dcc19d';
+      return `<path d="M128 168 C160 170 176 156 178 140 C166 152 150 156 130 154 Z" fill="${d}" ${O}/>
+      <path d="M60 180 C50 142 58 108 100 108 C142 108 150 142 140 180 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="153" rx="27" ry="25" fill="${l}"/>
+      <ellipse cx="82" cy="180" rx="13" ry="5" fill="${d}" ${O2}/><ellipse cx="118" cy="180" rx="13" ry="5" fill="${d}" ${O2}/>
+      <circle cx="66" cy="58" r="9" fill="${d}" ${O}/><circle cx="134" cy="58" r="9" fill="${d}" ${O}/>
+      <ellipse cx="100" cy="84" rx="42" ry="35" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="98" rx="28" ry="18" fill="${l}"/>
+      <ellipse cx="100" cy="134" rx="15" ry="10" fill="#aaa79a" ${O}/><path d="M93 131 C96 129 100 129 103 130" fill="none" stroke="#d6d3c6" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="84" cy="134" rx="8" ry="7" fill="${d}" ${O2}/><ellipse cx="116" cy="134" rx="8" ry="7" fill="${d}" ${O2}/>
+      <path d="M93 91 Q100 87 107 91 Q104 97 100 97 Q96 97 93 91 Z" fill="${INK}"/>
+      <path d="M76 99 L62 96 M76 103 L62 105 M124 99 L138 96 M124 103 L138 105" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
+    }
+  },
+  fox: {
+    label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: 'Ember',
+    face: { eyes: [[80, 86], [120, 86]], er: 5.5, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[67, 100], [133, 100]], zz: [148, 42] },
+    art: () => {
+      const o = '#dc844b', w = '#f7ecdb', k = INK;
+      const head = 'M52 82 C52 60 74 52 100 52 C126 52 148 60 148 82 C148 108 126 128 100 128 C74 128 52 108 52 82 Z';
+      return `<path d="M126 170 C176 172 192 124 168 94 C170 126 152 146 122 148 Z" fill="${o}" ${O}/>
+      <path d="M168 94 C178 106 183 120 181 134 C172 126 167 110 168 94 Z" fill="${w}" ${O2}/>
+      <path d="M64 180 C56 144 72 116 100 116 C128 116 144 144 136 180 Z" fill="${o}" ${O}/>
+      <path d="M84 124 Q100 166 116 124 Q100 132 84 124 Z" fill="${w}"/>
+      <ellipse cx="86" cy="179" rx="11" ry="5" fill="${k}"/><ellipse cx="114" cy="179" rx="11" ry="5" fill="${k}"/>
+      <path d="M58 80 L64 30 L96 62 Z" fill="${o}" ${O}/><path d="M142 80 L136 30 L104 62 Z" fill="${o}" ${O}/>
+      <path d="M66 68 L68 42 L85 60 Z" fill="${k}" opacity=".72"/><path d="M134 68 L132 42 L115 60 Z" fill="${k}" opacity=".72"/>
+      <path d="${head}" fill="${o}"/>
+      <path d="M58 94 C70 104 86 104 100 100 C114 104 130 104 142 94 C138 116 120 128 100 128 C80 128 62 116 58 94 Z" fill="${w}"/>
+      <path d="${head}" fill="none" ${O}/>
+      <ellipse cx="100" cy="103" rx="6.5" ry="4.8" fill="${k}"/>`;
+    }
+  },
+  turtle: {
+    label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: 'Moss',
+    face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
+    art: () => {
+      const sh = '#7e9a5d', rim = '#64804b', pl = '#a6bb7b', sk = '#bcc78d';
+      return `<ellipse cx="52" cy="168" rx="15" ry="9" fill="${sk}" ${O}/><ellipse cx="128" cy="170" rx="15" ry="9" fill="${sk}" ${O}/>
+      <path d="M30 150 L14 157 L32 162 Z" fill="${sk}" ${O}/>
+      <path d="M138 142 C140 118 150 102 166 102 C184 102 192 118 188 134 C184 150 166 156 150 154 Z" fill="${sk}" ${O}/>
+      <path d="M30 154 C30 106 58 82 92 82 C126 82 152 106 152 154 Z" fill="${sh}" ${O}/>
+      <path d="M72 102 L92 93 L112 102 L112 121 L92 130 L72 121 Z" fill="${pl}" ${O2}/>
+      <path d="M44 132 L60 118 L72 124 L72 144 L46 146 Z" fill="${pl}" ${O2}/>
+      <path d="M112 124 L124 118 L140 130 L138 146 L112 144 Z" fill="${pl}" ${O2}/>
+      <path d="M24 154 C24 148 30 146 36 146 H146 C152 146 158 148 158 154 C158 162 152 165 146 165 H36 C30 165 24 162 24 154 Z" fill="${rim}" ${O}/>
+      <path d="M50 150 v10 M76 150 v10 M102 150 v10 M128 150 v10" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".55"/>`;
+    }
+  },
+  axolotl: {
+    label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: 'Nori',
+    face: { eyes: [[78, 102], [122, 102]], er: 6.5, mouth: { x: 100, y: 121, type: 'wide', w: 15 }, blush: [[64, 116], [136, 116]], zz: [152, 56] },
+    art: () => {
+      const p = '#f3bcc1', d = '#e49aa3', g = '#dd7488';
+      const gl = `<path d="M56 86 C38 70 28 74 31 83 C40 86 48 90 56 95 Z" fill="${g}" ${O2}/><path d="M52 101 C32 97 25 104 29 111 C38 109 46 109 54 109 Z" fill="${g}" ${O2}/><path d="M57 116 C42 123 37 132 43 136 C49 130 55 125 61 121 Z" fill="${g}" ${O2}/>`;
+      return `<path d="M140 150 C168 146 186 132 192 112 C178 142 160 162 134 168 Z" fill="${p}" ${O}/>
+      ${gl}<g transform="translate(200 0) scale(-1 1)">${gl}</g>
+      <ellipse cx="112" cy="155" rx="42" ry="22" fill="${p}" ${O}/>
+      <ellipse cx="86" cy="175" rx="10" ry="6" fill="${p}" ${O2}/><ellipse cx="134" cy="175" rx="10" ry="6" fill="${p}" ${O2}/>
+      <ellipse cx="100" cy="106" rx="50" ry="38" fill="${p}" ${O}/>
+      <circle cx="86" cy="78" r="3" fill="${d}"/><circle cx="112" cy="76" r="2.4" fill="${d}"/><circle cx="126" cy="84" r="2" fill="${d}"/><circle cx="120" cy="160" r="3" fill="${d}"/><circle cx="138" cy="150" r="2.4" fill="${d}"/>`;
+    }
+  },
+  heron: {
+    label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: 'Sage',
+    face: { eyes: [[85, 56], [100, 56]], er: 4.2, mouth: null, blush: [[79, 67], [103, 68]], blushR: 5, zz: [124, 22] },
+    art: (st) => {
+      const b = '#a2b3bd', l = '#e5ebed', d = '#5f717c', wg = '#7f919b', bk = '#e2b04f', lg = '#c79f4b';
+      const beak = st === 'happy'
+        ? `<path d="M108 54 L156 52 L108 62 Z" fill="${bk}" ${O2}/><path d="M108 64 L152 70 L108 68 Z" fill="${bk}" ${O2}/>`
+        : `<path d="M108 56 L158 62 L108 68 Z" fill="${bk}" ${O2}/>`;
+      return `<path d="M96 150 L96 186 M88 186 H104" stroke="${lg}" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M110 150 L120 164 L107 168" stroke="${lg}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M140 146 L172 160 L146 158 Z" fill="${d}" ${O2}/>
+      <path d="M58 124 C58 100 92 94 122 106 C150 118 160 144 142 152 C116 162 66 154 58 124 Z" fill="${b}" ${O}/>
+      <path d="M84 112 C110 108 136 118 150 140 C128 150 98 146 86 132 Z" fill="${wg}" ${O2}/>
+      <path d="M64 120 C52 98 80 88 80 70 L102 68 C104 92 78 100 86 118 Z" fill="${l}" ${O}/>
+      <circle cx="92" cy="56" r="21" fill="${l}" ${O}/>
+      <path d="M73 49 C77 36 98 32 109 45 C98 42 86 42 73 49 Z" fill="${d}"/>
+      <path d="M76 46 C66 40 56 40 48 44 M78 52 C68 50 60 52 54 57" stroke="${d}" stroke-width="3" stroke-linecap="round" fill="none"/>
+      ${beak}`;
+    }
+  }
+};
+const ANIMAL_KEYS = Object.keys(ANIMALS);
+
+function faceSVG(f, st) {
+  let out = '';
+  const er = f.er;
+  if (f.whites) {
+    f.whites.forEach(([x, y, r]) => {
+      out += st === 'sleeping'
+        ? `<circle cx="${x}" cy="${y}" r="${r}" fill="${f.lid}" ${O2}/>`
+        : `<circle cx="${x}" cy="${y}" r="${r}" fill="#fbfaf4" ${O2}/>`;
+    });
+  }
+  const br = f.blushR || 9;
+  (f.blush || []).forEach(([x, y]) => { out += `<ellipse cx="${x}" cy="${y}" rx="${br}" ry="${br * .55}" fill="#e7938a" opacity="${st === 'happy' ? .8 : .5}"/>`; });
+  if (st === 'awake') {
+    out += '<g class="eyes">' + f.eyes.map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="${er * .86}" ry="${er}" fill="${INK}"/><circle cx="${x + er * .34}" cy="${y - er * .38}" r="${er * .36}" fill="#fff"/>`).join('') + '</g>';
+  } else if (st === 'sleeping') {
+    out += f.eyes.map(([x, y]) => `<path d="M${x - er * 1.15} ${y} Q${x} ${y + er * 1.1} ${x + er * 1.15} ${y}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`).join('');
+  } else {
+    out += f.eyes.map(([x, y]) => `<path d="M${x - er * 1.15} ${y + er * .45} Q${x} ${y - er * 1.3} ${x + er * 1.15} ${y + er * .45}" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`).join('');
+  }
+  const m = f.mouth;
+  if (m) {
+    const { x, y } = m;
+    if (st === 'happy') {
+      const w = m.type === 'wide' ? m.w : 8;
+      out += `<path d="M${x - w} ${y - 1} Q${x} ${y + w * .9 + 6} ${x + w} ${y - 1} Z" fill="#7a3b33" ${O2}/><ellipse cx="${x}" cy="${y + w * .35 + 2}" rx="${w * .45}" ry="${Math.max(2.4, w * .18)}" fill="#e58b86"/>`;
+    } else if (m.type === 'wide') {
+      const w = st === 'sleeping' ? m.w * .6 : m.w;
+      out += `<path d="M${x - w} ${y} Q${x} ${y + 9} ${x + w} ${y}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`;
+    } else if (m.type === 'cat') {
+      out += st === 'sleeping'
+        ? `<ellipse cx="${x}" cy="${y + 1}" rx="2.6" ry="2.2" fill="${INK}"/>`
+        : `<path d="M${x - 7} ${y - 1} Q${x - 3.5} ${y + 5} ${x} ${y - 1} Q${x + 3.5} ${y + 5} ${x + 7} ${y - 1}" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`;
+    } else {
+      out += st === 'sleeping'
+        ? `<path d="M${x - 3} ${y + 1} H${x + 3}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`
+        : `<path d="M${x - 6} ${y} Q${x} ${y + 6} ${x + 6} ${y}" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`;
+    }
+  }
+  return out;
+}
+
+function sparkle(x, y, s) {
+  return `<path class="spark" d="M${x} ${y - s} C${x + s * .18} ${y - s * .2} ${x + s * .2} ${y - s * .18} ${x + s} ${y} C${x + s * .2} ${y + s * .18} ${x + s * .18} ${y + s * .2} ${x} ${y + s} C${x - s * .18} ${y + s * .2} ${x - s * .2} ${y + s * .18} ${x - s} ${y} C${x - s * .2} ${y - s * .18} ${x - s * .18} ${y - s * .2} ${x} ${y - s} Z" fill="#f4d97c" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>`;
+}
+
+/* Returns the animal as an SVG string. state: awake | sleeping | happy */
+function animalSVG(kind, state = 'awake', opts = {}) {
+  const a = ANIMALS[kind] || ANIMALS.frog;
+  const f = a.face;
+  const label = opts.label || `${a.label}, ${state === 'sleeping' ? 'napping' : state}`;
+  const [zx, zy] = f.zz;
+  const extras = state === 'sleeping'
+    ? `<g class="zz"><text x="${zx}" y="${zy}" font-size="24">z</text><text x="${zx + 12}" y="${zy - 12}" font-size="19">z</text><text x="${zx + 22}" y="${zy - 24}" font-size="15">z</text></g>`
+    : state === 'happy' ? sparkle(zx - 2, zy + 6, 11) + sparkle(36, zy + 26, 9) + sparkle(zx + 20, zy + 46, 7) : '';
+  const tag = opts.nested ? `<svg x="${opts.x || 0}" y="${opts.y || 0}" width="${opts.w || 200}" height="${opts.w || 200}"` : '<svg';
+  return `${tag} class="ga ${state}" viewBox="0 0 200 200" role="img" aria-label="${label}" overflow="visible">
+    <ellipse cx="100" cy="182" rx="60" ry="8" fill="rgba(40,30,20,.16)"/>
+    <g class="bod"><g filter="url(#gr-wob)">${a.art(state)}</g>${faceSVG(f, state)}</g>${extras}</svg>`;
+}
+
+/* Animal sitting on its own lily pad */
+function onPadSVG(kind, state, opts = {}) {
+  const bloom = opts.bloom !== false;
+  return `<svg viewBox="0 0 240 230" overflow="visible" aria-hidden="${opts.hidden ? 'true' : 'false'}">
+    <g transform="translate(120 200)">
+      <ellipse cx="0" cy="8" rx="112" ry="20" fill="var(--water-2)" opacity=".55"/>
+      <path d="M0 0 L50 -20.8 A100 24 0 1 1 17.4 -23.6 Z" fill="var(--pad)" stroke="var(--pad-2)" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0 0 L-72 9 M0 0 L-26 21 M0 0 L44 18 M0 0 L84 4 M0 0 L-90 -6" stroke="var(--pad-2)" stroke-width="2" opacity=".6" stroke-linecap="round"/>
+      ${bloom ? `<g transform="translate(-86 -12)"><path d="M0 0 C-10 -6 -12 -18 -6 -24 C-2 -16 0 -10 0 0 Z M0 0 C10 -6 12 -18 6 -24 C2 -16 0 -10 0 0 Z M0 0 C-5 -10 -4 -22 0 -28 C4 -22 5 -10 0 0 Z" fill="var(--bloom)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>` : ''}
+    </g>
+    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label })}
+  </svg>`;
+}
+
+/* Small round avatar portrait */
+function avatarSVG(kind, state = 'awake') {
+  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
+}
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-5);
+const pad2 = n => String(n).padStart(2, '0');
+const dayKey = (d = new Date()) => { const x = new Date(d); return `${x.getFullYear()}-${pad2(x.getMonth() + 1)}-${pad2(x.getDate())}`; };
+const keyToDate = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const icon = (id, cls = '') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+const fmtMin = m => { m = Math.round(m); if (m < 60) return `${m} min`; const h = Math.floor(m / 60), r = m % 60; return r ? `${h}h ${r}m` : `${h}h`; };
+const ago = t => { const s = (Date.now() - t) / 1000; if (s < 60) return 'just now'; if (s < 3600) return `${Math.floor(s / 60)} min ago`; if (s < 86400) return `${Math.floor(s / 3600)}h ago`; const d = Math.floor(s / 86400); return d === 1 ? 'yesterday' : `${d} days ago`; };
+const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const clampStr = (s, n) => String(s ?? '').slice(0, n);
+const COURSE_COLORS = ['#5f8a5a', '#b0766a', '#5b7fa0', '#c39a43', '#8a6aa0', '#4f9a94', '#a0705a', '#7a8a3a'];
+
+/* ---------- state ---------- */
+const KEY = 'grind.v1';
+function exampleRock() {
+  const due = dayKey(addDays(new Date(), 5));
+  return {
+    id: 'example-rock', title: 'Deep Learning quiz on CNNs', courseId: 'c-dl', due, example: true, createdAt: Date.now(), notes: '',
+    pebbles: [
+      { id: uid(), text: 'Skim the lecture 4 slides and list five key terms', mins: 15, done: true, doneAt: Date.now() },
+      { id: uid(), text: 'Rewatch the convolution part of lecture 5', mins: 20, done: false },
+      { id: uid(), text: 'Do five practice questions on padding and stride', mins: 20, done: false },
+      { id: uid(), text: 'Write a one-page cheat sheet', mins: 25, done: false },
+      { id: uid(), text: 'Quiz each other in your Grind Together circle', mins: 15, done: false }
+    ]
+  };
+}
+function defaultState() {
+  const semId = 'sem-' + uid();
+  return {
+    v: 1, updatedAt: 0, onboarded: false,
+    profile: { name: '', uni: '', major: '', bio: '' },
+    active: 'frog',
+    pets: { frog: { name: 'Pip', bond: 0 }, duckling: { name: 'Sunny', bond: 0 }, capybara: { name: 'Yuzu', bond: 0 } },
+    unlocked: ['frog', 'duckling', 'capybara'],
+    coins: 20, coinsEarned: 20, bestStreak: 0,
+    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, autoRest: true, demo: false },
+    semesters: [{ id: semId, name: 'Fall 2026', courses: [
+      { id: 'c-fws', name: 'FWS310', color: COURSE_COLORS[0] },
+      { id: 'c-dl', name: 'Deep Learning', color: COURSE_COLORS[1] },
+      { id: 'c-co', name: 'Computer Organization', color: COURSE_COLORS[2] }] }],
+    currentSem: semId,
+    rocks: [exampleRock()], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
+    seenRipple: 0, timer: null, lastCourse: 'c-dl', openRock: 'example-rock'
+  };
+}
+function mergeState(s) {
+  const d = defaultState();
+  return { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) } };
+}
+function loadLocal() {
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return mergeState(s); } catch (e) {}
+  return defaultState();
+}
+let S = loadLocal();
+let saveT = null;
+function save() {
+  S.updatedAt = Date.now();
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+  clearTimeout(saveT); saveT = setTimeout(remoteSave, 1500);
+}
+
+/* ---------- derived data ---------- */
+const allCourses = () => S.semesters.flatMap(s => s.courses.map(c => ({ ...c, sem: s.id })));
+const curCourses = () => (S.semesters.find(s => s.id === S.currentSem) || S.semesters[0] || { courses: [] }).courses;
+const courseById = id => allCourses().find(c => c.id === id);
+const courseName = id => courseById(id)?.name || 'General';
+const courseColor = id => courseById(id)?.color || 'var(--muted)';
+const pet = () => { const p = S.pets[S.active]; return p || { name: ANIMALS[S.active].defaultName, bond: 0 }; };
+const petName = () => pet().name || ANIMALS[S.active].label;
+const myName = () => S.profile.name || 'Student';
+
+function minutesByDay(filter) {
+  const m = {};
+  S.sessions.forEach(s => { if (filter && !filter(s)) return; const k = dayKey(s.start); m[k] = (m[k] || 0) + s.mins; });
+  return m;
+}
+function activeDays() {
+  const set = new Set();
+  S.sessions.forEach(s => { if (s.mins > 0) set.add(dayKey(s.start)); });
+  S.pebLog.forEach(p => set.add(dayKey(p.at)));
+  return set;
+}
+function streakNow() {
+  const days = activeDays();
+  let d = new Date(), n = 0;
+  if (!days.has(dayKey(d))) d = addDays(d, -1);
+  while (days.has(dayKey(d))) { n++; d = addDays(d, -1); }
+  return n;
+}
+function bestStreak() {
+  const ks = [...activeDays()].sort();
+  let best = 0, run = 0, prev = null;
+  ks.forEach(k => { const d = keyToDate(k); run = prev && Math.round((d - prev) / 864e5) === 1 ? run + 1 : 1; best = Math.max(best, run); prev = d; });
+  return Math.max(best, S.bestStreak || 0);
+}
+const todayMins = () => minutesByDay()[dayKey()] || 0;
+function nextPebble() {
+  const rocks = S.rocks.filter(r => r.pebbles.some(p => !p.done));
+  rocks.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
+  for (const r of rocks) { const p = r.pebbles.find(p => !p.done); if (p) return { rock: r, peb: p }; }
+  return null;
+}
+function dueText(due) {
+  if (!due) return '';
+  const n = Math.round((keyToDate(due) - keyToDate(dayKey())) / 864e5);
+  if (n === 0) return 'Due today';
+  if (n === 1) return 'Due tomorrow';
+  if (n > 1) return `Due in ${n} days`;
+  return n === -1 ? 'Was due yesterday' : `Was due ${-n} days ago`;
+}
+
+/* ---------- toasts & small UI ---------- */
+function toast(html, art) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = (art || '') + `<span>${html}</span>`;
+  $('#toasts').appendChild(t);
+  setTimeout(() => { t.style.transition = 'opacity .4s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 450); }, 3800);
+}
+function addCoins(n, why) {
+  if (!n) return;
+  S.coins = Math.max(0, S.coins + n);
+  if (n > 0) S.coinsEarned = (S.coinsEarned || 0) + n;
+  renderChips();
+  if (n > 0 && why) toast(`<b>+${n} coins</b> ${esc(why)}`, icon('i-coin'));
+}
+let audioCtx = null;
+function chime() {
+  if (!S.settings.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, now + i * .16); g.gain.linearRampToValueAtTime(.12, now + i * .16 + .03); g.gain.exponentialRampToValueAtTime(.0001, now + i * .16 + 1.4);
+      o.connect(g).connect(audioCtx.destination); o.start(now + i * .16); o.stop(now + i * .16 + 1.5);
+    });
+  } catch (e) {}
+}
+
+/* ---------- themes ---------- */
+const TOKENS = ['bg', 'bg-2', 'surface', 'surface-2', 'line', 'line-2', 'ink', 'ink-2', 'muted', 'accent', 'accent-ink', 'moss', 'rose', 'rose-soft', 'gold', 'sky', 'water', 'water-2', 'water-hi', 'pad', 'pad-2', 'bank', 'reed', 'bloom', 'glow', 'shadow'];
+const PRESETS = {
+  auto: { name: 'Enchanted Pond', note: 'Beige, moss and rosy brown. Follows light and dark.', sw: ['#efe6d5', '#2f5a3f', '#7f8f55', '#b07a6e', '#a2baa6'] },
+  midnight: { name: 'Midnight', dark: true, sw: ['#10141f', '#c9b6e4', '#8fa3c4', '#e0a3b0', '#1d2b45'],
+    v: ['#10141f', '#141a28', '#181f2f', '#1f2839', '#2b3549', '#3a4660', '#e8e4d8', '#bdbbb0', '#8a8d99', '#c9b6e4', '#151826', '#8fa3c4', '#e0a3b0', '#3d2a35', '#e0c070', '#121a2c', '#1d2b45', '#16223a', '#2d3f60', '#3e5a4a', '#2f4739', '#1c2436', '#2a3a3a', '#e7b7c8', '#f5e7a1', 'rgba(0,0,0,.4)'] },
+  sakura: { name: 'Sakura', sw: ['#f6e9e6', '#a8506a', '#8c9a6a', '#c97a8c', '#c9d6d4'],
+    v: ['#f6e9e6', '#efdcd8', '#fbf4f1', '#f2e3df', '#e2c8c2', '#d3afa8', '#3a2a2e', '#5e4a4e', '#8e7a7c', '#a8506a', '#fff6f3', '#8c9a6a', '#c97a8c', '#f3d4d9', '#c9a050', '#f7e3e3', '#c9d6d4', '#aec4c2', '#e2ebe8', '#86a06a', '#6b8752', '#e6cfc4', '#7f8f5a', '#f0aebe', '#fbeec0', 'rgba(90,40,50,.14)'] },
+  ocean: { name: 'Ocean', sw: ['#e8eef0', '#2b6a85', '#6c9a8a', '#c08a7a', '#8fb6c6'],
+    v: ['#e8eef0', '#dce6ea', '#f4f8f9', '#e6eef1', '#c8d6dc', '#aebfc7', '#1d3440', '#44606c', '#72878f', '#2b6a85', '#f4f8f9', '#6c9a8a', '#c08a7a', '#f1dcd4', '#c9a050', '#dfeaf0', '#8fb6c6', '#6f9db1', '#c3dbe4', '#5f9a7a', '#4a7f62', '#d6d0bd', '#4f7a6a', '#f2c4b8', '#f8eab0', 'rgba(20,50,60,.14)'] },
+  forest: { name: 'Forest', dark: true, sw: ['#1a2219', '#d9b36a', '#9db06a', '#d29b85', '#2f4a37'],
+    v: ['#1a2219', '#1f291e', '#243022', '#2c3a29', '#3a4b36', '#4b5f45', '#efe6cf', '#cfc5aa', '#98a08a', '#d9b36a', '#1a2219', '#9db06a', '#d29b85', '#45332a', '#d9b36a', '#1d2a1d', '#2f4a37', '#233d2c', '#43614a', '#5a7d3e', '#476431', '#2a3524', '#415234', '#e2a9a0', '#f2e08f', 'rgba(0,0,0,.35)'] }
+};
+function lum(hex) { const h = hex.replace('#', ''); if (h.length < 6) return .5; const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); return .2126 * r + .7152 * g + .0722 * b; }
+function applyTheme() {
+  const st = document.documentElement.style;
+  TOKENS.forEach(t => st.removeProperty('--' + t));
+  st.removeProperty('color-scheme');
+  const p = PRESETS[S.settings.preset];
+  if (p && p.v) { TOKENS.forEach((t, i) => st.setProperty('--' + t, p.v[i])); st.setProperty('color-scheme', p.dark ? 'dark' : 'light'); }
+  const c = S.settings.custom || {};
+  if (c.accent) { st.setProperty('--accent', c.accent); st.setProperty('--accent-ink', lum(c.accent) > .55 ? '#1b241e' : '#fbf6ec'); }
+  if (c.bg) { st.setProperty('--bg', c.bg); const dark = lum(c.bg) < .4; if (dark !== !!(p && p.dark)) { /* keep text readable on a custom paper */ st.setProperty('--ink', dark ? '#ede4d1' : '#22352a'); st.setProperty('--ink-2', dark ? '#c3bca8' : '#4b5a4a'); } }
+  if (c.water) { st.setProperty('--water', c.water); }
+  const cs = getComputedStyle(document.documentElement);
+  $('#cAccent').value = toHex(cs.getPropertyValue('--accent'));
+  $('#cBg').value = toHex(cs.getPropertyValue('--bg'));
+  $('#cWater').value = toHex(cs.getPropertyValue('--water'));
+}
+function toHex(v) { v = v.trim(); if (/^#[0-9a-f]{6}$/i.test(v)) return v; if (/^#[0-9a-f]{3}$/i.test(v)) return '#' + [...v.slice(1)].map(c => c + c).join(''); return '#888888'; }
+function skyNow() {
+  if (S.settings.sky !== 'auto') return S.settings.sky;
+  const h = new Date().getHours() + new Date().getMinutes() / 60;
+  return h >= 6 && h < 17 ? 'day' : h >= 17 && h < 19.5 ? 'dusk' : 'night';
+}
+
+/* ---------- pond scenery ---------- */
+function padShape(x, y, r, bloom) {
+  return `<g transform="translate(${x} ${y}) scale(${r / 100})"><path d="M0 0 L50 -20.8 A100 24 0 1 1 17.4 -23.6 Z" fill="var(--pad)" stroke="var(--pad-2)" stroke-width="${300 / r}" stroke-linejoin="round"/><path d="M0 0 L-70 9 M0 0 L-24 21 M0 0 L46 17" stroke="var(--pad-2)" stroke-width="${200 / r}" opacity=".55"/>${bloom ? `<g transform="translate(-40 -14) scale(${Math.max(1.3, 90 / r)})"><path d="M0 0 C-10 -6 -12 -18 -6 -24 C-2 -16 0 -10 0 0 Z M0 0 C10 -6 12 -18 6 -24 C2 -16 0 -10 0 0 Z M0 0 C-5 -10 -4 -22 0 -28 C4 -22 5 -10 0 0 Z" fill="var(--bloom)" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/></g>` : ''}</g>`;
+}
+function cattails(x, flip) {
+  const s = flip ? -1 : 1;
+  const stems = [[0, 0, -18, -150], [26, 0, 34, -120], [-20, 0, -44, -100], [12, 0, 6, -170]];
+  return `<g transform="translate(${x} 505) scale(${s} 1)">${stems.map(([a, b, c, d], i) => `<path d="M${a} ${b} Q${(a + c) / 2 + 10} ${d / 2} ${c} ${d}" stroke="var(--reed)" stroke-width="4" fill="none" stroke-linecap="round"/>${i % 2 === 0 ? `<rect x="${c - 6}" y="${d - 4}" width="12" height="34" rx="6" fill="#7a5a3c" stroke="${INK}" stroke-width="2"/>` : ''}`).join('')}
+    <path d="M-30 0 Q-40 -60 -70 -90 M40 0 Q52 -50 80 -70" stroke="var(--reed)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/></g>`;
+}
+function sceneSVG(kind) {
+  const pads = kind === 'focus'
+    ? [[130, 330, 46, 1], [672, 300, 40, 0], [70, 450, 62, 0], [736, 440, 58, 1], [292, 236, 24, 0], [540, 228, 20, 1], [430, 300, 18, 0]]
+    : [[110, 250, 26, 1], [700, 240, 24, 0], [40, 480, 40, 0], [770, 470, 40, 1], [400, 212, 16, 1]];
+  let stars = '';
+  for (let i = 0; i < 26; i++) { const x = (i * 137) % 800, y = (i * 53) % 130 + 8; stars += `<circle cx="${x}" cy="${y}" r="${i % 3 ? 1.1 : 1.8}" fill="#fff8dc"/>`; }
+  let trees = 'M0 150';
+  for (let x = 0; x <= 800; x += 40) trees += ` Q${x + 20} ${118 + ((x * 7) % 26)} ${x + 40} ${146 - ((x * 3) % 10)}`;
+  trees += ' V170 H0 Z';
+  return `<svg class="scene" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><linearGradient id="wg-${kind}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--water-hi)"/><stop offset=".22" style="stop-color:var(--water)"/><stop offset="1" style="stop-color:var(--water-2)"/></linearGradient></defs>
+    <rect width="800" height="500" fill="var(--sky)"/>
+    <g class="stars">${stars}</g>
+    <circle class="sun" cx="640" cy="70" r="34" fill="var(--glow)" opacity=".9"/>
+    <g class="moon"><circle cx="640" cy="72" r="24" fill="#f3ecd2"/><circle cx="651" cy="64" r="21" fill="var(--sky)"/></g>
+    <path d="M0 152 C80 112 160 124 240 136 C320 104 420 108 500 132 C580 110 680 114 800 142 V180 H0Z" fill="var(--bank)"/>
+    <path d="${trees}" fill="var(--reed)" opacity=".5"/>
+    <rect y="166" width="800" height="334" fill="url(#wg-${kind})"/>
+    <path d="M0 168 C200 160 600 176 800 166" stroke="var(--pad-2)" stroke-width="3" opacity=".25" fill="none"/>
+    <g class="water-line" stroke="var(--water-hi)" stroke-width="3" stroke-linecap="round" opacity=".75" fill="none">
+      <path d="M90 200 h70 M220 214 h40 M470 196 h90 M610 222 h50 M330 266 h60 M560 290 h80 M200 300 h44 M60 360 h50 M690 360 h50 M380 420 h70 M240 470 h60 M540 470 h70"/></g>
+    ${pads.map(p => padShape(...p)).join('')}
+    ${cattails(18, false)}${cattails(782, true)}
+    <rect class="tint" width="800" height="500" fill="#0b1424" opacity="0"/>
+  </svg>`;
+}
+
+/* ---------- ambient effects (fireflies, rain, petals) ---------- */
+const FX = [];
+function makeFX(stage) { const c = document.createElement('canvas'); c.className = 'fx'; stage.appendChild(c); const o = { stage, c, ctx: c.getContext('2d'), parts: [], drops: [], mode: null, sky: null, w: 0, h: 0 }; FX.push(o); return o; }
+function fxSize(o) {
+  const r = o.stage.getBoundingClientRect();
+  if (!r.width) return false;
+  if (Math.abs(o.w - r.width) > 1 || Math.abs(o.h - r.height) > 1) {
+    const d = Math.min(2, devicePixelRatio || 1);
+    o.w = r.width; o.h = r.height; o.c.width = r.width * d; o.c.height = r.height * d; o.ctx.setTransform(d, 0, 0, d, 0, 0); o.mode = null;
+  }
+  return true;
+}
+function fxSeed(o) {
+  o.mode = S.settings.fx; o.sky = skyNow(); o.parts = []; o.drops = [];
+  const { w, h } = o;
+  const n = o.mode === 'fireflies' ? (o.sky === 'night' ? 26 : o.sky === 'dusk' ? 18 : 11) : o.mode === 'rain' ? 90 : o.mode === 'petals' ? 22 : 0;
+  for (let i = 0; i < n; i++) o.parts.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .2, ph: Math.random() * 6.28, r: 1.6 + Math.random() * 1.8, s: .6 + Math.random() * .9, a: Math.random() * 6.28 });
+}
+function fxDraw(o, t) {
+  const { ctx, w, h } = o;
+  ctx.clearRect(0, 0, w, h);
+  if (o.mode === 'fireflies') {
+    const night = o.sky !== 'day';
+    o.parts.forEach(p => {
+      p.x += p.vx + Math.sin(t / 1900 + p.ph) * .25; p.y += p.vy + Math.cos(t / 2300 + p.ph) * .2;
+      if (p.x < -10) p.x = w + 10; if (p.x > w + 10) p.x = -10; if (p.y < h * .12) p.vy = Math.abs(p.vy); if (p.y > h) p.vy = -Math.abs(p.vy);
+      const a = .25 + .75 * Math.pow(Math.abs(Math.sin(t / 900 * p.s + p.ph)), 2);
+      const R = p.r * (night ? 7 : 5);
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R);
+      g.addColorStop(0, `rgba(255,246,190,${a})`); g.addColorStop(.25, `rgba(244,227,150,${a * .55})`); g.addColorStop(1, 'rgba(244,227,150,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, 6.283); ctx.fill();
+      ctx.fillStyle = `rgba(255,250,215,${Math.min(1, a + .2)})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * .7, 0, 6.283); ctx.fill();
+    });
+  } else if (o.mode === 'rain') {
+    ctx.strokeStyle = 'rgba(235,242,240,.55)'; ctx.lineWidth = 1.2; ctx.beginPath();
+    o.parts.forEach(p => {
+      p.y += 7 * p.s + 3; p.x += .8;
+      const floor = h * (.38 + (p.ph / 6.28) * .6);
+      if (p.y > floor) { o.drops.push({ x: p.x, y: floor, r: 1, a: .6 }); p.y = -20 - Math.random() * h * .3; p.x = Math.random() * w; }
+      ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - 1.6, p.y - 11);
+    });
+    ctx.stroke();
+    o.drops = o.drops.filter(d => d.a > .02);
+    o.drops.forEach(d => { d.r += .5; d.a *= .955; ctx.strokeStyle = `rgba(240,246,244,${d.a})`; ctx.beginPath(); ctx.ellipse(d.x, d.y, d.r * 2, d.r * .6, 0, 0, 6.283); ctx.stroke(); });
+  } else if (o.mode === 'petals') {
+    o.parts.forEach(p => {
+      p.y += .45 * p.s + .2; p.x += .35 + Math.sin(t / 1400 + p.ph) * .5; p.a += .012 * p.s;
+      if (p.y > h + 10 || p.x > w + 10) { p.y = -10; p.x = Math.random() * w * .9 - w * .1; }
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.scale(1, .55 + .45 * Math.sin(p.a * 2));
+      ctx.fillStyle = 'rgba(240,176,190,.88)'; ctx.strokeStyle = 'rgba(160,90,100,.5)'; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.ellipse(0, 0, p.r * 2.6, p.r * 1.6, 0, 0, 6.283); ctx.fill(); ctx.stroke(); ctx.restore();
+    });
+  }
+}
+function fxLoop(t) {
+  FX.forEach(o => {
+    if (!o.stage.offsetParent || !fxSize(o)) return;
+    if (o.mode !== S.settings.fx || o.sky !== skyNow()) fxSeed(o);
+    fxDraw(o, t);
+  });
+  if (!REDUCED) requestAnimationFrame(fxLoop);
+}
+function applySky() { const s = skyNow(); $$('.stage').forEach(st => st.dataset.sky = s); }
+/* ---------- shared pond (runtime capabilities) ---------- */
+const NET = { db: null, uid: null, canWrite: false, ready: false, pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, sampleP: Promise.resolve(null), downloadsP: Promise.resolve(null) };
+const wq = {};
+function writeQ(path, fn) {
+  wq[path] = (wq[path] || Promise.resolve()).then(fn).catch(e => {
+    if (e && (e.code === 'invalid_argument' || e.code === 'permission-denied')) { toast('That change was not allowed by the pond. Try signing in again.'); }
+    else if (e && e.code === 'quota_exceeded') toast('The shared pond is full right now. Ask the owner to clear old posts.');
+  });
+  return wq[path];
+}
+const ANIMAL_OK = k => ANIMAL_KEYS.includes(k) ? k : 'frog';
+function cleanResident(id, d) {
+  return {
+    id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
+    status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
+    streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0
+  };
+}
+function liveStatus(r) {
+  if ((r.status === 'focus' || r.status === 'rest') && r.endsAt > Date.now() - 30000) return r.status;
+  return Date.now() - r.updatedAt > 30 * 60000 ? 'away' : 'idle';
+}
+
+/* ---------- shared pond on Firebase (public website build) ---------- */
+const FB_VERSION = '10.12.2';
+let FB = null;
+function fsAdapter(m, fs) {
+  const snapDoc = s => ({ id: s.id, exists: s.exists(), data: () => s.data(), metadata: s.metadata });
+  const qSnap = s => ({ docs: s.docs.map(snapDoc), size: s.size, empty: s.empty });
+  const docRef = path => {
+    const r = m.doc(fs, path);
+    return {
+      id: r.id, path,
+      get: async () => snapDoc(await m.getDoc(r)),
+      set: d => m.setDoc(r, d),
+      delete: () => m.deleteDoc(r),
+      onSnapshot: (next, err) => m.onSnapshot(r, s => next(snapDoc(s)), e => err && err(e)),
+      collection: p => colRef(path + '/' + p)
+    };
+  };
+  const query = (path, cons) => ({
+    where: (f, op, v) => query(path, [...cons, m.where(f, op, v)]),
+    orderBy: (f, d = 'asc') => query(path, [...cons, m.orderBy(f, d)]),
+    limit: n => query(path, [...cons, m.limit(n)]),
+    get: async () => qSnap(await m.getDocs(m.query(m.collection(fs, path), ...cons))),
+    onSnapshot: (next, err) => m.onSnapshot(m.query(m.collection(fs, path), ...cons), s => next(qSnap(s)), e => err && err(e))
+  });
+  const colRef = path => ({ ...query(path, []), path, doc: id => docRef(path + '/' + (id || m.doc(m.collection(fs, path)).id)) });
+  return { doc: docRef, collection: colRef };
+}
+function signIn() {
+  if (!FB) { toast('Sign-in is still loading. Try again in a moment.'); return; }
+  FB.authM.signInWithPopup(FB.auth, new FB.authM.GoogleAuthProvider()).catch(e => {
+    if (e && e.code === 'auth/popup-closed-by-user') return;
+    toast('Sign-in did not finish. Check that pop-ups are allowed and try again.');
+  });
+}
+function signOut() { if (FB) FB.authM.signOut(FB.auth); }
+
+async function initNet() {
+  NET.web = true; NET.unsubs = [];
+  const cfg = window.GRIND_FIREBASE;
+  if (!cfg || !cfg.apiKey) { NET.ready = true; renderSync(); renderNotices(); return; }
+  try {
+    const base = `https://www.gstatic.com/firebasejs/${FB_VERSION}/`;
+    const [appM, authM, fsM] = await Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-firestore.js')]);
+    const app = appM.initializeApp(cfg);
+    const auth = authM.getAuth(app);
+    FB = { authM, auth, fsM, fs: fsM.getFirestore(app) };
+    NET.fbReady = true;
+  } catch (e) { NET.ready = true; renderSync(); renderNotices(); return; }
+  NET.ready = true; renderSync(); renderNotices();
+  FB.authM.onAuthStateChanged(FB.auth, u => { if (u) connect(u); else disconnect(); });
+}
+function disconnect() {
+  (NET.unsubs || []).forEach(u => { try { u(); } catch (e) {} });
+  NET.unsubs = [];
+  Object.values(NET.circleUnsub).forEach(u => { try { u(); } catch (e) {} });
+  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {} });
+  renderAll(); renderDrawer();
+}
+async function connect(u) {
+  const db = fsAdapter(FB.fsM, FB.fs), id = u.uid;
+  NET.db = db; NET.uid = id; NET.canWrite = true; NET.userName = u.displayName || '';
+  if (!S.profile.name && u.displayName) { S.profile.name = clampStr(u.displayName.split(' ')[0], 40); save(); }
+  try {
+    const snap = await db.doc(`data/users/${id}/state`).get();
+    if (snap.exists) {
+      const d = snap.data();
+      if (d && d.json && (+d.updatedAt || 0) > (S.updatedAt || 0)) {
+        S = mergeState(JSON.parse(d.json));
+        try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+        applyTheme();
+      }
+    }
+  } catch (e) {}
+  renderAll();
+  NET.unsubs.push(db.collection('pond').orderBy('updatedAt', 'desc').limit(80).onSnapshot(s => {
+    NET.pond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
+    renderPond(); renderFriends(); renderCircle();
+  }, () => {}));
+  NET.unsubs.push(db.doc('ripples/' + id).onSnapshot(s => {
+    const items = s.exists ? ((s.data() || {}).items || []) : [];
+    const prev = NET.ripples.length ? NET.ripples[0].at : S.seenRipple;
+    NET.ripples = items.filter(r => r && typeof r === 'object').map(r => ({ from: clampStr(r.from, 80), name: clampStr(r.name, 40) || 'Someone', animal: ANIMAL_OK(r.animal), msg: clampStr(r.msg, 60), at: +r.at || 0 }));
+    const fresh = NET.ripples.filter(r => r.at > Math.max(prev || 0, S.seenRipple || 0));
+    if (fresh.length) {
+      const r = fresh[0];
+      toast(`<b>${esc(r.name)}</b> sent you a ripple: “${esc(r.msg)}”`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(r.animal, 'happy')}</span>`);
+      rippleAt(null);
+      if (currentView !== 'pond') $('#pondDot').hidden = false;
+      else { S.seenRipple = r.at; save(); }
+    }
+    renderRipples();
+  }, () => {}));
+  NET.unsubs.push(db.collection('posts').orderBy('at', 'desc').limit(80).onSnapshot(s => {
+    NET.posts = s.docs.filter(d => d.exists).map(d => cleanPost(d.id, d.data() || {}));
+    renderFeed();
+  }, () => {}));
+  subscribeCircles();
+  publishPond();
+  remoteSave();
+  renderSync(); renderNotices(); renderComposerNote(); renderDrawer();
+  toast(`Signed in. ${esc(petName())} has joined the pond.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`);
+}
+
+function remoteSave() {
+  if (!NET.db || !NET.uid || !NET.canWrite) return;
+  const json = JSON.stringify(S);
+  if (json.length > 240000) { S.sessions = S.sessions.slice(-1500); }
+  const body = { json: JSON.stringify(S), updatedAt: S.updatedAt };
+  writeQ(`data/users/${NET.uid}/state`, () => NET.db.doc(`data/users/${NET.uid}/state`).set(body));
+}
+function myStatus() {
+  const t = S.timer;
+  if (t && t.endsAt && !t.pausedLeft) return { status: t.phase, endsAt: t.endsAt };
+  return { status: 'idle', endsAt: 0 };
+}
+function publishPond() {
+  if (!NET.db || !NET.uid || !NET.canWrite) return;
+  const st = myStatus();
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
+  writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
+}
+function sendRippleNet(toId, msg) {
+  if (!NET.db || !NET.canWrite) return;
+  const ref = NET.db.doc('ripples/' + toId);
+  writeQ('ripples/' + toId, async () => {
+    const s = await ref.get();
+    const items = s.exists ? ((s.data() || {}).items || []) : [];
+    items.unshift({ from: NET.uid, name: myName(), animal: S.active, msg, at: Date.now() });
+    await ref.set({ items: items.slice(0, 30) });
+  });
+}
+
+/* posts */
+function cleanPost(id, d) {
+  return {
+    id, by: clampStr(d.by, 80), name: clampStr(d.name, 40) || 'Someone', animal: ANIMAL_OK(d.animal), kind: ['note', 'done', 'win'].includes(d.kind) ? d.kind : 'note',
+    course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 2000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
+    at: +d.at || 0, likes: Array.isArray(d.likes) ? d.likes.slice(0, 500).map(x => clampStr(x, 80)) : [],
+    comments: Array.isArray(d.comments) ? d.comments.slice(-100).map(c => ({ by: clampStr(c.by, 80), name: clampStr(c.name, 40) || 'Someone', text: clampStr(c.text, 500), at: +c.at || 0 })) : []
+  };
+}
+const sharedPosts = () => NET.db && NET.canWrite && NET.posts !== null;
+function postMutate(id, fn) {
+  if (sharedPosts()) {
+    const ref = NET.db.doc('posts/' + id);
+    return writeQ('posts/' + id, async () => {
+      const s = await ref.get(); if (!s.exists) return;
+      const p = cleanPost(id, s.data() || {}); fn(p);
+      const { id: _, ...body } = p; await ref.set(body);
+    });
+  }
+  const p = S.localPosts.find(p => p.id === id); if (p) { fn(p); save(); renderFeed(); }
+}
+
+/* circles */
+function subscribeCircles() {
+  if (!NET.db) return;
+  Object.entries(NET.circleUnsub).forEach(([code, un]) => { if (!S.circles.includes(code)) { un(); delete NET.circleUnsub[code]; delete NET.circleDocs[code]; } });
+  S.circles.forEach(code => {
+    if (NET.circleUnsub[code]) return;
+    NET.circleUnsub[code] = NET.db.doc('circles/' + code).onSnapshot(s => {
+      NET.circleDocs[code] = s.exists ? cleanCircle(s.data() || {}) : null;
+      renderCircle();
+    }, () => {});
+  });
+}
+function cleanCircle(d) {
+  const members = {};
+  Object.entries(d.members || {}).slice(0, 12).forEach(([k, m]) => { members[clampStr(k, 80)] = { name: clampStr(m.name, 40) || 'Someone', animal: ANIMAL_OK(m.animal), pet: clampStr(m.pet, 30), day: clampStr(m.day, 10), mins: Math.max(0, +m.mins || 0) }; });
+  return { name: clampStr(d.name, 40) || 'Study circle', createdBy: clampStr(d.createdBy, 80), members };
+}
+function meAsMember() { return { name: myName(), animal: S.active, pet: petName(), day: dayKey(), mins: todayMins() }; }
+function updateCircles() {
+  if (!NET.db || !NET.canWrite) return;
+  S.circles.forEach(code => {
+    const ref = NET.db.doc('circles/' + code);
+    writeQ('circles/' + code, async () => {
+      const s = await ref.get(); if (!s.exists) return;
+      const d = s.data() || {}; d.members = d.members || {}; d.members[NET.uid] = meAsMember();
+      await ref.set(d);
+    });
+  });
+}
+function afterProgress() { publishPond(); updateCircles(); }
+/* ---------- focus timer ---------- */
+let mode = 'focus';
+let heroState = null, happyUntil = 0, napAfterStop = false;
+const LINES = {
+  start: ['One pebble at a time.', 'I will stay awake with you.', 'Just start. I am right here.', 'Slow is still forward.'],
+  pet: ['That tickles.', 'You are doing better than you think.', 'Sip some water?', 'I believe in you.', 'Tiny steps count.'],
+  done: ['We did it!', 'Look at that. A whole session.', 'Proud of you.', 'Another stone laid.'],
+  stop: ['That still counts. Nap time.', 'Rest is part of it.', 'No worries. I will nap here.'],
+  rest: ['Stretch, breathe, look far away.', 'Zzz. Wake me when you are ready.'],
+  wake: ['Rest done. Ready for one more pebble?', 'I feel fresh. You?']
+};
+const pick = a => a[Math.floor(Math.random() * a.length)];
+let speechT;
+function say(text) {
+  const el = $('#speech'); el.textContent = text; el.classList.add('show');
+  clearTimeout(speechT); speechT = setTimeout(() => el.classList.remove('show'), 3400);
+}
+const phaseMs = (min) => min * 60000 / (S.settings.demo ? 60 : 1);
+
+function computeHero() {
+  if (Date.now() < happyUntil) return 'happy';
+  const t = S.timer;
+  if (t && t.phase === 'rest') return 'sleeping';
+  if (t && t.phase === 'focus') return t.pausedLeft ? 'awake' : 'awake';
+  return napAfterStop ? 'sleeping' : 'awake';
+}
+function renderHero(force) {
+  const st = computeHero();
+  const el = $('#heroPet');
+  el.classList.toggle('focus', !!(S.timer && S.timer.phase === 'focus' && !S.timer.pausedLeft));
+  if (!force && st === heroState) return;
+  heroState = st;
+  el.innerHTML = onPadSVG(S.active, st, { label: `${petName()} the ${ANIMALS[S.active].label.toLowerCase()}, ${st === 'sleeping' ? 'napping' : st}` });
+  $('#petName').textContent = petName();
+  $('#petSpecies').textContent = `${ANIMALS[S.active].label}${st === 'sleeping' ? ' · napping' : st === 'happy' ? ' · happy' : S.timer?.phase === 'focus' ? ' · awake with you' : ''}`;
+}
+function makeHappy(ms = 3200) { happyUntil = Date.now() + ms; renderHero(); setTimeout(() => renderHero(), ms + 50); }
+
+function renderTimer() {
+  const t = S.timer;
+  const startB = $('#startBtn'), pauseB = $('#pauseBtn'), stopB = $('#stopBtn'), skipB = $('#skipBtn');
+  let left, total, label, sub;
+  if (!t) {
+    total = phaseMs(mode === 'focus' ? S.settings.focus : S.settings.rest); left = total;
+    label = mode === 'focus' ? (napAfterStop ? `${petName()} is napping` : 'Ready when you are') : 'Time for a rest';
+    const np = nextPebble();
+    sub = mode === 'focus' ? (np ? `Next pebble: ${np.peb.text}` : 'Pick one small pebble and start. That is enough.') : `${petName()} will nap while you rest.`;
+    startB.hidden = false; pauseB.hidden = true; stopB.hidden = true; skipB.hidden = true;
+    startB.querySelector('span').textContent = mode === 'focus' ? 'Start focusing' : 'Start resting';
+  } else {
+    total = t.total;
+    left = t.pausedLeft != null ? t.pausedLeft : Math.max(0, t.endsAt - Date.now());
+    label = t.phase === 'focus' ? (t.pausedLeft != null ? 'Paused' : 'Focusing') : 'Resting';
+    sub = t.phase === 'focus' ? `${courseName(t.courseId)} · ${petName()} is awake with you` : `${petName()} is napping. Stretch and breathe.`;
+    startB.hidden = t.pausedLeft == null; startB.querySelector('span').textContent = 'Resume';
+    pauseB.hidden = t.pausedLeft != null || t.phase !== 'focus';
+    stopB.hidden = t.phase !== 'focus'; skipB.hidden = t.phase !== 'rest';
+  }
+  const nominalLeft = left * (S.settings.demo ? 60 : 1);
+  const mm = Math.floor(nominalLeft / 60000), ss = Math.floor(nominalLeft / 1000) % 60;
+  const txt = `${pad2(mm)}:${pad2(ss)}`;
+  const clock = $('#clock');
+  if (clock.textContent !== txt) clock.textContent = txt;
+  $('#phaseLabel').textContent = label;
+  $('#clockSub').textContent = sub;
+  const frac = total ? 1 - left / total : 0;
+  $('#progFill').style.width = (frac * 100) + '%';
+  $('#progDot').style.left = (frac * 100) + '%';
+  if (t && !t.pausedLeft) document.title = `${txt} · ${t.phase === 'focus' ? 'Focusing' : 'Resting'} · Grind`; else document.title = 'Grind';
+  $('#modeFocus').setAttribute('aria-pressed', mode === 'focus'); $('#modeRest').setAttribute('aria-pressed', mode === 'rest');
+  $('#focusRange').disabled = $('#restRange').disabled = !!t;
+}
+
+function startPhase(phase) {
+  const min = phase === 'focus' ? S.settings.focus : S.settings.rest;
+  const total = phaseMs(min);
+  S.timer = { phase, min, total, startedAt: Date.now(), endsAt: Date.now() + total, pausedLeft: null, courseId: $('#courseSel').value };
+  mode = phase; napAfterStop = false;
+  save(); renderTimer(); renderHero(); publishPond();
+  say(pick(phase === 'focus' ? LINES.start : LINES.rest));
+  requestWake();
+}
+function logFocus(mins, completed) {
+  const t = S.timer;
+  if (mins < 1) return 0;
+  S.sessions.push({ id: uid(), start: t.startedAt, mins, courseId: t.courseId, completed, animal: S.active });
+  const p = S.pets[S.active]; if (p) p.bond = (p.bond || 0) + mins;
+  const coins = completed ? Math.max(1, Math.round(mins / 5)) + 2 : Math.floor(mins / 5);
+  checkUnlocks();
+  return coins;
+}
+function completePhase() {
+  const t = S.timer; if (!t) return;
+  chime();
+  if (t.phase === 'focus') {
+    const coins = logFocus(t.min, true);
+    S.timer = null; mode = 'rest';
+    save(); addCoins(coins, `for ${fmtMin(t.min)} of focus`);
+    makeHappy(); say(pick(LINES.done));
+    afterProgress(); renderAllLight();
+    if (S.settings.autoRest) setTimeout(() => { if (!S.timer) startPhase('rest'); }, 1600);
+  } else {
+    S.timer = null; mode = 'focus';
+    save(); say(pick(LINES.wake)); makeHappy(1800); publishPond(); renderTimer();
+  }
+  releaseWake();
+}
+function stopFocus() {
+  const t = S.timer; if (!t) return;
+  const left = t.pausedLeft != null ? t.pausedLeft : Math.max(0, t.endsAt - Date.now());
+  const done = Math.floor(t.min * (1 - left / t.total));
+  const coins = logFocus(done, false);
+  S.timer = null; napAfterStop = true; mode = 'focus';
+  save(); renderHero(); renderTimer();
+  say(pick(LINES.stop));
+  if (done >= 1) { addCoins(coins, `for ${fmtMin(done)} of focus`); toast(`${fmtMin(done)} added to your journal. Every minute counts.`); }
+  afterProgress(); renderAllLight(); releaseWake();
+}
+let wakeLock = null;
+async function requestWake() { try { wakeLock = await navigator.wakeLock?.request('screen'); } catch (e) { wakeLock = null; } }
+function releaseWake() { try { wakeLock?.release(); } catch (e) {} wakeLock = null; }
+
+function tick() {
+  const t = S.timer;
+  if (t && t.pausedLeft == null && Date.now() >= t.endsAt) completePhase();
+  renderTimer();
+}
+
+function renderCourseSelects() {
+  const opts = `<option value="">General</option>` + curCourses().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+  ['#courseSel', '#rockCourse', '#postCourse'].forEach(s => { const el = $(s); const v = el.value; el.innerHTML = opts; el.value = v && [...el.options].some(o => o.value === v) ? v : (s === '#courseSel' ? (S.lastCourse || '') : ''); if (el.selectedIndex < 0) el.value = ''; });
+}
+function renderPresetsRow() {
+  const sets = [[25, 5, 'Classic 25 · 5'], [50, 10, 'Deep 50 · 10'], [15, 3, 'Gentle start 15 · 3'], [90, 20, 'Long haul 90 · 20']];
+  $('#presetRow').innerHTML = `<span class="eyebrow" style="margin-right:4px">Quick picks</span>` + sets.map(([f, r, l]) => `<button class="btn small ${S.settings.focus === f && S.settings.rest === r ? 'primary' : ''}" data-f="${f}" data-r="${r}">${l}</button>`).join('');
+}
+function renderToday() {
+  const k = dayKey();
+  const ses = S.sessions.filter(s => dayKey(s.start) === k);
+  const pebs = S.pebLog.filter(p => dayKey(p.at) === k);
+  const mins = ses.reduce((a, s) => a + s.mins, 0);
+  $('#todayDate').textContent = `${WD[new Date().getDay()]} ${new Date().getDate()} ${MO[new Date().getMonth()]}`;
+  $('#todayStats').innerHTML = `<div><b class="num">${fmtMin(mins)}</b><span>Focused</span></div><div><b class="num">${ses.length}</b><span>Sessions</span></div><div><b class="num">${pebs.length}</b><span>Pebbles</span></div>`;
+  const items = [...ses.map(s => ({ at: s.start, t: `${fmtMin(s.mins)} on ${courseName(s.courseId)}${s.completed ? '' : ' (stopped early, still counts)'}`, i: 'i-timer' })), ...pebs.map(p => ({ at: p.at, t: p.text, i: 'i-check' }))].sort((a, b) => b.at - a.at).slice(0, 6);
+  $('#todayList').innerHTML = items.length ? items.map(x => `<li>${icon(x.i)}<span class="t">${esc(x.t)}</span><span class="muted" style="font-size:.78rem">${new Date(x.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span></li>`).join('')
+    : `<li class="muted" style="border:0">Nothing yet, and that is fine. Your first session or pebble will show up here.</li>`;
+}
+function renderNextPebble() {
+  const np = nextPebble();
+  const el = $('#nextPebble');
+  if (!np) { el.innerHTML = `<div class="empty"><span class="hand">The pond is calm.</span><span>No pebbles waiting. Add a rock when something new comes up.</span><button class="btn small primary" data-go="pebbles">Add a rock</button></div>`; return; }
+  const left = np.rock.pebbles.filter(p => !p.done).length;
+  el.innerHTML = `<div class="next-peb">${pebbleArt(courseColor(np.rock.courseId), 44)}<div style="min-width:0; flex:1"><h3>${esc(np.peb.text)}</h3>
+    <p class="muted" style="font-size:.85rem">${esc(np.rock.title)} · about ${np.peb.mins || 15} min${np.rock.due ? ' · ' + dueText(np.rock.due).toLowerCase() : ''}</p>
+    <div class="row" style="margin-top:10px"><button class="btn small primary" id="npFocus">${icon('i-play')}Focus on this</button><button class="btn small" id="npDone">${icon('i-check')}Done</button><span class="muted" style="font-size:.8rem">${left - 1} more after this</span></div></div></div>`;
+  $('#npFocus').onclick = () => { if (np.peb.mins) { S.settings.focus = Math.min(120, Math.max(1, np.peb.mins)); syncRanges(); } $('#courseSel').value = np.rock.courseId || ''; if (!S.timer) startPhase('focus'); };
+  $('#npDone').onclick = () => togglePebble(np.rock.id, np.peb.id);
+}
+function pebbleArt(color, w = 44, done = true) {
+  return `<svg class="peb-shape" viewBox="0 0 44 34" width="${w}" aria-hidden="true"><path d="M4 22 C2 12 10 5 22 4 C34 3 42 10 41 19 C40 28 30 31 20 31 C11 31 5 28 4 22 Z" fill="${done ? color : 'none'}" stroke="${INK}" stroke-width="2.2" ${done ? '' : 'stroke-dasharray="4 4"'} /><path d="M11 15 C14 11 18 10 23 10" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>`;
+}
+function syncRanges() {
+  $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
+  $('#focusVal').textContent = S.settings.focus; $('#restVal').textContent = S.settings.rest;
+  renderPresetsRow(); renderTimer();
+}
+function bindFocus() {
+  $('#focusRange').oninput = e => { S.settings.focus = +e.target.value; $('#focusVal').textContent = S.settings.focus; renderTimer(); };
+  $('#restRange').oninput = e => { S.settings.rest = +e.target.value; $('#restVal').textContent = S.settings.rest; renderTimer(); };
+  $('#focusRange').onchange = $('#restRange').onchange = () => { renderPresetsRow(); save(); };
+  $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; S.settings.rest = +b.dataset.r; syncRanges(); save(); };
+  $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
+  $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };
+  $('#courseSel').onchange = e => { S.lastCourse = e.target.value; save(); };
+  $('#startBtn').onclick = () => {
+    const t = S.timer;
+    if (t && t.pausedLeft != null) { t.endsAt = Date.now() + t.pausedLeft; t.pausedLeft = null; save(); renderTimer(); renderHero(); publishPond(); say('Back to it.'); return; }
+    chimePrime(); startPhase(mode);
+  };
+  $('#pauseBtn').onclick = () => { const t = S.timer; if (!t) return; t.pausedLeft = Math.max(0, t.endsAt - Date.now()); save(); renderTimer(); renderHero(); publishPond(); };
+  $('#stopBtn').onclick = stopFocus;
+  $('#skipBtn').onclick = () => { S.timer = null; mode = 'focus'; save(); renderTimer(); renderHero(); publishPond(); say(pick(LINES.wake)); releaseWake(); };
+  $('#heroPet').onclick = () => { makeHappy(2200); say(pick(LINES.pet)); };
+}
+function chimePrime() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume?.(); } catch (e) {} }
+/* ---------- rocks and pebbles ---------- */
+let rockFilter = 'all';
+const aiDrafts = {};
+function rockArt(color) {
+  return `<svg class="rk" viewBox="0 0 52 42" aria-hidden="true"><path d="M3 32 C1 18 12 6 26 5 C40 4 50 14 49 26 C48 37 37 40 25 40 C13 40 4 38 3 32 Z" fill="${color}" stroke="${INK}" stroke-width="2.4"/><path d="M12 22 C16 15 22 12 29 12" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M30 30 l6 -4 M18 32 l5 1" stroke="${INK}" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/></svg>`;
+}
+function crossingSVG(rock) {
+  const n = Math.max(1, rock.pebbles.length), done = rock.pebbles.filter(p => p.done).length;
+  const x0 = 92, x1 = 508;
+  const stones = rock.pebbles.map((p, i) => {
+    const x = n === 1 ? 300 : x0 + (x1 - x0) * i / (n - 1), y = 70 + Math.sin(i * 1.3) * 9;
+    return { x, y, done: p.done };
+  });
+  const lastDone = [...stones].reverse().find(s => s.done);
+  const all = done === rock.pebbles.length && rock.pebbles.length > 0;
+  const ax = all ? 548 : lastDone ? lastDone.x : 46, ay = all ? 58 : lastDone ? lastDone.y : 62;
+  return `<svg viewBox="0 0 600 120" role="img" aria-label="${done} of ${rock.pebbles.length} stepping stones laid">
+    <rect width="600" height="120" fill="var(--water)"/>
+    <path d="M70 26 h60 M250 18 h50 M420 30 h70 M160 104 h50 M360 108 h60" stroke="var(--water-hi)" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+    <path d="M0 0 H52 C70 30 66 90 50 120 H0 Z" fill="var(--bank)" stroke="var(--pad-2)" stroke-width="2"/>
+    <path d="M600 0 H548 C530 30 534 90 550 120 H600 Z" fill="var(--bank)" stroke="var(--pad-2)" stroke-width="2"/>
+    <g transform="translate(578 40)"><path d="M0 0 C-8 -5 -10 -14 -5 -19 C-2 -13 0 -8 0 0 Z M0 0 C8 -5 10 -14 5 -19 C2 -13 0 -8 0 0 Z M0 0 C-4 -8 -3 -18 0 -23 C3 -18 4 -8 0 0 Z" fill="${all ? 'var(--bloom)' : 'var(--line-2)'}" stroke="${INK}" stroke-width="1.4"/></g>
+    ${stones.map(s => `<ellipse cx="${s.x}" cy="${s.y + 6}" rx="24" ry="7" fill="var(--water-2)" opacity=".6"/><path d="M${s.x - 24} ${s.y + 2} C${s.x - 24} ${s.y - 10} ${s.x - 10} ${s.y - 13} ${s.x} ${s.y - 13} C${s.x + 14} ${s.y - 13} ${s.x + 24} ${s.y - 8} ${s.x + 24} ${s.y + 1} C${s.x + 24} ${s.y + 8} ${s.x + 12} ${s.y + 10} ${s.x} ${s.y + 10} C${s.x - 12} ${s.y + 10} ${s.x - 24} ${s.y + 8} ${s.x - 24} ${s.y + 2} Z" fill="${s.done ? '#b9ad97' : 'none'}" stroke="${s.done ? INK : 'var(--water-hi)'}" stroke-width="2.2" ${s.done ? '' : 'stroke-dasharray="5 5"'}/>`).join('')}
+    ${animalSVG(S.active, all ? 'happy' : 'awake', { nested: true, x: ax - 30, y: ay - 56, w: 60, label: petName() })}
+  </svg>`;
+}
+function renderRockFilter() {
+  const cs = curCourses();
+  $('#rockFilter').innerHTML = `<div class="seg" role="group" aria-label="Filter by course"><button data-c="all" aria-pressed="${rockFilter === 'all'}">All</button>${cs.map(c => `<button data-c="${esc(c.id)}" aria-pressed="${rockFilter === c.id}">${esc(c.name)}</button>`).join('')}<button data-c="" aria-pressed="${rockFilter === ''}">General</button></div>`;
+}
+function renderRocks() {
+  renderRockFilter();
+  let rocks = S.rocks.filter(r => rockFilter === 'all' || (r.courseId || '') === rockFilter);
+  const isDone = r => r.pebbles.length && r.pebbles.every(p => p.done);
+  rocks.sort((a, b) => (isDone(a) - isDone(b)) || (a.due || '9999').localeCompare(b.due || '9999') || b.createdAt - a.createdAt);
+  const el = $('#rockList');
+  if (!rocks.length) { el.innerHTML = `<div class="card flat empty"><span class="hand">No rocks here.</span><span>Add a big task and split it into pebbles, or import your Blackboard calendar.</span></div>`; return; }
+  el.innerHTML = rocks.map(r => {
+    const d = r.pebbles.filter(p => p.done).length, n = r.pebbles.length, open = S.openRock === r.id;
+    const draft = aiDrafts[r.id];
+    return `<article class="rock" data-rock="${esc(r.id)}">
+      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt(courseColor(r.courseId))}
+        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${courseColor(r.courseId)}"></i>${esc(courseName(r.courseId))}</span>${r.due ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${isDone(r) ? '<span class="pill" style="background:var(--moss);color:#fff">Crossed</span>' : ''}</div></div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width:90px"><span class="muted num" style="font-size:.82rem">${d} of ${n} pebbles</span><span class="prog-bar" style="width:90px"><i style="width:${n ? d / n * 100 : 0}%"></i></span></div>
+      </div>
+      ${open ? `<div class="rock-body">
+        <div class="crossing">${crossingSVG(r)}</div>
+        ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(p => `<li class="peb ${p.done ? 'done' : ''}"><button class="chk" data-peb="${esc(p.id)}" aria-label="${p.done ? 'Mark not done' : 'Mark done'}: ${esc(p.text)}">${icon('i-check')}</button><span class="tx">${esc(p.text)}</span><span class="mins">${p.mins || 15} min</span><button class="icon-btn" style="width:30px;height:30px" data-delpeb="${esc(p.id)}" aria-label="Remove pebble">${icon('i-x')}</button></li>`).join('')}</ul>` : '<p class="muted">No pebbles yet. Add the smallest first step you can think of, or let Claude break it down.</p>'}
+        ${draft ? aiBox(r.id, draft) : ''}
+        <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="15" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
+        <div class="row"><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
+      </div>` : ''}
+    </article>`;
+  }).join('');
+}
+function aiBox(id, d) {
+  if (d.loading) return `<div class="ai-box"><span class="hand">Claude is thinking about small first steps...</span></div>`;
+  if (d.error) return `<div class="ai-box"><span>${esc(d.error)}</span><div class="row"><button class="btn small" data-aiclose>Close</button></div></div>`;
+  return `<div class="ai-box"><span class="eyebrow">${d.offline ? 'A simple starting split' : 'Suggested by Claude'}</span><ol>${d.items.map(p => `<li>${esc(p.text)} <span class="muted">· ${p.mins} min</span></li>`).join('')}</ol>
+    <div class="row"><button class="btn small primary" data-aiadd>${icon('i-plus')}Add these pebbles</button>${d.offline ? '' : '<button class="btn small" data-ai>Try again</button>'}<button class="btn small quiet" data-aiclose>Dismiss</button></div></div>`;
+}
+async function breakDown(rockId) {
+  const r = S.rocks.find(x => x.id === rockId); if (!r) return;
+  aiDrafts[rockId] = { loading: true }; S.openRock = rockId; renderRocks();
+  const sample = await NET.sampleP;
+  const offline = () => ({ offline: true, items: [
+    { text: 'Write the task in one sentence and note what “done” looks like', mins: 10 },
+    { text: 'Gather what you need: slides, notes, the brief', mins: 10 },
+    { text: 'Do the smallest first part only', mins: 20 },
+    { text: 'Do the next part', mins: 25 },
+    { text: 'Review, fix one thing, and submit or save', mins: 15 }] });
+  if (!sample) { aiDrafts[rockId] = offline(); renderRocks(); return; }
+  try {
+    const prompt = `You help a university student who procrastinates because of decision fatigue, not laziness. Split their task into 4 to 7 small pebbles. Each pebble is one concrete action that takes 10 to 30 minutes. The first pebble must be the easiest possible start. Be specific to the task, warm and plain. No emojis.
+Course: ${courseName(r.courseId)}
+Task: ${r.title}
+${r.due ? 'Due: ' + r.due + ' (today is ' + dayKey() + ')' : ''}
+${r.notes ? 'Notes from the student: ' + r.notes : ''}
+Reply with only JSON in this shape: {"pebbles":[{"text":"under 90 characters","mins":15}]}`;
+    const out = await sample.json(prompt, { modelTier: 'quick', cache: false });
+    const items = (out && Array.isArray(out.pebbles) ? out.pebbles : []).slice(0, 8).map(p => ({ text: clampStr(p.text, 120), mins: Math.min(60, Math.max(5, Math.round(+p.mins || 15))) })).filter(p => p.text);
+    aiDrafts[rockId] = items.length ? { items } : offline();
+  } catch (e) {
+    aiDrafts[rockId] = e && e.code === 'not_granted' ? offline() : { error: e && e.code === 'rate_limited' ? 'Claude needs a short breather. Try again in a minute.' : 'Claude could not split this one right now. You can add pebbles by hand.' };
+  }
+  renderRocks();
+}
+function togglePebble(rockId, pebId) {
+  const r = S.rocks.find(x => x.id === rockId); if (!r) return;
+  const p = r.pebbles.find(x => x.id === pebId); if (!p) return;
+  const wasAll = r.pebbles.every(x => x.done);
+  p.done = !p.done;
+  if (p.done) {
+    p.doneAt = Date.now();
+    S.pebLog.push({ id: p.id, at: p.doneAt, text: p.text, rock: r.title, courseId: r.courseId });
+    addCoins(3, 'for laying a stepping stone');
+    if (r.pebbles.every(x => x.done)) { addCoins(10, `for crossing “${r.title}”`); S.lastCrossed = { title: r.title, at: Date.now() }; makeHappy(4000); say('We crossed the whole pond!'); }
+    checkUnlocks();
+  } else {
+    S.pebLog = S.pebLog.filter(x => x.id !== p.id);
+    S.coins = Math.max(0, S.coins - 3 - (wasAll ? 10 : 0));
+  }
+  save(); renderAllLight(); afterProgress();
+}
+function bindPebbles() {
+  $('#newRockBtn').onclick = () => { $('#rockForm').hidden = false; renderCourseSelects(); $('#rockCourse').value = rockFilter !== 'all' ? rockFilter : (S.lastCourse || ''); $('#rockTitle').focus(); };
+  $('#rockCancel').onclick = () => { $('#rockForm').hidden = true; };
+  const addRock = (split) => {
+    const title = $('#rockTitle').value.trim(); if (!title) { $('#rockTitle').focus(); return; }
+    const r = { id: uid(), title: clampStr(title, 120), courseId: $('#rockCourse').value, due: $('#rockDue').value || '', notes: clampStr($('#rockNotes').value.trim(), 300), createdAt: Date.now(), pebbles: [] };
+    S.rocks.unshift(r); S.openRock = r.id; save();
+    $('#rockForm').reset(); $('#rockForm').hidden = true; renderRocks();
+    if (split) breakDown(r.id);
+  };
+  $('#rockForm').onsubmit = e => { e.preventDefault(); addRock(false); };
+  $('#rockAddSplit').onclick = () => addRock(true);
+  $('#rockFilter').onclick = e => { const b = e.target.closest('button[data-c]'); if (!b) return; rockFilter = b.dataset.c; renderRocks(); };
+  $('#rockList').addEventListener('click', e => {
+    const art = e.target.closest('[data-rock]'); if (!art) return;
+    const id = art.dataset.rock, r = S.rocks.find(x => x.id === id);
+    if (e.target.closest('[data-toggle]')) { S.openRock = S.openRock === id ? null : id; renderRocks(); return; }
+    const chk = e.target.closest('[data-peb]'); if (chk) { togglePebble(id, chk.dataset.peb); return; }
+    const dp = e.target.closest('[data-delpeb]'); if (dp) { r.pebbles = r.pebbles.filter(p => p.id !== dp.dataset.delpeb); save(); renderRocks(); renderNextPebble(); return; }
+    if (e.target.closest('[data-ai]')) { breakDown(id); return; }
+    if (e.target.closest('[data-aiclose]')) { delete aiDrafts[id]; renderRocks(); return; }
+    if (e.target.closest('[data-aiadd]')) { const d = aiDrafts[id]; d.items.forEach(p => r.pebbles.push({ id: uid(), text: p.text, mins: p.mins, done: false })); delete aiDrafts[id]; save(); renderRocks(); renderNextPebble(); toast(`${d.items.length} pebbles added. Start with the first one.`); return; }
+    if (e.target.closest('[data-focusrock]')) { const p = r.pebbles.find(x => !x.done); if (p) { S.settings.focus = Math.min(120, p.mins || 15); syncRanges(); renderCourseSelects(); $('#courseSel').value = r.courseId || ''; go('focus'); if (!S.timer) startPhase('focus'); } return; }
+    if (e.target.closest('[data-delrock]')) { art.querySelector('[data-delwrap]').innerHTML = `<span class="confirm">Remove this rock and its pebbles? <button class="btn small rose" data-delyes>Remove</button><button class="btn small" data-delno>Keep it</button></span>`; return; }
+    if (e.target.closest('[data-delyes]')) { S.rocks = S.rocks.filter(x => x.id !== id); save(); renderRocks(); renderNextPebble(); return; }
+    if (e.target.closest('[data-delno]')) { renderRocks(); return; }
+  });
+  $('#rockList').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-toggle]')) { e.preventDefault(); e.target.click(); } });
+  $('#rockList').addEventListener('submit', e => {
+    const f = e.target.closest('[data-addpeb]'); if (!f) return; e.preventDefault();
+    const r = S.rocks.find(x => x.id === f.closest('[data-rock]').dataset.rock); const t = f.t.value.trim(); if (!t) return;
+    r.pebbles.push({ id: uid(), text: clampStr(t, 120), mins: Math.min(120, Math.max(1, +f.m.value || 15)), done: false });
+    save(); renderRocks(); renderNextPebble();
+    const nf = $(`[data-rock="${CSS.escape(r.id)}"] [data-addpeb] input`); nf && nf.focus();
+  });
+  $('#icsFile').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { const n = importICS(await f.text()); toast(n ? `Imported ${n} rocks from your calendar. Break each one into pebbles when you are ready.` : 'No upcoming assignments found in that file.'); }
+    catch (err) { toast('That file could not be read. Export the calendar from Blackboard as an .ics file and try again.'); }
+    e.target.value = ''; renderRocks(); renderNextPebble();
+  };
+}
+function importICS(text) {
+  const lines = text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').split(/\r?\n/);
+  const evs = []; let cur = null;
+  lines.forEach(l => {
+    if (l === 'BEGIN:VEVENT' || l === 'BEGIN:VTODO') cur = {};
+    else if ((l === 'END:VEVENT' || l === 'END:VTODO') && cur) { evs.push(cur); cur = null; }
+    else if (cur) { const i = l.indexOf(':'); if (i < 0) return; const k = l.slice(0, i).split(';')[0]; cur[k] = l.slice(i + 1); }
+  });
+  const unesc = s => (s || '').replace(/\\n/gi, ' ').replace(/\\([,;\\])/g, '$1').trim();
+  const today = dayKey(addDays(new Date(), -1));
+  let n = 0;
+  evs.forEach(ev => {
+    const title = unesc(ev.SUMMARY); const raw = ev.DUE || ev.DTSTART || ''; if (!title) return;
+    const m = raw.match(/(\d{4})(\d{2})(\d{2})/); const due = m ? `${m[1]}-${m[2]}-${m[3]}` : '';
+    if (due && due < today) return;
+    const icsId = 'ics-' + (ev.UID || title + due).replace(/[^a-z0-9]/gi, '').slice(0, 40);
+    if (S.rocks.some(r => r.icsId === icsId)) return;
+    const lc = (title + ' ' + unesc(ev.CATEGORIES || '')).toLowerCase();
+    const course = allCourses().find(c => lc.includes(c.name.toLowerCase()));
+    S.rocks.push({ id: uid(), icsId, title: clampStr(title, 120), courseId: course ? course.id : '', due, notes: clampStr(unesc(ev.DESCRIPTION), 300), createdAt: Date.now(), pebbles: [] });
+    n++;
+  });
+  save();
+  return n;
+}
+/* ---------- the pond (community) ---------- */
+const EXAMPLES = [
+  { id: 'ex-lina', name: 'Lina', pet: 'Miso', animal: 'otter', uni: 'ADU', major: 'Computer Engineering', bio: 'Deep Learning quiz on Thursday. One pebble at a time.', status: 'focus', mins: 50, streak: 6, example: true },
+  { id: 'ex-noor', name: 'Noor', pet: 'Clover', animal: 'rabbit', uni: 'ADU', major: 'Architecture', bio: 'Studio night again.', status: 'rest', mins: 35, streak: 3, example: true },
+  { id: 'ex-sami', name: 'Sami', pet: 'Biscuit', animal: 'capybara', uni: 'ADU', major: 'Mechanical Engineering', bio: 'Calm capybara energy.', status: 'focus', mins: 90, streak: 11, example: true },
+  { id: 'ex-hessa', name: 'Hessa', pet: 'Sunny', animal: 'duckling', uni: 'ADU', major: 'Psychology', bio: '', status: 'idle', mins: 20, streak: 1, example: true },
+  { id: 'ex-rami', name: 'Rami', pet: 'Ember', animal: 'fox', uni: 'ADU', major: 'Data Science', bio: 'Ask me about pandas.', status: 'idle', mins: 0, streak: 0, example: true }
+];
+const RIPPLE_MSGS = ['You have got this', 'Proud of you', 'Keep going', 'Drink some water', 'Studying with you'];
+let pondFilter = 'all', popFor = null;
+const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], [89, 82], [32, 45], [68, 45], [50, 52], [14, 42], [86, 43], [50, 36], [24, 72], [76, 74], [42, 66], [58, 66], [8, 60], [92, 62]];
+const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
+function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function residents() {
+  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
+  let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
+  const showEx = !others.length;
+  if (showEx) others = EXAMPLES.map(e => ({ ...e }));
+  if (pondFilter === 'friends') others = others.filter(r => S.friends.includes(r.id));
+  return { me, others, showEx };
+}
+function resState(r) { return r.status === 'focus' ? 'awake' : r.status === 'rest' || r.status === 'away' ? 'sleeping' : 'awake'; }
+function statusLine(r) {
+  if (r.status === 'focus') { const left = r.endsAt ? Math.max(0, Math.round((r.endsAt - Date.now()) / 60000)) : 0; return r.endsAt ? `Focusing now, ${left} min to go` : 'Focusing now'; }
+  if (r.status === 'rest') return 'Resting between sessions';
+  if (r.status === 'away') return 'Away, napping on the pad';
+  return r.mins ? `Studied ${fmtMin(r.mins)} today` : 'Floating around';
+}
+let lastPondSig = '';
+function renderPond(force) {
+  const { me, others, showEx } = residents();
+  const wide = $('#pondStage').clientWidth > 640 || window.innerWidth > 640;
+  const slots = wide ? SLOTS_WIDE : SLOTS_TALL;
+  const list = [me, ...others.sort((a, b) => hashStr(a.id) - hashStr(b.id))];
+  const placed = list.slice(0, slots.length);
+  const sig = JSON.stringify(placed.map(r => [r.id, r.animal, r.name, r.pet, resState(r), r.status])) + wide;
+  if (force || sig !== lastPondSig) {
+    lastPondSig = sig;
+    const over = $('#pondOver');
+    over.innerHTML = placed.map((r, i) => `<button class="resident ${r.me ? 'me' : ''}" style="left:${slots[i][0]}%; top:${slots[i][1]}%" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
+  }
+  $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r))}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
+    + (pondFilter === 'friends' && !others.length ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : '');
+  if (popFor) openPop(popFor, true);
+}
+function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
+function openPop(id, refresh) {
+  const r = findRes(id); const over = $('#pondOver');
+  let pop = $('#pondPop');
+  if (!r) { pop && pop.remove(); popFor = null; return; }
+  const btn = over.querySelector(`[data-res="${CSS.escape(id)}"]`);
+  if (!pop) { pop = document.createElement('div'); pop.className = 'pop'; pop.id = 'pondPop'; over.appendChild(pop); }
+  popFor = id;
+  const isFriend = S.friends.includes(r.id);
+  pop.innerHTML = `<div class="ph"><span class="av">${avatarSVG(r.animal, r.me ? 'happy' : resState(r))}</span><div style="min-width:0; flex:1"><b style="font-family:var(--f-display); font-weight:400; font-size:1.15rem">${esc(r.me ? 'You' : r.name)}</b><div class="muted" style="font-size:.82rem">${esc(r.pet || '')} the ${ANIMALS[r.animal].label.toLowerCase()}${r.uni || r.major ? ' · ' + esc([r.uni, r.major].filter(Boolean).join(', ')) : ''}</div></div><button class="icon-btn" data-popclose aria-label="Close">${icon('i-x')}</button></div>
+    ${r.bio ? `<p class="hand" style="font-size:1.3rem">${esc(r.bio)}</p>` : ''}
+    <p style="font-size:.88rem">${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</p>
+    ${r.me ? `<p class="muted" style="font-size:.84rem">This is you. Friends can send you ripples while you study.</p>` : `<span class="eyebrow">Send a ripple</span><div class="msgs">${RIPPLE_MSGS.map(m => `<button class="btn small" data-send="${esc(m)}">${esc(m)}</button>`).join('')}</div>
+    ${r.example ? '<span class="muted" style="font-size:.8rem">Example neighbour. Ripples to examples stay on your screen.</span>' : `<button class="btn small ${isFriend ? '' : 'primary'}" data-friend style="align-self:flex-start">${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>`}`}`;
+  if (btn) {
+    const ob = over.getBoundingClientRect(), bb = btn.getBoundingClientRect();
+    const pw = Math.min(300, ob.width - 20);
+    let x = bb.left - ob.left + bb.width / 2 - pw / 2; x = Math.max(10, Math.min(ob.width - pw - 10, x));
+    let y = bb.top - ob.top - 10; const ph = pop.offsetHeight || 220;
+    y = y - ph < 10 ? Math.min(ob.height - ph - 10, bb.bottom - ob.top + 6) : y - ph;
+    pop.style.left = x + 'px'; pop.style.top = Math.max(10, y) + 'px'; pop.style.width = pw + 'px';
+  }
+}
+function rippleAt(id) {
+  const over = $('#pondOver'); if (!over) return;
+  const btn = id ? over.querySelector(`[data-res="${CSS.escape(id)}"]`) : over.querySelector('.resident.me');
+  if (!btn) return;
+  const ob = over.getBoundingClientRect(), bb = btn.getBoundingClientRect();
+  for (let i = 0; i < 3; i++) {
+    const r = document.createElement('span'); r.className = 'ripple-ring';
+    r.style.left = (bb.left - ob.left + bb.width / 2) + 'px'; r.style.top = (bb.top - ob.top + bb.height * .78) + 'px'; r.style.animationDelay = (i * .35) + 's';
+    over.appendChild(r); setTimeout(() => r.remove(), 2600);
+  }
+}
+function sendRipple(id, msg) {
+  const r = findRes(id); if (!r || r.me) return;
+  rippleAt(id);
+  if (!r.example) sendRippleNet(id, msg);
+  toast(`Ripple sent to <b>${esc(r.name)}</b>${r.example ? ' (example)' : ''}: “${esc(msg)}”`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(r.animal, 'happy')}</span>`);
+}
+function renderRipples() {
+  const items = NET.ripples.length ? NET.ripples : [];
+  const html = items.length ? items.slice(0, 12).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
+    : `<li class="muted">${NET.db ? 'No ripples yet. When a friend taps your animal, their encouragement lands here.' : 'Ripples from friends land here once the shared pond is connected.'}</li>`;
+  $('#rippleFeed').innerHTML = html;
+  $('#rippleMini').innerHTML = items.length ? items.slice(0, 3).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
+    : `<li class="muted">No ripples yet. Send one to someone in the pond, it makes their day.</li>`;
+}
+function bindPond() {
+  $('#pondOver').addEventListener('click', e => {
+    const res = e.target.closest('[data-res]'); if (res) { openPop(res.dataset.res); return; }
+    if (e.target.closest('[data-popclose]')) { $('#pondPop')?.remove(); popFor = null; return; }
+    const s = e.target.closest('[data-send]'); if (s) { sendRipple(popFor, s.dataset.send); return; }
+    if (e.target.closest('[data-friend]')) { const id = popFor; S.friends = S.friends.includes(id) ? S.friends.filter(x => x !== id) : [...S.friends, id]; save(); openPop(id, true); renderFriends(); return; }
+  });
+  $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
+  $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };
+  $('#pondFriends').onclick = () => { pondFilter = 'friends'; $('#pondAll').setAttribute('aria-pressed', false); $('#pondFriends').setAttribute('aria-pressed', true); renderPond(true); };
+}
+
+/* ---------- grind together ---------- */
+let activeCircle = null;
+function exampleCircle() {
+  const k = dayKey();
+  return { example: true, name: 'FWS310 study circle', members: {
+    me: meAsMember(), 'ex-lina': { name: 'Lina', animal: 'otter', pet: 'Miso', day: k, mins: 50 }, 'ex-sami': { name: 'Sami', animal: 'capybara', pet: 'Biscuit', day: k, mins: 90 }, 'ex-noor': { name: 'Noor', animal: 'rabbit', pet: 'Clover', day: '', mins: 0 } } };
+}
+function lotusSVG(members) {
+  const n = members.length, studied = members.filter(m => m.studied).length, full = n > 0 && studied === n;
+  const P = Math.min(14, Math.max(6, n * 2));
+  const petal = 'M0 0 C-24 -30 -19 -74 0 -96 C19 -74 24 -30 0 0 Z';
+  let petals = '';
+  for (let j = 0; j < P; j++) {
+    const m = members[Math.floor(j * n / P)] || {};
+    const ang = -78 + 156 * j / (P - 1);
+    const open = !!m.studied;
+    petals += `<path d="${petal}" transform="translate(150 182) rotate(${open ? ang : ang * .28}) scale(${open ? 1 : .78})" fill="${open ? 'var(--bloom)' : 'var(--pad)'}" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" style="transition:transform .8s cubic-bezier(.3,1.4,.5,1)"/>`;
+  }
+  return `<svg viewBox="0 0 300 260" role="img" aria-label="Lotus: ${studied} of ${n} studied today${full ? ', in full bloom' : ''}">
+    ${full ? '<circle cx="150" cy="130" r="110" fill="url(#gr-glow)" opacity=".9"/>' : ''}
+    <ellipse cx="150" cy="204" rx="138" ry="34" fill="var(--water)"/>${padShape(150, 196, 118, false)}
+    ${petals}
+    <path d="M0 0 C-14 -18 -12 -48 0 -62 C12 -48 14 -18 0 0 Z" transform="translate(150 182)" fill="${full ? 'var(--bloom)' : 'var(--pad-2)'}" stroke="${INK}" stroke-width="2.4"/>
+    <circle cx="150" cy="150" r="${full ? 12 : 7}" fill="var(--glow)" stroke="${INK}" stroke-width="2"/>
+    ${full ? sparkle(70, 70, 9) + sparkle(232, 84, 8) + sparkle(150, 34, 10) : ''}
+  </svg>`;
+}
+function renderCircle() {
+  const tabs = $('#circleTabs'), view = $('#circleView');
+  const codes = S.circles;
+  if (codes.length && (!activeCircle || !codes.includes(activeCircle))) activeCircle = codes[0];
+  tabs.innerHTML = codes.map(c => { const d = NET.circleDocs[c]; return `<button class="btn small ${c === activeCircle ? 'primary' : ''}" data-circle="${esc(c)}">${esc(d ? d.name : c)}</button>`; }).join('');
+  let doc, code = activeCircle;
+  if (code) doc = NET.circleDocs[code];
+  const isEx = !code;
+  if (isEx) doc = exampleCircle();
+  if (doc === undefined) { view.innerHTML = `<div class="card empty"><span class="hand">Finding your circle...</span></div>`; return; }
+  if (doc === null) { view.innerHTML = `<div class="card empty"><span>The circle ${esc(code)} was not found.</span><button class="btn small" data-leave="${esc(code)}">Remove it</button></div>`; return; }
+  const k = dayKey();
+  const ms = Object.entries(doc.members).map(([id, m]) => {
+    const mine = id === NET.uid || id === 'me';
+    const mm = mine ? meAsMember() : m;
+    return { id, mine, ...mm, studied: mm.day === k && mm.mins > 0 };
+  });
+  const st = ms.filter(m => m.studied).length, full = st === ms.length && ms.length > 0;
+  view.innerHTML = `<div class="card"><div class="card-h"><div><h2>${esc(doc.name)}</h2>${isEx ? '<span class="pill example" style="margin-top:6px">Example circle</span>' : `<span class="muted" style="font-size:.84rem">Share this code: <span class="code">${esc(code)}</span> <button class="btn small quiet" data-copy="${esc(code)}">Copy</button></span>`}</div>
+    <span class="hand" style="color:var(--rose); font-size:1.6rem">${full ? 'Full bloom today' : `${st} of ${ms.length} studied today`}</span></div>
+    <div class="lotus-wrap">${lotusSVG(ms)}<div class="stack" style="gap:12px">
+      <ul class="member-list">${ms.map(m => `<li><span class="av">${avatarSVG(m.animal, m.studied ? 'happy' : 'sleeping')}</span><span class="nm"><b>${esc(m.mine ? 'You' : m.name)}</b><span>${m.studied ? `Studied ${fmtMin(m.mins)} today` : 'Not yet today, no pressure'}</span></span>${m.studied ? `<span class="pill" style="background:var(--bloom); color:${INK}">Petals open</span>` : ''}</li>`).join('')}</ul>
+      <p class="muted" style="font-size:.86rem">${full ? 'Everyone showed up today. The lotus is open for the whole circle.' : 'Each person opens their petals by finishing a focus session or a pebble today.'}</p>
+      ${isEx ? '' : `<span data-leavewrap><button class="btn small quiet" data-leaveask>Leave circle</button></span>`}
+    </div></div></div>`;
+}
+function bindTogether() {
+  const code6 = () => { const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; for (let i = 0; i < 6; i++) s += A[Math.floor(Math.random() * A.length)]; return s; };
+  $('#createCircle').onsubmit = async e => {
+    e.preventDefault();
+    if (!NET.db || !NET.canWrite) { toast(NET.web ? 'Sign in with Google to create a circle.' : 'Circles need the shared pond. Open Grind from an invite to create one.'); if (NET.web) signIn(); return; }
+    const name = clampStr($('#circleName').value.trim(), 40) || 'Study circle'; const code = code6();
+    await writeQ('circles/' + code, () => NET.db.doc('circles/' + code).set({ name, createdBy: NET.uid, createdAt: Date.now(), members: { [NET.uid]: meAsMember() } }));
+    S.circles = [...S.circles, code]; activeCircle = code; save(); subscribeCircles(); renderCircle();
+    $('#circleName').value = ''; toast(`Circle created. Share the code ${code} with your friends.`);
+  };
+  $('#joinCircle').onsubmit = async e => {
+    e.preventDefault();
+    const code = $('#circleCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (!NET.db || !NET.canWrite) { toast(NET.web ? 'Sign in with Google to join a circle.' : 'Joining a circle needs the shared pond.'); if (NET.web) signIn(); return; }
+    if (code.length !== 6) { toast('Circle codes have six letters and numbers.'); return; }
+    const s = await NET.db.doc('circles/' + code).get().catch(() => null);
+    if (!s || !s.exists) { toast(`No circle with the code ${code}. Check it with your friend.`); return; }
+    if (!S.circles.includes(code)) S.circles = [...S.circles, code];
+    activeCircle = code; save(); subscribeCircles(); updateCircles(); renderCircle();
+    $('#circleCode').value = ''; toast('You joined the circle.');
+  };
+  $('#circleTabs').onclick = e => { const b = e.target.closest('[data-circle]'); if (b) { activeCircle = b.dataset.circle; renderCircle(); } };
+  $('#circleView').addEventListener('click', e => {
+    const c = e.target.closest('[data-copy]');
+    if (c) { navigator.clipboard?.writeText(c.dataset.copy).then(() => toast('Code copied.'), () => { const r = document.createRange(); r.selectNodeContents($('.code')); getSelection().removeAllRanges(); getSelection().addRange(r); toast('Code selected. Copy it to share.'); }); return; }
+    if (e.target.closest('[data-leaveask]')) { e.target.closest('[data-leavewrap]').innerHTML = `<span class="confirm">Leave this circle? <button class="btn small rose" data-leave="${esc(activeCircle)}">Leave</button><button class="btn small" data-stay>Stay</button></span>`; return; }
+    if (e.target.closest('[data-stay]')) { renderCircle(); return; }
+    const l = e.target.closest('[data-leave]');
+    if (l) {
+      const code = l.dataset.leave;
+      if (NET.db && NET.canWrite) writeQ('circles/' + code, async () => { const ref = NET.db.doc('circles/' + code); const s = await ref.get(); if (!s.exists) return; const d = s.data() || {}; if (d.members) delete d.members[NET.uid]; await ref.set(d); });
+      S.circles = S.circles.filter(x => x !== code); activeCircle = null; save(); subscribeCircles(); renderCircle();
+    }
+  });
+}
+
+/* ---------- commons ---------- */
+let postKind = 'note', feedFilter = 'all';
+const openComments = new Set();
+const KIND_LABEL = { note: 'Notes', done: 'Finished work', win: 'Achievement' };
+function postsNow() { return sharedPosts() ? NET.posts : S.localPosts; }
+function renderComposerNote() { $('#composerNote').textContent = sharedPosts() ? 'Everyone in the pond can see this.' : 'Saved on this device until the shared pond is connected.'; }
+function renderFeed() {
+  const me = NET.uid || 'me';
+  const ps = postsNow().filter(p => feedFilter === 'all' || p.kind === feedFilter).slice().sort((a, b) => b.at - a.at);
+  $('#feed').innerHTML = ps.length ? ps.map(p => {
+    const liked = p.likes.includes(me);
+    return `<article class="post" data-post="${esc(p.id)}"><div class="post-h"><span class="av">${avatarSVG(p.animal, 'awake')}</span><div class="who"><b>${esc(p.by === me ? 'You' : p.name)}</b><span>${KIND_LABEL[p.kind]}${p.course ? ' · ' + esc(p.course) : ''} · ${ago(p.at)}</span></div>${p.by === me ? `<span data-delpwrap><button class="icon-btn" data-delpost aria-label="Delete post">${icon('i-trash')}</button></span>` : ''}</div>
+      ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
+      ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
+      ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
+      <div class="post-a"><button class="btn small ${liked ? 'liked' : ''}" data-like aria-pressed="${liked}">${icon('i-heart')}<span class="num">${p.likes.length || ''}</span> ${liked ? 'Liked' : 'Like'}</button><button class="btn small" data-cm>${icon('i-comment')}${p.comments.length || ''} Comment</button></div>
+      ${openComments.has(p.id) ? `<div class="comments">${p.comments.map(c => `<p class="cm"><b>${esc(c.by === me ? 'You' : c.name)}</b> ${esc(c.text)} <span class="muted" style="font-size:.75rem">${ago(c.at)}</span></p>`).join('')}
+        <form class="add-peb" data-cform><input class="inp" name="t" maxlength="500" placeholder="Say something kind" aria-label="Comment"><button class="btn small" type="submit">Send</button></form></div>` : ''}
+    </article>`;
+  }).join('') : `<div class="card flat empty"><span class="hand">Nothing shared yet.</span><span>Post your notes, a finished assignment, or a small win. Others see what you did, not what you missed.</span></div>`;
+}
+function milestones() {
+  const out = [];
+  const st = streakNow(), total = S.sessions.reduce((a, s) => a + s.mins, 0), tm = todayMins();
+  if (st >= 2) out.push(`${st}-day study streak with ${petName()}`);
+  if (tm >= 25) out.push(`Focused for ${fmtMin(tm)} today`);
+  if (S.lastCrossed && Date.now() - S.lastCrossed.at < 7 * 864e5) out.push(`Finished every pebble of “${S.lastCrossed.title}”`);
+  if (total >= 60) out.push(`${fmtMin(total)} of focus this semester`);
+  const peb = S.pebLog.filter(p => Date.now() - p.at < 7 * 864e5).length;
+  if (peb >= 3) out.push(`Laid ${peb} stepping stones this week`);
+  return out;
+}
+function renderMilestones() {
+  const ms = milestones();
+  $('#milestones').innerHTML = ms.length ? ms.map(m => `<div class="achv">${icon('i-spark')}<div style="flex:1; min-width:0"><b>${esc(m)}</b></div><button class="btn small" data-share="${esc(m)}">Share</button></div>`).join('')
+    : `<p class="muted" style="font-size:.88rem">Finish a session or a few pebbles and your wins will show up here, ready to share.</p>`;
+}
+function bindCommons() {
+  $('#composer').addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (!b) return; postKind = b.dataset.kind; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  $('#composer').onsubmit = e => {
+    e.preventDefault();
+    const title = $('#postTitle').value.trim(); if (!title) return;
+    const link = $('#postLink').value.trim();
+    const p = { by: NET.uid || 'me', name: myName(), animal: S.active, kind: postKind, course: $('#postCourse').value ? courseName($('#postCourse').value) : '', title: clampStr(title, 100), body: clampStr($('#postBody').value.trim(), 2000), link: /^https:\/\//i.test(link) ? link : '', at: Date.now(), likes: [], comments: [] };
+    if (sharedPosts()) { const id = uid(); writeQ('posts/' + id, () => NET.db.doc('posts/' + id).set(p)); }
+    else { S.localPosts.unshift({ id: uid(), ...p }); save(); renderFeed(); }
+    $('#composer').reset(); toast('Shared to the Commons.');
+  };
+  $('#milestones').onclick = e => { const b = e.target.closest('[data-share]'); if (!b) return; postKind = 'win'; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x.dataset.kind === 'win')); $('#postTitle').value = b.dataset.share; $('#postBody').focus(); };
+  $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
+  $('#feed').addEventListener('click', e => {
+    const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
+    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likes = p.likes.includes(me) ? p.likes.filter(x => x !== me) : [...p.likes, me]; }); return; }
+    if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
+    if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
+    if (e.target.closest('[data-delpno]')) { renderFeed(); return; }
+    if (e.target.closest('[data-delpyes]')) { if (sharedPosts()) writeQ('posts/' + id, () => NET.db.doc('posts/' + id).delete()); else { S.localPosts = S.localPosts.filter(p => p.id !== id); save(); renderFeed(); } }
+  });
+  $('#feed').addEventListener('submit', e => {
+    const f = e.target.closest('[data-cform]'); if (!f) return; e.preventDefault();
+    const t = f.t.value.trim(); if (!t) return; const id = f.closest('[data-post]').dataset.post;
+    postMutate(id, p => { p.comments.push({ by: NET.uid || 'me', name: myName(), text: clampStr(t, 500), at: Date.now() }); });
+    f.t.value = '';
+  });
+}
+/* ---------- sanctuary ---------- */
+const previewState = {};
+function unlockText(a) { const u = a.unlock; return u.type === 'coins' ? `${u.n} coins` : u.type === 'streak' ? `${u.n}-day streak` : 'Free'; }
+function checkUnlocks() {
+  const best = Math.max(bestStreak(), streakNow());
+  S.bestStreak = best;
+  ANIMAL_KEYS.forEach(k => {
+    const a = ANIMALS[k];
+    if (a.unlock.type === 'streak' && best >= a.unlock.n && !S.unlocked.includes(k)) {
+      S.unlocked.push(k); S.pets[k] = { name: a.defaultName, bond: 0 };
+      toast(`<b>A ${a.label.toLowerCase()} arrived at the pond.</b> Your ${a.unlock.n}-day streak earned its trust.`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(k, 'happy')}</span>`);
+    }
+  });
+}
+function bondLevel(b) { return Math.min(5, Math.floor((b || 0) / 60)); }
+const BOND_NAMES = ['New friend', 'Getting close', 'Study buddy', 'Close friend', 'Best friend', 'Kindred spirit'];
+function renderZoo() {
+  const best = Math.max(bestStreak(), streakNow());
+  $('#zoo').innerHTML = ANIMAL_KEYS.map(k => {
+    const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: a.defaultName, bond: 0 };
+    const st = previewState[k] || (owned ? 'awake' : 'sleeping');
+    const lv = bondLevel(p.bond);
+    let action;
+    if (!owned && a.unlock.type === 'coins') action = `<button class="btn small primary" data-adopt="${k}" ${S.coins < a.unlock.n ? 'disabled' : ''}>${icon('i-coin')}Adopt for ${a.unlock.n}</button>${S.coins < a.unlock.n ? `<span class="muted" style="font-size:.78rem">${a.unlock.n - S.coins} more coins</span>` : ''}`;
+    else if (!owned) action = `<span class="muted" style="font-size:.82rem">Arrives at a ${a.unlock.n}-day streak. Your best so far is ${best}.</span>`;
+    else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(p.name)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
+    return `<article class="beast ${owned ? '' : 'locked'} ${active ? 'active' : ''}">
+      <div class="pic" data-pet="${k}" title="${owned ? 'Tap to pet' : ''}">${animalSVG(k, st, { label: `${a.label}, ${st}` })}</div>
+      ${owned ? '' : `<span class="lock">${icon('i-lock')}${unlockText(a)}</span>`}
+      <h3><span>${owned ? `<span data-namewrap="${k}">${esc(p.name)}</span>` : a.label}</span><span class="sp">${owned ? a.label : ''}</span></h3>
+      <p class="lore">${esc(a.lore)}</p>
+      <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
+      ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
+      <div class="row">${action}${owned ? `<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
+    </article>`;
+  }).join('');
+}
+function bindZoo() {
+  $('#zoo').addEventListener('click', e => {
+    const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
+    const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
+    const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
+    const ad = e.target.closest('[data-adopt]'); if (ad) { const k = ad.dataset.adopt, a = ANIMALS[k]; if (S.coins < a.unlock.n) return; S.coins -= a.unlock.n; S.unlocked.push(k); S.pets[k] = { name: a.defaultName, bond: 0 }; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`Welcome, ${a.defaultName} the ${a.label.toLowerCase()}.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(k, 'happy')}</span>`); return; }
+    const pp = e.target.closest('[data-pet]'); if (pp && S.unlocked.includes(pp.dataset.pet)) { const k = pp.dataset.pet; previewState[k] = 'happy'; renderZoo(); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2200); return; }
+    const rn = e.target.closest('[data-rename]');
+    if (rn) {
+      const k = rn.dataset.rename, w = $(`[data-namewrap="${k}"]`);
+      w.innerHTML = `<form data-nameform="${k}" style="display:inline-flex; gap:6px"><input class="inp" name="n" maxlength="30" value="${esc(S.pets[k].name)}" style="width:130px; padding:4px 8px" aria-label="New name"><button class="btn small" type="submit">Save</button></form>`;
+      w.querySelector('input').focus();
+    }
+  });
+  $('#zoo').addEventListener('submit', e => { const f = e.target.closest('[data-nameform]'); if (!f) return; e.preventDefault(); const k = f.dataset.nameform; const n = f.n.value.trim(); if (n) S.pets[k].name = clampStr(n, 30); save(); renderAll(); publishPond(); });
+}
+
+/* ---------- journal (stats) ---------- */
+let statSem = 'all', showDailyTable = false;
+function semFilter() {
+  if (statSem === 'all') return () => true;
+  const sem = S.semesters.find(s => s.id === statSem); const ids = new Set((sem ? sem.courses : []).map(c => c.id));
+  return s => ids.has(s.courseId) || (!s.courseId && sem && sem.id === S.currentSem);
+}
+function niceMax(v) { if (v <= 30) return 30; if (v <= 60) return 60; if (v <= 120) return 120; if (v <= 180) return 180; if (v <= 240) return 240; return Math.ceil(v / 120) * 120; }
+function renderStats() {
+  $('#statSem').innerHTML = `<option value="all">All semesters</option>` + S.semesters.map(s => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+  $('#statSem').value = statSem;
+  const flt = semFilter();
+  const ses = S.sessions.filter(flt);
+  const total = ses.reduce((a, s) => a + s.mins, 0);
+  const wk = addDays(new Date(), -6); wk.setHours(0, 0, 0, 0);
+  const week = ses.filter(s => s.start >= +wk).reduce((a, s) => a + s.mins, 0);
+  const pebs = S.pebLog.filter(p => statSem === 'all' || flt({ courseId: p.courseId })).length;
+  $('#kpis').innerHTML = [
+    [fmtMin(total), 'Total focus'], [fmtMin(week), 'Last 7 days'], [ses.length, 'Sessions'], [pebs, 'Stepping stones laid'],
+    [`${streakNow()}<small>days</small>`, 'Current streak'], [`${Math.max(bestStreak(), streakNow())}<small>days</small>`, 'Best streak']
+  ].map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
+  // daily bars
+  const byDay = minutesByDay(flt);
+  const days = []; for (let i = 13; i >= 0; i--) { const d = addDays(new Date(), -i); days.push({ d, k: dayKey(d), v: byDay[dayKey(d)] || 0 }); }
+  const max = niceMax(Math.max(...days.map(d => d.v), 1));
+  const W = 700, H = 220, L = 40, B = 28, T = 10, bw = (W - L) / 14;
+  const y = v => T + (H - T - B) * (1 - v / max);
+  const ticks = [0, max / 2, max];
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Focus minutes per day for the last 14 days">`;
+  ticks.forEach(t => { svg += `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1" ${t ? 'stroke-dasharray="3 4"' : ''}/><text x="${L - 8}" y="${y(t) + 4}" text-anchor="end">${t >= 60 && t % 60 === 0 ? t / 60 + 'h' : t + 'm'}</text>`; });
+  days.forEach((d, i) => {
+    const x = L + i * bw + bw * .2, w = bw * .6, h = Math.max(0, y(0) - y(d.v)), isT = i === 13;
+    if (d.v > 0) svg += `<path d="M${x} ${y(0)} V${y(d.v) + Math.min(4, h)} Q${x} ${y(d.v)} ${x + Math.min(4, w / 2)} ${y(d.v)} H${x + w - Math.min(4, w / 2)} Q${x + w} ${y(d.v)} ${x + w} ${y(d.v) + Math.min(4, h)} V${y(0)} Z" fill="${isT ? 'var(--accent)' : 'var(--moss)'}"/>`;
+    if (i % (innerWidth < 640 ? 2 : 1) === 0 || isT) svg += `<text x="${x + w / 2}" y="${H - 8}" text-anchor="middle" style="${isT ? 'fill:var(--ink); font-weight:700' : ''}">${isT ? 'Today' : WD[d.d.getDay()].slice(0, 2) + ' ' + d.d.getDate()}</text>`;
+    svg += `<rect x="${L + i * bw}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent" data-tip="${WD[d.d.getDay()]} ${d.d.getDate()} ${MO[d.d.getMonth()]} · ${fmtMin(d.v)}"/>`;
+  });
+  svg += '</svg>';
+  $('#dailyChart').innerHTML = svg;
+  $('#dailyChart').hidden = showDailyTable; $('#dailyTable').hidden = !showDailyTable;
+  $('#dailyTable').innerHTML = `<table class="data"><thead><tr><th>Day</th><th style="text-align:right">Focus</th></tr></thead><tbody>${days.slice().reverse().map(d => `<tr><td>${WD[d.d.getDay()]} ${d.d.getDate()} ${MO[d.d.getMonth()]}</td><td class="n">${fmtMin(d.v)}</td></tr>`).join('')}</tbody></table>`;
+  $('#dailyTableBtn').textContent = showDailyTable ? 'Show as chart' : 'Show as table';
+  // by course
+  const byC = {}; ses.forEach(s => { byC[s.courseId || ''] = (byC[s.courseId || ''] || 0) + s.mins; });
+  const rows = Object.entries(byC).sort((a, b) => b[1] - a[1]); const cmax = Math.max(1, ...rows.map(r => r[1]));
+  $('#courseBars').innerHTML = rows.length ? rows.map(([id, v]) => `<div class="hbar"><span class="nm"><i style="background:${courseColor(id)}"></i><span>${esc(courseName(id))}</span></span><span class="tr"><b style="width:${v / cmax * 100}%; background:${courseColor(id)}"></b></span><span class="v">${fmtMin(v)}</span></div>`).join('')
+    : `<div class="empty"><span>Your courses fill in here after your first focus session.</span></div>`;
+  // heat
+  const allDay = minutesByDay(flt); const pebDay = {}; S.pebLog.forEach(p => { const k = dayKey(p.at); pebDay[k] = (pebDay[k] || 0) + 1; });
+  const start = addDays(new Date(), -(16 * 7 - 1) - new Date().getDay());
+  const lvl = v => v === 0 ? 0 : v < 25 ? 1 : v < 60 ? 2 : v < 120 ? 3 : 4;
+  const shade = l => l === 0 ? 'var(--surface-2)' : `color-mix(in srgb, var(--moss) ${[0, 30, 55, 80, 100][l]}%, var(--surface-2))`;
+  let cells = '';
+  for (let i = 0; i < 16 * 7; i++) { const d = addDays(start, i); if (d > new Date()) { cells += '<i style="visibility:hidden"></i>'; continue; } const k = dayKey(d), v = allDay[k] || 0, pb = pebDay[k] || 0; cells += `<i style="background:${shade(lvl(v || (pb ? 1 : 0)))}" data-tip="${WD[d.getDay()]} ${d.getDate()} ${MO[d.getMonth()]} · ${fmtMin(v)}${pb ? ` · ${pb} pebble${pb > 1 ? 's' : ''}` : ''}"></i>`; }
+  $('#heat').innerHTML = cells;
+  $('#heatLegend').innerHTML = `<span>Less</span>${[0, 1, 2, 3, 4].map(l => `<i style="width:13px;height:13px;border-radius:4px;background:${shade(l)}"></i>`).join('')}<span>More</span>`;
+  // sessions table
+  const recent = ses.slice().sort((a, b) => b.start - a.start).slice(0, 12);
+  $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}${s.sample ? ' <span class="pill example">Sample</span>' : ''}</td></tr>`).join('')}</tbody>`
+    : `<tbody><tr><td class="muted" style="border:0">No sessions yet. Your first focus session will appear here.</td></tr></tbody>`;
+}
+function bindStats() {
+  $('#statSem').onchange = e => { statSem = e.target.value; renderStats(); };
+  $('#dailyTableBtn').onclick = () => { showDailyTable = !showDailyTable; renderStats(); };
+  const tip = $('#tip');
+  document.addEventListener('pointermove', e => {
+    const t = e.target.closest && e.target.closest('[data-tip]');
+    if (!t) { tip.classList.remove('show'); return; }
+    tip.textContent = t.dataset.tip; tip.style.left = e.clientX + 'px'; tip.style.top = e.clientY + 'px'; tip.style.position = 'fixed'; tip.classList.add('show');
+  });
+}
+
+/* ---------- profile ---------- */
+function renderProfile() {
+  $('#profAv').innerHTML = avatarSVG(S.active, 'happy');
+  $('#profName').textContent = myName();
+  $('#profLine').textContent = [S.profile.uni, S.profile.major].filter(Boolean).join(' · ') || 'Add your university and major below.';
+  $('#profPet').textContent = `Studying with ${petName()} the ${ANIMALS[S.active].label.toLowerCase()} · ${streakNow()}-day streak`;
+  ['Name', 'Uni', 'Major', 'Bio'].forEach(k => { const el = $('#pf' + k); if (document.activeElement !== el) el.value = S.profile[k.toLowerCase()] || ''; });
+  if (document.activeElement !== $('#pfPet')) $('#pfPet').value = petName();
+  $('#semList').innerHTML = S.semesters.map(s => `<div class="sem" data-sem="${esc(s.id)}">
+    <div class="sem-h"><input class="inp" data-semname value="${esc(s.name)}" maxlength="40" style="max-width:220px; font-family:var(--f-display)" aria-label="Semester name">
+      <div class="row">${s.id === S.currentSem ? '<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Current</span>' : '<button class="btn small" data-semcur>Make current</button>'}${S.semesters.length > 1 ? '<span data-semdelwrap><button class="btn small quiet" data-semdel>Remove</button></span>' : ''}</div></div>
+    <div class="course-chips">${s.courses.map(c => `<span class="cchip"><i style="background:${c.color}"></i>${esc(c.name)}<button data-cdel="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">${icon('i-x')}</button></span>`).join('') || '<span class="muted" style="font-size:.85rem">No courses yet.</span>'}</div>
+    <form class="add-peb" data-cadd><input class="inp" name="n" maxlength="40" placeholder="Add a course, like AIRE410" aria-label="New course"><button class="btn small" type="submit">${icon('i-plus')}Add</button></form>
+  </div>`).join('');
+}
+function renderFriends() {
+  const fr = S.friends.map(id => NET.pond.find(r => r.id === id) || EXAMPLES.find(e => e.id === id)).filter(Boolean);
+  $('#friendList').innerHTML = fr.length ? fr.map(r => `<div class="friend"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.example ? '<span class="pill example">Example</span>' : ''}</div>`).join('')
+    : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
+}
+function bindProfile() {
+  $('#profForm').onsubmit = e => {
+    e.preventDefault();
+    S.profile.name = clampStr($('#pfName').value.trim(), 40); S.profile.uni = clampStr($('#pfUni').value.trim(), 60); S.profile.major = clampStr($('#pfMajor').value.trim(), 60); S.profile.bio = clampStr($('#pfBio').value.trim(), 140);
+    const pn = $('#pfPet').value.trim(); if (pn) { S.pets[S.active] = S.pets[S.active] || { bond: 0 }; S.pets[S.active].name = clampStr(pn, 30); }
+    save(); renderAll(); publishPond(); updateCircles();
+    $('#profSaved').textContent = 'Saved'; setTimeout(() => $('#profSaved').textContent = '', 2000);
+  };
+  $('#addSem').onclick = () => { const id = 'sem-' + uid(); S.semesters.push({ id, name: 'New semester', courses: [] }); save(); renderProfile(); };
+  $('#semList').addEventListener('click', e => {
+    const box = e.target.closest('[data-sem]'); if (!box) return; const s = S.semesters.find(x => x.id === box.dataset.sem);
+    if (e.target.closest('[data-semcur]')) { S.currentSem = s.id; save(); renderAll(); return; }
+    const cd = e.target.closest('[data-cdel]'); if (cd) { s.courses = s.courses.filter(c => c.id !== cd.dataset.cdel); save(); renderAll(); return; }
+    if (e.target.closest('[data-semdel]')) { box.querySelector('[data-semdelwrap]').innerHTML = `<span class="confirm">Remove ${esc(s.name)}? Sessions stay in your journal. <button class="btn small rose" data-semyes>Remove</button><button class="btn small" data-semno>Keep</button></span>`; return; }
+    if (e.target.closest('[data-semno]')) { renderProfile(); return; }
+    if (e.target.closest('[data-semyes]')) { S.semesters = S.semesters.filter(x => x.id !== s.id); if (S.currentSem === s.id) S.currentSem = S.semesters[0].id; save(); renderAll(); }
+  });
+  $('#semList').addEventListener('change', e => { const i = e.target.closest('[data-semname]'); if (!i) return; const s = S.semesters.find(x => x.id === i.closest('[data-sem]').dataset.sem); s.name = clampStr(i.value.trim(), 40) || s.name; save(); renderStats(); });
+  $('#semList').addEventListener('submit', e => {
+    const f = e.target.closest('[data-cadd]'); if (!f) return; e.preventDefault();
+    const n = f.n.value.trim(); if (!n) return; const s = S.semesters.find(x => x.id === f.closest('[data-sem]').dataset.sem);
+    const used = allCourses().length;
+    s.courses.push({ id: 'c-' + uid(), name: clampStr(n, 40), color: COURSE_COLORS[used % COURSE_COLORS.length] });
+    save(); renderAll(); $(`[data-sem="${CSS.escape(s.id)}"] [data-cadd] input`)?.focus();
+  });
+}
+
+/* ---------- customize drawer ---------- */
+function openDrawer(on) { $('#drawer').classList.toggle('on', on); $('#scrim').classList.toggle('on', on); $('#drawer').setAttribute('aria-hidden', !on); if (on) renderDrawer(); }
+function renderDrawer() {
+  $('#presets').innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button class="preset" data-preset="${k}" aria-pressed="${S.settings.preset === k}"><span class="sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(p.name)}</button>`).join('');
+  $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
+  $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
+  [['#swSound', 'sound'], ['#swAuto', 'autoRest'], ['#swDemo', 'demo']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
+  $('#dataWhere').textContent = NET.db && NET.canWrite ? `Your progress is saved to your account and on this device. The pond, ripples, circles and posts are shared with everyone${NET.web ? ' who signs in' : ' invited'}.` : 'Your progress is saved in this browser on this device. Export it to keep a copy.';
+  $('#acctRow').innerHTML = !NET.web ? '' : NET.db ? `<span class="muted" style="font-size:.84rem">Signed in${NET.userName ? ' as ' + esc(NET.userName) : ''}</span><button class="btn small quiet" id="signOutBtn">Sign out</button>` : '<button class="btn small primary" id="signInBtn2">Sign in with Google</button>';
+  $('#signOutBtn') && ($('#signOutBtn').onclick = () => signOut());
+  $('#signInBtn2') && ($('#signInBtn2').onclick = () => signIn());
+  $('#sampleBtn').textContent = S.sessions.some(s => s.sample) ? 'Remove sample week' : 'Add a sample week';
+}
+function bindDrawer() {
+  $('#openCustomize').onclick = $('#openCustomize2').onclick = () => openDrawer(true);
+  $('#closeDrawer').onclick = $('#scrim').onclick = () => openDrawer(false);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { openDrawer(false); $('#pondPop')?.remove(); popFor = null; } });
+  $('#presets').onclick = e => { const b = e.target.closest('[data-preset]'); if (!b) return; S.settings.preset = b.dataset.preset; S.settings.custom = {}; save(); applyTheme(); renderDrawer(); };
+  const setC = (k, v) => { S.settings.custom = { ...(S.settings.custom || {}), [k]: v }; applyTheme(); };
+  $('#cAccent').oninput = e => setC('accent', e.target.value);
+  $('#cBg').oninput = e => setC('bg', e.target.value);
+  $('#cWater').oninput = e => setC('water', e.target.value);
+  ['#cAccent', '#cBg', '#cWater'].forEach(s => $(s).onchange = () => save());
+  $('#cReset').onclick = () => { S.settings.custom = {}; save(); applyTheme(); };
+  $('#fxSeg').onclick = e => { const b = e.target.closest('[data-fx]'); if (!b) return; S.settings.fx = b.dataset.fx; save(); renderDrawer(); if (REDUCED) FX.forEach(o => { fxSize(o); fxSeed(o); fxDraw(o, 0); }); };
+  $('#skySeg').onclick = e => { const b = e.target.closest('[data-sky]'); if (!b) return; S.settings.sky = b.dataset.sky; save(); applySky(); renderDrawer(); };
+  const sw = (id, k, after) => { $(id).onclick = () => { if (S.timer && k === 'demo') { toast('Finish or stop the current session before changing demo speed.'); return; } S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
+  sw('#swSound', 'sound'); sw('#swAuto', 'autoRest'); sw('#swDemo', 'demo', () => { renderChips(); renderTimer(); });
+  $('#exportBtn').onclick = async () => {
+    const data = JSON.stringify(S, null, 2);
+    const dl = await NET.downloadsP;
+    if (dl) { try { await dl.save({ filename: `grind-${dayKey()}.json`, data }); return; } catch (e) { if (e && e.code === 'declined') return; } }
+    if (NET.web) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = `grind-${dayKey()}.json`; document.body.appendChild(a); a.click(); a.remove(); return; }
+    try { await navigator.clipboard.writeText(data); toast('Your data was copied as text. Paste it into a file to keep it.'); } catch (e) { toast('Export is not available in this view.'); }
+  };
+  $('#sampleBtn').onclick = () => {
+    if (S.sessions.some(s => s.sample)) { S.sessions = S.sessions.filter(s => !s.sample); toast('Sample week removed.'); }
+    else {
+      const cs = curCourses(); const pattern = [50, 25, 0, 75, 40, 100, 30];
+      pattern.forEach((m, i) => { if (!m) return; const d = addDays(new Date(), -(7 - i)); d.setHours(14 + (i % 4), 10, 0, 0); let left = m; while (left > 0) { const len = Math.min(left, 25 + (i % 2) * 25); S.sessions.push({ id: uid(), start: +d, mins: len, courseId: cs.length ? cs[(i + left) % cs.length].id : '', completed: true, animal: S.active, sample: true }); d.setMinutes(d.getMinutes() + len + 5); left -= len; } });
+      toast('A sample week was added so you can see the journal. Remove it here any time.');
+    }
+    save(); renderAll();
+  };
+  $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; };
+  function restoreReset() { $('#resetWrap').innerHTML = `<button class="btn small quiet" id="resetBtn">${icon('i-trash')}Start over</button>`; bindReset(); }
+  function bindReset() { $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; }; }
+}
+
+/* ---------- welcome ---------- */
+let starterPick = 'frog';
+function showWelcome() {
+  starterPick = S.active || 'frog';
+  const draw = () => { $('#starter').innerHTML = ['frog', 'duckling', 'capybara'].map(k => `<button type="button" data-st="${k}" aria-pressed="${starterPick === k}">${animalSVG(k, starterPick === k ? 'happy' : 'awake')}${ANIMALS[k].label}</button>`).join(''); };
+  draw();
+  $('#starter').onclick = e => { const b = e.target.closest('[data-st]'); if (!b) return; const prevDefault = ANIMALS[starterPick].defaultName; starterPick = b.dataset.st; if (!$('#wPet').value || $('#wPet').value === prevDefault) $('#wPet').value = ANIMALS[starterPick].defaultName; draw(); };
+  $('#wName').value = S.profile.name; $('#wPet').value = petName(); $('#wUni').value = S.profile.uni; $('#wMajor').value = S.profile.major;
+  $('#welcome').classList.add('on');
+}
+function bindWelcome() {
+  $('#welcomeForm').onsubmit = e => {
+    e.preventDefault();
+    S.profile.name = clampStr($('#wName').value.trim(), 40); S.profile.uni = clampStr($('#wUni').value.trim(), 60); S.profile.major = clampStr($('#wMajor').value.trim(), 60);
+    S.active = starterPick; S.pets[starterPick].name = clampStr($('#wPet').value.trim(), 30) || ANIMALS[starterPick].defaultName;
+    S.onboarded = true; save(); $('#welcome').classList.remove('on'); renderAll(); publishPond(); makeHappy(); say(`Hi ${myName()}. I am ${petName()}.`);
+  };
+  $('#wSkip').onclick = () => { S.onboarded = true; save(); $('#welcome').classList.remove('on'); };
+}
+
+/* ---------- shell ---------- */
+const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile' };
+let currentView = 'focus';
+function go(v) {
+  if (!TITLES[v]) v = 'focus';
+  currentView = v;
+  $$('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
+  $$('#nav button').forEach(b => b.toggleAttribute('aria-current', false));
+  const nb = $(`#nav button[data-go="${v}"]`); if (nb) nb.setAttribute('aria-current', 'page');
+  $('#viewTitle').textContent = TITLES[v];
+  try { history.replaceState(null, '', '#' + v); } catch (e) {}
+  if (v === 'pond') { renderPond(true); $('#pondDot').hidden = true; if (NET.ripples[0]) { S.seenRipple = NET.ripples[0].at; save(); } }
+  if (v === 'stats') renderStats();
+  if (v === 'sanctuary') renderZoo();
+  if (v === 'commons') { renderFeed(); renderMilestones(); }
+  if (v === 'together') renderCircle();
+  if (v === 'profile') { renderProfile(); renderFriends(); }
+  if (v === 'pebbles') renderRocks();
+  window.scrollTo({ top: 0 });
+}
+function renderChips() {
+  const st = streakNow();
+  $('#streakChip').textContent = `${st} day${st === 1 ? '' : 's'}`;
+  $('#coinChip').textContent = S.coins;
+  $('#demoChip').hidden = !S.settings.demo;
+}
+function renderSync() {
+  const c = $('#syncChip');
+  const on = NET.db && NET.canWrite;
+  c.classList.toggle('on', !!on);
+  c.querySelector('span').textContent = !NET.ready ? 'Connecting' : on ? 'Shared pond' : NET.db ? 'Pond view only' : NET.web && NET.fbReady ? 'Sign in to join the pond' : 'On this device';
+  c.onclick = () => { if (NET.web && NET.fbReady && !NET.db) signIn(); else if (on) go('pond'); };
+  c.title = on ? 'Live with everyone in the pond' : NET.db ? 'You can see the pond but not post to it' : 'Your progress is saved in this browser';
+}
+function noticeHTML(text) { return `<div class="notice">${icon('i-info')}<span>${text}</span></div>`; }
+function renderNotices() {
+  let pondN = '', togN = '';
+  if (NET.ready && !NET.db) {
+    if (NET.web) {
+      const btn = NET.fbReady ? ' <button class="btn small primary" data-signin>Sign in with Google</button>' : '';
+      pondN = noticeHTML('You are seeing example neighbours. Sign in to put your animal in the real pond with everyone else. Your own studying is saved on this device either way.' + btn);
+      togN = noticeHTML('Sign in to start or join a circle. Here is an example circle to show how the lotus blooms.' + btn);
+    } else {
+    pondN = noticeHTML('You are seeing example neighbours. The live shared pond appears when you open Grind from an invite while signed in to Claude. Your own studying is always saved on this device.');
+    togN = noticeHTML('Circles need the live shared pond, so here is an example circle to show how the lotus blooms.');
+    }
+  } else if (NET.db && !NET.canWrite) {
+    pondN = noticeHTML('You can watch the pond, but joining it needs an invite with edit access from the pond’s owner.');
+    togN = pondN;
+  }
+  $('#pondNotice').innerHTML = pondN; $('#togetherNotice').innerHTML = togN;
+  renderComposerNote(); renderRipples();
+}
+function renderGreeting() {
+  const h = new Date().getHours();
+  const g = h < 5 ? 'Up late' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 22 ? 'Good evening' : 'Up late';
+  $('#greetHand').textContent = `${g}${S.profile.name ? ', ' + S.profile.name : ''}`;
+  $('#meMiniAv').innerHTML = avatarSVG(S.active, 'awake');
+  $('#meMiniName').textContent = myName();
+  $('#meMiniSub').textContent = `with ${petName()}`;
+}
+function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
+function renderAll() {
+  renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
+  if (currentView === 'pond') renderPond(true);
+}
+
+function boot() {
+  document.body.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { signIn(); return; } const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); } });
+  $('#focusStage').insertAdjacentHTML('afterbegin', sceneSVG('focus'));
+  $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
+  makeFX($('#focusStage')); makeFX($('#pondStage'));
+  applySky(); applyTheme();
+  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome();
+  if (S.timer) mode = S.timer.phase;
+  checkUnlocks();
+  renderAll();
+  go((location.hash || '').replace('#', '') || 'focus');
+  if (!S.onboarded) showWelcome();
+  setInterval(tick, 250);
+  setInterval(() => { applySky(); if (currentView === 'pond') renderPond(); }, 30000);
+  let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (currentView === 'pond') renderPond(true); if (currentView === 'stats') renderStats(); }, 200); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
+  requestAnimationFrame(fxLoop);
+  initNet();
+}
+boot();
+</script>
+</body>
+</html>

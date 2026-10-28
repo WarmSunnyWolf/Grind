@@ -1,0 +1,36 @@
+rules_version = '2';
+// Paste these into Firebase console > Firestore Database > Rules, then Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+
+    // Each student's animal in the shared pond. Everyone signed in can see it, only you can change yours.
+    match /pond/{uid} {
+      allow read: if signedIn();
+      allow write: if signedIn() && request.auth.uid == uid;
+    }
+    // Ripples someone received. Anyone signed in can add one, the list stays short.
+    match /ripples/{uid} {
+      allow read: if signedIn();
+      allow write: if signedIn() && request.resource.data.items.size() <= 30;
+    }
+    // Commons posts. Only the author can create or delete; others may only add likes and comments.
+    match /posts/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.by == request.auth.uid;
+      allow update: if signedIn()
+        && request.resource.data.by == resource.data.by
+        && request.resource.data.title == resource.data.title
+        && request.resource.data.body == resource.data.body;
+      allow delete: if signedIn() && resource.data.by == request.auth.uid;
+    }
+    // Grind Together circles, joined by code.
+    match /circles/{code} {
+      allow read, write: if signedIn();
+    }
+    // Each student's private progress (timer, pebbles, courses, coins).
+    match /data/users/{uid}/{rest=**} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+  }
+}

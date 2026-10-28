@@ -1,0 +1,292 @@
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="gr-wob" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="gr-soft"><feGaussianBlur stdDeviation="6"/></filter>
+    <radialGradient id="gr-glow"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".35" stop-color="#f4e39a" stop-opacity=".55"/><stop offset="1" stop-color="#f4e39a" stop-opacity="0"/></radialGradient>
+  </defs>
+  <symbol id="i-timer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.6M9.5 2.8h5M18.4 6.6l1.3-1.3"/></g></symbol>
+  <symbol id="i-pebble" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 15.6c-.9-3.6 1.8-7.4 6.3-8.2 4.3-.8 8.6.9 9.3 4.6.7 3.6-2.4 6.3-7.2 6.8-4.1.4-7.6-.4-8.4-3.2z"/><path d="M8.5 11.2c1.2-1 2.7-1.4 4.2-1.3"/></g></symbol>
+  <symbol id="i-pond" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12l6.8-3.2A7.6 5.2 0 1 1 15 7.1z"/><path d="M3 19.5c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/></g></symbol>
+  <symbol id="i-lotus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4.5c2.4 2.4 3 5.8 0 10.5-3-4.7-2.4-8.1 0-10.5z"/><path d="M12 15C9.4 15 5.8 13.8 4 10.2c3.2-.6 6 .9 8 4.8zM12 15c2.6 0 6.2-1.2 8-4.8-3.2-.6-6 .9-8 4.8z"/><path d="M5 18.5c4.5 1.6 9.5 1.6 14 0"/></g></symbol>
+  <symbol id="i-commons" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h11a2 2 0 0 1 2 2V13a2 2 0 0 1-2 2H9l-4 3.2V15H4a2 2 0 0 1-2-2V7.5a2 2 0 0 1 2-2z" transform="translate(1 0)"/><path d="M8 9.5h6M8 12h3.5"/></g></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19C4 11 9 5 19.5 4.5 20 14 14 20 5 19z"/><path d="M5 19c3.5-4.5 6.5-7.5 10-10"/></g></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M6.5 16.5V12M11 16.5V7.5M15.5 16.5v-6M20 16.5V4.5" transform="translate(-1 0)"/></g></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></g></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 14H3.5a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.2.8z"/></g></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#d9b25a" stroke="#8a6a2a" stroke-width="1.4"/><circle cx="12" cy="12" r="6.8" fill="none" stroke="#a98236" stroke-width="1" stroke-dasharray="1.6 1.4"/><path d="M8.6 14.8c.1-4 2.6-6.4 6.8-6.7.1 4.1-2.5 6.6-6.8 6.7zM8.6 14.8l3.8-3.6" fill="#f3dc95" stroke="#8a6a2a" stroke-width="1.1" stroke-linecap="round"/></symbol>
+  <symbol id="i-firefly" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="8" fill="url(#gr-glow)"/><ellipse cx="9.3" cy="9.3" rx="3.2" ry="2" transform="rotate(-35 9.3 9.3)" fill="#e8ecef" stroke="#3a2e26" stroke-width="1"/><ellipse cx="14.7" cy="9.3" rx="3.2" ry="2" transform="rotate(35 14.7 9.3)" fill="#e8ecef" stroke="#3a2e26" stroke-width="1"/><ellipse cx="12" cy="12" rx="2.4" ry="3.4" fill="#4a3b2c" stroke="#3a2e26" stroke-width="1"/><ellipse cx="12" cy="15.6" rx="2.6" ry="2.8" fill="#f2df7a" stroke="#3a2e26" stroke-width="1"/><path d="M11 8.2l-1.3-2.2M13 8.2l1.3-2.2" stroke="#3a2e26" stroke-width="1" stroke-linecap="round"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.6 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20 11.5c0 4-3.6 7-8 7-1.2 0-2.3-.2-3.3-.6L4 19.5l1.3-3.6A6.7 6.7 0 0 1 4 11.5c0-4 3.6-7 8-7s8 3 8 7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5c.6 4.8 2.4 7 7.5 9.5-5.1 2.5-6.9 4.7-7.5 9.5-.6-4.8-2.4-7-7.5-9.5 5.1-2.5 6.9-4.7 7.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-ripple" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="2.6" ry="1.2"/><path d="M5.5 14c0-1.9 2.9-3.4 6.5-3.4s6.5 1.5 6.5 3.4-2.9 3.4-6.5 3.4"/><path d="M2 14c0-3.3 4.5-5.9 10-5.9S22 10.7 22 14" opacity=".6"/></g></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5.5v13M16 5.5v13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="3" fill="currentColor"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24"><path d="M6 6l8 6-8 6zM17.5 6v12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4.5M7.5 8.5L12 4l4.5 4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15"/></g></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10.5M7.5 10l4.5 4.5 4.5-4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15"/></g></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7h15M9.5 7V4.8h5V7M6.5 7l.9 12.2a1.5 1.5 0 0 0 1.5 1.3h6.2a1.5 1.5 0 0 0 1.5-1.3L17.5 7"/></g></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></g></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h8l4.5 4.5v12.5H6z"/><path d="M13.5 3.5V8.5h5M9 13h6M9 16.5h4"/></g></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L15 9M13.5 7.5l3 3"/><path d="M18 3v3M16.5 4.5h3M20.5 9.5v2M19.5 10.5h2M10 3.5v2M9 4.5h2"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-friend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19c1-3.2 3.3-4.8 6.2-4.8s5.2 1.6 6.2 4.8M17.5 8v6M14.5 11h6"/></g></symbol>
+  <symbol id="i-leafpip" viewBox="0 0 24 24"><path d="M4 20C3 11 9 4.5 20 4c.6 10-5.6 16.4-16 16z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="app">
+  <aside class="side" aria-label="Main">
+    <a class="brand" href="#focus" data-go="focus" aria-label="Grind home">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 24l15.5-7.5A17 12 0 1 1 31 9z" fill="var(--pad)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M14 22c3-3.2 7-4.6 11-4.3" fill="none" stroke="var(--pad-2)" stroke-width="2" stroke-linecap="round"/><circle cx="33" cy="30" r="5.5" fill="var(--bloom)" stroke="var(--ink)" stroke-width="2"/><circle cx="33" cy="30" r="1.8" fill="var(--glow)"/></svg>
+      <span><b>Grind</b><small>FWS310 study pond</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
+      <button data-go="pebbles"><svg><use href="#i-pebble"/></svg><span>Pebbles</span></button>
+      <button data-go="pond"><svg><use href="#i-pond"/></svg><span>The Pond</span><i class="dot" id="pondDot" hidden></i></button>
+      <button data-go="together"><svg><use href="#i-lotus"/></svg><span>Together</span></button>
+      <button data-go="commons"><svg><use href="#i-commons"/></svg><span>Commons</span></button>
+      <button data-go="sanctuary"><svg><use href="#i-leaf"/></svg><span>Sanctuary</span></button>
+      <button data-go="stats"><svg><use href="#i-chart"/></svg><span>Journal</span></button>
+    </nav>
+    <div class="side-foot">
+      <button class="me-mini" data-go="profile" id="meMini"><span class="av" id="meMiniAv"></span><span><b id="meMiniName">Student</b><span id="meMiniSub">Profile and courses</span></span></button>
+      <button class="ghost-btn" id="openCustomize"><svg><use href="#i-gear"/></svg>Customize</button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="main-in">
+      <header class="top">
+        <div class="greet">
+          <span class="hand" id="greetHand">Good evening</span>
+          <h1 id="viewTitle">Focus</h1>
+        </div>
+        <div class="chips">
+          <span class="chip demo" id="demoChip" hidden>Demo speed</span>
+          <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
+          <span class="chip" title="Coins"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></span>
+          <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
+          <span class="mobile-top"><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
+        </div>
+      </header>
+
+      <!-- FOCUS -->
+      <section class="view on" id="v-focus" aria-labelledby="viewTitle">
+        <div class="grid g-focus">
+          <div class="stack">
+            <div class="stage focus-stage" id="focusStage">
+              <div class="timer-ov">
+                <span class="phase" id="phaseLabel">Ready when you are</span>
+                <span class="clock" id="clock" aria-live="off">25:00</span>
+                <span class="sub" id="clockSub">Pick one small pebble and start. That is enough.</span>
+              </div>
+              <div class="pet-tag"><b id="petName">Pip</b><span id="petSpecies">Frog</span></div>
+              <div class="hero-pet" id="heroPet"></div>
+              <div class="speech" id="speech"></div>
+              <div class="prog" aria-hidden="true"><i id="progFill"></i><b id="progDot"></b></div>
+            </div>
+            <div class="card controls">
+              <div class="row" style="justify-content:space-between">
+                <div class="seg" role="group" aria-label="Session type">
+                  <button id="modeFocus" aria-pressed="true">Focus</button>
+                  <button id="modeRest" aria-pressed="false">Rest</button>
+                </div>
+                <label class="f" style="flex-direction:row; align-items:center; gap:8px; font-weight:500">
+                  <span>Studying</span>
+                  <select class="inp" id="courseSel" style="width:auto; min-width:150px"></select>
+                </label>
+              </div>
+              <div class="dur-row">
+                <div class="dur">
+                  <div class="dur-top"><span class="eyebrow">Focus length</span><b><span class="num" id="focusVal">25</span><small>min</small></b></div>
+                  <input type="range" id="focusRange" min="1" max="120" value="25" aria-label="Focus length in minutes">
+                </div>
+                <div class="dur">
+                  <div class="dur-top"><span class="eyebrow">Rest length</span><b><span class="num" id="restVal">5</span><small>min</small></b></div>
+                  <input type="range" id="restRange" min="1" max="30" value="5" aria-label="Rest length in minutes">
+                </div>
+              </div>
+              <div class="row" id="presetRow"></div>
+              <div class="row">
+                <button class="btn primary big" id="startBtn"><svg><use href="#i-play"/></svg><span>Start focusing</span></button>
+                <button class="btn big" id="pauseBtn" hidden><svg><use href="#i-pause"/></svg><span>Pause</span></button>
+                <button class="btn big quiet" id="stopBtn" hidden><svg><use href="#i-stop"/></svg><span>Stop and nap</span></button>
+                <button class="btn big quiet" id="skipBtn" hidden><svg><use href="#i-skip"/></svg><span>Skip rest</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="card">
+              <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
+              <div id="nextPebble"></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>What you did today</h2><span class="hand muted" id="todayDate"></span></div>
+              <div class="mini-stats" id="todayStats"></div>
+              <ul class="done-list" id="todayList" style="margin-top:12px"></ul>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
+              <ul class="ripple-feed" id="rippleMini"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEBBLES -->
+      <section class="view" id="v-pebbles">
+        <div class="row" style="justify-content:space-between">
+          <p class="muted" style="max-width:60ch">A big task is a rock. Split it into pebbles small enough to start right now. Every pebble you finish lays a stepping stone across the pond.</p>
+          <div class="row">
+            <label class="btn" for="icsFile"><svg><use href="#i-upload"/></svg>Import Blackboard calendar</label>
+            <input type="file" id="icsFile" accept=".ics,text/calendar" class="sr">
+            <button class="btn primary" id="newRockBtn"><svg><use href="#i-plus"/></svg>New rock</button>
+          </div>
+        </div>
+        <form class="card" id="rockForm" hidden>
+          <div class="card-h"><h2>A new rock</h2><button type="button" class="icon-btn" id="rockCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+          <div class="form-grid">
+            <label class="f" style="grid-column:1/-1">What is the big task?<input class="inp" id="rockTitle" required maxlength="120" placeholder="Deep Learning quiz on CNNs"></label>
+            <label class="f">Course<select class="inp" id="rockCourse"></select></label>
+            <label class="f">Due date (optional)<input class="inp" type="date" id="rockDue"></label>
+            <label class="f" style="grid-column:1/-1">Anything Claude should know when splitting it? (optional)<input class="inp" id="rockNotes" maxlength="300" placeholder="Covers lectures 4 to 6, 20 multiple choice questions"></label>
+          </div>
+          <div class="row" style="margin-top:14px">
+            <button class="btn primary" type="submit"><svg><use href="#i-plus"/></svg>Add rock</button>
+            <button class="btn" type="button" id="rockAddSplit"><svg><use href="#i-wand"/></svg>Add and break it down</button>
+          </div>
+        </form>
+        <div class="row" id="rockFilter"></div>
+        <div class="rock-list" id="rockList"></div>
+      </section>
+
+      <!-- POND -->
+      <section class="view" id="v-pond">
+        <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement. There are no rankings in this pond.</p>
+        <div id="pondNotice"></div>
+        <div class="stage pond-stage" id="pondStage"><div class="over" id="pondOver"></div></div>
+        <div class="legend"><span><i style="background:var(--accent)"></i>Focusing now</span><span><i style="background:var(--rose)"></i>You</span><span><i style="background:var(--line-2)"></i>Napping or away</span></div>
+        <div class="grid g-2">
+          <div class="card"><div class="card-h"><h2>In the pond</h2><div class="seg" role="group" aria-label="Who to show"><button id="pondAll" aria-pressed="true">Everyone</button><button id="pondFriends" aria-pressed="false">Friends</button></div></div><ul class="member-list" id="pondList"></ul></div>
+          <div class="card"><div class="card-h"><h2>Ripples you received</h2></div><ul class="ripple-feed" id="rippleFeed"></ul></div>
+        </div>
+      </section>
+
+      <!-- TOGETHER -->
+      <section class="view" id="v-together">
+        <p class="muted" style="max-width:62ch">Grind Together is a small circle of friends who study on the same days. Each person is a pair of petals. The lotus only opens fully when everyone in the circle has studied today.</p>
+        <div id="togetherNotice"></div>
+        <div class="row"><div class="circle-tabs" id="circleTabs"></div></div>
+        <div id="circleView"></div>
+        <div class="grid g-2">
+          <form class="card" id="createCircle"><h2>Start a circle</h2><p class="muted" style="margin:6px 0 12px">You get a code to share with your study friends.</p><div class="add-peb"><input class="inp" id="circleName" maxlength="40" placeholder="FWS310 study group" required><button class="btn primary" type="submit">Create</button></div></form>
+          <form class="card" id="joinCircle"><h2>Join with a code</h2><p class="muted" style="margin:6px 0 12px">Ask a friend for their six-letter circle code.</p><div class="add-peb"><input class="inp" id="circleCode" maxlength="6" placeholder="LOTUS7" required style="text-transform:uppercase; letter-spacing:.12em"><button class="btn" type="submit">Join</button></div></form>
+        </div>
+      </section>
+
+      <!-- COMMONS -->
+      <section class="view" id="v-commons">
+        <div class="grid g-focus">
+          <div class="stack">
+            <form class="card composer" id="composer">
+              <div class="seg" role="group" aria-label="Post type"><button type="button" data-kind="note" aria-pressed="true">Notes</button><button type="button" data-kind="done" aria-pressed="false">Finished work</button><button type="button" data-kind="win" aria-pressed="false">Achievement</button></div>
+              <div class="form-grid">
+                <label class="f" style="grid-column:1/-1">Title<input class="inp" id="postTitle" maxlength="100" required placeholder="My summary of lecture 5: backpropagation"></label>
+                <label class="f">Course<select class="inp" id="postCourse"></select></label>
+                <label class="f">Link to file (optional)<input class="inp" id="postLink" type="url" maxlength="300" placeholder="https://drive.google.com/..."></label>
+                <label class="f" style="grid-column:1/-1">Write something<textarea class="inp" id="postBody" maxlength="2000" placeholder="Key ideas, a tip that helped, or what you are proud of."></textarea></label>
+              </div>
+              <div class="row"><button class="btn primary" type="submit">Share to the Commons</button><span class="muted" id="composerNote" style="font-size:.82rem"></span></div>
+            </form>
+            <div class="feed" id="feed"></div>
+          </div>
+          <div class="stack">
+            <div class="card"><div class="card-h"><h2>Worth sharing</h2></div><div id="milestones" class="stack" style="gap:10px"></div></div>
+            <div class="card"><div class="card-h"><h2>Filter</h2></div><div class="seg" role="group" aria-label="Filter posts" id="feedFilter"><button data-f="all" aria-pressed="true">All</button><button data-f="note" aria-pressed="false">Notes</button><button data-f="done" aria-pressed="false">Finished</button><button data-f="win" aria-pressed="false">Wins</button></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SANCTUARY -->
+      <section class="view" id="v-sanctuary">
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Nine animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
+        <div class="zoo" id="zoo"></div>
+      </section>
+
+      <!-- STATS -->
+      <section class="view" id="v-stats">
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:60ch">Everything you have already done, in one place.</p><label class="f" style="flex-direction:row; align-items:center; gap:8px; font-weight:500">Semester<select class="inp" id="statSem" style="width:auto"></select></label></div>
+        <div class="kpis" id="kpis"></div>
+        <div class="card"><div class="card-h"><h2>Focus minutes, last 14 days</h2><button class="btn small quiet table-toggle" id="dailyTableBtn">Show as table</button></div><div class="chart" id="dailyChart"></div><div id="dailyTable" hidden></div></div>
+        <div class="grid g-2">
+          <div class="card"><div class="card-h"><h2>By course</h2></div><div id="courseBars"></div></div>
+          <div class="card"><div class="card-h"><h2>Moss calendar</h2><span class="muted" style="font-size:.8rem">Last 16 weeks</span></div><div class="heat-wrap"><div class="heat" id="heat"></div></div><div class="legend" style="margin-top:10px" id="heatLegend"></div></div>
+        </div>
+        <div class="card"><div class="card-h"><h2>Recent sessions</h2></div><div style="overflow-x:auto"><table class="data" id="sessTable"></table></div></div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="view" id="v-profile">
+        <div class="card prof-hero"><div class="av" id="profAv"></div><div style="flex:1; min-width:200px"><h2 id="profName">Student</h2><p class="muted" id="profLine"></p><p class="hand" id="profPet" style="color:var(--rose); margin-top:6px"></p></div><button class="btn" data-go="sanctuary">Change companion</button></div>
+        <form class="card" id="profForm">
+          <div class="card-h"><h2>About you</h2><span class="muted" id="profSaved" style="font-size:.82rem"></span></div>
+          <div class="form-grid">
+            <label class="f">Your name<input class="inp" id="pfName" maxlength="40"></label>
+            <label class="f">Your animal's name<input class="inp" id="pfPet" maxlength="30"></label>
+            <label class="f">University<input class="inp" id="pfUni" maxlength="60" placeholder="ADU"></label>
+            <label class="f">Major<input class="inp" id="pfMajor" maxlength="60" placeholder="Computer Engineering"></label>
+            <label class="f" style="grid-column:1/-1">A line about you<input class="inp" id="pfBio" maxlength="140" placeholder="Night owl trying to become a morning frog."></label>
+          </div>
+          <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
+        </form>
+        <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
+        <div class="card"><div class="card-h"><h2>Friends</h2><button class="btn small quiet" data-go="pond">Find friends in the pond</button></div><div class="friends" id="friendList"></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Customize" aria-hidden="true">
+  <div class="row" style="justify-content:space-between"><h2>Make it yours</h2><button class="icon-btn" id="closeDrawer" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <section><span class="eyebrow">Theme</span><div class="presets" id="presets"></div></section>
+  <section><span class="eyebrow">Your own colors</span><div class="colors"><label>Accent<input type="color" id="cAccent"></label><label>Paper<input type="color" id="cBg"></label><label>Water<input type="color" id="cWater"></label></div><button class="btn small quiet" id="cReset" style="align-self:flex-start">Clear my colors</button></section>
+  <section><span class="eyebrow">Pond weather</span><div class="seg" role="group" id="fxSeg"><button data-fx="fireflies">Fireflies</button><button data-fx="rain">Rain</button><button data-fx="petals">Petals</button><button data-fx="still">Still</button></div></section>
+  <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
+  <section><span class="eyebrow">Session</span>
+    <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
+    <div class="toggle"><span>Start rest automatically after focus</span><button class="switch" role="switch" id="swAuto" aria-checked="true" aria-label="Auto rest"></button></div>
+    <div class="toggle"><span><b>Demo speed</b><br><span class="muted" style="font-size:.82rem">One minute passes in one second. For presenting.</span></span><button class="switch" role="switch" id="swDemo" aria-checked="false" aria-label="Demo speed"></button></div>
+  </section>
+  <section><span class="eyebrow">Your data</span>
+    <p class="muted" style="font-size:.84rem" id="dataWhere"></p>
+    <div id="acctRow" class="row"></div>
+    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button><button class="btn small" id="sampleBtn">Add a sample week</button></div>
+    <div id="resetWrap"><button class="btn small quiet" id="resetBtn"><svg><use href="#i-trash"/></svg>Start over</button></div>
+  </section>
+</aside>
+
+<div class="modal" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+  <form class="modal-box" id="welcomeForm">
+    <div><span class="hand" style="color:var(--rose); font-size:1.7rem">Welcome to the pond</span><h2 id="wTitle" style="font-size:1.7rem">Pick a companion to study with</h2><p class="muted" style="margin-top:6px">It stays awake while you focus and naps while you rest. If you stop early it just takes a nap. It never gets hurt.</p></div>
+    <div class="starter" id="starter"></div>
+    <div class="form-grid">
+      <label class="f">Your name<input class="inp" id="wName" maxlength="40" required placeholder="Lina"></label>
+      <label class="f">Name your animal<input class="inp" id="wPet" maxlength="30" required placeholder="Pip"></label>
+      <label class="f">University<input class="inp" id="wUni" maxlength="60" placeholder="ADU"></label>
+      <label class="f">Major<input class="inp" id="wMajor" maxlength="60" placeholder="Computer Engineering"></label>
+    </div>
+    <div class="row"><button class="btn primary big" type="submit">Into the pond</button><button class="btn quiet" type="button" id="wSkip">Look around first</button></div>
+  </form>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="tip" id="tip"></div>

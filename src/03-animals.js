@@ -1,0 +1,235 @@
+/* Grind animal illustrations. Every animal is drawn in SVG with three faces: awake, sleeping, happy. */
+const INK = '#3b2f27';
+const O = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
+const O2 = `stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"`;
+
+const ANIMALS = {
+  frog: {
+    label: 'Frog', lore: 'Hums quietly on a lily pad. Starts any task with one small hop.', unlock: { type: 'free' }, defaultName: 'Pip',
+    face: { eyes: [[68, 85], [132, 85]], er: 7, whites: [[68, 84, 14], [132, 84, 14]], lid: '#8fb069', mouth: { x: 100, y: 124, type: 'wide', w: 22 }, blush: [[56, 116], [144, 116]], zz: [150, 52] },
+    art: () => {
+      const b = '#8fb069', d = '#6d8c4c', l = '#d9e3a8';
+      return `<ellipse cx="54" cy="160" rx="24" ry="15" fill="${d}" ${O}/><ellipse cx="146" cy="160" rx="24" ry="15" fill="${d}" ${O}/>
+      <circle cx="68" cy="88" r="24" fill="${b}" ${O}/><circle cx="132" cy="88" r="24" fill="${b}" ${O}/>
+      <path d="M38 150 C36 112 62 94 100 94 C138 94 164 112 162 150 C161 172 136 180 100 180 C64 180 39 172 38 150 Z" fill="${b}" ${O}/>
+      <path d="M50 102 C58 98 62 98 68 100 M132 100 C138 98 142 98 150 102" fill="none" stroke="${b}" stroke-width="5"/>
+      <ellipse cx="100" cy="152" rx="42" ry="23" fill="${l}"/>
+      <circle cx="60" cy="134" r="5" fill="${d}"/><circle cx="142" cy="130" r="6" fill="${d}"/><circle cx="150" cy="146" r="3.5" fill="${d}"/><circle cx="118" cy="104" r="3" fill="${d}"/>
+      <ellipse cx="76" cy="177" rx="14" ry="6" fill="${b}" ${O}/><ellipse cx="124" cy="177" rx="14" ry="6" fill="${b}" ${O}/>`;
+    }
+  },
+  duckling: {
+    label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: 'Sunny',
+    face: { eyes: [[76, 86], [106, 86]], er: 5.5, mouth: null, blush: [[64, 100], [118, 100]], zz: [128, 50] },
+    art: (st) => {
+      const y = '#f4d06f', s = '#e3b552', bk = '#e8894a';
+      const beak = st === 'happy'
+        ? `<path d="M76 102 C84 92 102 92 110 102 Z" fill="${bk}" ${O}/><path d="M78 103 Q93 117 108 103 Z" fill="#7a3b33" ${O2}/><ellipse cx="93" cy="109" rx="6" ry="3" fill="#e58b86"/>`
+        : `<path d="M76 104 C84 96 102 96 110 104 C102 112 84 112 76 104 Z" fill="${bk}" ${O}/><path d="M79 104 H107" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`;
+      return `<ellipse cx="84" cy="178" rx="13" ry="5" fill="${bk}" ${O2}/><ellipse cx="116" cy="178" rx="13" ry="5" fill="${bk}" ${O2}/>
+      <path d="M148 132 L174 116 L162 148 Z" fill="${y}" ${O}/>
+      <ellipse cx="106" cy="146" rx="54" ry="34" fill="${y}" ${O}/>
+      <path d="M112 136 C128 130 148 136 150 150 C138 160 120 160 110 152 Z" fill="${s}" ${O2}/>
+      <circle cx="90" cy="90" r="36" fill="${y}" ${O}/>
+      <path d="M86 56 C83 44 92 40 96 49 C98 38 110 41 104 54" fill="none" ${O}/>
+      ${beak}`;
+    }
+  },
+  capybara: {
+    label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: 'Yuzu',
+    face: { eyes: [[62, 82], [108, 82]], er: 4.8, mouth: { x: 85, y: 121, type: 'cat' }, blush: [[52, 100], [120, 100]], zz: [140, 58] },
+    art: () => {
+      const b = '#b98b63', d = '#94694a', l = '#d2ab85';
+      return `<rect x="56" y="158" width="20" height="22" rx="9" fill="${d}" ${O}/><rect x="132" y="158" width="20" height="22" rx="9" fill="${d}" ${O}/>
+      <path d="M40 142 C38 110 64 98 106 98 C148 98 170 114 168 146 C167 170 148 180 106 180 C64 180 41 170 40 142 Z" fill="${b}" ${O}/>
+      <path d="M136 120 C146 124 152 132 154 142" fill="none" stroke="${d}" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="54" cy="52" rx="9" ry="8" fill="${d}" ${O}/><ellipse cx="116" cy="52" rx="9" ry="8" fill="${d}" ${O}/>
+      <path d="M42 78 C42 56 60 46 86 46 C114 46 128 58 128 80 L128 108 C128 128 112 138 86 138 C58 138 42 128 42 108 Z" fill="${b}" ${O}/>
+      <ellipse cx="85" cy="113" rx="32" ry="20" fill="${l}" ${O2}/>
+      <ellipse cx="76" cy="107" rx="3.6" ry="2.6" fill="${INK}"/><ellipse cx="94" cy="107" rx="3.6" ry="2.6" fill="${INK}"/>
+      <circle cx="86" cy="40" r="12" fill="#efb24a" ${O}/><circle cx="82" cy="36" r="2.2" fill="#f8d68a"/>
+      <path d="M87 28 C91 20 100 19 103 23 C99 28 92 29 87 28 Z" fill="#7d9a52" ${O2}/>`;
+    }
+  },
+  rabbit: {
+    label: 'Rabbit', lore: 'Quick bursts of focus, then a good long rest in the clover.', unlock: { type: 'coins', n: 40 }, defaultName: 'Clover',
+    face: { eyes: [[84, 96], [116, 96]], er: 5.5, mouth: { x: 100, y: 113, type: 'cat' }, blush: [[72, 108], [128, 108]], zz: [142, 62] },
+    art: () => {
+      const b = '#efe6d8', p = '#eab4ad';
+      return `<path d="M74 72 C62 34 64 12 77 11 C90 10 93 36 90 72 Z" fill="${b}" ${O}/><path d="M78 64 C71 38 72 23 77 22 C83 22 85 40 84 64 Z" fill="${p}"/>
+      <path d="M110 70 C116 36 128 20 140 25 C151 30 138 54 124 76 Z" fill="${b}" ${O}/><path d="M116 64 C121 42 130 32 137 35 C142 39 132 54 122 68 Z" fill="${p}"/>
+      <circle cx="148" cy="156" r="12" fill="#ffffff" ${O}/>
+      <ellipse cx="100" cy="150" rx="48" ry="31" fill="${b}" ${O}/>
+      <ellipse cx="78" cy="178" rx="16" ry="6" fill="${b}" ${O}/><ellipse cx="122" cy="178" rx="16" ry="6" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="98" rx="40" ry="33" fill="${b}" ${O}/>
+      <path d="M95 105 H105 L100 110 Z" fill="${p}" ${O2}/>`;
+    }
+  },
+  otter: {
+    label: 'Otter', lore: 'Holds its favourite pebble in its paws, the way you keep your best notes.', unlock: { type: 'coins', n: 80 }, defaultName: 'Miso',
+    face: { eyes: [[83, 80], [117, 80]], er: 5.5, mouth: { x: 100, y: 103, type: 'cat' }, blush: [[71, 94], [129, 94]], zz: [144, 50] },
+    art: () => {
+      const b = '#8c6549', d = '#6c4b34', l = '#dcc19d';
+      return `<path d="M128 168 C160 170 176 156 178 140 C166 152 150 156 130 154 Z" fill="${d}" ${O}/>
+      <path d="M60 180 C50 142 58 108 100 108 C142 108 150 142 140 180 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="153" rx="27" ry="25" fill="${l}"/>
+      <ellipse cx="82" cy="180" rx="13" ry="5" fill="${d}" ${O2}/><ellipse cx="118" cy="180" rx="13" ry="5" fill="${d}" ${O2}/>
+      <circle cx="66" cy="58" r="9" fill="${d}" ${O}/><circle cx="134" cy="58" r="9" fill="${d}" ${O}/>
+      <ellipse cx="100" cy="84" rx="42" ry="35" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="98" rx="28" ry="18" fill="${l}"/>
+      <ellipse cx="100" cy="134" rx="15" ry="10" fill="#aaa79a" ${O}/><path d="M93 131 C96 129 100 129 103 130" fill="none" stroke="#d6d3c6" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="84" cy="134" rx="8" ry="7" fill="${d}" ${O2}/><ellipse cx="116" cy="134" rx="8" ry="7" fill="${d}" ${O2}/>
+      <path d="M93 91 Q100 87 107 91 Q104 97 100 97 Q96 97 93 91 Z" fill="${INK}"/>
+      <path d="M76 99 L62 96 M76 103 L62 105 M124 99 L138 96 M124 103 L138 105" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
+    }
+  },
+  fox: {
+    label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: 'Ember',
+    face: { eyes: [[80, 86], [120, 86]], er: 5.5, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[67, 100], [133, 100]], zz: [148, 42] },
+    art: () => {
+      const o = '#dc844b', w = '#f7ecdb', k = INK;
+      const head = 'M52 82 C52 60 74 52 100 52 C126 52 148 60 148 82 C148 108 126 128 100 128 C74 128 52 108 52 82 Z';
+      return `<path d="M126 170 C176 172 192 124 168 94 C170 126 152 146 122 148 Z" fill="${o}" ${O}/>
+      <path d="M168 94 C178 106 183 120 181 134 C172 126 167 110 168 94 Z" fill="${w}" ${O2}/>
+      <path d="M64 180 C56 144 72 116 100 116 C128 116 144 144 136 180 Z" fill="${o}" ${O}/>
+      <path d="M84 124 Q100 166 116 124 Q100 132 84 124 Z" fill="${w}"/>
+      <ellipse cx="86" cy="179" rx="11" ry="5" fill="${k}"/><ellipse cx="114" cy="179" rx="11" ry="5" fill="${k}"/>
+      <path d="M58 80 L64 30 L96 62 Z" fill="${o}" ${O}/><path d="M142 80 L136 30 L104 62 Z" fill="${o}" ${O}/>
+      <path d="M66 68 L68 42 L85 60 Z" fill="${k}" opacity=".72"/><path d="M134 68 L132 42 L115 60 Z" fill="${k}" opacity=".72"/>
+      <path d="${head}" fill="${o}"/>
+      <path d="M58 94 C70 104 86 104 100 100 C114 104 130 104 142 94 C138 116 120 128 100 128 C80 128 62 116 58 94 Z" fill="${w}"/>
+      <path d="${head}" fill="none" ${O}/>
+      <ellipse cx="100" cy="103" rx="6.5" ry="4.8" fill="${k}"/>`;
+    }
+  },
+  turtle: {
+    label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: 'Moss',
+    face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
+    art: () => {
+      const sh = '#7e9a5d', rim = '#64804b', pl = '#a6bb7b', sk = '#bcc78d';
+      return `<ellipse cx="52" cy="168" rx="15" ry="9" fill="${sk}" ${O}/><ellipse cx="128" cy="170" rx="15" ry="9" fill="${sk}" ${O}/>
+      <path d="M30 150 L14 157 L32 162 Z" fill="${sk}" ${O}/>
+      <path d="M138 142 C140 118 150 102 166 102 C184 102 192 118 188 134 C184 150 166 156 150 154 Z" fill="${sk}" ${O}/>
+      <path d="M30 154 C30 106 58 82 92 82 C126 82 152 106 152 154 Z" fill="${sh}" ${O}/>
+      <path d="M72 102 L92 93 L112 102 L112 121 L92 130 L72 121 Z" fill="${pl}" ${O2}/>
+      <path d="M44 132 L60 118 L72 124 L72 144 L46 146 Z" fill="${pl}" ${O2}/>
+      <path d="M112 124 L124 118 L140 130 L138 146 L112 144 Z" fill="${pl}" ${O2}/>
+      <path d="M24 154 C24 148 30 146 36 146 H146 C152 146 158 148 158 154 C158 162 152 165 146 165 H36 C30 165 24 162 24 154 Z" fill="${rim}" ${O}/>
+      <path d="M50 150 v10 M76 150 v10 M102 150 v10 M128 150 v10" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".55"/>`;
+    }
+  },
+  axolotl: {
+    label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: 'Nori',
+    face: { eyes: [[78, 102], [122, 102]], er: 6.5, mouth: { x: 100, y: 121, type: 'wide', w: 15 }, blush: [[64, 116], [136, 116]], zz: [152, 56] },
+    art: () => {
+      const p = '#f3bcc1', d = '#e49aa3', g = '#dd7488';
+      const gl = `<path d="M56 86 C38 70 28 74 31 83 C40 86 48 90 56 95 Z" fill="${g}" ${O2}/><path d="M52 101 C32 97 25 104 29 111 C38 109 46 109 54 109 Z" fill="${g}" ${O2}/><path d="M57 116 C42 123 37 132 43 136 C49 130 55 125 61 121 Z" fill="${g}" ${O2}/>`;
+      return `<path d="M140 150 C168 146 186 132 192 112 C178 142 160 162 134 168 Z" fill="${p}" ${O}/>
+      ${gl}<g transform="translate(200 0) scale(-1 1)">${gl}</g>
+      <ellipse cx="112" cy="155" rx="42" ry="22" fill="${p}" ${O}/>
+      <ellipse cx="86" cy="175" rx="10" ry="6" fill="${p}" ${O2}/><ellipse cx="134" cy="175" rx="10" ry="6" fill="${p}" ${O2}/>
+      <ellipse cx="100" cy="106" rx="50" ry="38" fill="${p}" ${O}/>
+      <circle cx="86" cy="78" r="3" fill="${d}"/><circle cx="112" cy="76" r="2.4" fill="${d}"/><circle cx="126" cy="84" r="2" fill="${d}"/><circle cx="120" cy="160" r="3" fill="${d}"/><circle cx="138" cy="150" r="2.4" fill="${d}"/>`;
+    }
+  },
+  heron: {
+    label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: 'Sage',
+    face: { eyes: [[85, 56], [100, 56]], er: 4.2, mouth: null, blush: [[79, 67], [103, 68]], blushR: 5, zz: [124, 22] },
+    art: (st) => {
+      const b = '#a2b3bd', l = '#e5ebed', d = '#5f717c', wg = '#7f919b', bk = '#e2b04f', lg = '#c79f4b';
+      const beak = st === 'happy'
+        ? `<path d="M108 54 L156 52 L108 62 Z" fill="${bk}" ${O2}/><path d="M108 64 L152 70 L108 68 Z" fill="${bk}" ${O2}/>`
+        : `<path d="M108 56 L158 62 L108 68 Z" fill="${bk}" ${O2}/>`;
+      return `<path d="M96 150 L96 186 M88 186 H104" stroke="${lg}" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M110 150 L120 164 L107 168" stroke="${lg}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M140 146 L172 160 L146 158 Z" fill="${d}" ${O2}/>
+      <path d="M58 124 C58 100 92 94 122 106 C150 118 160 144 142 152 C116 162 66 154 58 124 Z" fill="${b}" ${O}/>
+      <path d="M84 112 C110 108 136 118 150 140 C128 150 98 146 86 132 Z" fill="${wg}" ${O2}/>
+      <path d="M64 120 C52 98 80 88 80 70 L102 68 C104 92 78 100 86 118 Z" fill="${l}" ${O}/>
+      <circle cx="92" cy="56" r="21" fill="${l}" ${O}/>
+      <path d="M73 49 C77 36 98 32 109 45 C98 42 86 42 73 49 Z" fill="${d}"/>
+      <path d="M76 46 C66 40 56 40 48 44 M78 52 C68 50 60 52 54 57" stroke="${d}" stroke-width="3" stroke-linecap="round" fill="none"/>
+      ${beak}`;
+    }
+  }
+};
+const ANIMAL_KEYS = Object.keys(ANIMALS);
+
+function faceSVG(f, st) {
+  let out = '';
+  const er = f.er;
+  if (f.whites) {
+    f.whites.forEach(([x, y, r]) => {
+      out += st === 'sleeping'
+        ? `<circle cx="${x}" cy="${y}" r="${r}" fill="${f.lid}" ${O2}/>`
+        : `<circle cx="${x}" cy="${y}" r="${r}" fill="#fbfaf4" ${O2}/>`;
+    });
+  }
+  const br = f.blushR || 9;
+  (f.blush || []).forEach(([x, y]) => { out += `<ellipse cx="${x}" cy="${y}" rx="${br}" ry="${br * .55}" fill="#e7938a" opacity="${st === 'happy' ? .8 : .5}"/>`; });
+  if (st === 'awake') {
+    out += '<g class="eyes">' + f.eyes.map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="${er * .86}" ry="${er}" fill="${INK}"/><circle cx="${x + er * .34}" cy="${y - er * .38}" r="${er * .36}" fill="#fff"/>`).join('') + '</g>';
+  } else if (st === 'sleeping') {
+    out += f.eyes.map(([x, y]) => `<path d="M${x - er * 1.15} ${y} Q${x} ${y + er * 1.1} ${x + er * 1.15} ${y}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`).join('');
+  } else {
+    out += f.eyes.map(([x, y]) => `<path d="M${x - er * 1.15} ${y + er * .45} Q${x} ${y - er * 1.3} ${x + er * 1.15} ${y + er * .45}" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`).join('');
+  }
+  const m = f.mouth;
+  if (m) {
+    const { x, y } = m;
+    if (st === 'happy') {
+      const w = m.type === 'wide' ? m.w : 8;
+      out += `<path d="M${x - w} ${y - 1} Q${x} ${y + w * .9 + 6} ${x + w} ${y - 1} Z" fill="#7a3b33" ${O2}/><ellipse cx="${x}" cy="${y + w * .35 + 2}" rx="${w * .45}" ry="${Math.max(2.4, w * .18)}" fill="#e58b86"/>`;
+    } else if (m.type === 'wide') {
+      const w = st === 'sleeping' ? m.w * .6 : m.w;
+      out += `<path d="M${x - w} ${y} Q${x} ${y + 9} ${x + w} ${y}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`;
+    } else if (m.type === 'cat') {
+      out += st === 'sleeping'
+        ? `<ellipse cx="${x}" cy="${y + 1}" rx="2.6" ry="2.2" fill="${INK}"/>`
+        : `<path d="M${x - 7} ${y - 1} Q${x - 3.5} ${y + 5} ${x} ${y - 1} Q${x + 3.5} ${y + 5} ${x + 7} ${y - 1}" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`;
+    } else {
+      out += st === 'sleeping'
+        ? `<path d="M${x - 3} ${y + 1} H${x + 3}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`
+        : `<path d="M${x - 6} ${y} Q${x} ${y + 6} ${x + 6} ${y}" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`;
+    }
+  }
+  return out;
+}
+
+function sparkle(x, y, s) {
+  return `<path class="spark" d="M${x} ${y - s} C${x + s * .18} ${y - s * .2} ${x + s * .2} ${y - s * .18} ${x + s} ${y} C${x + s * .2} ${y + s * .18} ${x + s * .18} ${y + s * .2} ${x} ${y + s} C${x - s * .18} ${y + s * .2} ${x - s * .2} ${y + s * .18} ${x - s} ${y} C${x - s * .2} ${y - s * .18} ${x - s * .18} ${y - s * .2} ${x} ${y - s} Z" fill="#f4d97c" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>`;
+}
+
+/* Returns the animal as an SVG string. state: awake | sleeping | happy */
+function animalSVG(kind, state = 'awake', opts = {}) {
+  const a = ANIMALS[kind] || ANIMALS.frog;
+  const f = a.face;
+  const label = opts.label || `${a.label}, ${state === 'sleeping' ? 'napping' : state}`;
+  const [zx, zy] = f.zz;
+  const extras = state === 'sleeping'
+    ? `<g class="zz"><text x="${zx}" y="${zy}" font-size="24">z</text><text x="${zx + 12}" y="${zy - 12}" font-size="19">z</text><text x="${zx + 22}" y="${zy - 24}" font-size="15">z</text></g>`
+    : state === 'happy' ? sparkle(zx - 2, zy + 6, 11) + sparkle(36, zy + 26, 9) + sparkle(zx + 20, zy + 46, 7) : '';
+  const tag = opts.nested ? `<svg x="${opts.x || 0}" y="${opts.y || 0}" width="${opts.w || 200}" height="${opts.w || 200}"` : '<svg';
+  return `${tag} class="ga ${state}" viewBox="0 0 200 200" role="img" aria-label="${label}" overflow="visible">
+    <ellipse cx="100" cy="182" rx="60" ry="8" fill="rgba(40,30,20,.16)"/>
+    <g class="bod"><g filter="url(#gr-wob)">${a.art(state)}</g>${faceSVG(f, state)}</g>${extras}</svg>`;
+}
+
+/* Animal sitting on its own lily pad */
+function onPadSVG(kind, state, opts = {}) {
+  const bloom = opts.bloom !== false;
+  return `<svg viewBox="0 0 240 230" overflow="visible" aria-hidden="${opts.hidden ? 'true' : 'false'}">
+    <g transform="translate(120 200)">
+      <ellipse cx="0" cy="8" rx="112" ry="20" fill="var(--water-2)" opacity=".55"/>
+      <path d="M0 0 L50 -20.8 A100 24 0 1 1 17.4 -23.6 Z" fill="var(--pad)" stroke="var(--pad-2)" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0 0 L-72 9 M0 0 L-26 21 M0 0 L44 18 M0 0 L84 4 M0 0 L-90 -6" stroke="var(--pad-2)" stroke-width="2" opacity=".6" stroke-linecap="round"/>
+      ${bloom ? `<g transform="translate(-86 -12)"><path d="M0 0 C-10 -6 -12 -18 -6 -24 C-2 -16 0 -10 0 0 Z M0 0 C10 -6 12 -18 6 -24 C2 -16 0 -10 0 0 Z M0 0 C-5 -10 -4 -22 0 -28 C4 -22 5 -10 0 0 Z" fill="var(--bloom)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>` : ''}
+    </g>
+    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label })}
+  </svg>`;
+}
+
+/* Small round avatar portrait */
+function avatarSVG(kind, state = 'awake') {
+  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
+}
