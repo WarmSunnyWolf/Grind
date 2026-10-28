@@ -44,12 +44,14 @@ function defaultState() {
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
     rocks: [exampleRock()], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
-    seenRipple: 0, timer: null, lastCourse: '', openRock: 'example-rock'
+    seenRipple: 0, timer: null, lastCourse: '', openRock: 'example-rock',
+    sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true }
   };
 }
 function mergeState(s) {
   const d = defaultState();
-  const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) } };
+  const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) }, sounds: { ...d.sounds, ...(s.sounds || {}) } };
+  if (!Array.isArray(m.sounds.owned) || !m.sounds.owned.includes('rain')) m.sounds.owned = ['rain', ...(Array.isArray(m.sounds.owned) ? m.sounds.owned : [])];
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
   Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });

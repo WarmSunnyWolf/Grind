@@ -476,4 +476,24 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .g-link{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
 .g-link code{font-size:.95rem; padding:8px 12px; border-radius:10px; background:var(--surface-2); overflow-wrap:anywhere}
 @media (max-width:860px){.g-list{grid-template-columns:minmax(0,1fr)} .g-hero{grid-template-columns:minmax(0,1fr); padding:20px} .g-hero-pic{display:none}}
+
+/* sounds */
+.snd-list{display:flex; flex-direction:column; gap:8px}
+.snd{display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:16px; background:var(--surface-2); padding:4px 8px 4px 4px}
+.snd.sel{border-color:var(--accent)}
+.snd.locked .snd-main{opacity:.72; cursor:default}
+.snd-main{flex:1; min-width:0; display:flex; align-items:center; gap:10px; border:0; background:none; padding:4px; text-align:left; color:var(--ink); font:inherit; cursor:pointer; border-radius:12px}
+.snd-ic{flex:none; width:36px; height:36px; border-radius:12px; display:grid; place-items:center; background:var(--surface); color:var(--pad)}
+.snd-ic svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.snd-ic.on{background:var(--accent); color:var(--accent-ink)}
+.snd-ic.on svg{animation:sndPulse 1.6s ease-in-out infinite}
+@keyframes sndPulse{50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.snd-ic.on svg{animation:none}}
+.snd-t{min-width:0; display:flex; flex-direction:column}
+.snd-t b{font-size:.92rem}
+.snd-t small{font-size:.78rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.snd-act{margin-left:auto; flex:none; width:30px; height:30px; display:grid; place-items:center; border-radius:50%; border:1px solid var(--line)}
+.snd-act svg{width:14px; height:14px}
+.snd-foot{display:flex; flex-direction:column; gap:10px; margin-top:14px}
+.snd-vol{display:flex; align-items:center; gap:12px}
 </style>

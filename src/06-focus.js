@@ -78,6 +78,7 @@ function startPhase(phase) {
   mode = phase; napAfterStop = false;
   save(); renderTimer(); renderHero(); publishPond();
   say(pick(phase === 'focus' ? LINES.start : LINES.rest));
+  if (phase === 'focus') sndOnFocus(true);
   requestWake();
 }
 function logFocus(mins, completed) {
@@ -93,6 +94,7 @@ function completePhase() {
   const t = S.timer; if (!t) return;
   chime();
   if (t.phase === 'focus') {
+    sndOnFocus(false);
     const coins = logFocus(t.min, true);
     S.timer = null; mode = 'rest';
     save(); addCoins(coins, `for ${fmtMin(t.min)} of focus`);
@@ -110,6 +112,7 @@ function stopFocus() {
   const left = t.pausedLeft != null ? t.pausedLeft : Math.max(0, t.endsAt - Date.now());
   const done = Math.floor(t.min * (1 - left / t.total));
   const coins = logFocus(done, false);
+  if (t.phase === 'focus') sndOnFocus(false);
   S.timer = null; napAfterStop = true; mode = 'focus';
   save(); renderHero(); renderTimer();
   say(pick(LINES.stop));

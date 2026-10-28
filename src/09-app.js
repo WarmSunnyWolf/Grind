@@ -262,6 +262,7 @@ function go(v) {
   window.scrollTo({ top: 0 });
 }
 function renderChips() {
+  renderSounds();
   const st = streakNow();
   $('#streakChip').textContent = `${st} day${st === 1 ? '' : 's'}`;
   $('#coinChip').textContent = S.coins;
@@ -314,7 +315,7 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide();
+  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds();
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();
