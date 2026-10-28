@@ -195,6 +195,40 @@ input[type=range]{accent-color:var(--accent); width:100%}
 
 /* ---------- pebbles ---------- */
 .rock-list{display:flex; flex-direction:column; gap:16px}
+/* ---------- calendar ---------- */
+#v-cal > .card, #v-cal > form{margin-bottom:18px}
+.cal-card{padding:18px}
+.cal-head{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px}
+.cal-head h2{font-size:1.6rem; letter-spacing:.01em}
+.cal-wd, .cal-grid{display:grid; grid-template-columns:repeat(7, minmax(0, 1fr))}
+.cal-wd span{font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; text-align:center; padding:6px 0}
+.cal-grid{border-top:1px solid var(--line); border-left:1px solid var(--line); border-radius:12px; overflow:hidden}
+.cal-day{min-height:104px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:6px; display:flex; flex-direction:column; gap:3px; cursor:pointer; background:var(--surface); min-width:0; transition:background .15s}
+.cal-day:hover{background:var(--surface-2)}
+.cal-day.out{background:var(--bg); opacity:.6}
+.cal-day .n{font-size:.8rem; font-weight:600; color:var(--ink-2); width:24px; height:24px; display:grid; place-items:center; border-radius:50%}
+.cal-day.today .n{background:var(--accent); color:var(--accent-ink)}
+.cal-day.sel{box-shadow:inset 0 0 0 2px var(--rose)}
+.cal-ev{display:block; width:100%; text-align:left; border:0; border-left:3px solid var(--c); background:color-mix(in srgb, var(--c) 14%, var(--surface)); color:var(--ink); font:inherit; font-size:.74rem; line-height:1.25; padding:3px 6px; border-radius:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer}
+.cal-ev small{color:var(--muted); font-size:.68rem}
+.cal-ev.rock{border-left-style:dashed}
+.cal-ev.t-exam{font-weight:600}
+.cal-day .more{font-size:.7rem; color:var(--muted); padding-left:4px}
+.cal-day .dots{display:none; gap:3px; justify-content:center; margin-top:auto}
+.cal-day .dots i{width:6px; height:6px; border-radius:50%}
+.cal-list .bar{width:4px; align-self:stretch; border-radius:4px; flex:none}
+.cal-list .nm b{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.cal-list .nm > span{font-size:.8rem; color:var(--muted)}
+.pill.soon{background:var(--rose); color:#fff; border-color:transparent}
+.toast-ic svg{width:22px; height:22px}
+@media (max-width:720px){
+  .cal-card{padding:12px}
+  .cal-head h2{font-size:1.25rem; white-space:nowrap}
+  .cal-head .row{flex-wrap:nowrap; gap:6px}
+  .cal-day{min-height:58px; padding:4px; align-items:center}
+  .cal-day .cal-ev, .cal-day .more{display:none}
+  .cal-day .dots{display:flex}
+}
 .rock{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden}
 .rock-head{display:flex; gap:14px; align-items:center; padding:16px 18px; cursor:pointer}
 .rock-head .rk{width:52px; height:42px; flex:none}
@@ -508,6 +542,13 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .note-wrap{position:relative; display:inline-flex}
 .note-btn{padding:7px 9px; cursor:pointer; position:relative; color:var(--ink)}
 .note-badge{position:absolute; top:-5px; right:-5px; min-width:19px; height:19px; padding:0 5px; border-radius:999px; background:var(--rose); color:#fff; font-size:.7rem; display:grid; place-items:center; border:2px solid var(--bg)}
+.coin-btn{cursor:pointer}
+.coin-panel .coin-big{font-size:.95rem; margin:0 0 12px}
+.coin-panel .coin-big b{font-size:1.6rem}
+.coin-rules{list-style:none; margin:6px 0 0; padding:0; display:flex; flex-direction:column; gap:4px}
+.coin-rules li{display:flex; justify-content:space-between; gap:12px; padding:7px 10px; border-radius:10px; background:var(--bg); font-size:.88rem}
+.coin-rules b{white-space:nowrap}
+.note-foot{margin-top:12px; display:flex; justify-content:center}
 .note-panel{position:absolute; top:calc(100% + 8px); right:0; width:min(380px, calc(100vw - 32px)); max-height:min(70vh, 560px); overflow:auto; z-index:40; box-shadow:0 18px 50px rgba(30,40,30,.18); padding:16px}
 .note-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px}
 .note-list li{display:flex; align-items:center; gap:10px; padding:8px; border-radius:14px}

@@ -40,11 +40,11 @@ function defaultState() {
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
-    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, autoRest: true, demo: false },
+    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
-    rocks: [exampleRock()], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
-    seenRipple: 0, timer: null, lastCourse: '', openRock: 'example-rock',
+    rocks: [exampleRock()], events: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
+    seenRipple: 0, visV2: true, timer: null, lastCourse: '', openRock: 'example-rock',
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true }
   };
 }
@@ -53,8 +53,8 @@ function mergeAccount(remote, local, uid) {
   if (!remote) return local.ownerUid && local.ownerUid !== uid ? defaultState() : local;
   if (local.ownerUid === uid) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
   if (local.ownerUid) return remote;
-  const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || [])].map(x => x.id));
-  const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example)];
+  const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || []), ...(remote.events || [])].map(x => x.id));
+  const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example), ...(local.events || [])];
   if (mine.some(x => remIds.has(x.id))) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
   if (!mine.length) return remote;
   const m = remote, byId = (a, b) => { const ids = new Set(a.map(x => x.id)); return [...a, ...b.filter(x => x && !ids.has(x.id))]; };
@@ -62,6 +62,7 @@ function mergeAccount(remote, local, uid) {
   m.rocks = byId(m.rocks || [], (local.rocks || []).filter(r => !r.example));
   m.pebLog = [...(m.pebLog || []), ...(local.pebLog || [])].filter((x, i, a) => a.findIndex(y => JSON.stringify(y) === JSON.stringify(x)) === i);
   m.localPosts = byId(m.localPosts || [], local.localPosts || []);
+  m.events = byId(m.events || [], local.events || []);
   m.unlocked = [...new Set([...(m.unlocked || []), ...(local.unlocked || [])])];
   Object.entries(local.pets || {}).forEach(([k, p]) => { if (!m.pets[k]) m.pets[k] = p; else { m.pets[k].bond = Math.max(m.pets[k].bond || 0, p.bond || 0); if (!m.pets[k].name && p.name) m.pets[k].name = p.name; } });
   const earned = Math.max(0, (local.coinsEarned || 20) - 20);
@@ -78,6 +79,8 @@ function mergeState(s) {
   const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) }, sounds: { ...d.sounds, ...(s.sounds || {}) } };
   if (!['me', 'friends', 'everyone'].includes(m.profile.visibility)) m.profile.visibility = m.profile.public === false ? 'me' : 'everyone';
   delete m.profile.public;
+  // everyone starts public; earlier versions could leave accounts hidden
+  if (!s.visV2) { m.profile.visibility = 'everyone'; m.visV2 = true; }
   if (!Array.isArray(m.sounds.owned) || !m.sounds.owned.includes('rain')) m.sounds.owned = ['rain', ...(Array.isArray(m.sounds.owned) ? m.sounds.owned : [])];
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };

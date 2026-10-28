@@ -16,7 +16,7 @@ function cleanResident(id, d) {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
-    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me',
+    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === false ? 'me' : 'everyone',
     board: d.board && typeof d.board === 'object' ? { d: clampStr(d.board.d, 10), w: clampStr(d.board.w, 10), m: clampStr(d.board.m, 7), dm: Math.max(0, Math.min(1440, +d.board.dm || 0)), wm: Math.max(0, Math.min(10080, +d.board.wm || 0)), mm: Math.max(0, Math.min(44640, +d.board.mm || 0)) } : null
   };
 }

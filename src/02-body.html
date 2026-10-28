@@ -8,6 +8,8 @@
     <radialGradient id="gr-glow"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".35" stop-color="#f4e39a" stop-opacity=".55"/><stop offset="1" stop-color="#f4e39a" stop-opacity="0"/></radialGradient>
   </defs>
   <symbol id="i-timer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.6M9.5 2.8h5M18.4 6.6l1.3-1.3"/></g></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9.5 5.5l6.5 6.5-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.8" y="5" width="16.4" height="15" rx="3"/><path d="M3.8 9.6h16.4M8.3 3.2v3.4M15.7 3.2v3.4"/><path d="M8 13.4h.01M12 13.4h.01M16 13.4h.01M8 16.6h.01M12 16.6h.01"/></g></symbol>
   <symbol id="i-pebble" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 15.6c-.9-3.6 1.8-7.4 6.3-8.2 4.3-.8 8.6.9 9.3 4.6.7 3.6-2.4 6.3-7.2 6.8-4.1.4-7.6-.4-8.4-3.2z"/><path d="M8.5 11.2c1.2-1 2.7-1.4 4.2-1.3"/></g></symbol>
   <symbol id="i-pond" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12l6.8-3.2A7.6 5.2 0 1 1 15 7.1z"/><path d="M3 19.5c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/></g></symbol>
   <symbol id="i-lotus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4.5c2.4 2.4 3 5.8 0 10.5-3-4.7-2.4-8.1 0-10.5z"/><path d="M12 15C9.4 15 5.8 13.8 4 10.2c3.2-.6 6 .9 8 4.8zM12 15c2.6 0 6.2-1.2 8-4.8-3.2-.6-6 .9-8 4.8z"/><path d="M5 18.5c4.5 1.6 9.5 1.6 14 0"/></g></symbol>
@@ -51,6 +53,7 @@
     <nav class="nav" id="nav">
       <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
       <button data-go="pebbles"><svg><use href="#i-pebble"/></svg><span>Pebbles</span></button>
+      <button data-go="cal"><svg><use href="#i-cal"/></svg><span>Calendar</span><i class="dot" id="calDot" hidden></i></button>
       <button data-go="pond"><svg><use href="#i-pond"/></svg><span>The Pond</span><i class="dot" id="pondDot" hidden></i></button>
       <button data-go="together"><svg><use href="#i-lotus"/></svg><span>Together</span></button>
       <button data-go="commons"><svg><use href="#i-commons"/></svg><span>Commons</span></button>
@@ -76,7 +79,17 @@
           <span class="note-wrap"><button type="button" class="chip note-btn" id="noteBtn" aria-label="Notifications" aria-expanded="false" aria-haspopup="true"><svg><use href="#i-bell"/></svg><b class="note-badge" id="noteBadge" hidden>0</b></button>
             <div class="card note-panel" id="notePanel" hidden role="dialog" aria-label="Notifications"><div class="card-h"><h2>Notifications</h2><button class="icon-btn" data-noteclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div><div id="noteBody"></div></div></span>
           <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
-          <span class="chip" title="Coins"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></span>
+          <span class="note-wrap"><button type="button" class="chip coin-btn" id="coinBtn" title="How coins work" aria-expanded="false" aria-haspopup="true"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></button>
+            <div class="card note-panel coin-panel" id="coinPanel" hidden role="dialog" aria-label="How coins work"><div class="card-h"><h2>Your coins</h2><button class="icon-btn" data-coinclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+              <p class="coin-big"><b id="coinNow">0</b> coins now <span class="muted" id="coinEarned"></span></p>
+              <span class="eyebrow">How to earn</span>
+              <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
+              <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
+              <span class="eyebrow">How to spend</span>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
+              <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
+            </div></span>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
           <span class="mobile-top"><button class="icon-btn" data-go="guide" aria-label="How to use Grind"><svg><use href="#i-info"/></svg></button><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
@@ -180,6 +193,35 @@
         <div class="rock-list" id="rockList"></div>
       </section>
 
+      <!-- CALENDAR -->
+      <section class="view" id="v-cal">
+        <div class="row" style="justify-content:space-between">
+          <p class="muted" style="max-width:60ch">Every deadline, exam and lab in one month. Click a day to see it, double click to add. Grind reminds you before things are due, and rocks with a due date from Pebbles show up here too.</p>
+          <div class="row"><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
+        </div>
+        <form class="card" id="evForm" hidden>
+          <div class="card-h"><h2 id="evFormTitle">Add to your calendar</h2><button type="button" class="icon-btn" id="evCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+          <div class="form-grid">
+            <label class="f" style="grid-column:1/-1">What is it?<input class="inp" id="evTitle" required maxlength="100" placeholder="Data Com midterm"></label>
+            <label class="f">Date<input class="inp" type="date" id="evDate" required></label>
+            <label class="f">Time (optional)<input class="inp" type="time" id="evTime"></label>
+            <label class="f">Course<select class="inp" id="evCourse"></select></label>
+            <label class="f">Type<select class="inp" id="evType"></select></label>
+            <label class="f">Remind me<select class="inp" id="evRemind"></select></label>
+          </div>
+          <div class="row" style="margin-top:14px"><button class="btn primary" type="submit"><svg><use href="#i-check"/></svg>Save</button><button class="btn quiet" type="button" id="evDel" hidden><svg><use href="#i-trash"/></svg>Delete</button></div>
+        </form>
+        <div class="card cal-card">
+          <div class="cal-head"><h2 id="calTitle">Month</h2><div class="row"><button class="icon-btn" id="calPrev" aria-label="Previous month"><svg style="transform:rotate(180deg)"><use href="#i-chev"/></svg></button><button class="btn small" id="calToday">Today</button><button class="icon-btn" id="calNext" aria-label="Next month"><svg><use href="#i-chev"/></svg></button></div></div>
+          <div class="cal-wd"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="grid g-2">
+          <div class="card"><div class="card-h"><h2 id="calDayTitle">Today</h2><button class="btn small" id="calDayAdd"><svg><use href="#i-plus"/></svg>Add on this day</button></div><ul class="member-list cal-list" id="calDayList"></ul></div>
+          <div class="card"><div class="card-h"><h2>Coming up</h2><span class="muted" style="font-size:.82rem">Next two weeks</span></div><ul class="member-list cal-list" id="calSoon"></ul></div>
+        </div>
+      </section>
+
       <!-- POND -->
       <section class="view" id="v-pond">
         <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement, and check the leaderboard to see who studied the most.</p>
@@ -258,12 +300,13 @@
               <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
               <a href="#g-3" data-gjump="3"><b>3</b>Time a study session</a>
               <a href="#g-4" data-gjump="4"><b>4</b>Break big tasks into pebbles</a>
-              <a href="#g-5" data-gjump="5"><b>5</b>Meet people in the pond</a>
-              <a href="#g-6" data-gjump="6"><b>6</b>Study with friends in a circle</a>
-              <a href="#g-7" data-gjump="7"><b>7</b>Share notes in the Commons</a>
-              <a href="#g-8" data-gjump="8"><b>8</b>Earn coins and new animals</a>
-              <a href="#g-9" data-gjump="9"><b>9</b>See your progress</a>
-              <a href="#g-10" data-gjump="10"><b>10</b>Make it yours</a>
+              <a href="#g-4b" data-gjump="4b"><b>5</b>Plan deadlines in the calendar</a>
+              <a href="#g-5" data-gjump="5"><b>6</b>Meet people in the pond</a>
+              <a href="#g-6" data-gjump="6"><b>7</b>Study with friends in a circle</a>
+              <a href="#g-7" data-gjump="7"><b>8</b>Share notes in the Commons</a>
+              <a href="#g-8" data-gjump="8"><b>9</b>Earn coins and new animals</a>
+              <a href="#g-9" data-gjump="9"><b>10</b>See your progress</a>
+              <a href="#g-10" data-gjump="10"><b>11</b>Make it yours</a>
             </div>
           </div>
           <div class="g-hero-pic" id="gHeroPic" aria-hidden="true"></div>
@@ -289,33 +332,38 @@
             <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
+          <article class="card g-sec" id="g-4b">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-cal"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Plan deadlines in the calendar</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Calendar</b> to see the whole month. Click <b>Add</b>, or double click a day, and type what it is, like "DSP midterm".</li><li>Pick the date, a time if it has one, the course, and when to be reminded: from 1 hour to 1 week before.</li><li>When it is close, a reminder pops up and stays in the <b>bell</b>. Click <b>Also alert me on this device</b> to get alerts even when Grind is in another tab. Rocks with a due date show up on the calendar by themselves.</li></ol>
+            <div class="row"><button class="btn small" data-go="cal">Show me the calendar</button></div>
+          </article>
           <article class="card g-sec" id="g-5">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 6</span><h2>Meet people in the pond</h2></div></div>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts, with a soft sound. Turn the sound off in <b>Customize</b>.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-lotus"/></svg></span><div><span class="eyebrow">Step 6</span><h2>Study with friends in a circle</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-lotus"/></svg></span><div><span class="eyebrow">Step 7</span><h2>Study with friends in a circle</h2></div></div>
             <ol class="g-steps"><li>Open <b>Together</b>, name a circle under <b>Start a circle</b>, and click <b>Create</b>.</li><li>You get a six-letter code. Send it, with the site link, to your study friends.</li><li>They sign in, open Together, and type it under <b>Join with a code</b>. The lotus opens fully on days when everyone has studied.</li></ol>
             <div class="row"><button class="btn small" data-go="together">Show me circles</button></div>
           </article>
           <article class="card g-sec" id="g-7">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 7</span><h2>Share notes in the Commons</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Share notes in the Commons</h2></div></div>
             <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and your notes. You can paste a Google Drive link to a file.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
             <div class="row"><button class="btn small" data-go="commons">Show me the Commons</button></div>
           </article>
           <article class="card g-sec" id="g-8">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 9</span><h2>See your progress</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 10</span><h2>See your progress</h2></div></div>
             <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
             <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
           </article>
           <article class="card g-sec" id="g-10">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 10</span><h2>Make it yours</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 11</span><h2>Make it yours</h2></div></div>
             <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
@@ -391,6 +439,7 @@
   <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
   <section><span class="eyebrow">Session</span>
     <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
+    <div class="toggle"><span>Sound when a notification arrives</span><button class="switch" role="switch" id="swNoteSound" aria-checked="true" aria-label="Notification sound"></button></div>
     <div class="toggle"><span>Start rest automatically after focus</span><button class="switch" role="switch" id="swAuto" aria-checked="true" aria-label="Auto rest"></button></div>
   </section>
   <section><span class="eyebrow">Your data</span>

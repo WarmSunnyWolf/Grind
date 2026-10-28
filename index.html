@@ -202,6 +202,40 @@ input[type=range]{accent-color:var(--accent); width:100%}
 
 /* ---------- pebbles ---------- */
 .rock-list{display:flex; flex-direction:column; gap:16px}
+/* ---------- calendar ---------- */
+#v-cal > .card, #v-cal > form{margin-bottom:18px}
+.cal-card{padding:18px}
+.cal-head{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px}
+.cal-head h2{font-size:1.6rem; letter-spacing:.01em}
+.cal-wd, .cal-grid{display:grid; grid-template-columns:repeat(7, minmax(0, 1fr))}
+.cal-wd span{font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; text-align:center; padding:6px 0}
+.cal-grid{border-top:1px solid var(--line); border-left:1px solid var(--line); border-radius:12px; overflow:hidden}
+.cal-day{min-height:104px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:6px; display:flex; flex-direction:column; gap:3px; cursor:pointer; background:var(--surface); min-width:0; transition:background .15s}
+.cal-day:hover{background:var(--surface-2)}
+.cal-day.out{background:var(--bg); opacity:.6}
+.cal-day .n{font-size:.8rem; font-weight:600; color:var(--ink-2); width:24px; height:24px; display:grid; place-items:center; border-radius:50%}
+.cal-day.today .n{background:var(--accent); color:var(--accent-ink)}
+.cal-day.sel{box-shadow:inset 0 0 0 2px var(--rose)}
+.cal-ev{display:block; width:100%; text-align:left; border:0; border-left:3px solid var(--c); background:color-mix(in srgb, var(--c) 14%, var(--surface)); color:var(--ink); font:inherit; font-size:.74rem; line-height:1.25; padding:3px 6px; border-radius:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer}
+.cal-ev small{color:var(--muted); font-size:.68rem}
+.cal-ev.rock{border-left-style:dashed}
+.cal-ev.t-exam{font-weight:600}
+.cal-day .more{font-size:.7rem; color:var(--muted); padding-left:4px}
+.cal-day .dots{display:none; gap:3px; justify-content:center; margin-top:auto}
+.cal-day .dots i{width:6px; height:6px; border-radius:50%}
+.cal-list .bar{width:4px; align-self:stretch; border-radius:4px; flex:none}
+.cal-list .nm b{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.cal-list .nm > span{font-size:.8rem; color:var(--muted)}
+.pill.soon{background:var(--rose); color:#fff; border-color:transparent}
+.toast-ic svg{width:22px; height:22px}
+@media (max-width:720px){
+  .cal-card{padding:12px}
+  .cal-head h2{font-size:1.25rem; white-space:nowrap}
+  .cal-head .row{flex-wrap:nowrap; gap:6px}
+  .cal-day{min-height:58px; padding:4px; align-items:center}
+  .cal-day .cal-ev, .cal-day .more{display:none}
+  .cal-day .dots{display:flex}
+}
 .rock{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden}
 .rock-head{display:flex; gap:14px; align-items:center; padding:16px 18px; cursor:pointer}
 .rock-head .rk{width:52px; height:42px; flex:none}
@@ -515,6 +549,13 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .note-wrap{position:relative; display:inline-flex}
 .note-btn{padding:7px 9px; cursor:pointer; position:relative; color:var(--ink)}
 .note-badge{position:absolute; top:-5px; right:-5px; min-width:19px; height:19px; padding:0 5px; border-radius:999px; background:var(--rose); color:#fff; font-size:.7rem; display:grid; place-items:center; border:2px solid var(--bg)}
+.coin-btn{cursor:pointer}
+.coin-panel .coin-big{font-size:.95rem; margin:0 0 12px}
+.coin-panel .coin-big b{font-size:1.6rem}
+.coin-rules{list-style:none; margin:6px 0 0; padding:0; display:flex; flex-direction:column; gap:4px}
+.coin-rules li{display:flex; justify-content:space-between; gap:12px; padding:7px 10px; border-radius:10px; background:var(--bg); font-size:.88rem}
+.coin-rules b{white-space:nowrap}
+.note-foot{margin-top:12px; display:flex; justify-content:center}
 .note-panel{position:absolute; top:calc(100% + 8px); right:0; width:min(380px, calc(100vw - 32px)); max-height:min(70vh, 560px); overflow:auto; z-index:40; box-shadow:0 18px 50px rgba(30,40,30,.18); padding:16px}
 .note-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px}
 .note-list li{display:flex; align-items:center; gap:10px; padding:8px; border-radius:14px}
@@ -574,6 +615,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
     <radialGradient id="gr-glow"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".35" stop-color="#f4e39a" stop-opacity=".55"/><stop offset="1" stop-color="#f4e39a" stop-opacity="0"/></radialGradient>
   </defs>
   <symbol id="i-timer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.6M9.5 2.8h5M18.4 6.6l1.3-1.3"/></g></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9.5 5.5l6.5 6.5-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.8" y="5" width="16.4" height="15" rx="3"/><path d="M3.8 9.6h16.4M8.3 3.2v3.4M15.7 3.2v3.4"/><path d="M8 13.4h.01M12 13.4h.01M16 13.4h.01M8 16.6h.01M12 16.6h.01"/></g></symbol>
   <symbol id="i-pebble" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 15.6c-.9-3.6 1.8-7.4 6.3-8.2 4.3-.8 8.6.9 9.3 4.6.7 3.6-2.4 6.3-7.2 6.8-4.1.4-7.6-.4-8.4-3.2z"/><path d="M8.5 11.2c1.2-1 2.7-1.4 4.2-1.3"/></g></symbol>
   <symbol id="i-pond" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12l6.8-3.2A7.6 5.2 0 1 1 15 7.1z"/><path d="M3 19.5c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/></g></symbol>
   <symbol id="i-lotus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4.5c2.4 2.4 3 5.8 0 10.5-3-4.7-2.4-8.1 0-10.5z"/><path d="M12 15C9.4 15 5.8 13.8 4 10.2c3.2-.6 6 .9 8 4.8zM12 15c2.6 0 6.2-1.2 8-4.8-3.2-.6-6 .9-8 4.8z"/><path d="M5 18.5c4.5 1.6 9.5 1.6 14 0"/></g></symbol>
@@ -617,6 +660,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
     <nav class="nav" id="nav">
       <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
       <button data-go="pebbles"><svg><use href="#i-pebble"/></svg><span>Pebbles</span></button>
+      <button data-go="cal"><svg><use href="#i-cal"/></svg><span>Calendar</span><i class="dot" id="calDot" hidden></i></button>
       <button data-go="pond"><svg><use href="#i-pond"/></svg><span>The Pond</span><i class="dot" id="pondDot" hidden></i></button>
       <button data-go="together"><svg><use href="#i-lotus"/></svg><span>Together</span></button>
       <button data-go="commons"><svg><use href="#i-commons"/></svg><span>Commons</span></button>
@@ -642,7 +686,17 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <span class="note-wrap"><button type="button" class="chip note-btn" id="noteBtn" aria-label="Notifications" aria-expanded="false" aria-haspopup="true"><svg><use href="#i-bell"/></svg><b class="note-badge" id="noteBadge" hidden>0</b></button>
             <div class="card note-panel" id="notePanel" hidden role="dialog" aria-label="Notifications"><div class="card-h"><h2>Notifications</h2><button class="icon-btn" data-noteclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div><div id="noteBody"></div></div></span>
           <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
-          <span class="chip" title="Coins"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></span>
+          <span class="note-wrap"><button type="button" class="chip coin-btn" id="coinBtn" title="How coins work" aria-expanded="false" aria-haspopup="true"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></button>
+            <div class="card note-panel coin-panel" id="coinPanel" hidden role="dialog" aria-label="How coins work"><div class="card-h"><h2>Your coins</h2><button class="icon-btn" data-coinclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+              <p class="coin-big"><b id="coinNow">0</b> coins now <span class="muted" id="coinEarned"></span></p>
+              <span class="eyebrow">How to earn</span>
+              <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
+              <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
+              <span class="eyebrow">How to spend</span>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
+              <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
+            </div></span>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
           <span class="mobile-top"><button class="icon-btn" data-go="guide" aria-label="How to use Grind"><svg><use href="#i-info"/></svg></button><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
@@ -746,6 +800,35 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
         <div class="rock-list" id="rockList"></div>
       </section>
 
+      <!-- CALENDAR -->
+      <section class="view" id="v-cal">
+        <div class="row" style="justify-content:space-between">
+          <p class="muted" style="max-width:60ch">Every deadline, exam and lab in one month. Click a day to see it, double click to add. Grind reminds you before things are due, and rocks with a due date from Pebbles show up here too.</p>
+          <div class="row"><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
+        </div>
+        <form class="card" id="evForm" hidden>
+          <div class="card-h"><h2 id="evFormTitle">Add to your calendar</h2><button type="button" class="icon-btn" id="evCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+          <div class="form-grid">
+            <label class="f" style="grid-column:1/-1">What is it?<input class="inp" id="evTitle" required maxlength="100" placeholder="Data Com midterm"></label>
+            <label class="f">Date<input class="inp" type="date" id="evDate" required></label>
+            <label class="f">Time (optional)<input class="inp" type="time" id="evTime"></label>
+            <label class="f">Course<select class="inp" id="evCourse"></select></label>
+            <label class="f">Type<select class="inp" id="evType"></select></label>
+            <label class="f">Remind me<select class="inp" id="evRemind"></select></label>
+          </div>
+          <div class="row" style="margin-top:14px"><button class="btn primary" type="submit"><svg><use href="#i-check"/></svg>Save</button><button class="btn quiet" type="button" id="evDel" hidden><svg><use href="#i-trash"/></svg>Delete</button></div>
+        </form>
+        <div class="card cal-card">
+          <div class="cal-head"><h2 id="calTitle">Month</h2><div class="row"><button class="icon-btn" id="calPrev" aria-label="Previous month"><svg style="transform:rotate(180deg)"><use href="#i-chev"/></svg></button><button class="btn small" id="calToday">Today</button><button class="icon-btn" id="calNext" aria-label="Next month"><svg><use href="#i-chev"/></svg></button></div></div>
+          <div class="cal-wd"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="grid g-2">
+          <div class="card"><div class="card-h"><h2 id="calDayTitle">Today</h2><button class="btn small" id="calDayAdd"><svg><use href="#i-plus"/></svg>Add on this day</button></div><ul class="member-list cal-list" id="calDayList"></ul></div>
+          <div class="card"><div class="card-h"><h2>Coming up</h2><span class="muted" style="font-size:.82rem">Next two weeks</span></div><ul class="member-list cal-list" id="calSoon"></ul></div>
+        </div>
+      </section>
+
       <!-- POND -->
       <section class="view" id="v-pond">
         <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement, and check the leaderboard to see who studied the most.</p>
@@ -824,12 +907,13 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
               <a href="#g-3" data-gjump="3"><b>3</b>Time a study session</a>
               <a href="#g-4" data-gjump="4"><b>4</b>Break big tasks into pebbles</a>
-              <a href="#g-5" data-gjump="5"><b>5</b>Meet people in the pond</a>
-              <a href="#g-6" data-gjump="6"><b>6</b>Study with friends in a circle</a>
-              <a href="#g-7" data-gjump="7"><b>7</b>Share notes in the Commons</a>
-              <a href="#g-8" data-gjump="8"><b>8</b>Earn coins and new animals</a>
-              <a href="#g-9" data-gjump="9"><b>9</b>See your progress</a>
-              <a href="#g-10" data-gjump="10"><b>10</b>Make it yours</a>
+              <a href="#g-4b" data-gjump="4b"><b>5</b>Plan deadlines in the calendar</a>
+              <a href="#g-5" data-gjump="5"><b>6</b>Meet people in the pond</a>
+              <a href="#g-6" data-gjump="6"><b>7</b>Study with friends in a circle</a>
+              <a href="#g-7" data-gjump="7"><b>8</b>Share notes in the Commons</a>
+              <a href="#g-8" data-gjump="8"><b>9</b>Earn coins and new animals</a>
+              <a href="#g-9" data-gjump="9"><b>10</b>See your progress</a>
+              <a href="#g-10" data-gjump="10"><b>11</b>Make it yours</a>
             </div>
           </div>
           <div class="g-hero-pic" id="gHeroPic" aria-hidden="true"></div>
@@ -855,33 +939,38 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
+          <article class="card g-sec" id="g-4b">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-cal"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Plan deadlines in the calendar</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Calendar</b> to see the whole month. Click <b>Add</b>, or double click a day, and type what it is, like "DSP midterm".</li><li>Pick the date, a time if it has one, the course, and when to be reminded: from 1 hour to 1 week before.</li><li>When it is close, a reminder pops up and stays in the <b>bell</b>. Click <b>Also alert me on this device</b> to get alerts even when Grind is in another tab. Rocks with a due date show up on the calendar by themselves.</li></ol>
+            <div class="row"><button class="btn small" data-go="cal">Show me the calendar</button></div>
+          </article>
           <article class="card g-sec" id="g-5">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 6</span><h2>Meet people in the pond</h2></div></div>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts, with a soft sound. Turn the sound off in <b>Customize</b>.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-lotus"/></svg></span><div><span class="eyebrow">Step 6</span><h2>Study with friends in a circle</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-lotus"/></svg></span><div><span class="eyebrow">Step 7</span><h2>Study with friends in a circle</h2></div></div>
             <ol class="g-steps"><li>Open <b>Together</b>, name a circle under <b>Start a circle</b>, and click <b>Create</b>.</li><li>You get a six-letter code. Send it, with the site link, to your study friends.</li><li>They sign in, open Together, and type it under <b>Join with a code</b>. The lotus opens fully on days when everyone has studied.</li></ol>
             <div class="row"><button class="btn small" data-go="together">Show me circles</button></div>
           </article>
           <article class="card g-sec" id="g-7">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 7</span><h2>Share notes in the Commons</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Share notes in the Commons</h2></div></div>
             <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and your notes. You can paste a Google Drive link to a file.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
             <div class="row"><button class="btn small" data-go="commons">Show me the Commons</button></div>
           </article>
           <article class="card g-sec" id="g-8">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 9</span><h2>See your progress</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 10</span><h2>See your progress</h2></div></div>
             <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
             <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
           </article>
           <article class="card g-sec" id="g-10">
-            <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 10</span><h2>Make it yours</h2></div></div>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 11</span><h2>Make it yours</h2></div></div>
             <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
@@ -957,6 +1046,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
   <section><span class="eyebrow">Session</span>
     <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
+    <div class="toggle"><span>Sound when a notification arrives</span><button class="switch" role="switch" id="swNoteSound" aria-checked="true" aria-label="Notification sound"></button></div>
     <div class="toggle"><span>Start rest automatically after focus</span><button class="switch" role="switch" id="swAuto" aria-checked="true" aria-label="Auto rest"></button></div>
   </section>
   <section><span class="eyebrow">Your data</span>
@@ -1414,11 +1504,11 @@ function defaultState() {
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
-    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, autoRest: true, demo: false },
+    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
-    rocks: [exampleRock()], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
-    seenRipple: 0, timer: null, lastCourse: '', openRock: 'example-rock',
+    rocks: [exampleRock()], events: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
+    seenRipple: 0, visV2: true, timer: null, lastCourse: '', openRock: 'example-rock',
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true }
   };
 }
@@ -1427,8 +1517,8 @@ function mergeAccount(remote, local, uid) {
   if (!remote) return local.ownerUid && local.ownerUid !== uid ? defaultState() : local;
   if (local.ownerUid === uid) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
   if (local.ownerUid) return remote;
-  const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || [])].map(x => x.id));
-  const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example)];
+  const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || []), ...(remote.events || [])].map(x => x.id));
+  const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example), ...(local.events || [])];
   if (mine.some(x => remIds.has(x.id))) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
   if (!mine.length) return remote;
   const m = remote, byId = (a, b) => { const ids = new Set(a.map(x => x.id)); return [...a, ...b.filter(x => x && !ids.has(x.id))]; };
@@ -1436,6 +1526,7 @@ function mergeAccount(remote, local, uid) {
   m.rocks = byId(m.rocks || [], (local.rocks || []).filter(r => !r.example));
   m.pebLog = [...(m.pebLog || []), ...(local.pebLog || [])].filter((x, i, a) => a.findIndex(y => JSON.stringify(y) === JSON.stringify(x)) === i);
   m.localPosts = byId(m.localPosts || [], local.localPosts || []);
+  m.events = byId(m.events || [], local.events || []);
   m.unlocked = [...new Set([...(m.unlocked || []), ...(local.unlocked || [])])];
   Object.entries(local.pets || {}).forEach(([k, p]) => { if (!m.pets[k]) m.pets[k] = p; else { m.pets[k].bond = Math.max(m.pets[k].bond || 0, p.bond || 0); if (!m.pets[k].name && p.name) m.pets[k].name = p.name; } });
   const earned = Math.max(0, (local.coinsEarned || 20) - 20);
@@ -1452,6 +1543,8 @@ function mergeState(s) {
   const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) }, sounds: { ...d.sounds, ...(s.sounds || {}) } };
   if (!['me', 'friends', 'everyone'].includes(m.profile.visibility)) m.profile.visibility = m.profile.public === false ? 'me' : 'everyone';
   delete m.profile.public;
+  // everyone starts public; earlier versions could leave accounts hidden
+  if (!s.visV2) { m.profile.visibility = 'everyone'; m.visV2 = true; }
   if (!Array.isArray(m.sounds.owned) || !m.sounds.owned.includes('rain')) m.sounds.owned = ['rain', ...(Array.isArray(m.sounds.owned) ? m.sounds.owned : [])];
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
@@ -1725,7 +1818,7 @@ function cleanResident(id, d) {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
-    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me',
+    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === false ? 'me' : 'everyone',
     board: d.board && typeof d.board === 'object' ? { d: clampStr(d.board.d, 10), w: clampStr(d.board.w, 10), m: clampStr(d.board.m, 7), dm: Math.max(0, Math.min(1440, +d.board.dm || 0)), wm: Math.max(0, Math.min(10080, +d.board.wm || 0)), mm: Math.max(0, Math.min(44640, +d.board.mm || 0)) } : null
   };
 }
@@ -2435,6 +2528,145 @@ function importICS(text) {
   save();
   return n;
 }
+/* ---------- calendar and reminders ---------- */
+const EV_TYPES = { deadline: 'Deadline', exam: 'Exam or quiz', lab: 'Lab', meeting: 'Meeting', other: 'Other' };
+const REMIND_OPTS = [[-1, 'No reminder'], [60, '1 hour before'], [180, '3 hours before'], [1440, '1 day before'], [2880, '2 days before'], [10080, '1 week before']];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+let calMonth = dayKey().slice(0, 7), calDay = dayKey(), calEdit = null;
+
+// an event without a time is anchored at 9 in the morning, so "1 day before" lands the morning before
+const evAt = e => { const d = keyToDate(e.date); const [h, m] = (e.time || '09:00').split(':').map(Number); d.setHours(h || 0, m || 0, 0, 0); return +d; };
+const fmtClock = t => (t ? new Date(`2000-01-01T${t}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '');
+function calItems() {
+  const ev = (S.events || []).map(e => ({ ...e, kind: 'event' }));
+  const rocks = S.rocks.filter(r => r.due && !r.example && !isDone(r)).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, type: 'deadline', remind: 1440 }));
+  return [...ev, ...rocks].sort((a, b) => evAt(a) - evAt(b));
+}
+function whenText(it) {
+  const n = Math.round((keyToDate(it.date) - keyToDate(dayKey())) / 864e5), t = it.time ? ` at ${fmtClock(it.time)}` : '';
+  if (n < 0) return `${-n} day${n === -1 ? '' : 's'} ago`;
+  if (n === 0) return 'Today' + t;
+  if (n === 1) return 'Tomorrow' + t;
+  if (n < 7) return `${WD[keyToDate(it.date).getDay()]}${t}, in ${n} days`;
+  const d = keyToDate(it.date); return `${WD[d.getDay()]} ${d.getDate()} ${MO[d.getMonth()]}${t}`;
+}
+function chipHTML(it) {
+  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}" style="--c:${courseColor(it.courseId)}" data-calev="${esc(it.id)}" title="${esc(it.title)}">${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
+}
+function renderCal() {
+  if (!$('#calGrid')) return;
+  const [y, m] = calMonth.split('-').map(Number), first = new Date(y, m - 1, 1), today = dayKey();
+  $('#calTitle').textContent = `${MONTHS[m - 1]} ${y}`;
+  const items = calItems(), byDay = {};
+  items.forEach(it => (byDay[it.date] = byDay[it.date] || []).push(it));
+  const start = addDays(first, -first.getDay()), weeks = Math.ceil((first.getDay() + new Date(y, m, 0).getDate()) / 7);
+  let cells = '';
+  for (let i = 0; i < weeks * 7; i++) {
+    const d = addDays(start, i), k = dayKey(d), list = byDay[k] || [], out = d.getMonth() !== m - 1;
+    cells += `<div class="cal-day${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${courseColor(it.courseId)}"></i>`).join('')}</span>` : ''}</div>`;
+  }
+  $('#calGrid').innerHTML = cells;
+  // the selected day
+  const dl = byDay[calDay] || [], sd = keyToDate(calDay);
+  $('#calDayTitle').textContent = calDay === today ? 'Today' : `${WD[sd.getDay()]} ${sd.getDate()} ${MO[sd.getMonth()]}`;
+  $('#calDayList').innerHTML = dl.length ? dl.map(itemRow).join('') : `<li class="muted" style="background:none">Nothing on this day yet.</li>`;
+  // coming up in the next two weeks
+  const now = Date.now(), soon = items.filter(it => evAt(it) >= now - 864e5 / 2 && it.date >= today && it.date <= dayKey(addDays(new Date(), 14)));
+  $('#calSoon').innerHTML = soon.length ? soon.slice(0, 12).map(itemRow).join('') : `<li class="muted" style="background:none">Nothing due in the next two weeks. Add a deadline and Grind will remind you before it.</li>`;
+  renderCalAlerts();
+}
+function itemRow(it) {
+  const n = Math.round((keyToDate(it.date) - keyToDate(dayKey())) / 864e5);
+  return `<li><span class="bar" style="background:${courseColor(it.courseId)}"></span><span class="nm"><b>${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
+}
+function renderCalAlerts() {
+  const b = $('#calAlerts'); if (!b) return;
+  const has = 'Notification' in window, p = has ? Notification.permission : 'denied';
+  b.hidden = !has || p === 'denied' || (p === 'granted' && S.calAlerts !== false);
+}
+function openEvForm(it) {
+  calEdit = it && it.kind === 'event' ? it.id : null;
+  const f = $('#evForm'), e = it || { title: '', date: calDay, time: '', courseId: S.lastCourse || '', type: 'deadline', remind: 1440 };
+  $('#evFormTitle').textContent = calEdit ? 'Edit' : 'Add to your calendar';
+  $('#evCourse').innerHTML = `<option value="">General</option>` + curCourses().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+  $('#evType').innerHTML = Object.entries(EV_TYPES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+  $('#evRemind').innerHTML = REMIND_OPTS.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
+  $('#evTitle').value = e.title; $('#evDate').value = e.date; $('#evTime').value = e.time || ''; $('#evCourse').value = e.courseId || ''; $('#evType').value = e.type || 'deadline'; $('#evRemind').value = String(e.remind ?? 1440);
+  $('#evDel').hidden = !calEdit;
+  f.hidden = false; $('#evTitle').focus();
+}
+function closeEvForm() { $('#evForm').hidden = true; calEdit = null; }
+
+/* reminders: checked every minute while the site is open, and once when it loads */
+function reminderList() {
+  return calItems().filter(it => it.remind >= 0).map(it => ({ it, key: `${it.id}@${evAt(it)}@${it.remind}`, at: evAt(it) - it.remind * 60000, due: evAt(it) }));
+}
+function checkReminders() {
+  S.remDone = S.remDone || {};
+  const now = Date.now(); let fired = 0;
+  reminderList().forEach(r => {
+    if (S.remDone[r.key] || r.at > now || r.due < now) return;
+    S.remDone[r.key] = now; fired++;
+    const n = Math.round((keyToDate(r.it.date) - keyToDate(dayKey())) / 864e5);
+    const text = `${r.it.title} is ${r.it.type === 'deadline' ? 'due ' : ''}${n === 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`}${r.it.time ? ` at ${fmtClock(r.it.time)}` : ''}.`;
+    S.remLog = [{ at: now, id: r.it.id, text, courseId: r.it.courseId }, ...(S.remLog || [])].slice(0, 30);
+    if (fired <= 3) toast(esc(text), `<span class="toast-ic">${icon('i-bell')}</span>`);
+    if ('Notification' in window && Notification.permission === 'granted' && S.calAlerts !== false) { try { new Notification('Grind reminder', { body: text, tag: r.key }); } catch (e) {} }
+  });
+  // forget reminders for things that are long past
+  Object.keys(S.remDone).forEach(k => { if (now - S.remDone[k] > 60 * 864e5) delete S.remDone[k]; });
+  if (fired) { save(); renderNotes(); }
+  renderCalDot();
+}
+function renderCalDot() {
+  const d = $('#calDot'); if (!d) return;
+  const lim = dayKey(addDays(new Date(), 2)), today = dayKey();
+  d.hidden = !calItems().some(it => it.date >= today && it.date <= lim && evAt(it) >= Date.now());
+}
+
+function bindCal() {
+  $('#calPrev').onclick = () => { const [y, m] = calMonth.split('-').map(Number); calMonth = dayKey(new Date(y, m - 2, 1)).slice(0, 7); renderCal(); };
+  $('#calNext').onclick = () => { const [y, m] = calMonth.split('-').map(Number); calMonth = dayKey(new Date(y, m, 1)).slice(0, 7); renderCal(); };
+  $('#calToday').onclick = () => { calDay = dayKey(); calMonth = calDay.slice(0, 7); renderCal(); };
+  $('#calAdd').onclick = () => openEvForm();
+  $('#calDayAdd').onclick = () => openEvForm();
+  $('#v-cal').addEventListener('click', e => {
+    const ev = e.target.closest('[data-calev]');
+    if (ev) {
+      e.stopPropagation();
+      const it = calItems().find(x => x.id === ev.dataset.calev); if (!it) return;
+      if (it.kind === 'rock') { S.openRock = it.rockId; save(); go('pebbles'); return; }
+      calDay = it.date; renderCal(); openEvForm(it); return;
+    }
+    const d = e.target.closest('[data-calday]');
+    if (d) { calDay = d.dataset.calday; if (calDay.slice(0, 7) !== calMonth) calMonth = calDay.slice(0, 7); renderCal(); }
+  });
+  $('#calGrid').addEventListener('dblclick', e => { const d = e.target.closest('[data-calday]'); if (d && !e.target.closest('[data-calev]')) { calDay = d.dataset.calday; openEvForm(); } });
+  $('#calGrid').addEventListener('keydown', e => { const d = e.target.closest('[data-calday]'); if (d && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); d.click(); } });
+  $('#evCancel').onclick = closeEvForm;
+  $('#evForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const title = $('#evTitle').value.trim(), date = $('#evDate').value;
+    if (!title || !date) return;
+    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value };
+    S.events = S.events || [];
+    if (calEdit) { const x = S.events.find(v => v.id === calEdit); if (x) Object.assign(x, data); }
+    else S.events.push({ id: uid(), createdAt: Date.now(), ...data });
+    calDay = date; calMonth = date.slice(0, 7);
+    toast(calEdit ? 'Saved.' : data.remind >= 0 ? `Added. You will get a reminder ${REMIND_OPTS.find(o => o[0] === data.remind)[1]}.` : 'Added to your calendar.');
+    closeEvForm(); save(); renderCal(); checkReminders();
+  });
+  $('#evDel').onclick = () => { if (!calEdit) return; S.events = S.events.filter(v => v.id !== calEdit); closeEvForm(); save(); renderCal(); renderCalDot(); toast('Removed from your calendar.'); };
+  $('#calAlerts').onclick = async () => {
+    if (!('Notification' in window)) return;
+    let p = Notification.permission;
+    if (p === 'default') { try { p = await Notification.requestPermission(); } catch (e) {} }
+    if (p === 'granted') { S.calAlerts = true; save(); toast('Reminders will also pop up on this device while Grind is open in a tab.'); }
+    renderCalAlerts();
+  };
+  checkReminders();
+  setInterval(() => { checkReminders(); if (currentView === 'cal') renderCal(); }, 60000);
+}
 /* ---------- the pond (community) ---------- */
 const EXAMPLES = [];
 const RIPPLE_MSGS = ['Lock in', 'You got this', 'Let him cook', 'You are so locked in', 'Main character energy', 'No cap, proud of you', 'It is giving A+', 'Hydrate, bestie', 'Slay this exam', 'Studying with you fr'];
@@ -2844,6 +3076,7 @@ function collectNotes() {
   NET.ripples.forEach(r => out.push(r.kind === 'friend'
     ? { at: r.at, kind: 'friend', who: r.name, animal: r.animal, from: r.from, text: 'added you as a friend.' }
     : { at: r.at, kind: 'ripple', who: r.name, animal: r.animal, from: r.from, text: `sent you a ripple: “${r.msg}”` }));
+  (S.remLog || []).forEach(r => out.push({ at: r.at, kind: 'remind', who: '', animal: S.active, text: r.text }));
   const me = NET.uid;
   if (me) (NET.posts || []).filter(p => p.by === me).forEach(p => {
     p.comments.filter(c => c.by !== me).forEach(c => out.push({ at: c.at, kind: 'comment', who: c.name, animal: 'frog', text: `commented on “${p.title}”: “${c.text}”` }));
@@ -2853,21 +3086,43 @@ function collectNotes() {
   out.forEach(n => { if (n.unread === undefined) n.unread = n.at > (S.seenNote || 0); });
   return out.sort((a, b) => b.at - a.at).slice(0, 40);
 }
+let lastUnread = 0;
+function notePing() {
+  if (S.settings.noteSound === false) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    [[880, 0], [1318.5, .12]].forEach(([f, d]) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, now + d); g.gain.linearRampToValueAtTime(.1, now + d + .02); g.gain.exponentialRampToValueAtTime(.0001, now + d + .7);
+      o.connect(g).connect(audioCtx.destination); o.start(now + d); o.stop(now + d + .8);
+    });
+  } catch (e) {}
+}
 function renderNotes() {
   const btn = $('#noteBtn'); if (!btn) return;
   const list = collectNotes(), unread = list.filter(n => n.unread).length;
+  if (unread > lastUnread) {
+    notePing();
+    const n = list.find(x => x.unread);
+    // reminders send their own system alert
+    if (n && n.kind !== 'remind' && document.hidden && 'Notification' in window && Notification.permission === 'granted' && S.calAlerts !== false) { try { new Notification('Grind', { body: `${n.who ? n.who + ' ' : ''}${n.text}`, tag: 'grind-note' }); } catch (e) {} }
+  }
+  lastUnread = unread;
   $('#noteBadge').hidden = !unread; $('#noteBadge').textContent = unread > 9 ? '9+' : unread;
   btn.setAttribute('aria-label', unread ? `Notifications, ${unread} new` : 'Notifications');
   const panel = $('#notePanel'); if (panel.hidden) return;
   let body;
-  if (!NET.db) body = `<div class="note-empty"><p>Sign in to hear from classmates: ripples, new friends, likes and comments.</p>${NET.web && NET.fbReady ? '<button class="btn small primary" data-signin>Sign in with Google</button>' : ''}</div>`;
-  else if (!list.length) body = `<div class="note-empty"><p>Nothing yet. Ripples, new friends, likes and comments on your posts will show up here.</p></div>`;
+  if (!NET.db && !list.length) body = `<div class="note-empty"><p>Sign in to hear from classmates: ripples, new friends, likes and comments.</p>${NET.web && NET.fbReady ? '<button class="btn small primary" data-signin>Sign in with Google</button>' : ''}</div>`;
+  else if (!list.length) body = `<div class="note-empty"><p>Nothing yet. Deadline reminders, ripples, new friends, likes and comments on your posts will show up here.</p></div>`;
   else body = `<ul class="note-list">${list.map(n => {
     const act = n.kind === 'friend' ? (S.friends.includes(n.from) ? '<span class="muted" style="font-size:.78rem">Friends</span>' : `<button class="btn small primary" data-noteadd="${esc(n.from)}">Add back</button>`)
-      : n.kind === 'ripple' ? `<button class="btn small" data-notego="pond">Pond</button>` : `<button class="btn small" data-notego="commons">See post</button>`;
-    const pic = n.kind === 'like' ? `<span class="av note-ic">${icon('i-heart')}</span>` : n.kind === 'comment' ? `<span class="av note-ic">${icon('i-comment')}</span>` : `<span class="av">${avatarSVG(n.animal, 'happy')}</span>`;
+      : n.kind === 'remind' ? `<button class="btn small" data-notego="cal">Calendar</button>` : n.kind === 'ripple' ? `<button class="btn small" data-notego="pond">Pond</button>` : `<button class="btn small" data-notego="commons">See post</button>`;
+    const pic = n.kind === 'remind' ? `<span class="av note-ic">${icon('i-bell')}</span>` : n.kind === 'like' ? `<span class="av note-ic">${icon('i-heart')}</span>` : n.kind === 'comment' ? `<span class="av note-ic">${icon('i-comment')}</span>` : `<span class="av">${avatarSVG(n.animal, 'happy')}</span>`;
     return `<li class="${n.unread ? 'new' : ''}">${pic}<span class="note-t">${n.who ? `<b>${esc(n.who)}</b> ` : ''}${esc(n.text)}<small>${n.kind === 'like' ? 'just now' : ago(n.at)}</small></span>${act}</li>`;
   }).join('')}</ul>`;
+  if ('Notification' in window && Notification.permission === 'default') body += `<div class="note-foot"><button class="btn small" data-notealerts>${icon('i-bell')}Also alert me on this device</button></div>`;
   $('#noteBody').innerHTML = body;
 }
 function markNotesSeen() {
@@ -2882,11 +3137,24 @@ function openNotes(on) {
   if (on) { panel.hidden = false; renderNotes(); $('#noteBtn').setAttribute('aria-expanded', 'true'); }
   else { panel.hidden = true; $('#noteBtn').setAttribute('aria-expanded', 'false'); markNotesSeen(); renderNotes(); }
 }
+function openCoins(on) {
+  const p = $('#coinPanel'); if (on === undefined) on = p.hidden;
+  p.hidden = !on; $('#coinBtn').setAttribute('aria-expanded', String(on));
+}
 function bindNotes() {
-  $('#noteBtn').onclick = e => { e.stopPropagation(); openNotes(); };
+  $('#coinBtn').onclick = e => { e.stopPropagation(); if (!$('#notePanel').hidden) openNotes(false); openCoins(); };
+  $('#coinPanel').addEventListener('click', e => {
+    e.stopPropagation();
+    const g = e.target.closest('[data-coingo]'); if (g) { openCoins(false); go(g.dataset.coingo); if (g.dataset.coingo === 'focus') setTimeout(() => $('#sndList')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50); return; }
+    if (e.target.closest('[data-coinclose]')) openCoins(false);
+  });
+  document.addEventListener('click', () => openCoins(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') openCoins(false); });
+  $('#noteBtn').onclick = e => { e.stopPropagation(); openCoins(false); openNotes(); };
   $('#notePanel').addEventListener('click', e => {
     e.stopPropagation();
     if (e.target.closest('[data-signin]')) { signIn(); return; }
+    if (e.target.closest('[data-notealerts]')) { Notification.requestPermission().then(p => { if (p === 'granted') { S.calAlerts = true; save(); toast('Alerts are on for this device while Grind is open in a tab.'); } renderNotes(); renderCalAlerts(); }).catch(() => {}); return; }
     const a = e.target.closest('[data-noteadd]'); if (a) { if (!S.friends.includes(a.dataset.noteadd)) toggleFriend(a.dataset.noteadd); renderNotes(); return; }
     const g = e.target.closest('[data-notego]'); if (g) { openNotes(false); go(g.dataset.notego); return; }
     if (e.target.closest('[data-noteclose]')) openNotes(false);
@@ -3074,7 +3342,7 @@ function renderDrawer() {
   $('#presets').innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button class="preset" data-preset="${k}" aria-pressed="${S.settings.preset === k}"><span class="sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(p.name)}</button>`).join('');
   $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
   $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
-  [['#swSound', 'sound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
+  [['#swSound', 'sound'], ['#swNoteSound', 'noteSound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
   $('#dataWhere').textContent = NET.db && NET.canWrite ? `Your progress is saved to your account and on this device. The pond, ripples, circles and posts are shared with everyone${NET.web ? ' who signs in' : ' invited'}.` : 'Your progress is saved in this browser on this device. Export it to keep a copy.';
   $('#acctRow').innerHTML = !NET.web ? '' : NET.db ? `<span class="muted" style="font-size:.84rem">Signed in${NET.userName ? ' as ' + esc(NET.userName) : ''}</span><button class="btn small quiet" id="signOutBtn">Sign out</button>` : '<button class="btn small primary" id="signInBtn2">Sign in with Google</button>';
   $('#signOutBtn') && ($('#signOutBtn').onclick = () => signOut());
@@ -3094,7 +3362,7 @@ function bindDrawer() {
   $('#fxSeg').onclick = e => { const b = e.target.closest('[data-fx]'); if (!b) return; S.settings.fx = b.dataset.fx; save(); renderDrawer(); if (REDUCED) FX.forEach(o => { fxSize(o); fxSeed(o); fxDraw(o, 0); }); };
   $('#skySeg').onclick = e => { const b = e.target.closest('[data-sky]'); if (!b) return; S.settings.sky = b.dataset.sky; save(); applySky(); renderDrawer(); };
   const sw = (id, k, after) => { $(id).onclick = () => { S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
-  sw('#swSound', 'sound'); sw('#swAuto', 'autoRest');
+  sw('#swSound', 'sound'); sw('#swNoteSound', 'noteSound', () => { if (S.settings.noteSound) notePing(); }); sw('#swAuto', 'autoRest');
   $('#exportBtn').onclick = async () => {
     const data = JSON.stringify(S, null, 2);
     const dl = await NET.downloadsP;
@@ -3128,7 +3396,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind' };
+const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -3145,6 +3413,7 @@ function go(v) {
   if (v === 'together') renderCircle();
   if (v === 'profile') { renderProfile(); renderFriends(); }
   if (v === 'pebbles') renderRocks();
+  if (v === 'cal') renderCal();
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
   if (v === 'guide') renderGuide();
   window.scrollTo({ top: 0 });
@@ -3154,6 +3423,7 @@ function renderChips() {
   const st = streakNow();
   $('#streakChip').textContent = `${st} day${st === 1 ? '' : 's'}`;
   $('#coinChip').textContent = S.coins;
+  $('#coinNow').textContent = S.coins; $('#coinEarned').textContent = `· ${S.coinsEarned || 0} earned in total`;
 }
 function renderSync() {
   const c = $('#syncChip');
@@ -3190,7 +3460,7 @@ function renderGreeting() {
   $('#meMiniName').textContent = myName();
   $('#meMiniSub').textContent = `with ${petName()}`;
 }
-function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
+function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); if (currentView === 'cal') renderCal(); renderCalDot(); if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
@@ -3202,7 +3472,7 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes();
+  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes(); bindCal();
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
