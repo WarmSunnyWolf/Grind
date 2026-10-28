@@ -102,6 +102,46 @@ const ANIMALS = {
       <ellipse cx="100" cy="103" rx="6.5" ry="4.8" fill="${k}"/>`;
     }
   },
+  horse: {
+    label: 'Horse', lore: 'Strong and gentle. Carries you through the long study days.', unlock: { type: 'coins', n: 160 }, defaultName: 'Maple',
+    face: { eyes: [[80, 80], [120, 80]], er: 5.5, mouth: { x: 100, y: 124, type: 'smile' }, blush: [[64, 96], [136, 96]], zz: [150, 40] },
+    art: () => {
+      const b = '#b77a4e', d = '#8c5a38', m = '#5a3a2a', l = '#ecd2b2', h = '#4a372c';
+      return `<path d="M132 150 C162 146 176 162 170 184 C160 176 150 170 136 170 Z" fill="${m}" ${O}/>
+      <path d="M62 180 C54 146 72 118 100 118 C128 118 146 146 138 180 Z" fill="${b}" ${O}/>
+      <path d="M84 128 Q100 150 116 128 Q100 136 84 128 Z" fill="${l}" opacity=".8"/>
+      <rect x="74" y="160" width="18" height="20" rx="6" fill="${b}" ${O2}/><rect x="108" y="160" width="18" height="20" rx="6" fill="${b}" ${O2}/>
+      <ellipse cx="83" cy="180" rx="11" ry="5" fill="${h}"/><ellipse cx="117" cy="180" rx="11" ry="5" fill="${h}"/>
+      <path d="M66 52 L70 18 L90 44 Z" fill="${b}" ${O}/><path d="M134 52 L130 18 L110 44 Z" fill="${b}" ${O}/>
+      <path d="M72 46 L73 28 L84 43 Z" fill="${d}"/><path d="M128 46 L127 28 L116 43 Z" fill="${d}"/>
+      <path d="M62 84 C60 56 78 42 100 42 C122 42 140 56 138 84 C137 100 134 110 130 118 L70 118 C66 110 63 100 62 84 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="116" rx="30" ry="21" fill="${l}" ${O}/>
+      <ellipse cx="89" cy="112" rx="3.6" ry="2.8" fill="${d}"/><ellipse cx="111" cy="112" rx="3.6" ry="2.8" fill="${d}"/>
+      <path d="M82 50 C86 34 98 30 104 40 C108 30 120 34 118 50 C112 44 106 50 100 56 C94 50 88 46 82 50 Z" fill="${m}" ${O2}/>
+      <path d="M100 60 L96 70 L104 70 Z" fill="#f4ecdf"/>`;
+    }
+  },
+  deer: {
+    label: 'Deer', lore: 'Quiet and watchful. Notices the small wins you forget to count.', unlock: { type: 'coins', n: 200 }, defaultName: 'Fern',
+    face: { eyes: [[80, 86], [120, 86]], er: 6, mouth: { x: 100, y: 118, type: 'cat' }, blush: [[66, 102], [134, 102]], zz: [152, 34] },
+    art: () => {
+      const b = '#c98d5a', d = '#9e6a42', l = '#f3e4cb', a = '#7c5638', k = INK;
+      return `<path d="M136 146 C146 138 156 142 152 152 C148 156 140 154 136 146 Z" fill="${l}" ${O2}/>
+      <path d="M64 180 C56 146 72 120 100 120 C128 120 144 146 136 180 Z" fill="${b}" ${O}/>
+      <path d="M86 130 Q100 168 114 130 Q100 138 86 130 Z" fill="${l}"/>
+      <circle cx="74" cy="150" r="3.2" fill="${l}"/><circle cx="80" cy="164" r="2.6" fill="${l}"/><circle cx="126" cy="150" r="3.2" fill="${l}"/><circle cx="120" cy="164" r="2.6" fill="${l}"/>
+      <ellipse cx="86" cy="179" rx="10" ry="5" fill="${k}"/><ellipse cx="114" cy="179" rx="10" ry="5" fill="${k}"/>
+      <path d="M78 52 C74 40 70 30 62 24 M72 38 C66 38 60 34 56 30 M122 52 C126 40 130 30 138 24 M128 38 C134 38 140 34 144 30" fill="none" stroke="${a}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M78 52 C74 40 70 30 62 24 M72 38 C66 38 60 34 56 30 M122 52 C126 40 130 30 138 24 M128 38 C134 38 140 34 144 30" fill="none" stroke="#a87b55" stroke-width="2" stroke-linecap="round"/>
+      <path d="M66 72 C50 72 34 64 30 56 C42 52 58 56 70 64 Z" fill="${b}" ${O}/><path d="M134 72 C150 72 166 64 170 56 C158 52 142 56 130 64 Z" fill="${b}" ${O}/>
+      <path d="M62 68 C48 66 40 62 37 58 C46 57 56 60 64 64 Z" fill="#eab4ad"/><path d="M138 68 C152 66 160 62 163 58 C154 57 144 60 136 64 Z" fill="#eab4ad"/>
+      <path d="M60 86 C60 62 78 50 100 50 C122 50 140 62 140 86 C140 112 122 130 100 130 C78 130 60 112 60 86 Z" fill="${b}" ${O}/>
+      <path d="M80 104 C84 96 92 94 100 94 C108 94 116 96 120 104 C120 120 112 128 100 128 C88 128 80 120 80 104 Z" fill="${l}"/>
+      <path d="M60 86 C60 62 78 50 100 50 C122 50 140 62 140 86 C140 112 122 130 100 130 C78 130 60 112 60 86 Z" fill="none" ${O}/>
+      <ellipse cx="100" cy="107" rx="7" ry="5" fill="${k}"/>
+      <circle cx="90" cy="62" r="2.4" fill="${l}"/><circle cx="110" cy="62" r="2.4" fill="${l}"/><circle cx="100" cy="58" r="2" fill="${l}"/>`;
+    }
+  },
   turtle: {
     label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: 'Moss',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
