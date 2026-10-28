@@ -21,11 +21,11 @@ const KEY = 'grind.v1';
 function exampleRock() {
   const due = dayKey(addDays(new Date(), 5));
   return {
-    id: 'example-rock', title: 'Deep Learning quiz on CNNs', courseId: 'c-dl', due, example: true, createdAt: Date.now(), notes: '',
+    id: 'example-rock', title: 'Example: quiz on chapter 4', courseId: '', due, example: true, createdAt: Date.now(), notes: '',
     pebbles: [
-      { id: uid(), text: 'Skim the lecture 4 slides and list five key terms', mins: 15, done: true, doneAt: Date.now() },
-      { id: uid(), text: 'Rewatch the convolution part of lecture 5', mins: 20, done: false },
-      { id: uid(), text: 'Do five practice questions on padding and stride', mins: 20, done: false },
+      { id: uid(), text: 'Skim the chapter 4 slides and list five key terms', mins: 15, done: true, doneAt: Date.now() },
+      { id: uid(), text: 'Rewatch the hardest part of the lecture', mins: 20, done: false },
+      { id: uid(), text: 'Do five practice questions', mins: 20, done: false },
       { id: uid(), text: 'Write a one-page cheat sheet', mins: 25, done: false },
       { id: uid(), text: 'Quiz each other in your Grind Together circle', mins: 15, done: false }
     ]
@@ -41,13 +41,10 @@ function defaultState() {
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
     settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, autoRest: true, demo: false },
-    semesters: [{ id: semId, name: 'Fall 2026', courses: [
-      { id: 'c-fws', name: 'FWS310', color: COURSE_COLORS[0] },
-      { id: 'c-dl', name: 'Deep Learning', color: COURSE_COLORS[1] },
-      { id: 'c-co', name: 'Computer Organization', color: COURSE_COLORS[2] }] }],
+    semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
     rocks: [exampleRock()], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
-    seenRipple: 0, timer: null, lastCourse: 'c-dl', openRock: 'example-rock'
+    seenRipple: 0, timer: null, lastCourse: '', openRock: 'example-rock'
   };
 }
 function mergeState(s) {
