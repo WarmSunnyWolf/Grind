@@ -24,6 +24,13 @@ service cloud.firestore {
         && request.resource.data.body == resource.data.body;
       allow delete: if signedIn() && resource.data.by == request.auth.uid;
     }
+    // Study stats shown on someone's profile card. They choose who can read them: only me, friends, or everyone.
+    match /stats/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid
+        || resource.data.vis == 'everyone'
+        || (resource.data.vis == 'friends' && request.auth.uid in resource.data.allow));
+      allow write: if signedIn() && request.auth.uid == uid;
+    }
     // Grind Together circles, joined by code.
     match /circles/{code} {
       allow read, write: if signedIn();

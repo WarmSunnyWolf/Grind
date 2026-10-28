@@ -6,7 +6,7 @@ const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], 
 const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
-  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , public: S.profile.public !== false, stats: publicStats() };
+  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats() };
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -94,22 +94,34 @@ function likerList(p, me) {
   }).sort((a, b) => b.me - a.me);
 }
 function peerBtn(r) { return `<button class="btn small" data-peer="${esc(r.id)}">${icon('i-user')}${r.me ? 'Your public profile' : 'See profile'}</button>`; }
-function openPeer(id) {
+function cleanStats(d) {
+  if (!d || typeof d !== 'object') return null;
+  return { totalMins: Math.max(0, +d.totalMins || 0), weekMins: Math.max(0, +d.weekMins || 0), sessions: Math.max(0, +d.sessions || 0), bestStreak: Math.max(0, +d.bestStreak || 0), coinsEarned: Math.max(0, +d.coinsEarned || 0), pebbles: Math.max(0, +d.pebbles || 0), animals: Array.isArray(d.animals) ? [...new Set(d.animals.filter(k => ANIMAL_KEYS.includes(k)))] : [] };
+}
+async function openPeer(id) {
   const { me, others } = residents();
   const r = [me, ...others].find(x => x.id === id); if (!r) return;
   const box = $('#peerBox');
   const head = `<div class="row" style="justify-content:space-between; align-items:flex-start"><div class="row" style="gap:14px; flex-wrap:nowrap"><span class="peer-av">${avatarSVG(r.animal, 'happy')}</span><div><h2 style="font-size:1.5rem">${esc(r.me ? myName() : r.name)}</h2><p class="muted" style="font-size:.88rem">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'Student')}</p>${r.bio ? `<p class="hand" style="color:var(--rose); font-size:1.25rem">${esc(r.bio)}</p>` : ''}</div></div><button class="icon-btn" data-peerclose aria-label="Close">${icon('i-x')}</button></div>`;
+  box.innerHTML = head + `<p class="muted">Loading…</p>`;
+  $('#peerModal').classList.add('on');
+  let st = null;
+  if (r.me) st = r.vis === 'me' ? null : r.stats;
+  else if (NET.db && r.vis !== 'me') { try { const d = await NET.db.doc('stats/' + id).get(); st = d.exists ? cleanStats((d.data() || {}).stats) : null; } catch (e) { st = null; } }
+  if (!$('#peerModal').classList.contains('on')) return;
+  const lock = r.me ? (r.vis === 'me' ? 'Only you can see your stats' : '') : r.vis === 'friends' ? 'Only their friends can see their stats' : 'This profile is private';
+  const why = r.me ? 'Classmates only see your name and animal. Change who can see your stats under Privacy on your profile page.'
+    : r.vis === 'friends' ? 'Their stats show up once they add you as a friend. You can still send them a ripple or add them.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.';
   let body;
-  if (!r.public || !r.stats) {
-    body = `<div class="peer-private">${icon('i-lock')}<div><b>${r.me ? 'Your profile is private' : 'This profile is private'}</b><p class="muted" style="font-size:.88rem">${r.me ? 'Classmates only see your name and animal. Turn on Public profile on your profile page to share your study time and animals.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.'}</p></div></div>`;
+  if (!st) {
+    body = `<div class="peer-private">${icon('i-lock')}<div><b>${lock}</b><p class="muted" style="font-size:.88rem">${why}</p></div></div>`;
   } else {
-    const st = r.stats;
     const kp = [[fmtMin(st.totalMins), 'Studied in total'], [fmtMin(st.weekMins), 'This week'], [`${r.streak || 0}<small> days</small>`, 'Current streak'], [`${st.bestStreak}<small> days</small>`, 'Best streak'], [st.sessions, 'Sessions'], [st.coinsEarned, 'Coins earned']];
     body = `<div class="peer-kpis">${kp.map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
       <div><span class="eyebrow">Their animals · ${st.animals.length} of ${ANIMAL_KEYS.length}</span><div class="peer-zoo">${ANIMAL_KEYS.map(k => { const own = st.animals.includes(k); return `<div class="pz ${own ? '' : 'off'}" title="${ANIMALS[k].label}${own ? '' : ' (not yet)'}">${avatarSVG(k, own ? (k === r.animal ? 'happy' : 'awake') : 'sleeping')}<span>${ANIMALS[k].label}</span></div>`; }).join('')}</div></div>`;
   }
+  if (r.me && r.vis !== 'me') body = `<p class="muted" style="font-size:.86rem">${r.vis === 'friends' ? 'Only your friends see this.' : 'Everyone who signs in sees this.'}</p>` + body;
   box.innerHTML = head + body;
-  $('#peerModal').classList.add('on');
 }
 function closePeer() { $('#peerModal').classList.remove('on'); }
 function likedBy(p, me) {
@@ -125,6 +137,7 @@ function toggleFriend(id) {
   S.friends = adding ? [...S.friends, id] : S.friends.filter(x => x !== id);
   save(); renderFriends(); renderNotes();
   if (adding && NET.db && id !== NET.uid) sendRippleNet(id, '', 'friend');
+  if (S.profile.visibility === 'friends') publishPond();
 }
 function bindPond() {
   $('#pondOver').addEventListener('click', e => {

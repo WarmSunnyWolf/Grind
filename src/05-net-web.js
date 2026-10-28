@@ -14,11 +14,7 @@ function cleanResident(id, d) {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
-    public: d.public === true, stats: d.public === true && d.stats && typeof d.stats === 'object' ? {
-      totalMins: Math.max(0, +d.stats.totalMins || 0), weekMins: Math.max(0, +d.stats.weekMins || 0), sessions: Math.max(0, +d.stats.sessions || 0),
-      bestStreak: Math.max(0, +d.stats.bestStreak || 0), coinsEarned: Math.max(0, +d.stats.coinsEarned || 0), pebbles: Math.max(0, +d.stats.pebbles || 0),
-      animals: Array.isArray(d.stats.animals) ? [...new Set(d.stats.animals.filter(k => ANIMAL_KEYS.includes(k)))] : []
-    } : null
+    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me'
   };
 }
 function liveStatus(r) {
@@ -68,7 +64,16 @@ function signIn() {
     toast(`Sign-in did not finish. ${why}${code ? ` <span style="opacity:.6">(${esc(code)})</span>` : ''}`);
   });
 }
-function signOut() { if (FB) FB.authM.signOut(FB.auth); }
+function signOut() {
+  if (!FB) return;
+  clearTimeout(saveT); remoteSave();
+  setTimeout(() => FB.authM.signOut(FB.auth).then(() => {
+    S = defaultState(); S.onboarded = true;
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+    applyTheme(); renderAll();
+    toast('Signed out. Your progress is safe in your account. Sign in again on any device to continue.');
+  }), 400);
+}
 
 async function initNet() {
   NET.web = true; NET.unsubs = [];
@@ -95,19 +100,19 @@ function disconnect() {
 }
 async function connect(u) {
   const db = fsAdapter(FB.fsM, FB.fs), id = u.uid;
-  NET.db = db; NET.uid = id; NET.canWrite = true; NET.userName = u.displayName || '';
-  if (!S.profile.name && u.displayName) { S.profile.name = clampStr(u.displayName.split(' ')[0], 40); save(); }
+  NET.db = db; NET.uid = id; NET.canWrite = true; NET.userName = u.displayName || ''; NET.syncing = true;
   try {
     const snap = await db.doc(`data/users/${id}/state`).get();
-    if (snap.exists) {
-      const d = snap.data();
-      if (d && d.json && (+d.updatedAt || 0) > (S.updatedAt || 0)) {
-        S = mergeState(JSON.parse(d.json));
-        try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
-        applyTheme();
-      }
-    }
-  } catch (e) {}
+    const d = snap.exists ? snap.data() : null;
+    const remote = d && d.json ? mergeState(JSON.parse(d.json)) : null;
+    const before = S;
+    S = mergeState(mergeAccount(remote, S, id));
+    S.ownerUid = id;
+    if (!S.profile.name && u.displayName) S.profile.name = clampStr(u.displayName.split(' ')[0], 40);
+    if (S !== before && !before.ownerUid && remote && (before.sessions.length || before.rocks.some(r => !r.example))) toast('Your progress from this device was added to your account.');
+    applyTheme();
+    NET.syncing = false; save(); remoteSave();
+  } catch (e) { NET.syncing = false; NET.db = null; NET.canWrite = false; toast('Could not load your account just now. Your progress stays on this device. Try signing in again.'); renderAll(); return; }
   renderAll();
   NET.unsubs.push(db.collection('pond').orderBy('updatedAt', 'desc').limit(80).onSnapshot(s => {
     NET.pond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
@@ -142,7 +147,7 @@ async function connect(u) {
 }
 
 function remoteSave() {
-  if (!NET.db || !NET.uid || !NET.canWrite) return;
+  if (!NET.db || !NET.uid || !NET.canWrite || NET.syncing) return;
   const json = JSON.stringify(S);
   if (json.length > 240000) { S.sessions = S.sessions.slice(-1500); }
   const body = { json: JSON.stringify(S), updatedAt: S.updatedAt };
@@ -156,8 +161,9 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), public: S.profile.public !== false };
-  if (doc.public) doc.stats = publicStats();
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility };
+  const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
+  writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
 function sendRippleNet(toId, msg, kind = 'ripple') {

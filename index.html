@@ -543,6 +543,14 @@ button.liked-by{border:0; background:none; padding:2px 0; font:inherit; cursor:p
 .peer-private svg{width:22px; height:22px; flex:none; margin-top:2px}
 button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:none; padding:0}
 @media (max-width:560px){.peer-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.vis-seg{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.vis-seg button{display:flex; flex-direction:column; align-items:flex-start; gap:3px; text-align:left; padding:12px; border-radius:16px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink); font:inherit; cursor:pointer}
+.vis-seg button svg{width:20px; height:20px; color:var(--pad); margin-bottom:4px}
+.vis-seg button b{font-size:.92rem}
+.vis-seg button span{font-size:.78rem; color:var(--muted)}
+.vis-seg button[aria-pressed="true"]{border-color:var(--accent); background:var(--surface); box-shadow:0 0 0 2px var(--accent) inset}
+@media (max-width:560px){.vis-seg{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -778,7 +786,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 
       <!-- SANCTUARY -->
       <section class="view" id="v-sanctuary">
-        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Sixteen animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Seventeen animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
         <div class="zoo" id="zoo"></div>
       </section>
 
@@ -915,7 +923,12 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
         </form>
         <div class="card"><div class="card-h"><h2>Privacy</h2></div>
-          <div class="toggle"><span><b>Public profile</b><br><span class="muted" style="font-size:.84rem">Classmates can tap your animal in the pond to see your study time, streak, coins earned and your animals. Your rocks, notes and courses always stay private.</span></span><button class="switch" role="switch" id="swPublic" aria-checked="true" aria-label="Public profile"></button></div>
+          <p class="muted" style="font-size:.86rem; margin-bottom:12px">Who can see your study time, streak, coins earned and animals when they tap you in the pond. Your name and animal are always shown there. Your rocks, notes and courses are never shared.</p>
+          <div class="vis-seg" id="visSeg" role="group" aria-label="Who can see your stats">
+            <button type="button" data-vis="me"><svg><use href="#i-lock"/></svg><b>Only me</b><span>Nobody else sees your stats</span></button>
+            <button type="button" data-vis="friends"><svg><use href="#i-friend"/></svg><b>Friends</b><span>Only people you added as friends</span></button>
+            <button type="button" data-vis="everyone"><svg><use href="#i-pond"/></svg><b>Everyone</b><span>Anyone signed in to Grind</span></button>
+          </div>
           <div class="row" style="margin-top:12px"><button class="btn small" type="button" data-peer="me-self">See what classmates see</button></div>
         </div>
         <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
@@ -1103,6 +1116,23 @@ const ANIMALS = {
       <ellipse cx="100" cy="101" rx="7.5" ry="5.2" fill="${INK}"/><circle cx="97.5" cy="99.5" r="1.6" fill="#fff" opacity=".8"/>
       <path d="M74 124 Q100 138 126 124" fill="none" stroke="#d9675a" stroke-width="6" stroke-linecap="round"/>
       <circle cx="100" cy="135" r="5" fill="#efc15a" ${O2}/>`;
+    }
+  },
+  panda: {
+    label: 'Panda', lore: 'Munches bamboo between chapters and never rushes a good nap.', unlock: { type: 'coins', n: 140 }, defaultName: '',
+    face: { eyes: [[80, 91], [120, 91]], er: 4.4, whites: [[80, 90, 7.5], [120, 90, 7.5]], lid: '#3f3a37', mouth: { x: 100, y: 113, type: 'cat' }, blush: [[64, 110], [136, 110]], zz: [152, 44] },
+    art: () => {
+      const w = '#f6f3ec', k = '#3f3a37', g = '#8fb069';
+      return `<path d="M140 118 L152 72 M152 72 L162 66 M146 92 L156 90" stroke="${g}" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M152 74 C162 64 172 66 174 72 C166 76 158 78 152 74 Z" fill="${g}" ${O2}/>
+      <path d="M64 180 C56 146 72 120 100 120 C128 120 144 146 136 180 Z" fill="${w}" ${O}/>
+      <path d="M64 150 C70 132 84 124 100 124 C116 124 130 132 136 150 C128 146 118 144 100 144 C82 144 72 146 64 150 Z" fill="${k}"/>
+      <ellipse cx="84" cy="176" rx="13" ry="7" fill="${k}" ${O2}/><ellipse cx="116" cy="176" rx="13" ry="7" fill="${k}" ${O2}/>
+      <ellipse cx="136" cy="128" rx="9" ry="12" fill="${k}" ${O2} transform="rotate(-20 136 128)"/>
+      <circle cx="64" cy="58" r="15" fill="${k}" ${O}/><circle cx="136" cy="58" r="15" fill="${k}" ${O}/>
+      <path d="M52 92 C52 66 72 54 100 54 C128 54 148 66 148 92 C148 116 128 132 100 132 C72 132 52 116 52 92 Z" fill="${w}" ${O}/>
+      <ellipse cx="78" cy="92" rx="13" ry="16" fill="${k}" transform="rotate(25 78 92)"/><ellipse cx="122" cy="92" rx="13" ry="16" fill="${k}" transform="rotate(-25 122 92)"/>
+      <ellipse cx="100" cy="106" rx="6.5" ry="4.6" fill="${k}"/>`;
     }
   },
   fox: {
@@ -1370,7 +1400,7 @@ function defaultState() {
   const semId = 'sem-' + uid();
   return {
     v: 1, updatedAt: 0, onboarded: false,
-    profile: { name: '', uni: '', major: '', bio: '', public: true },
+    profile: { name: '', uni: '', major: '', bio: '', visibility: 'everyone' },
     active: 'frog',
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
@@ -1383,9 +1413,36 @@ function defaultState() {
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true }
   };
 }
+// When someone signs in, combine what they did on this device before signing in with what is saved in their account.
+function mergeAccount(remote, local, uid) {
+  if (!remote) return local.ownerUid && local.ownerUid !== uid ? defaultState() : local;
+  if (local.ownerUid === uid) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
+  if (local.ownerUid) return remote;
+  const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || [])].map(x => x.id));
+  const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example)];
+  if (mine.some(x => remIds.has(x.id))) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
+  if (!mine.length) return remote;
+  const m = remote, byId = (a, b) => { const ids = new Set(a.map(x => x.id)); return [...a, ...b.filter(x => x && !ids.has(x.id))]; };
+  m.sessions = byId(m.sessions || [], local.sessions || []).sort((a, b) => a.start - b.start);
+  m.rocks = byId(m.rocks || [], (local.rocks || []).filter(r => !r.example));
+  m.pebLog = [...(m.pebLog || []), ...(local.pebLog || [])].filter((x, i, a) => a.findIndex(y => JSON.stringify(y) === JSON.stringify(x)) === i);
+  m.localPosts = byId(m.localPosts || [], local.localPosts || []);
+  m.unlocked = [...new Set([...(m.unlocked || []), ...(local.unlocked || [])])];
+  Object.entries(local.pets || {}).forEach(([k, p]) => { if (!m.pets[k]) m.pets[k] = p; else { m.pets[k].bond = Math.max(m.pets[k].bond || 0, p.bond || 0); if (!m.pets[k].name && p.name) m.pets[k].name = p.name; } });
+  const earned = Math.max(0, (local.coinsEarned || 20) - 20);
+  m.coins = (m.coins || 0) + earned; m.coinsEarned = (m.coinsEarned || 0) + earned;
+  m.friends = [...new Set([...(m.friends || []), ...(local.friends || [])])];
+  m.circles = [...new Set([...(m.circles || []), ...(local.circles || [])])];
+  m.sounds = m.sounds || local.sounds;
+  if (m.sounds && local.sounds) m.sounds.owned = [...new Set([...(m.sounds.owned || []), ...(local.sounds.owned || [])])];
+  m.bestStreak = Math.max(m.bestStreak || 0, local.bestStreak || 0);
+  return m;
+}
 function mergeState(s) {
   const d = defaultState();
   const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) }, sounds: { ...d.sounds, ...(s.sounds || {}) } };
+  if (!['me', 'friends', 'everyone'].includes(m.profile.visibility)) m.profile.visibility = m.profile.public === false ? 'me' : 'everyone';
+  delete m.profile.public;
   if (!Array.isArray(m.sounds.owned) || !m.sounds.owned.includes('rain')) m.sounds.owned = ['rain', ...(Array.isArray(m.sounds.owned) ? m.sounds.owned : [])];
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
@@ -1649,11 +1706,7 @@ function cleanResident(id, d) {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
-    public: d.public === true, stats: d.public === true && d.stats && typeof d.stats === 'object' ? {
-      totalMins: Math.max(0, +d.stats.totalMins || 0), weekMins: Math.max(0, +d.stats.weekMins || 0), sessions: Math.max(0, +d.stats.sessions || 0),
-      bestStreak: Math.max(0, +d.stats.bestStreak || 0), coinsEarned: Math.max(0, +d.stats.coinsEarned || 0), pebbles: Math.max(0, +d.stats.pebbles || 0),
-      animals: Array.isArray(d.stats.animals) ? [...new Set(d.stats.animals.filter(k => ANIMAL_KEYS.includes(k)))] : []
-    } : null
+    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me'
   };
 }
 function liveStatus(r) {
@@ -1703,7 +1756,16 @@ function signIn() {
     toast(`Sign-in did not finish. ${why}${code ? ` <span style="opacity:.6">(${esc(code)})</span>` : ''}`);
   });
 }
-function signOut() { if (FB) FB.authM.signOut(FB.auth); }
+function signOut() {
+  if (!FB) return;
+  clearTimeout(saveT); remoteSave();
+  setTimeout(() => FB.authM.signOut(FB.auth).then(() => {
+    S = defaultState(); S.onboarded = true;
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+    applyTheme(); renderAll();
+    toast('Signed out. Your progress is safe in your account. Sign in again on any device to continue.');
+  }), 400);
+}
 
 async function initNet() {
   NET.web = true; NET.unsubs = [];
@@ -1730,19 +1792,19 @@ function disconnect() {
 }
 async function connect(u) {
   const db = fsAdapter(FB.fsM, FB.fs), id = u.uid;
-  NET.db = db; NET.uid = id; NET.canWrite = true; NET.userName = u.displayName || '';
-  if (!S.profile.name && u.displayName) { S.profile.name = clampStr(u.displayName.split(' ')[0], 40); save(); }
+  NET.db = db; NET.uid = id; NET.canWrite = true; NET.userName = u.displayName || ''; NET.syncing = true;
   try {
     const snap = await db.doc(`data/users/${id}/state`).get();
-    if (snap.exists) {
-      const d = snap.data();
-      if (d && d.json && (+d.updatedAt || 0) > (S.updatedAt || 0)) {
-        S = mergeState(JSON.parse(d.json));
-        try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
-        applyTheme();
-      }
-    }
-  } catch (e) {}
+    const d = snap.exists ? snap.data() : null;
+    const remote = d && d.json ? mergeState(JSON.parse(d.json)) : null;
+    const before = S;
+    S = mergeState(mergeAccount(remote, S, id));
+    S.ownerUid = id;
+    if (!S.profile.name && u.displayName) S.profile.name = clampStr(u.displayName.split(' ')[0], 40);
+    if (S !== before && !before.ownerUid && remote && (before.sessions.length || before.rocks.some(r => !r.example))) toast('Your progress from this device was added to your account.');
+    applyTheme();
+    NET.syncing = false; save(); remoteSave();
+  } catch (e) { NET.syncing = false; NET.db = null; NET.canWrite = false; toast('Could not load your account just now. Your progress stays on this device. Try signing in again.'); renderAll(); return; }
   renderAll();
   NET.unsubs.push(db.collection('pond').orderBy('updatedAt', 'desc').limit(80).onSnapshot(s => {
     NET.pond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
@@ -1777,7 +1839,7 @@ async function connect(u) {
 }
 
 function remoteSave() {
-  if (!NET.db || !NET.uid || !NET.canWrite) return;
+  if (!NET.db || !NET.uid || !NET.canWrite || NET.syncing) return;
   const json = JSON.stringify(S);
   if (json.length > 240000) { S.sessions = S.sessions.slice(-1500); }
   const body = { json: JSON.stringify(S), updatedAt: S.updatedAt };
@@ -1791,8 +1853,9 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), public: S.profile.public !== false };
-  if (doc.public) doc.stats = publicStats();
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility };
+  const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
+  writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
 function sendRippleNet(toId, msg, kind = 'ripple') {
@@ -2360,7 +2423,7 @@ const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], 
 const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
-  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , public: S.profile.public !== false, stats: publicStats() };
+  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats() };
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -2448,22 +2511,34 @@ function likerList(p, me) {
   }).sort((a, b) => b.me - a.me);
 }
 function peerBtn(r) { return `<button class="btn small" data-peer="${esc(r.id)}">${icon('i-user')}${r.me ? 'Your public profile' : 'See profile'}</button>`; }
-function openPeer(id) {
+function cleanStats(d) {
+  if (!d || typeof d !== 'object') return null;
+  return { totalMins: Math.max(0, +d.totalMins || 0), weekMins: Math.max(0, +d.weekMins || 0), sessions: Math.max(0, +d.sessions || 0), bestStreak: Math.max(0, +d.bestStreak || 0), coinsEarned: Math.max(0, +d.coinsEarned || 0), pebbles: Math.max(0, +d.pebbles || 0), animals: Array.isArray(d.animals) ? [...new Set(d.animals.filter(k => ANIMAL_KEYS.includes(k)))] : [] };
+}
+async function openPeer(id) {
   const { me, others } = residents();
   const r = [me, ...others].find(x => x.id === id); if (!r) return;
   const box = $('#peerBox');
   const head = `<div class="row" style="justify-content:space-between; align-items:flex-start"><div class="row" style="gap:14px; flex-wrap:nowrap"><span class="peer-av">${avatarSVG(r.animal, 'happy')}</span><div><h2 style="font-size:1.5rem">${esc(r.me ? myName() : r.name)}</h2><p class="muted" style="font-size:.88rem">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'Student')}</p>${r.bio ? `<p class="hand" style="color:var(--rose); font-size:1.25rem">${esc(r.bio)}</p>` : ''}</div></div><button class="icon-btn" data-peerclose aria-label="Close">${icon('i-x')}</button></div>`;
+  box.innerHTML = head + `<p class="muted">Loading…</p>`;
+  $('#peerModal').classList.add('on');
+  let st = null;
+  if (r.me) st = r.vis === 'me' ? null : r.stats;
+  else if (NET.db && r.vis !== 'me') { try { const d = await NET.db.doc('stats/' + id).get(); st = d.exists ? cleanStats((d.data() || {}).stats) : null; } catch (e) { st = null; } }
+  if (!$('#peerModal').classList.contains('on')) return;
+  const lock = r.me ? (r.vis === 'me' ? 'Only you can see your stats' : '') : r.vis === 'friends' ? 'Only their friends can see their stats' : 'This profile is private';
+  const why = r.me ? 'Classmates only see your name and animal. Change who can see your stats under Privacy on your profile page.'
+    : r.vis === 'friends' ? 'Their stats show up once they add you as a friend. You can still send them a ripple or add them.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.';
   let body;
-  if (!r.public || !r.stats) {
-    body = `<div class="peer-private">${icon('i-lock')}<div><b>${r.me ? 'Your profile is private' : 'This profile is private'}</b><p class="muted" style="font-size:.88rem">${r.me ? 'Classmates only see your name and animal. Turn on Public profile on your profile page to share your study time and animals.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.'}</p></div></div>`;
+  if (!st) {
+    body = `<div class="peer-private">${icon('i-lock')}<div><b>${lock}</b><p class="muted" style="font-size:.88rem">${why}</p></div></div>`;
   } else {
-    const st = r.stats;
     const kp = [[fmtMin(st.totalMins), 'Studied in total'], [fmtMin(st.weekMins), 'This week'], [`${r.streak || 0}<small> days</small>`, 'Current streak'], [`${st.bestStreak}<small> days</small>`, 'Best streak'], [st.sessions, 'Sessions'], [st.coinsEarned, 'Coins earned']];
     body = `<div class="peer-kpis">${kp.map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
       <div><span class="eyebrow">Their animals · ${st.animals.length} of ${ANIMAL_KEYS.length}</span><div class="peer-zoo">${ANIMAL_KEYS.map(k => { const own = st.animals.includes(k); return `<div class="pz ${own ? '' : 'off'}" title="${ANIMALS[k].label}${own ? '' : ' (not yet)'}">${avatarSVG(k, own ? (k === r.animal ? 'happy' : 'awake') : 'sleeping')}<span>${ANIMALS[k].label}</span></div>`; }).join('')}</div></div>`;
   }
+  if (r.me && r.vis !== 'me') body = `<p class="muted" style="font-size:.86rem">${r.vis === 'friends' ? 'Only your friends see this.' : 'Everyone who signs in sees this.'}</p>` + body;
   box.innerHTML = head + body;
-  $('#peerModal').classList.add('on');
 }
 function closePeer() { $('#peerModal').classList.remove('on'); }
 function likedBy(p, me) {
@@ -2479,6 +2554,7 @@ function toggleFriend(id) {
   S.friends = adding ? [...S.friends, id] : S.friends.filter(x => x !== id);
   save(); renderFriends(); renderNotes();
   if (adding && NET.db && id !== NET.uid) sendRippleNet(id, '', 'friend');
+  if (S.profile.visibility === 'friends') publishPond();
 }
 function bindPond() {
   $('#pondOver').addEventListener('click', e => {
@@ -2915,9 +2991,9 @@ function renderProfile() {
   </div>`).join('');
 }
 function renderFriends() {
-  if ($('#swPublic')) $('#swPublic').setAttribute('aria-checked', S.profile.public !== false);
+  $$('#visSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.vis === S.profile.visibility));
   const fr = S.friends.map(id => NET.pond.find(r => r.id === id) || EXAMPLES.find(e => e.id === id)).filter(Boolean);
-  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.public ? '' : `<span class="muted" style="font-size:.75rem">Private</span>`}</button>`).join('')
+  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.vis === 'me' ? `<span class="muted" style="font-size:.75rem">Private</span>` : ''}</button>`).join('')
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
 function bindProfile() {
@@ -3093,7 +3169,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes();
-  $('#swPublic').onclick = () => { S.profile.public = S.profile.public === false; save(); renderProfile(); publishPond(); toast(S.profile.public ? 'Your profile is public. Classmates can see your study time and animals.' : 'Your profile is private. Classmates only see your name and animal.'); };
+  $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
   $('#v-profile').addEventListener('click', e => { const b = e.target.closest('[data-peer]'); if (b) openPeer(b.dataset.peer === 'me-self' ? (NET.uid || 'me') : b.dataset.peer); });

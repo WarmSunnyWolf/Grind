@@ -139,9 +139,9 @@ function renderProfile() {
   </div>`).join('');
 }
 function renderFriends() {
-  if ($('#swPublic')) $('#swPublic').setAttribute('aria-checked', S.profile.public !== false);
+  $$('#visSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.vis === S.profile.visibility));
   const fr = S.friends.map(id => NET.pond.find(r => r.id === id) || EXAMPLES.find(e => e.id === id)).filter(Boolean);
-  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.public ? '' : `<span class="muted" style="font-size:.75rem">Private</span>`}</button>`).join('')
+  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.vis === 'me' ? `<span class="muted" style="font-size:.75rem">Private</span>` : ''}</button>`).join('')
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
 function bindProfile() {
@@ -317,7 +317,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes();
-  $('#swPublic').onclick = () => { S.profile.public = S.profile.public === false; save(); renderProfile(); publishPond(); toast(S.profile.public ? 'Your profile is public. Classmates can see your study time and animals.' : 'Your profile is private. Classmates only see your name and animal.'); };
+  $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
   $('#v-profile').addEventListener('click', e => { const b = e.target.closest('[data-peer]'); if (b) openPeer(b.dataset.peer === 'me-self' ? (NET.uid || 'me') : b.dataset.peer); });

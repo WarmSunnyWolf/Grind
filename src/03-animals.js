@@ -139,6 +139,23 @@ const ANIMALS = {
       <circle cx="100" cy="135" r="5" fill="#efc15a" ${O2}/>`;
     }
   },
+  panda: {
+    label: 'Panda', lore: 'Munches bamboo between chapters and never rushes a good nap.', unlock: { type: 'coins', n: 140 }, defaultName: '',
+    face: { eyes: [[80, 91], [120, 91]], er: 4.4, whites: [[80, 90, 7.5], [120, 90, 7.5]], lid: '#3f3a37', mouth: { x: 100, y: 113, type: 'cat' }, blush: [[64, 110], [136, 110]], zz: [152, 44] },
+    art: () => {
+      const w = '#f6f3ec', k = '#3f3a37', g = '#8fb069';
+      return `<path d="M140 118 L152 72 M152 72 L162 66 M146 92 L156 90" stroke="${g}" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M152 74 C162 64 172 66 174 72 C166 76 158 78 152 74 Z" fill="${g}" ${O2}/>
+      <path d="M64 180 C56 146 72 120 100 120 C128 120 144 146 136 180 Z" fill="${w}" ${O}/>
+      <path d="M64 150 C70 132 84 124 100 124 C116 124 130 132 136 150 C128 146 118 144 100 144 C82 144 72 146 64 150 Z" fill="${k}"/>
+      <ellipse cx="84" cy="176" rx="13" ry="7" fill="${k}" ${O2}/><ellipse cx="116" cy="176" rx="13" ry="7" fill="${k}" ${O2}/>
+      <ellipse cx="136" cy="128" rx="9" ry="12" fill="${k}" ${O2} transform="rotate(-20 136 128)"/>
+      <circle cx="64" cy="58" r="15" fill="${k}" ${O}/><circle cx="136" cy="58" r="15" fill="${k}" ${O}/>
+      <path d="M52 92 C52 66 72 54 100 54 C128 54 148 66 148 92 C148 116 128 132 100 132 C72 132 52 116 52 92 Z" fill="${w}" ${O}/>
+      <ellipse cx="78" cy="92" rx="13" ry="16" fill="${k}" transform="rotate(25 78 92)"/><ellipse cx="122" cy="92" rx="13" ry="16" fill="${k}" transform="rotate(-25 122 92)"/>
+      <ellipse cx="100" cy="106" rx="6.5" ry="4.6" fill="${k}"/>`;
+    }
+  },
   fox: {
     label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 5.5, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[67, 100], [133, 100]], zz: [148, 42] },

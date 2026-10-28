@@ -16,11 +16,7 @@ function cleanResident(id, d) {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
-    public: d.public === true, stats: d.public === true && d.stats && typeof d.stats === 'object' ? {
-      totalMins: Math.max(0, +d.stats.totalMins || 0), weekMins: Math.max(0, +d.stats.weekMins || 0), sessions: Math.max(0, +d.stats.sessions || 0),
-      bestStreak: Math.max(0, +d.stats.bestStreak || 0), coinsEarned: Math.max(0, +d.stats.coinsEarned || 0), pebbles: Math.max(0, +d.stats.pebbles || 0),
-      animals: Array.isArray(d.stats.animals) ? [...new Set(d.stats.animals.filter(k => ANIMAL_KEYS.includes(k)))] : []
-    } : null
+    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me'
   };
 }
 function liveStatus(r) {
@@ -102,8 +98,9 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), public: S.profile.public !== false };
-  if (doc.public) doc.stats = publicStats();
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility };
+  const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
+  writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
 function sendRippleNet(toId, msg, kind = 'ripple') {

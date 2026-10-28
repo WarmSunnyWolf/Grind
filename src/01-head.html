@@ -536,4 +536,12 @@ button.liked-by{border:0; background:none; padding:2px 0; font:inherit; cursor:p
 .peer-private svg{width:22px; height:22px; flex:none; margin-top:2px}
 button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:none; padding:0}
 @media (max-width:560px){.peer-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.vis-seg{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.vis-seg button{display:flex; flex-direction:column; align-items:flex-start; gap:3px; text-align:left; padding:12px; border-radius:16px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink); font:inherit; cursor:pointer}
+.vis-seg button svg{width:20px; height:20px; color:var(--pad); margin-bottom:4px}
+.vis-seg button b{font-size:.92rem}
+.vis-seg button span{font-size:.78rem; color:var(--muted)}
+.vis-seg button[aria-pressed="true"]{border-color:var(--accent); background:var(--surface); box-shadow:0 0 0 2px var(--accent) inset}
+@media (max-width:560px){.vis-seg{grid-template-columns:minmax(0,1fr)}}
 </style>

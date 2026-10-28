@@ -35,7 +35,7 @@ function defaultState() {
   const semId = 'sem-' + uid();
   return {
     v: 1, updatedAt: 0, onboarded: false,
-    profile: { name: '', uni: '', major: '', bio: '', public: true },
+    profile: { name: '', uni: '', major: '', bio: '', visibility: 'everyone' },
     active: 'frog',
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
@@ -48,9 +48,36 @@ function defaultState() {
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true }
   };
 }
+// When someone signs in, combine what they did on this device before signing in with what is saved in their account.
+function mergeAccount(remote, local, uid) {
+  if (!remote) return local.ownerUid && local.ownerUid !== uid ? defaultState() : local;
+  if (local.ownerUid === uid) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
+  if (local.ownerUid) return remote;
+  const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || [])].map(x => x.id));
+  const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example)];
+  if (mine.some(x => remIds.has(x.id))) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
+  if (!mine.length) return remote;
+  const m = remote, byId = (a, b) => { const ids = new Set(a.map(x => x.id)); return [...a, ...b.filter(x => x && !ids.has(x.id))]; };
+  m.sessions = byId(m.sessions || [], local.sessions || []).sort((a, b) => a.start - b.start);
+  m.rocks = byId(m.rocks || [], (local.rocks || []).filter(r => !r.example));
+  m.pebLog = [...(m.pebLog || []), ...(local.pebLog || [])].filter((x, i, a) => a.findIndex(y => JSON.stringify(y) === JSON.stringify(x)) === i);
+  m.localPosts = byId(m.localPosts || [], local.localPosts || []);
+  m.unlocked = [...new Set([...(m.unlocked || []), ...(local.unlocked || [])])];
+  Object.entries(local.pets || {}).forEach(([k, p]) => { if (!m.pets[k]) m.pets[k] = p; else { m.pets[k].bond = Math.max(m.pets[k].bond || 0, p.bond || 0); if (!m.pets[k].name && p.name) m.pets[k].name = p.name; } });
+  const earned = Math.max(0, (local.coinsEarned || 20) - 20);
+  m.coins = (m.coins || 0) + earned; m.coinsEarned = (m.coinsEarned || 0) + earned;
+  m.friends = [...new Set([...(m.friends || []), ...(local.friends || [])])];
+  m.circles = [...new Set([...(m.circles || []), ...(local.circles || [])])];
+  m.sounds = m.sounds || local.sounds;
+  if (m.sounds && local.sounds) m.sounds.owned = [...new Set([...(m.sounds.owned || []), ...(local.sounds.owned || [])])];
+  m.bestStreak = Math.max(m.bestStreak || 0, local.bestStreak || 0);
+  return m;
+}
 function mergeState(s) {
   const d = defaultState();
   const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) }, sounds: { ...d.sounds, ...(s.sounds || {}) } };
+  if (!['me', 'friends', 'everyone'].includes(m.profile.visibility)) m.profile.visibility = m.profile.public === false ? 'me' : 'everyone';
+  delete m.profile.public;
   if (!Array.isArray(m.sounds.owned) || !m.sounds.owned.includes('rain')) m.sounds.owned = ['rain', ...(Array.isArray(m.sounds.owned) ? m.sounds.owned : [])];
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
