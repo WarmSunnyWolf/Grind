@@ -6,7 +6,7 @@ const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], 
 const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
-  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
+  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , public: S.profile.public !== false, stats: publicStats() };
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -51,7 +51,8 @@ function openPop(id, refresh) {
     ${r.bio ? `<p class="hand" style="font-size:1.3rem">${esc(r.bio)}</p>` : ''}
     <p style="font-size:.88rem">${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</p>
     ${r.me ? `<p class="muted" style="font-size:.84rem">This is you. Friends can send you ripples while you study.</p>` : `<span class="eyebrow">Send a ripple</span><div class="msgs">${RIPPLE_MSGS.map(m => `<button class="btn small" data-send="${esc(m)}">${esc(m)}</button>`).join('')}</div>
-    ${r.example ? '<span class="muted" style="font-size:.8rem">Example neighbour. Ripples to examples stay on your screen.</span>' : `<button class="btn small ${isFriend ? '' : 'primary'}" data-friend style="align-self:flex-start">${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>`}`}`;
+    <div class="row" style="gap:8px"><button class="btn small ${isFriend ? '' : 'primary'}" data-friend>${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>${peerBtn(r)}</div>`}
+    ${r.me ? `<div class="row">${peerBtn(r)}</div>` : ''}`;
   if (btn) {
     const ob = over.getBoundingClientRect(), bb = btn.getBoundingClientRect();
     const pw = Math.min(300, ob.width - 20);
@@ -86,6 +87,31 @@ function renderRipples() {
   $('#rippleMini').innerHTML = items.length ? items.slice(0, 3).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
     : `<li class="muted">No ripples yet. Send one to someone in the pond, it makes their day.</li>`;
 }
+function likerList(p, me) {
+  return p.likes.map(id => {
+    const r = id === me ? { name: myName(), animal: S.active } : (NET.pond.find(x => x.id === id) || {});
+    return { id, me: id === me, name: id === me ? myName() : ((p.likeNames || {})[id] || r.name || 'A classmate'), animal: r.animal || (p.likeAnimals || {})[id] || 'frog' };
+  }).sort((a, b) => b.me - a.me);
+}
+function peerBtn(r) { return `<button class="btn small" data-peer="${esc(r.id)}">${icon('i-user')}${r.me ? 'Your public profile' : 'See profile'}</button>`; }
+function openPeer(id) {
+  const { me, others } = residents();
+  const r = [me, ...others].find(x => x.id === id); if (!r) return;
+  const box = $('#peerBox');
+  const head = `<div class="row" style="justify-content:space-between; align-items:flex-start"><div class="row" style="gap:14px; flex-wrap:nowrap"><span class="peer-av">${avatarSVG(r.animal, 'happy')}</span><div><h2 style="font-size:1.5rem">${esc(r.me ? myName() : r.name)}</h2><p class="muted" style="font-size:.88rem">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'Student')}</p>${r.bio ? `<p class="hand" style="color:var(--rose); font-size:1.25rem">${esc(r.bio)}</p>` : ''}</div></div><button class="icon-btn" data-peerclose aria-label="Close">${icon('i-x')}</button></div>`;
+  let body;
+  if (!r.public || !r.stats) {
+    body = `<div class="peer-private">${icon('i-lock')}<div><b>${r.me ? 'Your profile is private' : 'This profile is private'}</b><p class="muted" style="font-size:.88rem">${r.me ? 'Classmates only see your name and animal. Turn on Public profile on your profile page to share your study time and animals.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.'}</p></div></div>`;
+  } else {
+    const st = r.stats;
+    const kp = [[fmtMin(st.totalMins), 'Studied in total'], [fmtMin(st.weekMins), 'This week'], [`${r.streak || 0}<small> days</small>`, 'Current streak'], [`${st.bestStreak}<small> days</small>`, 'Best streak'], [st.sessions, 'Sessions'], [st.coinsEarned, 'Coins earned']];
+    body = `<div class="peer-kpis">${kp.map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+      <div><span class="eyebrow">Their animals · ${st.animals.length} of ${ANIMAL_KEYS.length}</span><div class="peer-zoo">${ANIMAL_KEYS.map(k => { const own = st.animals.includes(k); return `<div class="pz ${own ? '' : 'off'}" title="${ANIMALS[k].label}${own ? '' : ' (not yet)'}">${avatarSVG(k, own ? (k === r.animal ? 'happy' : 'awake') : 'sleeping')}<span>${ANIMALS[k].label}</span></div>`; }).join('')}</div></div>`;
+  }
+  box.innerHTML = head + body;
+  $('#peerModal').classList.add('on');
+}
+function closePeer() { $('#peerModal').classList.remove('on'); }
 function likedBy(p, me) {
   const names = p.likes.map(id => id === me ? 'you' : ((p.likeNames || {})[id] || (NET.pond.find(r => r.id === id) || {}).name || 'a classmate'));
   names.sort((a, b) => (b === 'you') - (a === 'you'));
@@ -106,6 +132,7 @@ function bindPond() {
     if (e.target.closest('[data-popclose]')) { $('#pondPop')?.remove(); popFor = null; return; }
     const s = e.target.closest('[data-send]'); if (s) { sendRipple(popFor, s.dataset.send); return; }
     if (e.target.closest('[data-friend]')) { toggleFriend(popFor); openPop(popFor, true); return; }
+    const pv = e.target.closest('[data-peer]'); if (pv) { openPeer(pv.dataset.peer); return; }
   });
   $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
   $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };
@@ -198,7 +225,7 @@ function bindTogether() {
 
 /* ---------- commons ---------- */
 let postKind = 'note', feedFilter = 'all';
-const openComments = new Set();
+const openComments = new Set(), openLikers = new Set();
 const KIND_LABEL = { note: 'Notes', done: 'Finished work', win: 'Achievement' };
 function postsNow() { return sharedPosts() ? NET.posts : S.localPosts; }
 function renderComposerNote() { $('#composerNote').textContent = sharedPosts() ? 'Everyone in the pond can see this.' : 'Saved on this device until the shared pond is connected.'; }
@@ -211,7 +238,8 @@ function renderFeed() {
       ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
       ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
       ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
-      ${p.likes.length ? `<p class="liked-by">${icon('i-heart')}<span>${likedBy(p, me)}</span></p>` : ''}
+      ${p.likes.length ? `<button type="button" class="liked-by" data-likers aria-expanded="${openLikers.has(p.id)}">${icon('i-heart')}<span>${likedBy(p, me)}</span>${p.likes.length > 1 ? `<span class="lb-more">${openLikers.has(p.id) ? 'Hide' : 'See all'}</span>` : ''}</button>` : ''}
+      ${openLikers.has(p.id) ? `<ul class="likers">${likerList(p, me).map(l => `<li><span class="av">${avatarSVG(l.animal, 'happy')}</span><b>${esc(l.name)}</b>${l.me ? '<span class="muted">You</span>' : ''}</li>`).join('')}</ul>` : ''}
       <div class="post-a"><button class="btn small ${liked ? 'liked' : ''}" data-like aria-pressed="${liked}">${icon('i-heart')}<span class="num">${p.likes.length || ''}</span> ${liked ? 'Liked' : 'Like'}</button><button class="btn small" data-cm>${icon('i-comment')}${p.comments.length || ''} Comment</button></div>
       ${openComments.has(p.id) ? `<div class="comments">${p.comments.map(c => `<p class="cm"><b>${esc(c.by === me ? 'You' : c.name)}</b> ${esc(c.text)} <span class="muted" style="font-size:.75rem">${ago(c.at)}</span></p>`).join('')}
         <form class="add-peb" data-cform><input class="inp" name="t" maxlength="500" placeholder="Say something kind" aria-label="Comment"><button class="btn small" type="submit">Send</button></form></div>` : ''}
@@ -249,7 +277,8 @@ function bindCommons() {
   $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
   $('#feed').addEventListener('click', e => {
     const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
-    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); } }); return; }
+    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; p.likeAnimals = p.likeAnimals || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; delete p.likeAnimals[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); p.likeAnimals[me] = S.active; } }); return; }
+    if (e.target.closest('[data-likers]')) { openLikers.has(id) ? openLikers.delete(id) : openLikers.add(id); renderFeed(); return; }
     if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
     if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
     if (e.target.closest('[data-delpno]')) { renderFeed(); return; }

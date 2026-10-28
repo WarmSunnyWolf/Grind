@@ -13,7 +13,12 @@ function cleanResident(id, d) {
   return {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
-    streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0
+    streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
+    public: d.public === true, stats: d.public === true && d.stats && typeof d.stats === 'object' ? {
+      totalMins: Math.max(0, +d.stats.totalMins || 0), weekMins: Math.max(0, +d.stats.weekMins || 0), sessions: Math.max(0, +d.stats.sessions || 0),
+      bestStreak: Math.max(0, +d.stats.bestStreak || 0), coinsEarned: Math.max(0, +d.stats.coinsEarned || 0), pebbles: Math.max(0, +d.stats.pebbles || 0),
+      animals: Array.isArray(d.stats.animals) ? [...new Set(d.stats.animals.filter(k => ANIMAL_KEYS.includes(k)))] : []
+    } : null
   };
 }
 function liveStatus(r) {
@@ -151,7 +156,8 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), public: S.profile.public !== false };
+  if (doc.public) doc.stats = publicStats();
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
 function sendRippleNet(toId, msg, kind = 'ripple') {
@@ -171,6 +177,7 @@ function cleanPost(id, d) {
     id, by: clampStr(d.by, 80), name: clampStr(d.name, 40) || 'Someone', animal: ANIMAL_OK(d.animal), kind: ['note', 'done', 'win'].includes(d.kind) ? d.kind : 'note',
     course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 2000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
     at: +d.at || 0, likes: Array.isArray(d.likes) ? d.likes.slice(0, 500).map(x => clampStr(x, 80)) : [],
+    likeAnimals: Object.fromEntries(Object.entries(d.likeAnimals && typeof d.likeAnimals === 'object' ? d.likeAnimals : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), ANIMAL_OK(v)])),
     likeNames: Object.fromEntries(Object.entries(d.likeNames && typeof d.likeNames === 'object' ? d.likeNames : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), clampStr(v, 40)])),
     comments: Array.isArray(d.comments) ? d.comments.slice(-100).map(c => ({ by: clampStr(c.by, 80), name: clampStr(c.name, 40) || 'Someone', text: clampStr(c.text, 500), at: +c.at || 0 })) : []
   };

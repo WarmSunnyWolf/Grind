@@ -515,4 +515,25 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 
 .liked-by{display:flex; align-items:center; gap:6px; font-size:.84rem; color:var(--ink-2); margin:2px 0 -2px}
 .liked-by svg{width:15px; height:15px; color:var(--rose); flex:none}
+
+/* public profiles + likers */
+button.liked-by{border:0; background:none; padding:2px 0; font:inherit; cursor:pointer; text-align:left}
+.liked-by .lb-more{color:var(--accent); font-weight:600; margin-left:4px}
+.likers{list-style:none; margin:4px 0 0; padding:10px; display:flex; flex-direction:column; gap:6px; background:var(--surface-2); border-radius:14px; max-height:260px; overflow:auto}
+.likers li{display:flex; align-items:center; gap:10px; font-size:.88rem}
+.likers .av{width:30px; height:30px; border-radius:50%; overflow:hidden; background:var(--surface); flex:none}
+.likers .av svg{width:100%; height:100%}
+.peer-box{gap:18px}
+.peer-av{width:72px; height:72px; border-radius:50%; overflow:hidden; background:var(--surface-2); flex:none}
+.peer-av svg{width:100%; height:100%}
+.peer-kpis{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.peer-kpis .kpi b{font-size:1.35rem}
+.peer-zoo{display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; margin-top:10px}
+.pz{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:.74rem; font-weight:600; padding:6px 4px; border-radius:14px; background:var(--surface-2)}
+.pz svg{width:56px; height:56px}
+.pz.off{opacity:.38; filter:grayscale(1)}
+.peer-private{display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:16px; background:var(--surface-2)}
+.peer-private svg{width:22px; height:22px; flex:none; margin-top:2px}
+button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:none; padding:0}
+@media (max-width:560px){.peer-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>

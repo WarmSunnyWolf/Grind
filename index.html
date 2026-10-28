@@ -522,6 +522,27 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 
 .liked-by{display:flex; align-items:center; gap:6px; font-size:.84rem; color:var(--ink-2); margin:2px 0 -2px}
 .liked-by svg{width:15px; height:15px; color:var(--rose); flex:none}
+
+/* public profiles + likers */
+button.liked-by{border:0; background:none; padding:2px 0; font:inherit; cursor:pointer; text-align:left}
+.liked-by .lb-more{color:var(--accent); font-weight:600; margin-left:4px}
+.likers{list-style:none; margin:4px 0 0; padding:10px; display:flex; flex-direction:column; gap:6px; background:var(--surface-2); border-radius:14px; max-height:260px; overflow:auto}
+.likers li{display:flex; align-items:center; gap:10px; font-size:.88rem}
+.likers .av{width:30px; height:30px; border-radius:50%; overflow:hidden; background:var(--surface); flex:none}
+.likers .av svg{width:100%; height:100%}
+.peer-box{gap:18px}
+.peer-av{width:72px; height:72px; border-radius:50%; overflow:hidden; background:var(--surface-2); flex:none}
+.peer-av svg{width:100%; height:100%}
+.peer-kpis{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.peer-kpis .kpi b{font-size:1.35rem}
+.peer-zoo{display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; margin-top:10px}
+.pz{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:.74rem; font-weight:600; padding:6px 4px; border-radius:14px; background:var(--surface-2)}
+.pz svg{width:56px; height:56px}
+.pz.off{opacity:.38; filter:grayscale(1)}
+.peer-private{display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:16px; background:var(--surface-2)}
+.peer-private svg{width:22px; height:22px; flex:none; margin-top:2px}
+button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:none; padding:0}
+@media (max-width:560px){.peer-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -818,7 +839,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
           </article>
           <article class="card g-sec" id="g-5">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company. Tap <b>See profile</b> to view a classmate's study time and animals, if their profile is public. Choose yours under <b>Privacy</b> on your profile page.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
@@ -893,6 +914,10 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
           </div>
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
         </form>
+        <div class="card"><div class="card-h"><h2>Privacy</h2></div>
+          <div class="toggle"><span><b>Public profile</b><br><span class="muted" style="font-size:.84rem">Classmates can tap your animal in the pond to see your study time, streak, coins earned and your animals. Your rocks, notes and courses always stay private.</span></span><button class="switch" role="switch" id="swPublic" aria-checked="true" aria-label="Public profile"></button></div>
+          <div class="row" style="margin-top:12px"><button class="btn small" type="button" data-peer="me-self">See what classmates see</button></div>
+        </div>
         <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
         <div class="card"><div class="card-h"><h2>Friends</h2><button class="btn small quiet" data-go="pond">Find friends in the pond</button></div><div class="friends" id="friendList"></div></div>
       </section>
@@ -934,6 +959,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
   </form>
 </div>
 
+<div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="tip" id="tip"></div>
 <script src="firebase-config.js"></script>
@@ -1344,7 +1370,7 @@ function defaultState() {
   const semId = 'sem-' + uid();
   return {
     v: 1, updatedAt: 0, onboarded: false,
-    profile: { name: '', uni: '', major: '', bio: '' },
+    profile: { name: '', uni: '', major: '', bio: '', public: true },
     active: 'frog',
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
@@ -1414,6 +1440,18 @@ function bestStreak() {
   return Math.max(best, S.bestStreak || 0);
 }
 const todayMins = () => minutesByDay()[dayKey()] || 0;
+function publicStats() {
+  const week = dayKey(addDays(new Date(), -6));
+  return {
+    totalMins: S.sessions.reduce((a, s) => a + s.mins, 0),
+    weekMins: S.sessions.filter(s => dayKey(s.start) >= week).reduce((a, s) => a + s.mins, 0),
+    sessions: S.sessions.length,
+    bestStreak: Math.max(bestStreak(), streakNow()),
+    coinsEarned: S.coinsEarned || 0,
+    pebbles: (S.pebLog || []).length,
+    animals: S.unlocked.slice(0, 40)
+  };
+}
 function nextPebble() {
   const rocks = S.rocks.filter(r => r.pebbles.some(p => !p.done));
   rocks.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
@@ -1610,7 +1648,12 @@ function cleanResident(id, d) {
   return {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
-    streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0
+    streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
+    public: d.public === true, stats: d.public === true && d.stats && typeof d.stats === 'object' ? {
+      totalMins: Math.max(0, +d.stats.totalMins || 0), weekMins: Math.max(0, +d.stats.weekMins || 0), sessions: Math.max(0, +d.stats.sessions || 0),
+      bestStreak: Math.max(0, +d.stats.bestStreak || 0), coinsEarned: Math.max(0, +d.stats.coinsEarned || 0), pebbles: Math.max(0, +d.stats.pebbles || 0),
+      animals: Array.isArray(d.stats.animals) ? [...new Set(d.stats.animals.filter(k => ANIMAL_KEYS.includes(k)))] : []
+    } : null
   };
 }
 function liveStatus(r) {
@@ -1748,7 +1791,8 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), public: S.profile.public !== false };
+  if (doc.public) doc.stats = publicStats();
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
 function sendRippleNet(toId, msg, kind = 'ripple') {
@@ -1768,6 +1812,7 @@ function cleanPost(id, d) {
     id, by: clampStr(d.by, 80), name: clampStr(d.name, 40) || 'Someone', animal: ANIMAL_OK(d.animal), kind: ['note', 'done', 'win'].includes(d.kind) ? d.kind : 'note',
     course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 2000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
     at: +d.at || 0, likes: Array.isArray(d.likes) ? d.likes.slice(0, 500).map(x => clampStr(x, 80)) : [],
+    likeAnimals: Object.fromEntries(Object.entries(d.likeAnimals && typeof d.likeAnimals === 'object' ? d.likeAnimals : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), ANIMAL_OK(v)])),
     likeNames: Object.fromEntries(Object.entries(d.likeNames && typeof d.likeNames === 'object' ? d.likeNames : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), clampStr(v, 40)])),
     comments: Array.isArray(d.comments) ? d.comments.slice(-100).map(c => ({ by: clampStr(c.by, 80), name: clampStr(c.name, 40) || 'Someone', text: clampStr(c.text, 500), at: +c.at || 0 })) : []
   };
@@ -2315,7 +2360,7 @@ const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], 
 const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
-  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
+  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , public: S.profile.public !== false, stats: publicStats() };
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -2360,7 +2405,8 @@ function openPop(id, refresh) {
     ${r.bio ? `<p class="hand" style="font-size:1.3rem">${esc(r.bio)}</p>` : ''}
     <p style="font-size:.88rem">${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</p>
     ${r.me ? `<p class="muted" style="font-size:.84rem">This is you. Friends can send you ripples while you study.</p>` : `<span class="eyebrow">Send a ripple</span><div class="msgs">${RIPPLE_MSGS.map(m => `<button class="btn small" data-send="${esc(m)}">${esc(m)}</button>`).join('')}</div>
-    ${r.example ? '<span class="muted" style="font-size:.8rem">Example neighbour. Ripples to examples stay on your screen.</span>' : `<button class="btn small ${isFriend ? '' : 'primary'}" data-friend style="align-self:flex-start">${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>`}`}`;
+    <div class="row" style="gap:8px"><button class="btn small ${isFriend ? '' : 'primary'}" data-friend>${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>${peerBtn(r)}</div>`}
+    ${r.me ? `<div class="row">${peerBtn(r)}</div>` : ''}`;
   if (btn) {
     const ob = over.getBoundingClientRect(), bb = btn.getBoundingClientRect();
     const pw = Math.min(300, ob.width - 20);
@@ -2395,6 +2441,31 @@ function renderRipples() {
   $('#rippleMini').innerHTML = items.length ? items.slice(0, 3).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
     : `<li class="muted">No ripples yet. Send one to someone in the pond, it makes their day.</li>`;
 }
+function likerList(p, me) {
+  return p.likes.map(id => {
+    const r = id === me ? { name: myName(), animal: S.active } : (NET.pond.find(x => x.id === id) || {});
+    return { id, me: id === me, name: id === me ? myName() : ((p.likeNames || {})[id] || r.name || 'A classmate'), animal: r.animal || (p.likeAnimals || {})[id] || 'frog' };
+  }).sort((a, b) => b.me - a.me);
+}
+function peerBtn(r) { return `<button class="btn small" data-peer="${esc(r.id)}">${icon('i-user')}${r.me ? 'Your public profile' : 'See profile'}</button>`; }
+function openPeer(id) {
+  const { me, others } = residents();
+  const r = [me, ...others].find(x => x.id === id); if (!r) return;
+  const box = $('#peerBox');
+  const head = `<div class="row" style="justify-content:space-between; align-items:flex-start"><div class="row" style="gap:14px; flex-wrap:nowrap"><span class="peer-av">${avatarSVG(r.animal, 'happy')}</span><div><h2 style="font-size:1.5rem">${esc(r.me ? myName() : r.name)}</h2><p class="muted" style="font-size:.88rem">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'Student')}</p>${r.bio ? `<p class="hand" style="color:var(--rose); font-size:1.25rem">${esc(r.bio)}</p>` : ''}</div></div><button class="icon-btn" data-peerclose aria-label="Close">${icon('i-x')}</button></div>`;
+  let body;
+  if (!r.public || !r.stats) {
+    body = `<div class="peer-private">${icon('i-lock')}<div><b>${r.me ? 'Your profile is private' : 'This profile is private'}</b><p class="muted" style="font-size:.88rem">${r.me ? 'Classmates only see your name and animal. Turn on Public profile on your profile page to share your study time and animals.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.'}</p></div></div>`;
+  } else {
+    const st = r.stats;
+    const kp = [[fmtMin(st.totalMins), 'Studied in total'], [fmtMin(st.weekMins), 'This week'], [`${r.streak || 0}<small> days</small>`, 'Current streak'], [`${st.bestStreak}<small> days</small>`, 'Best streak'], [st.sessions, 'Sessions'], [st.coinsEarned, 'Coins earned']];
+    body = `<div class="peer-kpis">${kp.map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+      <div><span class="eyebrow">Their animals · ${st.animals.length} of ${ANIMAL_KEYS.length}</span><div class="peer-zoo">${ANIMAL_KEYS.map(k => { const own = st.animals.includes(k); return `<div class="pz ${own ? '' : 'off'}" title="${ANIMALS[k].label}${own ? '' : ' (not yet)'}">${avatarSVG(k, own ? (k === r.animal ? 'happy' : 'awake') : 'sleeping')}<span>${ANIMALS[k].label}</span></div>`; }).join('')}</div></div>`;
+  }
+  box.innerHTML = head + body;
+  $('#peerModal').classList.add('on');
+}
+function closePeer() { $('#peerModal').classList.remove('on'); }
 function likedBy(p, me) {
   const names = p.likes.map(id => id === me ? 'you' : ((p.likeNames || {})[id] || (NET.pond.find(r => r.id === id) || {}).name || 'a classmate'));
   names.sort((a, b) => (b === 'you') - (a === 'you'));
@@ -2415,6 +2486,7 @@ function bindPond() {
     if (e.target.closest('[data-popclose]')) { $('#pondPop')?.remove(); popFor = null; return; }
     const s = e.target.closest('[data-send]'); if (s) { sendRipple(popFor, s.dataset.send); return; }
     if (e.target.closest('[data-friend]')) { toggleFriend(popFor); openPop(popFor, true); return; }
+    const pv = e.target.closest('[data-peer]'); if (pv) { openPeer(pv.dataset.peer); return; }
   });
   $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
   $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };
@@ -2507,7 +2579,7 @@ function bindTogether() {
 
 /* ---------- commons ---------- */
 let postKind = 'note', feedFilter = 'all';
-const openComments = new Set();
+const openComments = new Set(), openLikers = new Set();
 const KIND_LABEL = { note: 'Notes', done: 'Finished work', win: 'Achievement' };
 function postsNow() { return sharedPosts() ? NET.posts : S.localPosts; }
 function renderComposerNote() { $('#composerNote').textContent = sharedPosts() ? 'Everyone in the pond can see this.' : 'Saved on this device until the shared pond is connected.'; }
@@ -2520,7 +2592,8 @@ function renderFeed() {
       ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
       ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
       ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
-      ${p.likes.length ? `<p class="liked-by">${icon('i-heart')}<span>${likedBy(p, me)}</span></p>` : ''}
+      ${p.likes.length ? `<button type="button" class="liked-by" data-likers aria-expanded="${openLikers.has(p.id)}">${icon('i-heart')}<span>${likedBy(p, me)}</span>${p.likes.length > 1 ? `<span class="lb-more">${openLikers.has(p.id) ? 'Hide' : 'See all'}</span>` : ''}</button>` : ''}
+      ${openLikers.has(p.id) ? `<ul class="likers">${likerList(p, me).map(l => `<li><span class="av">${avatarSVG(l.animal, 'happy')}</span><b>${esc(l.name)}</b>${l.me ? '<span class="muted">You</span>' : ''}</li>`).join('')}</ul>` : ''}
       <div class="post-a"><button class="btn small ${liked ? 'liked' : ''}" data-like aria-pressed="${liked}">${icon('i-heart')}<span class="num">${p.likes.length || ''}</span> ${liked ? 'Liked' : 'Like'}</button><button class="btn small" data-cm>${icon('i-comment')}${p.comments.length || ''} Comment</button></div>
       ${openComments.has(p.id) ? `<div class="comments">${p.comments.map(c => `<p class="cm"><b>${esc(c.by === me ? 'You' : c.name)}</b> ${esc(c.text)} <span class="muted" style="font-size:.75rem">${ago(c.at)}</span></p>`).join('')}
         <form class="add-peb" data-cform><input class="inp" name="t" maxlength="500" placeholder="Say something kind" aria-label="Comment"><button class="btn small" type="submit">Send</button></form></div>` : ''}
@@ -2558,7 +2631,8 @@ function bindCommons() {
   $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
   $('#feed').addEventListener('click', e => {
     const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
-    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); } }); return; }
+    if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; p.likeAnimals = p.likeAnimals || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; delete p.likeAnimals[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); p.likeAnimals[me] = S.active; } }); return; }
+    if (e.target.closest('[data-likers]')) { openLikers.has(id) ? openLikers.delete(id) : openLikers.add(id); renderFeed(); return; }
     if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
     if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
     if (e.target.closest('[data-delpno]')) { renderFeed(); return; }
@@ -2841,8 +2915,9 @@ function renderProfile() {
   </div>`).join('');
 }
 function renderFriends() {
+  if ($('#swPublic')) $('#swPublic').setAttribute('aria-checked', S.profile.public !== false);
   const fr = S.friends.map(id => NET.pond.find(r => r.id === id) || EXAMPLES.find(e => e.id === id)).filter(Boolean);
-  $('#friendList').innerHTML = fr.length ? fr.map(r => `<div class="friend"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.example ? '<span class="pill example">Example</span>' : ''}</div>`).join('')
+  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.public ? '' : `<span class="muted" style="font-size:.75rem">Private</span>`}</button>`).join('')
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
 function bindProfile() {
@@ -3018,6 +3093,10 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes();
+  $('#swPublic').onclick = () => { S.profile.public = S.profile.public === false; save(); renderProfile(); publishPond(); toast(S.profile.public ? 'Your profile is public. Classmates can see your study time and animals.' : 'Your profile is private. Classmates only see your name and animal.'); };
+  $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
+  $('#v-profile').addEventListener('click', e => { const b = e.target.closest('[data-peer]'); if (b) openPeer(b.dataset.peer === 'me-self' ? (NET.uid || 'me') : b.dataset.peer); });
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();

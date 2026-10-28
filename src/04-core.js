@@ -35,7 +35,7 @@ function defaultState() {
   const semId = 'sem-' + uid();
   return {
     v: 1, updatedAt: 0, onboarded: false,
-    profile: { name: '', uni: '', major: '', bio: '' },
+    profile: { name: '', uni: '', major: '', bio: '', public: true },
     active: 'frog',
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
@@ -105,6 +105,18 @@ function bestStreak() {
   return Math.max(best, S.bestStreak || 0);
 }
 const todayMins = () => minutesByDay()[dayKey()] || 0;
+function publicStats() {
+  const week = dayKey(addDays(new Date(), -6));
+  return {
+    totalMins: S.sessions.reduce((a, s) => a + s.mins, 0),
+    weekMins: S.sessions.filter(s => dayKey(s.start) >= week).reduce((a, s) => a + s.mins, 0),
+    sessions: S.sessions.length,
+    bestStreak: Math.max(bestStreak(), streakNow()),
+    coinsEarned: S.coinsEarned || 0,
+    pebbles: (S.pebLog || []).length,
+    animals: S.unlocked.slice(0, 40)
+  };
+}
 function nextPebble() {
   const rocks = S.rocks.filter(r => r.pebbles.some(p => !p.done));
   rocks.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));

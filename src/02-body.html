@@ -291,7 +291,7 @@
           </article>
           <article class="card g-sec" id="g-5">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company. Tap <b>See profile</b> to view a classmate's study time and animals, if their profile is public. Choose yours under <b>Privacy</b> on your profile page.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
@@ -366,6 +366,10 @@
           </div>
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
         </form>
+        <div class="card"><div class="card-h"><h2>Privacy</h2></div>
+          <div class="toggle"><span><b>Public profile</b><br><span class="muted" style="font-size:.84rem">Classmates can tap your animal in the pond to see your study time, streak, coins earned and your animals. Your rocks, notes and courses always stay private.</span></span><button class="switch" role="switch" id="swPublic" aria-checked="true" aria-label="Public profile"></button></div>
+          <div class="row" style="margin-top:12px"><button class="btn small" type="button" data-peer="me-self">See what classmates see</button></div>
+        </div>
         <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
         <div class="card"><div class="card-h"><h2>Friends</h2><button class="btn small quiet" data-go="pond">Find friends in the pond</button></div><div class="friends" id="friendList"></div></div>
       </section>
@@ -407,5 +411,6 @@
   </form>
 </div>
 
+<div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="tip" id="tip"></div>
