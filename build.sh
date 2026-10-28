@@ -10,6 +10,6 @@ SRC=src
   printf '</head>\n<body>\n'
   cat $SRC/02-body.html
   printf '<script src="firebase-config.js"></script>\n<script>\n'
-  cat $SRC/03-animals.js $SRC/04-core.js $SRC/05-net-web.js $SRC/06-focus.js $SRC/06b-sounds.js $SRC/07-pebbles.js $SRC/08-social.js $SRC/08b-feedback.js $SRC/09-app.js
+  cat $SRC/03-animals.js $SRC/04-core.js $SRC/05-net-web.js $SRC/06-focus.js $SRC/06b-sounds.js $SRC/07-pebbles.js $SRC/08-social.js $SRC/08b-feedback.js $SRC/08c-notes.js $SRC/09-app.js
   printf '</script>\n</body>\n</html>\n'
 } > index.html

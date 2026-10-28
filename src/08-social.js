@@ -79,19 +79,25 @@ function sendRipple(id, msg) {
   toast(`Ripple sent to <b>${esc(r.name)}</b>${r.example ? ' (example)' : ''}: “${esc(msg)}”`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(r.animal, 'happy')}</span>`);
 }
 function renderRipples() {
-  const items = NET.ripples.length ? NET.ripples : [];
+  const items = NET.ripples.filter(r => r.kind !== 'friend');
   const html = items.length ? items.slice(0, 12).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
     : `<li class="muted">${NET.db ? 'No ripples yet. When a friend taps your animal, their encouragement lands here.' : 'Ripples from friends land here once the shared pond is connected.'}</li>`;
   $('#rippleFeed').innerHTML = html;
   $('#rippleMini').innerHTML = items.length ? items.slice(0, 3).map(r => `<li><span class="av">${avatarSVG(r.animal, 'happy')}</span><span style="min-width:0"><q>${esc(r.msg)}</q><small>from ${esc(r.name)} · ${ago(r.at)}</small></span></li>`).join('')
     : `<li class="muted">No ripples yet. Send one to someone in the pond, it makes their day.</li>`;
 }
+function toggleFriend(id) {
+  const adding = !S.friends.includes(id);
+  S.friends = adding ? [...S.friends, id] : S.friends.filter(x => x !== id);
+  save(); renderFriends(); renderNotes();
+  if (adding && NET.db && id !== NET.uid) sendRippleNet(id, '', 'friend');
+}
 function bindPond() {
   $('#pondOver').addEventListener('click', e => {
     const res = e.target.closest('[data-res]'); if (res) { openPop(res.dataset.res); return; }
     if (e.target.closest('[data-popclose]')) { $('#pondPop')?.remove(); popFor = null; return; }
     const s = e.target.closest('[data-send]'); if (s) { sendRipple(popFor, s.dataset.send); return; }
-    if (e.target.closest('[data-friend]')) { const id = popFor; S.friends = S.friends.includes(id) ? S.friends.filter(x => x !== id) : [...S.friends, id]; save(); openPop(id, true); renderFriends(); return; }
+    if (e.target.closest('[data-friend]')) { toggleFriend(popFor); openPop(popFor, true); return; }
   });
   $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
   $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };

@@ -315,7 +315,7 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds();
+  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes();
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();

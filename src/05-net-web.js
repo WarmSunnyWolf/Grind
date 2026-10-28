@@ -111,20 +111,23 @@ async function connect(u) {
   NET.unsubs.push(db.doc('ripples/' + id).onSnapshot(s => {
     const items = s.exists ? ((s.data() || {}).items || []) : [];
     const prev = NET.ripples.length ? NET.ripples[0].at : S.seenRipple;
-    NET.ripples = items.filter(r => r && typeof r === 'object').map(r => ({ from: clampStr(r.from, 80), name: clampStr(r.name, 40) || 'Someone', animal: ANIMAL_OK(r.animal), msg: clampStr(r.msg, 60), at: +r.at || 0 }));
+    NET.ripples = items.filter(r => r && typeof r === 'object').map(r => ({ from: clampStr(r.from, 80), name: clampStr(r.name, 40) || 'Someone', animal: ANIMAL_OK(r.animal), msg: clampStr(r.msg, 60), at: +r.at || 0, kind: r.kind === 'friend' ? 'friend' : 'ripple' }));
     const fresh = NET.ripples.filter(r => r.at > Math.max(prev || 0, S.seenRipple || 0));
     if (fresh.length) {
       const r = fresh[0];
-      toast(`<b>${esc(r.name)}</b> sent you a ripple: “${esc(r.msg)}”`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(r.animal, 'happy')}</span>`);
-      rippleAt(null);
-      if (currentView !== 'pond') $('#pondDot').hidden = false;
-      else { S.seenRipple = r.at; save(); }
+      if (r.kind === 'friend') toast(`<b>${esc(r.name)}</b> added you as a friend.`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(r.animal, 'happy')}</span>`);
+      else {
+        toast(`<b>${esc(r.name)}</b> sent you a ripple: “${esc(r.msg)}”`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(r.animal, 'happy')}</span>`);
+        rippleAt(null);
+        if (currentView !== 'pond') $('#pondDot').hidden = false;
+      }
+      if (currentView === 'pond') { S.seenRipple = r.at; save(); }
     }
-    renderRipples();
+    renderRipples(); renderNotes();
   }, () => {}));
   NET.unsubs.push(db.collection('posts').orderBy('at', 'desc').limit(80).onSnapshot(s => {
     NET.posts = s.docs.filter(d => d.exists).map(d => cleanPost(d.id, d.data() || {}));
-    renderFeed();
+    renderFeed(); renderNotes();
   }, () => {}));
   subscribeCircles();
   publishPond();
@@ -151,13 +154,13 @@ function publishPond() {
   const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now() };
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
-function sendRippleNet(toId, msg) {
+function sendRippleNet(toId, msg, kind = 'ripple') {
   if (!NET.db || !NET.canWrite) return;
   const ref = NET.db.doc('ripples/' + toId);
   writeQ('ripples/' + toId, async () => {
     const s = await ref.get();
     const items = s.exists ? ((s.data() || {}).items || []) : [];
-    items.unshift({ from: NET.uid, name: myName(), animal: S.active, msg, at: Date.now() });
+    items.unshift({ from: NET.uid, name: myName(), animal: S.active, msg, at: Date.now(), kind });
     await ref.set({ items: items.slice(0, 30) });
   });
 }
