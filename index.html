@@ -2539,7 +2539,7 @@ const evAt = e => { const d = keyToDate(e.date); const [h, m] = (e.time || '09:0
 const fmtClock = t => (t ? new Date(`2000-01-01T${t}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '');
 function calItems() {
   const ev = (S.events || []).map(e => ({ ...e, kind: 'event' }));
-  const rocks = S.rocks.filter(r => r.due && !r.example && !isDone(r)).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, type: 'deadline', remind: 1440 }));
+  const rocks = S.rocks.filter(r => r.due && !r.example && !(r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done))).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, type: 'deadline', remind: 1440 }));
   return [...ev, ...rocks].sort((a, b) => evAt(a) - evAt(b));
 }
 function whenText(it) {
