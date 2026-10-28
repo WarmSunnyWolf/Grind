@@ -1,3 +1,10 @@
-// Paste the firebaseConfig object from Firebase console > Project settings > Your apps.
-// Leave it as null and Grind still works, with each student's progress saved in their own browser.
-window.GRIND_FIREBASE = null;
+// Firebase web config for the Grind project. These values are meant to be public;
+// access is controlled by firestore.rules and the Authorized domains list.
+window.GRIND_FIREBASE = {
+  apiKey: "AIzaSyCcaHvfZIIj2_qXsD1G9MRAfa69oLNEyg0",
+  authDomain: "grind-a6d9e.firebaseapp.com",
+  projectId: "grind-a6d9e",
+  storageBucket: "grind-a6d9e.firebasestorage.app",
+  messagingSenderId: "854384394159",
+  appId: "1:854384394159:web:6b90d0a1c7fecb1996395a"
+};
