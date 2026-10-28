@@ -551,6 +551,9 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 .vis-seg button span{font-size:.78rem; color:var(--muted)}
 .vis-seg button[aria-pressed="true"]{border-color:var(--accent); background:var(--surface); box-shadow:0 0 0 2px var(--accent) inset}
 @media (max-width:560px){.vis-seg{grid-template-columns:minmax(0,1fr)}}
+
+.ripple-own{display:flex; gap:6px; margin-top:2px}
+.ripple-own .inp{flex:1; min-width:0; padding:7px 10px; font-size:.86rem}
 </style>
 </head>
 <body>
@@ -2417,7 +2420,7 @@ function importICS(text) {
 }
 /* ---------- the pond (community) ---------- */
 const EXAMPLES = [];
-const RIPPLE_MSGS = ['You have got this', 'Proud of you', 'Keep going', 'Drink some water', 'Studying with you'];
+const RIPPLE_MSGS = ['Lock in', 'You got this', 'Let him cook', 'You are so locked in', 'Main character energy', 'No cap, proud of you', 'It is giving A+', 'Hydrate, bestie', 'Slay this exam', 'Studying with you fr'];
 let pondFilter = 'all', popFor = null;
 const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], [89, 82], [32, 45], [68, 45], [50, 52], [14, 42], [86, 43], [50, 36], [24, 72], [76, 74], [42, 66], [58, 66], [8, 60], [92, 62]];
 const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
@@ -2468,6 +2471,7 @@ function openPop(id, refresh) {
     ${r.bio ? `<p class="hand" style="font-size:1.3rem">${esc(r.bio)}</p>` : ''}
     <p style="font-size:.88rem">${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</p>
     ${r.me ? `<p class="muted" style="font-size:.84rem">This is you. Friends can send you ripples while you study.</p>` : `<span class="eyebrow">Send a ripple</span><div class="msgs">${RIPPLE_MSGS.map(m => `<button class="btn small" data-send="${esc(m)}">${esc(m)}</button>`).join('')}</div>
+    <form class="ripple-own" data-ownripple><input class="inp" name="m" maxlength="60" placeholder="Or write your own" aria-label="Write your own ripple" autocomplete="off"><button class="btn small primary" type="submit">Send</button></form>
     <div class="row" style="gap:8px"><button class="btn small ${isFriend ? '' : 'primary'}" data-friend>${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>${peerBtn(r)}</div>`}
     ${r.me ? `<div class="row">${peerBtn(r)}</div>` : ''}`;
   if (btn) {
@@ -2563,6 +2567,11 @@ function bindPond() {
     const s = e.target.closest('[data-send]'); if (s) { sendRipple(popFor, s.dataset.send); return; }
     if (e.target.closest('[data-friend]')) { toggleFriend(popFor); openPop(popFor, true); return; }
     const pv = e.target.closest('[data-peer]'); if (pv) { openPeer(pv.dataset.peer); return; }
+  });
+  $('#pondOver').addEventListener('submit', e => {
+    const f = e.target.closest('[data-ownripple]'); if (!f) return; e.preventDefault();
+    const m = clampStr(f.m.value.trim().replace(/\s+/g, ' '), 60); if (!m) { f.m.focus(); return; }
+    sendRipple(popFor, m); f.m.value = '';
   });
   $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
   $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };
