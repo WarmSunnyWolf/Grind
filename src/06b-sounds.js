@@ -4,9 +4,30 @@ const SOUNDS = {
   ocean: { label: 'Ocean', note: 'Slow waves on the shore', cost: 30, icon: '<path d="M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/>' },
   forest: { label: 'Forest', note: 'Wind in the trees and birds', cost: 40, icon: '<path d="M12 3 5 13h4l-3 5h12l-3-5h4zM12 18v3"/>' },
   fire: { label: 'Fireplace', note: 'A warm crackling fire', cost: 60, icon: '<path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.6 1.6-3.8 2.6-5.2.4 1.6 1.2 2.4 2.4 2.8C11.6 8.2 11.4 5.6 12 3z"/>' },
-  cafe: { label: 'Café', note: 'Quiet chatter and cups', cost: 80, icon: '<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3c-1 1.4 1 2 0 3.5M12 3c-1 1.4 1 2 0 3.5"/>' }
+  cafe: { label: 'Café', note: 'Quiet chatter and cups', cost: 80, icon: '<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3c-1 1.4 1 2 0 3.5M12 3c-1 1.4 1 2 0 3.5"/>' },
+  quran: { label: 'Quran', note: 'Recitation, free for everyone', cost: 0, media: true, icon: '<path d="M12 6.5C10 5 7 4.6 4 5v13c3-.4 6 0 8 1.5 2-1.5 5-1.9 8-1.5V5c-3-.4-6 0-8 1.5zM12 6.5v13"/>' },
+  link: { label: 'Your own link', note: 'YouTube, Spotify, SoundCloud or audio', cost: 0, media: true, icon: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>' }
 };
-const SND = { ctx: null, master: null, bufs: null, stopFn: null, playing: null };
+// full recitations served by mp3quran.net, one file per surah
+const RECITERS = { afs: { name: 'Mishary Alafasy', base: 'https://server8.mp3quran.net/afs/' }, sds: { name: 'Abdul Rahman Al-Sudais', base: 'https://server11.mp3quran.net/sds/' }, maher: { name: 'Maher Al-Muaiqly', base: 'https://server12.mp3quran.net/maher/' } };
+const SURAHS = 'Al-Fatihah,Al-Baqarah,Al Imran,An-Nisa,Al-Maidah,Al-Anam,Al-Araf,Al-Anfal,At-Tawbah,Yunus,Hud,Yusuf,Ar-Rad,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha,Al-Anbiya,Al-Hajj,Al-Muminun,An-Nur,Al-Furqan,Ash-Shuara,An-Naml,Al-Qasas,Al-Ankabut,Ar-Rum,Luqman,As-Sajdah,Al-Ahzab,Saba,Fatir,Ya-Sin,As-Saffat,Sad,Az-Zumar,Ghafir,Fussilat,Ash-Shura,Az-Zukhruf,Ad-Dukhan,Al-Jathiyah,Al-Ahqaf,Muhammad,Al-Fath,Al-Hujurat,Qaf,Adh-Dhariyat,At-Tur,An-Najm,Al-Qamar,Ar-Rahman,Al-Waqiah,Al-Hadid,Al-Mujadilah,Al-Hashr,Al-Mumtahanah,As-Saff,Al-Jumuah,Al-Munafiqun,At-Taghabun,At-Talaq,At-Tahrim,Al-Mulk,Al-Qalam,Al-Haqqah,Al-Maarij,Nuh,Al-Jinn,Al-Muzzammil,Al-Muddaththir,Al-Qiyamah,Al-Insan,Al-Mursalat,An-Naba,An-Naziat,Abasa,At-Takwir,Al-Infitar,Al-Mutaffifin,Al-Inshiqaq,Al-Buruj,At-Tariq,Al-Ala,Al-Ghashiyah,Al-Fajr,Al-Balad,Ash-Shams,Al-Layl,Ad-Duha,Ash-Sharh,At-Tin,Al-Alaq,Al-Qadr,Al-Bayyinah,Az-Zalzalah,Al-Adiyat,Al-Qariah,At-Takathur,Al-Asr,Al-Humazah,Al-Fil,Quraysh,Al-Maun,Al-Kawthar,Al-Kafirun,An-Nasr,Al-Masad,Al-Ikhlas,Al-Falaq,An-Nas'.split(',');
+// turns a pasted link into something we can play: an embedded player or a plain audio file
+function parseSoundLink(raw) {
+  let u; try { u = new URL(String(raw || '').trim()); } catch (e) { return null; }
+  if (u.protocol !== 'https:') return null;
+  const h = u.hostname.replace(/^www\.|^m\./, '');
+  if (h === 'youtube.com' || h === 'music.youtube.com' || h === 'youtu.be') {
+    const list = u.searchParams.get('list'), id = h === 'youtu.be' ? u.pathname.slice(1) : u.searchParams.get('v') || (u.pathname.match(/^\/(?:shorts|live|embed)\/([\w-]{6,})/) || [])[1];
+    if (list && /^[\w-]+$/.test(list)) return { kind: 'embed', src: `https://www.youtube-nocookie.com/embed/videoseries?list=${list}&autoplay=1&loop=1`, h: 200 };
+    if (id && /^[\w-]{6,20}$/.test(id)) return { kind: 'embed', src: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&loop=1&playlist=${id}`, h: 200 };
+    return null;
+  }
+  if (h === 'open.spotify.com') { const m = u.pathname.match(/\/(track|playlist|album|episode|show)\/([A-Za-z0-9]+)/); return m ? { kind: 'embed', src: `https://open.spotify.com/embed/${m[1]}/${m[2]}`, h: m[1] === 'track' || m[1] === 'episode' ? 152 : 352, note: 'Press play in the Spotify player.' } : null; }
+  if (h === 'soundcloud.com' || h === 'on.soundcloud.com') return { kind: 'embed', src: `https://w.soundcloud.com/player/?url=${encodeURIComponent(u.href)}&auto_play=true&visual=false`, h: 166 };
+  return { kind: 'audio', src: u.href };
+}
+const SND = { ctx: null, master: null, bufs: null, stopFn: null, playing: null, audio: null };
+const sndOwned = k => SOUNDS[k].cost === 0 || S.sounds.owned.includes(k);
 
 function sndCtx() {
   if (!SND.ctx) {
@@ -79,16 +100,42 @@ function sndBuild(kind) {
     setTimeout(() => { nodes.forEach(x => { try { x.stop(); } catch (e) {} }); out.disconnect(); }, 800);
   };
 }
-function sndVolume() { if (SND.master) SND.master.gain.value = Math.pow(S.sounds.vol, 1.6) * .9; }
+function sndVolume() { if (SND.master) SND.master.gain.value = Math.pow(S.sounds.vol, 1.6) * .9; if (SND.audio) SND.audio.volume = Math.min(1, S.sounds.vol); }
+function mediaStop() {
+  if (SND.audio) { SND.audio.onended = SND.audio.onerror = null; SND.audio.pause(); SND.audio.removeAttribute('src'); SND.audio.load(); SND.audio = null; }
+  const em = $('#sndEmbed'); if (em) em.innerHTML = '';
+}
+function playAudio(src, onEnd) {
+  const a = new Audio(); a.preload = 'auto'; a.src = src; SND.audio = a; sndVolume();
+  a.onended = onEnd || (() => { a.currentTime = 0; a.play().catch(() => {}); });
+  a.onerror = () => { if (SND.audio !== a) return; toast('That audio could not be played. Check the link or your connection.'); sndStop(); };
+  a.play().catch(() => {});
+}
+function mediaPlay(kind) {
+  mediaStop();
+  if (kind === 'quran') {
+    const q = S.sounds.quran, r = RECITERS[q.reciter] || RECITERS.afs;
+    const next = () => { q.surah = q.surah >= 114 ? 1 : q.surah + 1; save(); renderSounds(); mediaPlay('quran'); };
+    playAudio(r.base + String(q.surah).padStart(3, '0') + '.mp3', next);
+    return true;
+  }
+  const L = parseSoundLink(S.sounds.link);
+  if (!L) { toast('Paste a YouTube, Spotify, SoundCloud or audio link first.'); return false; }
+  if (L.kind === 'audio') { playAudio(L.src); return true; }
+  $('#sndEmbed').innerHTML = `<iframe src="${esc(L.src)}" height="${L.h}" allow="autoplay; encrypted-media; clipboard-write" loading="lazy" title="Your sound" referrerpolicy="strict-origin-when-cross-origin"></iframe>${L.note ? `<p class="muted" style="font-size:.78rem; margin:6px 0 0">${L.note}</p>` : ''}`;
+  return true;
+}
 function sndPlay(kind) {
   try {
     if (SND.stopFn) SND.stopFn();
+    SND.stopFn = null; mediaStop();
+    if (SOUNDS[kind].media) { SND.playing = mediaPlay(kind) ? kind : null; renderSounds(); return; }
     sndCtx(); sndVolume();
     SND.stopFn = sndBuild(kind); SND.playing = kind;
   } catch (e) { SND.stopFn = null; SND.playing = null; toast('Sounds are not available in this browser.'); }
   renderSounds();
 }
-function sndStop() { if (SND.stopFn) SND.stopFn(); SND.stopFn = null; SND.playing = null; renderSounds(); }
+function sndStop() { if (SND.stopFn) SND.stopFn(); SND.stopFn = null; mediaStop(); SND.playing = null; renderSounds(); }
 function sndOnFocus(started) {
   if (!S.sounds.withFocus) return;
   if (started) sndPlay(S.sounds.pick); else sndStop();
@@ -97,17 +144,22 @@ function sndOnFocus(started) {
 function renderSounds() {
   const box = $('#sndList'); if (!box) return;
   const ss = S.sounds;
+  if (!SOUNDS[ss.pick]) ss.pick = 'rain';
   box.innerHTML = Object.entries(SOUNDS).map(([k, s]) => {
-    const own = ss.owned.includes(k), on = SND.playing === k, sel = ss.pick === k;
+    const own = sndOwned(k), on = SND.playing === k, sel = ss.pick === k;
     return `<div class="snd ${sel ? 'sel' : ''} ${own ? '' : 'locked'}">
       <button class="snd-main" data-snd="${k}" ${own ? '' : 'disabled'} aria-pressed="${on}" aria-label="${on ? 'Stop' : 'Play'} ${s.label}">
         <span class="snd-ic ${on ? 'on' : ''}"><svg viewBox="0 0 24 24" aria-hidden="true">${s.icon}</svg></span>
-        <span class="snd-t"><b>${s.label}</b><small>${on ? 'Playing now' : s.note}</small></span>
+        <span class="snd-t"><b>${s.label}</b><small>${on ? (k === 'quran' ? `Playing ${esc(SURAHS[ss.quran.surah - 1])}` : 'Playing now') : s.note}</small></span>
         ${own ? `<span class="snd-act">${icon(on ? 'i-pause' : 'i-play')}</span>` : ''}
       </button>
       ${own ? '' : `<button class="btn small ${S.coins >= s.cost ? 'primary' : ''}" data-sndbuy="${k}" ${S.coins >= s.cost ? '' : 'disabled'}>${icon('i-coin')}${s.cost}</button>`}
     </div>`;
   }).join('');
+  const ex = $('#sndExtra');
+  if (ss.pick === 'quran') ex.innerHTML = `<div class="snd-opts"><label class="f">Reciter<select class="inp" id="qReciter">${Object.entries(RECITERS).map(([k, r]) => `<option value="${k}" ${ss.quran.reciter === k ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label><label class="f">Surah<select class="inp" id="qSurah">${SURAHS.map((n, i) => `<option value="${i + 1}" ${ss.quran.surah === i + 1 ? 'selected' : ''}>${i + 1}. ${n}</option>`).join('')}</select></label></div><p class="muted" style="font-size:.78rem; margin:6px 0 0">Plays on to the next surah by itself.</p>`;
+  else if (ss.pick === 'link') ex.innerHTML = `<form class="snd-opts link" id="sndLinkForm"><input class="inp" id="sndLink" type="url" maxlength="500" placeholder="Paste a YouTube, Spotify or SoundCloud link" value="${esc(ss.link || '')}" aria-label="Sound link"><button class="btn small primary" type="submit">${icon('i-play')}Play</button></form>`;
+  else ex.innerHTML = '';
   $('#sndVol').value = Math.round(ss.vol * 100);
   $('#sndWith').setAttribute('aria-checked', !!ss.withFocus);
 }
@@ -126,6 +178,15 @@ function bindSounds() {
       if (SND.playing === k) { sndStop(); return; }
       S.sounds.pick = k; save(); sndPlay(k);
     }
+  });
+  $('#sndExtra').addEventListener('change', e => {
+    if (e.target.id === 'qReciter' || e.target.id === 'qSurah') { S.sounds.quran = { reciter: RECITERS[$('#qReciter').value] ? $('#qReciter').value : 'afs', surah: Math.max(1, Math.min(114, +$('#qSurah').value || 1)) }; save(); if (SND.playing === 'quran') sndPlay('quran'); }
+  });
+  $('#sndExtra').addEventListener('submit', e => {
+    if (e.target.id !== 'sndLinkForm') return; e.preventDefault();
+    const v = $('#sndLink').value.trim();
+    if (!parseSoundLink(v)) { toast('That link did not work. Paste a full link that starts with https://'); return; }
+    S.sounds.link = clampStr(v, 500); save(); sndPlay('link');
   });
   $('#sndVol').addEventListener('input', e => { S.sounds.vol = Math.max(0, Math.min(1, +e.target.value / 100)); sndVolume(); });
   $('#sndVol').addEventListener('change', () => save());

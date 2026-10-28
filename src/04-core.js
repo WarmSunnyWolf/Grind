@@ -45,7 +45,7 @@ function defaultState() {
     currentSem: semId,
     rocks: [exampleRock()], events: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
     seenRipple: 0, visV2: true, timer: null, lastCourse: '', openRock: 'example-rock',
-    sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true }
+    sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true, quran: { reciter: 'afs', surah: 1 }, link: '' }
   };
 }
 // When someone signs in, combine what they did on this device before signing in with what is saved in their account.
@@ -81,6 +81,7 @@ function mergeState(s) {
   delete m.profile.public;
   // everyone starts public; earlier versions could leave accounts hidden
   if (!s.visV2) { m.profile.visibility = 'everyone'; m.visV2 = true; }
+  if (!m.sounds.quran || typeof m.sounds.quran !== 'object') m.sounds.quran = { reciter: 'afs', surah: 1 };
   if (!Array.isArray(m.sounds.owned) || !m.sounds.owned.includes('rain')) m.sounds.owned = ['rain', ...(Array.isArray(m.sounds.owned) ? m.sounds.owned : [])];
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
