@@ -3,7 +3,7 @@
 A calm study website for FWS310. Focus with a hand-drawn pond animal, split big tasks (rocks) into small pebbles, and study alongside friends in a shared pond.
 
 ## Files
-- `index.html` is the whole site, built by `build.sh` from `src/`.
+- `index.html` is the whole site, built by `build.sh` from `../grind/src`.
 - `firebase-config.js` holds the Firebase web config (not a secret).
 - `firestore.rules` are the database rules to paste into Firebase.
 
@@ -12,3 +12,11 @@ A calm study website for FWS310. Focus with a hand-drawn pond animal, split big 
 2. Authentication > Sign-in method: enable Google. Under Settings > Authorized domains, add `<username>.github.io`.
 3. Firestore Database: create a database, then paste `firestore.rules` into the Rules tab and Publish.
 4. GitHub: push `index.html` and `firebase-config.js` to a public repo, then Settings > Pages > Deploy from branch `main`, folder `/`.
+
+## Feedback
+
+The Feedback page (left menu, "Send feedback") lets anyone send a rating and notes, signed in or not.
+Notes are saved in the Firestore collection `feedback`. Only the owner email written in the rules can read them.
+Read them in two places:
+- On the site: sign in with the owner account and open Feedback. Your private inbox appears at the bottom.
+- In Firebase console: Firestore Database > Data > feedback.

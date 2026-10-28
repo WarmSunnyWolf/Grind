@@ -58,6 +58,7 @@
     </nav>
     <div class="side-foot">
       <button class="me-mini" data-go="profile" id="meMini"><span class="av" id="meMiniAv"></span><span><b id="meMiniName">Student</b><span id="meMiniSub">Profile and courses</span></span></button>
+      <button class="ghost-btn" data-go="feedback"><svg><use href="#i-comment"/></svg>Send feedback</button>
       <button class="ghost-btn" id="openCustomize"><svg><use href="#i-gear"/></svg>Customize</button>
     </div>
   </aside>
@@ -74,7 +75,7 @@
           <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
           <span class="chip" title="Coins"><svg><use href="#i-coin"/></svg><span class="num" id="coinChip">0</span></span>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
-          <span class="mobile-top"><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
+          <span class="mobile-top"><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
       </header>
 
@@ -231,6 +232,31 @@
           <div class="card"><div class="card-h"><h2>Moss calendar</h2><span class="muted" style="font-size:.8rem">Last 16 weeks</span></div><div class="heat-wrap"><div class="heat" id="heat"></div></div><div class="legend" style="margin-top:10px" id="heatLegend"></div></div>
         </div>
         <div class="card"><div class="card-h"><h2>Recent sessions</h2></div><div style="overflow-x:auto"><table class="data" id="sessTable"></table></div></div>
+      </section>
+
+      <!-- FEEDBACK -->
+      <section class="view" id="v-feedback">
+        <p class="muted" style="max-width:62ch">Grind is a student project for FWS310. Tell us what helps you study and what gets in the way. It takes about a minute, and you do not need to sign in.</p>
+        <div class="grid g-focus">
+          <form class="card" id="fbForm">
+            <div class="stack" style="gap:20px">
+              <div><h2>How does Grind feel so far?</h2><p class="muted" style="font-size:.86rem; margin-top:4px">One lily pad is "not for me yet", five is "I would use this every day".</p><div class="rate" id="fbRate" role="radiogroup" aria-label="Rating from 1 to 5"></div></div>
+              <div><span class="eyebrow">Which part are you writing about?</span><div class="course-chips" id="fbArea" style="margin-top:8px"></div></div>
+              <label class="f">What do you like?<textarea class="inp" id="fbLike" maxlength="2000" placeholder="The pond is calming, the pebbles help me start..."></textarea></label>
+              <label class="f">What should we change or add?<textarea class="inp" id="fbImprove" maxlength="2000" placeholder="I wish I could..., this part confused me..."></textarea></label>
+              <div class="form-grid">
+                <label class="f">Your name (optional)<input class="inp" id="fbName" maxlength="40" placeholder="Lina"></label>
+                <label class="f">How to reach you (optional)<input class="inp" id="fbContact" maxlength="80" placeholder="Email or Instagram, only if you want a reply"></label>
+              </div>
+              <div class="row"><button class="btn primary big" type="submit">Send feedback</button><span class="muted" id="fbNote" style="font-size:.84rem"></span></div>
+            </div>
+          </form>
+          <div class="stack">
+            <div class="card fb-thanks" id="fbSide"></div>
+            <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Your answers go straight to the student team behind Grind. Nobody else can read them. Leave the name and contact empty to stay anonymous.</p></div>
+          </div>
+        </div>
+        <div id="fbInbox"></div>
       </section>
 
       <!-- PROFILE -->

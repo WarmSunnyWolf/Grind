@@ -240,7 +240,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile' };
+const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -257,6 +257,7 @@ function go(v) {
   if (v === 'together') renderCircle();
   if (v === 'profile') { renderProfile(); renderFriends(); }
   if (v === 'pebbles') renderRocks();
+  if (v === 'feedback') { renderFeedback(); loadInbox(); }
   window.scrollTo({ top: 0 });
 }
 function renderChips() {
@@ -312,7 +313,7 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome();
+  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback();
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();

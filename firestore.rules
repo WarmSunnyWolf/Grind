@@ -28,6 +28,14 @@ service cloud.firestore {
     match /circles/{code} {
       allow read, write: if signedIn();
     }
+    // Feedback notes. Anyone can send one, even signed out. Only the owner can read or remove them.
+    // Replace YOUR_GOOGLE_EMAIL with your own Google email when you paste this into Firebase.
+    match /feedback/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['rating','area','like','improve','name','contact','at','page','by'])
+        && request.resource.data.like is string && request.resource.data.like.size() <= 2000
+        && request.resource.data.improve is string && request.resource.data.improve.size() <= 2000;
+      allow read, delete: if signedIn() && request.auth.token.email == "YOUR_GOOGLE_EMAIL";
+    }
     // Each student's private progress (timer, pebbles, courses, coins).
     match /data/users/{uid}/{rest=**} {
       allow read, write: if signedIn() && request.auth.uid == uid;

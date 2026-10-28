@@ -67,6 +67,7 @@ async function initNet() {
     const app = appM.initializeApp(cfg);
     const auth = authM.getAuth(app);
     FB = { authM, auth, fsM, fs: fsM.getFirestore(app) };
+    NET.anonDb = fsAdapter(fsM, FB.fs);
     NET.fbReady = true;
   } catch (e) { NET.ready = true; renderSync(); renderNotices(); return; }
   NET.ready = true; renderSync(); renderNotices();
