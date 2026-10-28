@@ -707,7 +707,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 
       <!-- SANCTUARY -->
       <section class="view" id="v-sanctuary">
-        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Eleven animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Sixteen animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
         <div class="zoo" id="zoo"></div>
       </section>
 
@@ -783,7 +783,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt the rabbit (40), otter (80), fox (120), horse (160) or deer (200). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) up to the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -815,7 +815,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
               <label class="f">What do you like?<textarea class="inp" id="fbLike" maxlength="2000" placeholder="The pond is calming, the pebbles help me start..."></textarea></label>
               <label class="f">What should we change or add?<textarea class="inp" id="fbImprove" maxlength="2000" placeholder="I wish I could..., this part confused me..."></textarea></label>
               <div class="form-grid">
-                <label class="f">Your name (optional)<input class="inp" id="fbName" maxlength="40" placeholder="Lina"></label>
+                <label class="f">Your name (optional)<input class="inp" id="fbName" maxlength="40" placeholder="Your name"></label>
                 <label class="f">How to reach you (optional)<input class="inp" id="fbContact" maxlength="80" placeholder="Email or Instagram, only if you want a reply"></label>
               </div>
               <div class="row"><button class="btn primary big" type="submit">Send feedback</button><span class="muted" id="fbNote" style="font-size:.84rem"></span></div>
@@ -875,8 +875,8 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
     <div><span class="hand" style="color:var(--rose); font-size:1.7rem">Welcome to the pond</span><h2 id="wTitle" style="font-size:1.7rem">Pick a companion to study with</h2><p class="muted" style="margin-top:6px">It stays awake while you focus and naps while you rest. If you stop early it just takes a nap. It never gets hurt.</p></div>
     <div class="starter" id="starter"></div>
     <div class="form-grid">
-      <label class="f">Your name<input class="inp" id="wName" maxlength="40" required placeholder="Lina"></label>
-      <label class="f">Name your animal<input class="inp" id="wPet" maxlength="30" required placeholder="Pip"></label>
+      <label class="f">Your name<input class="inp" id="wName" maxlength="40" required placeholder="Your first name"></label>
+      <label class="f">Name your animal<input class="inp" id="wPet" maxlength="30" required placeholder="Give it a name"></label>
       <label class="f">University<input class="inp" id="wUni" maxlength="60" placeholder="ADU"></label>
       <label class="f">Major<input class="inp" id="wMajor" maxlength="60" placeholder="Computer Engineering"></label>
     </div>
@@ -895,7 +895,7 @@ const O2 = `stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-li
 
 const ANIMALS = {
   frog: {
-    label: 'Frog', lore: 'Hums quietly on a lily pad. Starts any task with one small hop.', unlock: { type: 'free' }, defaultName: 'Pip',
+    label: 'Frog', lore: 'Hums quietly on a lily pad. Starts any task with one small hop.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[68, 85], [132, 85]], er: 7, whites: [[68, 84, 14], [132, 84, 14]], lid: '#8fb069', mouth: { x: 100, y: 124, type: 'wide', w: 22 }, blush: [[56, 116], [144, 116]], zz: [150, 52] },
     art: () => {
       const b = '#8fb069', d = '#6d8c4c', l = '#d9e3a8';
@@ -909,7 +909,7 @@ const ANIMALS = {
     }
   },
   duckling: {
-    label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: 'Sunny',
+    label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[76, 86], [106, 86]], er: 5.5, mouth: null, blush: [[64, 100], [118, 100]], zz: [128, 50] },
     art: (st) => {
       const y = '#f4d06f', s = '#e3b552', bk = '#e8894a';
@@ -926,7 +926,7 @@ const ANIMALS = {
     }
   },
   capybara: {
-    label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: 'Yuzu',
+    label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[62, 82], [108, 82]], er: 4.8, mouth: { x: 85, y: 121, type: 'cat' }, blush: [[52, 100], [120, 100]], zz: [140, 58] },
     art: () => {
       const b = '#b98b63', d = '#94694a', l = '#d2ab85';
@@ -942,7 +942,7 @@ const ANIMALS = {
     }
   },
   rabbit: {
-    label: 'Rabbit', lore: 'Quick bursts of focus, then a good long rest in the clover.', unlock: { type: 'coins', n: 40 }, defaultName: 'Clover',
+    label: 'Rabbit', lore: 'Quick bursts of focus, then a good long rest in the clover.', unlock: { type: 'coins', n: 40 }, defaultName: '',
     face: { eyes: [[84, 96], [116, 96]], er: 5.5, mouth: { x: 100, y: 113, type: 'cat' }, blush: [[72, 108], [128, 108]], zz: [142, 62] },
     art: () => {
       const b = '#efe6d8', p = '#eab4ad';
@@ -955,8 +955,45 @@ const ANIMALS = {
       <path d="M95 105 H105 L100 110 Z" fill="${p}" ${O2}/>`;
     }
   },
+  butterfly: {
+    label: 'Butterfly', lore: 'Light and bright. Reminds you that small changes add up.', unlock: { type: 'coins', n: 50 }, defaultName: '',
+    face: { eyes: [[92, 82], [108, 82]], er: 3.8, mouth: { x: 100, y: 91, type: 'smile' }, blush: [[86, 89], [114, 89]], blushR: 4, zz: [132, 40] },
+    art: () => {
+      const up = '#c9b3ea', lo = '#f3b9c8', sp = '#fbe7a6', c = '#f4e4c8', ln = '#a78fcf';
+      const wing = `<path d="M96 104 C72 62 32 50 22 74 C14 100 48 122 94 118 Z" fill="${up}" ${O}/>
+      <path d="M96 118 C64 122 38 142 48 164 C58 182 88 170 98 134 Z" fill="${lo}" ${O}/>
+      <path d="M90 108 C70 82 46 72 34 80 M90 124 C72 134 58 150 60 162" fill="none" stroke="${ln}" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="46" cy="82" r="7" fill="${sp}" ${O2}/><circle cx="64" cy="98" r="4.5" fill="${sp}" ${O2}/><circle cx="66" cy="154" r="6" fill="${sp}" ${O2}/>`;
+      return `${wing}<g transform="translate(200 0) scale(-1 1)">${wing}</g>
+      <path d="M92 104 C92 96 108 96 108 104 L106 164 C106 174 94 174 94 164 Z" fill="${c}" ${O}/>
+      <path d="M94 122 H106 M94 136 H106 M95 150 H105" stroke="${ln}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M93 66 C89 52 81 44 74 42 M107 66 C111 52 119 44 126 42" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="73" cy="41" r="4.5" fill="${lo}" ${O2}/><circle cx="127" cy="41" r="4.5" fill="${lo}" ${O2}/>
+      <circle cx="100" cy="82" r="20" fill="${c}" ${O}/>`;
+    }
+  },
+  kitty: {
+    label: 'Kitty', lore: 'Curls up beside your notes and purrs you through every chapter.', unlock: { type: 'coins', n: 60 }, defaultName: '',
+    face: { eyes: [[80, 88], [120, 88]], er: 6, mouth: { x: 100, y: 111, type: 'cat' }, blush: [[68, 104], [132, 104]], zz: [150, 44] },
+    art: () => {
+      const b = '#f1c58c', d = '#d99a58', w = '#fbf1e2', p = '#eab4ad';
+      return `<path d="M128 174 C162 178 174 150 162 126 C158 120 150 124 152 131 C160 150 150 164 126 162 Z" fill="${b}" ${O}/>
+      <path d="M156 136 L166 132 M158 150 L168 150" stroke="${d}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M66 180 C58 146 74 118 100 118 C126 118 142 146 134 180 Z" fill="${b}" ${O}/>
+      <path d="M86 126 Q100 162 114 126 Q100 134 86 126 Z" fill="${w}"/>
+      <path d="M70 146 L80 148 M70 158 L80 158 M130 146 L120 148 M130 158 L120 158" stroke="${d}" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="86" cy="178" rx="11" ry="6" fill="${w}" ${O2}/><ellipse cx="114" cy="178" rx="11" ry="6" fill="${w}" ${O2}/>
+      <path d="M60 78 L62 36 L94 58 Z" fill="${b}" ${O}/><path d="M140 78 L138 36 L106 58 Z" fill="${b}" ${O}/>
+      <path d="M66 68 L67 46 L85 58 Z" fill="${p}"/><path d="M134 68 L133 46 L115 58 Z" fill="${p}"/>
+      <path d="M54 88 C54 64 74 54 100 54 C126 54 146 64 146 88 C146 112 126 128 100 128 C74 128 54 112 54 88 Z" fill="${b}" ${O}/>
+      <path d="M92 58 L94 70 M100 56 V72 M108 58 L106 70" stroke="${d}" stroke-width="3.2" stroke-linecap="round"/>
+      <ellipse cx="100" cy="109" rx="18" ry="12" fill="${w}"/>
+      <path d="M95 101 H105 L100 107 Z" fill="${p}" ${O2}/>
+      <path d="M74 106 L52 102 M74 112 L54 114 M126 106 L148 102 M126 112 L146 114" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>`;
+    }
+  },
   otter: {
-    label: 'Otter', lore: 'Holds its favourite pebble in its paws, the way you keep your best notes.', unlock: { type: 'coins', n: 80 }, defaultName: 'Miso',
+    label: 'Otter', lore: 'Holds its favourite pebble in its paws, the way you keep your best notes.', unlock: { type: 'coins', n: 80 }, defaultName: '',
     face: { eyes: [[83, 80], [117, 80]], er: 5.5, mouth: { x: 100, y: 103, type: 'cat' }, blush: [[71, 94], [129, 94]], zz: [144, 50] },
     art: () => {
       const b = '#8c6549', d = '#6c4b34', l = '#dcc19d';
@@ -973,8 +1010,27 @@ const ANIMALS = {
       <path d="M76 99 L62 96 M76 103 L62 105 M124 99 L138 96 M124 103 L138 105" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
     }
   },
+  dog: {
+    label: 'Dog', lore: 'Loyal and happy to see you, every single session.', unlock: { type: 'coins', n: 100 }, defaultName: '',
+    face: { eyes: [[80, 86], [120, 86]], er: 6, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [152, 44] },
+    art: () => {
+      const b = '#dcaa70', e = '#8f6340', l = '#f7e6c9', sp = '#c48a52';
+      return `<path d="M132 160 C150 150 158 132 152 118 C148 114 142 118 144 126 C148 140 140 150 128 152 Z" fill="${b}" ${O}/>
+      <path d="M66 180 C58 146 74 118 100 118 C126 118 142 146 134 180 Z" fill="${b}" ${O}/>
+      <path d="M86 128 Q100 164 114 128 Q100 136 86 128 Z" fill="${l}"/>
+      <ellipse cx="86" cy="178" rx="11" ry="6" fill="${l}" ${O2}/><ellipse cx="114" cy="178" rx="11" ry="6" fill="${l}" ${O2}/>
+      <path d="M56 86 C56 62 76 52 100 52 C124 52 144 62 144 86 C144 112 124 128 100 128 C76 128 56 112 56 86 Z" fill="${b}" ${O}/>
+      <ellipse cx="121" cy="84" rx="14" ry="13" fill="${sp}"/>
+      <ellipse cx="100" cy="109" rx="22" ry="15" fill="${l}"/>
+      <path d="M62 64 C42 62 34 84 40 106 C44 118 58 114 62 102 C65 90 67 76 62 64 Z" fill="${e}" ${O}/>
+      <path d="M138 64 C158 62 166 84 160 106 C156 118 142 114 138 102 C135 90 133 76 138 64 Z" fill="${e}" ${O}/>
+      <ellipse cx="100" cy="101" rx="7.5" ry="5.2" fill="${INK}"/><circle cx="97.5" cy="99.5" r="1.6" fill="#fff" opacity=".8"/>
+      <path d="M74 124 Q100 138 126 124" fill="none" stroke="#d9675a" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="100" cy="135" r="5" fill="#efc15a" ${O2}/>`;
+    }
+  },
   fox: {
-    label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: 'Ember',
+    label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 5.5, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[67, 100], [133, 100]], zz: [148, 42] },
     art: () => {
       const o = '#dc844b', w = '#f7ecdb', k = INK;
@@ -993,7 +1049,7 @@ const ANIMALS = {
     }
   },
   horse: {
-    label: 'Horse', lore: 'Strong and gentle. Carries you through the long study days.', unlock: { type: 'coins', n: 160 }, defaultName: 'Maple',
+    label: 'Horse', lore: 'Strong and gentle. Carries you through the long study days.', unlock: { type: 'coins', n: 160 }, defaultName: '',
     face: { eyes: [[80, 80], [120, 80]], er: 5.5, mouth: { x: 100, y: 124, type: 'smile' }, blush: [[64, 96], [136, 96]], zz: [150, 40] },
     art: () => {
       const b = '#b77a4e', d = '#8c5a38', m = '#5a3a2a', l = '#ecd2b2', h = '#4a372c';
@@ -1012,7 +1068,7 @@ const ANIMALS = {
     }
   },
   deer: {
-    label: 'Deer', lore: 'Quiet and watchful. Notices the small wins you forget to count.', unlock: { type: 'coins', n: 200 }, defaultName: 'Fern',
+    label: 'Deer', lore: 'Quiet and watchful. Notices the small wins you forget to count.', unlock: { type: 'coins', n: 200 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 6, mouth: { x: 100, y: 118, type: 'cat' }, blush: [[66, 102], [134, 102]], zz: [152, 34] },
     art: () => {
       const b = '#c98d5a', d = '#9e6a42', l = '#f3e4cb', a = '#7c5638', k = INK;
@@ -1032,8 +1088,46 @@ const ANIMALS = {
       <circle cx="90" cy="62" r="2.4" fill="${l}"/><circle cx="110" cy="62" r="2.4" fill="${l}"/><circle cx="100" cy="58" r="2" fill="${l}"/>`;
     }
   },
+  wolf: {
+    label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
+    face: { eyes: [[80, 88], [120, 88]], er: 5.5, mouth: { x: 100, y: 115, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [154, 38] },
+    art: () => {
+      const g = '#919ca6', d = '#5f6b76', l = '#eef0f2';
+      return `<path d="M126 170 C172 174 190 130 168 102 C170 130 154 146 122 150 Z" fill="${g}" ${O}/>
+      <path d="M168 102 C180 114 184 130 180 144 C172 134 166 118 168 102 Z" fill="${l}" ${O2}/>
+      <path d="M64 180 C56 144 72 118 100 118 C128 118 144 144 136 180 Z" fill="${g}" ${O}/>
+      <path d="M80 122 L87 138 L93 128 L100 146 L107 128 L113 138 L120 122 Q100 130 80 122 Z" fill="${l}"/>
+      <ellipse cx="86" cy="179" rx="11" ry="5" fill="${d}"/><ellipse cx="114" cy="179" rx="11" ry="5" fill="${d}"/>
+      <path d="M58 82 L62 24 L94 58 Z" fill="${g}" ${O}/><path d="M142 82 L138 24 L106 58 Z" fill="${g}" ${O}/>
+      <path d="M66 68 L67 38 L85 58 Z" fill="${d}" opacity=".8"/><path d="M134 68 L133 38 L115 58 Z" fill="${d}" opacity=".8"/>
+      <path d="M50 88 C50 62 72 52 100 52 C128 52 150 62 150 88 C150 98 156 104 148 110 C150 118 140 122 136 118 C126 128 114 132 100 132 C86 132 74 128 64 118 C60 122 50 118 52 110 C44 104 50 98 50 88 Z" fill="${g}" ${O}/>
+      <path d="M66 98 C76 106 88 106 100 100 C112 106 124 106 134 98 C134 120 118 130 100 130 C82 130 66 120 66 98 Z" fill="${l}"/>
+      <path d="M100 58 C94 66 92 76 100 86 C108 76 106 66 100 58 Z" fill="${d}" opacity=".55"/>
+      <ellipse cx="100" cy="106" rx="7" ry="5" fill="${INK}"/>`;
+    }
+  },
+  dragon: {
+    label: 'Dragon', lore: 'A tiny dragon with a big heart. Breathes warm courage before exams.', unlock: { type: 'coins', n: 300 }, defaultName: '',
+    face: { eyes: [[80, 86], [120, 86]], er: 6.5, mouth: { x: 100, y: 117, type: 'wide', w: 11 }, blush: [[64, 102], [136, 102]], zz: [156, 38] },
+    art: () => {
+      const b = '#83bca7', w = '#5f9a86', y = '#f3e3b3', h = '#f1cf7d';
+      const wing = `<path d="M70 130 C52 108 34 104 24 114 C34 118 36 126 32 134 C42 132 48 136 50 144 C56 140 64 142 70 146 Z" fill="${w}" ${O}/>`;
+      return `<path d="M128 170 C158 176 176 160 176 140 C184 140 192 132 188 122 C178 126 172 132 170 140 C168 156 152 164 126 160 Z" fill="${b}" ${O}/>
+      ${wing}<g transform="translate(200 0) scale(-1 1)">${wing}</g>
+      <path d="M64 180 C56 146 72 118 100 118 C128 118 144 146 136 180 Z" fill="${b}" ${O}/>
+      <path d="M84 130 C90 124 110 124 116 130 C120 152 114 172 100 174 C86 172 80 152 84 130 Z" fill="${y}" ${O2}/>
+      <path d="M86 142 H114 M86 154 H114 M88 165 H112" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" opacity=".45"/>
+      <ellipse cx="84" cy="179" rx="12" ry="6" fill="${b}" ${O2}/><ellipse cx="116" cy="179" rx="12" ry="6" fill="${b}" ${O2}/>
+      <path d="M70 62 C62 44 64 32 72 28 C76 40 80 50 84 58 Z" fill="${h}" ${O2}/><path d="M130 62 C138 44 136 32 128 28 C124 40 120 50 116 58 Z" fill="${h}" ${O2}/>
+      <path d="M88 58 L94 42 L100 56 L106 42 L112 58 Z" fill="${w}" ${O2}/>
+      <path d="M54 88 C54 62 74 52 100 52 C126 52 146 62 146 88 C146 112 126 128 100 128 C74 128 54 112 54 88 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="111" rx="25" ry="14" fill="${y}"/>
+      <ellipse cx="92" cy="106" rx="2.6" ry="2" fill="${w}"/><ellipse cx="108" cy="106" rx="2.6" ry="2" fill="${w}"/>
+      <path d="M62 74 q4 -4 8 0 M130 74 q4 -4 8 0" fill="none" stroke="${w}" stroke-width="2.2" stroke-linecap="round"/>`;
+    }
+  },
   turtle: {
-    label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: 'Moss',
+    label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
     art: () => {
       const sh = '#7e9a5d', rim = '#64804b', pl = '#a6bb7b', sk = '#bcc78d';
@@ -1049,7 +1143,7 @@ const ANIMALS = {
     }
   },
   axolotl: {
-    label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: 'Nori',
+    label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: '',
     face: { eyes: [[78, 102], [122, 102]], er: 6.5, mouth: { x: 100, y: 121, type: 'wide', w: 15 }, blush: [[64, 116], [136, 116]], zz: [152, 56] },
     art: () => {
       const p = '#f3bcc1', d = '#e49aa3', g = '#dd7488';
@@ -1063,7 +1157,7 @@ const ANIMALS = {
     }
   },
   heron: {
-    label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: 'Sage',
+    label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: '',
     face: { eyes: [[85, 56], [100, 56]], er: 4.2, mouth: null, blush: [[79, 67], [103, 68]], blushR: 5, zz: [124, 22] },
     art: (st) => {
       const b = '#a2b3bd', l = '#e5ebed', d = '#5f717c', wg = '#7f919b', bk = '#e2b04f', lg = '#c79f4b';
@@ -1202,7 +1296,7 @@ function defaultState() {
     v: 1, updatedAt: 0, onboarded: false,
     profile: { name: '', uni: '', major: '', bio: '' },
     active: 'frog',
-    pets: { frog: { name: 'Pip', bond: 0 }, duckling: { name: 'Sunny', bond: 0 }, capybara: { name: 'Yuzu', bond: 0 } },
+    pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
     settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, autoRest: true, demo: false },
@@ -1214,7 +1308,11 @@ function defaultState() {
 }
 function mergeState(s) {
   const d = defaultState();
-  return { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) } };
+  const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) } };
+  // earlier versions gave every animal a made-up name; students now name their own
+  const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
+  Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });
+  return m;
 }
 function loadLocal() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return mergeState(s); } catch (e) {}
@@ -1234,8 +1332,9 @@ const curCourses = () => (S.semesters.find(s => s.id === S.currentSem) || S.seme
 const courseById = id => allCourses().find(c => c.id === id);
 const courseName = id => courseById(id)?.name || 'General';
 const courseColor = id => courseById(id)?.color || 'var(--muted)';
-const pet = () => { const p = S.pets[S.active]; return p || { name: ANIMALS[S.active].defaultName, bond: 0 }; };
+const pet = () => { const p = S.pets[S.active]; return p || { name: '', bond: 0 }; };
 const petName = () => pet().name || ANIMALS[S.active].label;
+const petTitle = () => pet().name ? `${pet().name} the ${ANIMALS[S.active].label.toLowerCase()}` : `your ${ANIMALS[S.active].label.toLowerCase()}`;
 const myName = () => S.profile.name || 'Student';
 
 function minutesByDay(filter) {
@@ -1692,7 +1791,7 @@ function renderHero(force) {
   el.classList.toggle('focus', !!(S.timer && S.timer.phase === 'focus' && !S.timer.pausedLeft));
   if (!force && st === heroState) return;
   heroState = st;
-  el.innerHTML = onPadSVG(S.active, st, { label: `${petName()} the ${ANIMALS[S.active].label.toLowerCase()}, ${st === 'sleeping' ? 'napping' : st}` });
+  el.innerHTML = onPadSVG(S.active, st, { label: `${petTitle()}, ${st === 'sleeping' ? 'napping' : st}` });
   $('#petName').textContent = petName();
   $('#petSpecies').textContent = `${ANIMALS[S.active].label}${st === 'sleeping' ? ' · napping' : st === 'happy' ? ' · happy' : S.timer?.phase === 'focus' ? ' · awake with you' : ''}`;
 }
@@ -2017,13 +2116,7 @@ function importICS(text) {
   return n;
 }
 /* ---------- the pond (community) ---------- */
-const EXAMPLES = [
-  { id: 'ex-lina', name: 'Lina', pet: 'Miso', animal: 'otter', uni: 'ADU', major: 'Computer Engineering', bio: 'Deep Learning quiz on Thursday. One pebble at a time.', status: 'focus', mins: 50, streak: 6, example: true },
-  { id: 'ex-noor', name: 'Noor', pet: 'Clover', animal: 'rabbit', uni: 'ADU', major: 'Architecture', bio: 'Studio night again.', status: 'rest', mins: 35, streak: 3, example: true },
-  { id: 'ex-sami', name: 'Sami', pet: 'Biscuit', animal: 'capybara', uni: 'ADU', major: 'Mechanical Engineering', bio: 'Calm capybara energy.', status: 'focus', mins: 90, streak: 11, example: true },
-  { id: 'ex-hessa', name: 'Hessa', pet: 'Sunny', animal: 'duckling', uni: 'ADU', major: 'Psychology', bio: '', status: 'idle', mins: 20, streak: 1, example: true },
-  { id: 'ex-rami', name: 'Rami', pet: 'Ember', animal: 'fox', uni: 'ADU', major: 'Data Science', bio: 'Ask me about pandas.', status: 'idle', mins: 0, streak: 0, example: true }
-];
+const EXAMPLES = [];
 const RIPPLE_MSGS = ['You have got this', 'Proud of you', 'Keep going', 'Drink some water', 'Studying with you'];
 let pondFilter = 'all', popFor = null;
 const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], [89, 82], [32, 45], [68, 45], [50, 52], [14, 42], [86, 43], [50, 36], [24, 72], [76, 74], [42, 66], [58, 66], [8, 60], [92, 62]];
@@ -2059,7 +2152,7 @@ function renderPond(force) {
       ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
   }
   $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r))}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
-    + (pondFilter === 'friends' && !others.length ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : '');
+    + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);
   if (popFor) openPop(popFor, true);
 }
 function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
@@ -2124,11 +2217,6 @@ function bindPond() {
 
 /* ---------- grind together ---------- */
 let activeCircle = null;
-function exampleCircle() {
-  const k = dayKey();
-  return { example: true, name: 'Library study circle', members: {
-    me: meAsMember(), 'ex-lina': { name: 'Lina', animal: 'otter', pet: 'Miso', day: k, mins: 50 }, 'ex-sami': { name: 'Sami', animal: 'capybara', pet: 'Biscuit', day: k, mins: 90 }, 'ex-noor': { name: 'Noor', animal: 'rabbit', pet: 'Clover', day: '', mins: 0 } } };
-}
 function lotusSVG(members) {
   const n = members.length, studied = members.filter(m => m.studied).length, full = n > 0 && studied === n;
   const P = Math.min(14, Math.max(6, n * 2));
@@ -2156,8 +2244,8 @@ function renderCircle() {
   tabs.innerHTML = codes.map(c => { const d = NET.circleDocs[c]; return `<button class="btn small ${c === activeCircle ? 'primary' : ''}" data-circle="${esc(c)}">${esc(d ? d.name : c)}</button>`; }).join('');
   let doc, code = activeCircle;
   if (code) doc = NET.circleDocs[code];
-  const isEx = !code;
-  if (isEx) doc = exampleCircle();
+  const isEx = false;
+  if (!code) { view.innerHTML = `<div class="card empty"><span class="hand">No circle yet</span><span>Start one below and share its code, or join a friend's circle with their code.</span></div>`; return; }
   if (doc === undefined) { view.innerHTML = `<div class="card empty"><span class="hand">Finding your circle...</span></div>`; return; }
   if (doc === null) { view.innerHTML = `<div class="card empty"><span>The circle ${esc(code)} was not found.</span><button class="btn small" data-leave="${esc(code)}">Remove it</button></div>`; return; }
   const k = dayKey();
@@ -2357,7 +2445,7 @@ function checkUnlocks() {
   ANIMAL_KEYS.forEach(k => {
     const a = ANIMALS[k];
     if (a.unlock.type === 'streak' && best >= a.unlock.n && !S.unlocked.includes(k)) {
-      S.unlocked.push(k); S.pets[k] = { name: a.defaultName, bond: 0 };
+      S.unlocked.push(k); S.pets[k] = { name: '', bond: 0 };
       toast(`<b>A ${a.label.toLowerCase()} arrived at the pond.</b> Your ${a.unlock.n}-day streak earned its trust.`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(k, 'happy')}</span>`);
     }
   });
@@ -2367,17 +2455,17 @@ const BOND_NAMES = ['New friend', 'Getting close', 'Study buddy', 'Close friend'
 function renderZoo() {
   const best = Math.max(bestStreak(), streakNow());
   $('#zoo').innerHTML = ANIMAL_KEYS.map(k => {
-    const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: a.defaultName, bond: 0 };
+    const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
     const st = previewState[k] || (owned ? 'awake' : 'sleeping');
     const lv = bondLevel(p.bond);
     let action;
     if (!owned && a.unlock.type === 'coins') action = `<button class="btn small primary" data-adopt="${k}" ${S.coins < a.unlock.n ? 'disabled' : ''}>${icon('i-coin')}Adopt for ${a.unlock.n}</button>${S.coins < a.unlock.n ? `<span class="muted" style="font-size:.78rem">${a.unlock.n - S.coins} more coins</span>` : ''}`;
     else if (!owned) action = `<span class="muted" style="font-size:.82rem">Arrives at a ${a.unlock.n}-day streak. Your best so far is ${best}.</span>`;
-    else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(p.name)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
+    else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(pn)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
     return `<article class="beast ${owned ? '' : 'locked'} ${active ? 'active' : ''}">
       <div class="pic" data-pet="${k}" title="${owned ? 'Tap to pet' : ''}">${animalSVG(k, st, { label: `${a.label}, ${st}` })}</div>
       ${owned ? '' : `<span class="lock">${icon('i-lock')}${unlockText(a)}</span>`}
-      <h3><span>${owned ? `<span data-namewrap="${k}">${esc(p.name)}</span>` : a.label}</span><span class="sp">${owned ? a.label : ''}</span></h3>
+      <h3><span>${owned ? `<span data-namewrap="${k}">${esc(pn)}</span>` : a.label}</span><span class="sp">${owned && p.name ? a.label : ''}</span></h3>
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
@@ -2390,12 +2478,12 @@ function bindZoo() {
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
-    const ad = e.target.closest('[data-adopt]'); if (ad) { const k = ad.dataset.adopt, a = ANIMALS[k]; if (S.coins < a.unlock.n) return; S.coins -= a.unlock.n; S.unlocked.push(k); S.pets[k] = { name: a.defaultName, bond: 0 }; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`Welcome, ${a.defaultName} the ${a.label.toLowerCase()}.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(k, 'happy')}</span>`); return; }
+    const ad = e.target.closest('[data-adopt]'); if (ad) { const k = ad.dataset.adopt, a = ANIMALS[k]; if (S.coins < a.unlock.n) return; S.coins -= a.unlock.n; S.unlocked.push(k); S.pets[k] = { name: '', bond: 0 }; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`Welcome, little ${a.label.toLowerCase()}.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(k, 'happy')}</span>`); return; }
     const pp = e.target.closest('[data-pet]'); if (pp && S.unlocked.includes(pp.dataset.pet)) { const k = pp.dataset.pet; previewState[k] = 'happy'; renderZoo(); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2200); return; }
     const rn = e.target.closest('[data-rename]');
     if (rn) {
       const k = rn.dataset.rename, w = $(`[data-namewrap="${k}"]`);
-      w.innerHTML = `<form data-nameform="${k}" style="display:inline-flex; gap:6px"><input class="inp" name="n" maxlength="30" value="${esc(S.pets[k].name)}" style="width:130px; padding:4px 8px" aria-label="New name"><button class="btn small" type="submit">Save</button></form>`;
+      w.innerHTML = `<form data-nameform="${k}" style="display:inline-flex; gap:6px"><input class="inp" name="n" maxlength="30" value="${esc(S.pets[k].name)}" placeholder="Name your ${ANIMALS[k].label.toLowerCase()}" style="width:130px; padding:4px 8px" aria-label="New name"><button class="btn small" type="submit">Save</button></form>`;
       w.querySelector('input').focus();
     }
   });
@@ -2478,9 +2566,9 @@ function renderProfile() {
   $('#profAv').innerHTML = avatarSVG(S.active, 'happy');
   $('#profName').textContent = myName();
   $('#profLine').textContent = [S.profile.uni, S.profile.major].filter(Boolean).join(' · ') || 'Add your university and major below.';
-  $('#profPet').textContent = `Studying with ${petName()} the ${ANIMALS[S.active].label.toLowerCase()} · ${streakNow()}-day streak`;
+  $('#profPet').textContent = `Studying with ${petTitle()} · ${streakNow()}-day streak`;
   ['Name', 'Uni', 'Major', 'Bio'].forEach(k => { const el = $('#pf' + k); if (document.activeElement !== el) el.value = S.profile[k.toLowerCase()] || ''; });
-  if (document.activeElement !== $('#pfPet')) $('#pfPet').value = petName();
+  if (document.activeElement !== $('#pfPet')) $('#pfPet').value = pet().name || '';
   $('#semList').innerHTML = S.semesters.map(s => `<div class="sem" data-sem="${esc(s.id)}">
     <div class="sem-h"><input class="inp" data-semname value="${esc(s.name)}" maxlength="40" style="max-width:220px; font-family:var(--f-display)" aria-label="Semester name">
       <div class="row">${s.id === S.currentSem ? '<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Current</span>' : '<button class="btn small" data-semcur>Make current</button>'}${S.semesters.length > 1 ? '<span data-semdelwrap><button class="btn small quiet" data-semdel>Remove</button></span>' : ''}</div></div>
@@ -2575,15 +2663,15 @@ function showWelcome() {
   starterPick = S.active || 'frog';
   const draw = () => { $('#starter').innerHTML = ['frog', 'duckling', 'capybara'].map(k => `<button type="button" data-st="${k}" aria-pressed="${starterPick === k}">${animalSVG(k, starterPick === k ? 'happy' : 'awake')}${ANIMALS[k].label}</button>`).join(''); };
   draw();
-  $('#starter').onclick = e => { const b = e.target.closest('[data-st]'); if (!b) return; const prevDefault = ANIMALS[starterPick].defaultName; starterPick = b.dataset.st; if (!$('#wPet').value || $('#wPet').value === prevDefault) $('#wPet').value = ANIMALS[starterPick].defaultName; draw(); };
-  $('#wName').value = S.profile.name; $('#wPet').value = petName(); $('#wUni').value = S.profile.uni; $('#wMajor').value = S.profile.major;
+  $('#starter').onclick = e => { const b = e.target.closest('[data-st]'); if (!b) return; starterPick = b.dataset.st; $('#wPet').placeholder = `Name your ${ANIMALS[starterPick].label.toLowerCase()}`; draw(); };
+  $('#wName').value = S.profile.name; $('#wPet').value = pet().name || ''; $('#wPet').placeholder = `Name your ${ANIMALS[starterPick].label.toLowerCase()}`; $('#wUni').value = S.profile.uni; $('#wMajor').value = S.profile.major;
   $('#welcome').classList.add('on');
 }
 function bindWelcome() {
   $('#welcomeForm').onsubmit = e => {
     e.preventDefault();
     S.profile.name = clampStr($('#wName').value.trim(), 40); S.profile.uni = clampStr($('#wUni').value.trim(), 60); S.profile.major = clampStr($('#wMajor').value.trim(), 60);
-    S.active = starterPick; S.pets[starterPick].name = clampStr($('#wPet').value.trim(), 30) || ANIMALS[starterPick].defaultName;
+    S.active = starterPick; S.pets[starterPick].name = clampStr($('#wPet').value.trim(), 30);
     S.onboarded = true; save(); $('#welcome').classList.remove('on'); renderAll(); publishPond(); makeHappy(); say(`Hi ${myName()}. I am ${petName()}.`);
   };
   $('#wSkip').onclick = () => { S.onboarded = true; save(); $('#welcome').classList.remove('on'); };
@@ -2631,11 +2719,11 @@ function renderNotices() {
   if (NET.ready && !NET.db) {
     if (NET.web) {
       const btn = NET.fbReady ? ' <button class="btn small primary" data-signin>Sign in with Google</button>' : '';
-      pondN = noticeHTML('You are seeing example neighbours. Sign in to put your animal in the real pond with everyone else. Your own studying is saved on this device either way.' + btn);
-      togN = noticeHTML('Sign in to start or join a circle. Here is an example circle to show how the lotus blooms.' + btn);
+      pondN = noticeHTML('Sign in to see everyone in the pond and put your animal there too. Your own studying is saved on this device either way.' + btn);
+      togN = noticeHTML('Sign in to start a circle or join one with a code.' + btn);
     } else {
-    pondN = noticeHTML('You are seeing example neighbours. The live shared pond appears when you open Grind from an invite while signed in to Claude. Your own studying is always saved on this device.');
-    togN = noticeHTML('Circles need the live shared pond, so here is an example circle to show how the lotus blooms.');
+    pondN = noticeHTML('The shared pond appears when you open Grind from an invite while signed in to Claude. Your own studying is always saved on this device.');
+    togN = noticeHTML('Circles need the shared pond, which appears when you open Grind from an invite.');
     }
   } else if (NET.db && !NET.canWrite) {
     pondN = noticeHTML('You can watch the pond, but joining it needs an invite with edit access from the pond’s owner.');

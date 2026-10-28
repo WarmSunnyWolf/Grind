@@ -5,7 +5,7 @@ const O2 = `stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-li
 
 const ANIMALS = {
   frog: {
-    label: 'Frog', lore: 'Hums quietly on a lily pad. Starts any task with one small hop.', unlock: { type: 'free' }, defaultName: 'Pip',
+    label: 'Frog', lore: 'Hums quietly on a lily pad. Starts any task with one small hop.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[68, 85], [132, 85]], er: 7, whites: [[68, 84, 14], [132, 84, 14]], lid: '#8fb069', mouth: { x: 100, y: 124, type: 'wide', w: 22 }, blush: [[56, 116], [144, 116]], zz: [150, 52] },
     art: () => {
       const b = '#8fb069', d = '#6d8c4c', l = '#d9e3a8';
@@ -19,7 +19,7 @@ const ANIMALS = {
     }
   },
   duckling: {
-    label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: 'Sunny',
+    label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[76, 86], [106, 86]], er: 5.5, mouth: null, blush: [[64, 100], [118, 100]], zz: [128, 50] },
     art: (st) => {
       const y = '#f4d06f', s = '#e3b552', bk = '#e8894a';
@@ -36,7 +36,7 @@ const ANIMALS = {
     }
   },
   capybara: {
-    label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: 'Yuzu',
+    label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[62, 82], [108, 82]], er: 4.8, mouth: { x: 85, y: 121, type: 'cat' }, blush: [[52, 100], [120, 100]], zz: [140, 58] },
     art: () => {
       const b = '#b98b63', d = '#94694a', l = '#d2ab85';
@@ -52,7 +52,7 @@ const ANIMALS = {
     }
   },
   rabbit: {
-    label: 'Rabbit', lore: 'Quick bursts of focus, then a good long rest in the clover.', unlock: { type: 'coins', n: 40 }, defaultName: 'Clover',
+    label: 'Rabbit', lore: 'Quick bursts of focus, then a good long rest in the clover.', unlock: { type: 'coins', n: 40 }, defaultName: '',
     face: { eyes: [[84, 96], [116, 96]], er: 5.5, mouth: { x: 100, y: 113, type: 'cat' }, blush: [[72, 108], [128, 108]], zz: [142, 62] },
     art: () => {
       const b = '#efe6d8', p = '#eab4ad';
@@ -65,8 +65,45 @@ const ANIMALS = {
       <path d="M95 105 H105 L100 110 Z" fill="${p}" ${O2}/>`;
     }
   },
+  butterfly: {
+    label: 'Butterfly', lore: 'Light and bright. Reminds you that small changes add up.', unlock: { type: 'coins', n: 50 }, defaultName: '',
+    face: { eyes: [[92, 82], [108, 82]], er: 3.8, mouth: { x: 100, y: 91, type: 'smile' }, blush: [[86, 89], [114, 89]], blushR: 4, zz: [132, 40] },
+    art: () => {
+      const up = '#c9b3ea', lo = '#f3b9c8', sp = '#fbe7a6', c = '#f4e4c8', ln = '#a78fcf';
+      const wing = `<path d="M96 104 C72 62 32 50 22 74 C14 100 48 122 94 118 Z" fill="${up}" ${O}/>
+      <path d="M96 118 C64 122 38 142 48 164 C58 182 88 170 98 134 Z" fill="${lo}" ${O}/>
+      <path d="M90 108 C70 82 46 72 34 80 M90 124 C72 134 58 150 60 162" fill="none" stroke="${ln}" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="46" cy="82" r="7" fill="${sp}" ${O2}/><circle cx="64" cy="98" r="4.5" fill="${sp}" ${O2}/><circle cx="66" cy="154" r="6" fill="${sp}" ${O2}/>`;
+      return `${wing}<g transform="translate(200 0) scale(-1 1)">${wing}</g>
+      <path d="M92 104 C92 96 108 96 108 104 L106 164 C106 174 94 174 94 164 Z" fill="${c}" ${O}/>
+      <path d="M94 122 H106 M94 136 H106 M95 150 H105" stroke="${ln}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M93 66 C89 52 81 44 74 42 M107 66 C111 52 119 44 126 42" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="73" cy="41" r="4.5" fill="${lo}" ${O2}/><circle cx="127" cy="41" r="4.5" fill="${lo}" ${O2}/>
+      <circle cx="100" cy="82" r="20" fill="${c}" ${O}/>`;
+    }
+  },
+  kitty: {
+    label: 'Kitty', lore: 'Curls up beside your notes and purrs you through every chapter.', unlock: { type: 'coins', n: 60 }, defaultName: '',
+    face: { eyes: [[80, 88], [120, 88]], er: 6, mouth: { x: 100, y: 111, type: 'cat' }, blush: [[68, 104], [132, 104]], zz: [150, 44] },
+    art: () => {
+      const b = '#f1c58c', d = '#d99a58', w = '#fbf1e2', p = '#eab4ad';
+      return `<path d="M128 174 C162 178 174 150 162 126 C158 120 150 124 152 131 C160 150 150 164 126 162 Z" fill="${b}" ${O}/>
+      <path d="M156 136 L166 132 M158 150 L168 150" stroke="${d}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M66 180 C58 146 74 118 100 118 C126 118 142 146 134 180 Z" fill="${b}" ${O}/>
+      <path d="M86 126 Q100 162 114 126 Q100 134 86 126 Z" fill="${w}"/>
+      <path d="M70 146 L80 148 M70 158 L80 158 M130 146 L120 148 M130 158 L120 158" stroke="${d}" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="86" cy="178" rx="11" ry="6" fill="${w}" ${O2}/><ellipse cx="114" cy="178" rx="11" ry="6" fill="${w}" ${O2}/>
+      <path d="M60 78 L62 36 L94 58 Z" fill="${b}" ${O}/><path d="M140 78 L138 36 L106 58 Z" fill="${b}" ${O}/>
+      <path d="M66 68 L67 46 L85 58 Z" fill="${p}"/><path d="M134 68 L133 46 L115 58 Z" fill="${p}"/>
+      <path d="M54 88 C54 64 74 54 100 54 C126 54 146 64 146 88 C146 112 126 128 100 128 C74 128 54 112 54 88 Z" fill="${b}" ${O}/>
+      <path d="M92 58 L94 70 M100 56 V72 M108 58 L106 70" stroke="${d}" stroke-width="3.2" stroke-linecap="round"/>
+      <ellipse cx="100" cy="109" rx="18" ry="12" fill="${w}"/>
+      <path d="M95 101 H105 L100 107 Z" fill="${p}" ${O2}/>
+      <path d="M74 106 L52 102 M74 112 L54 114 M126 106 L148 102 M126 112 L146 114" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>`;
+    }
+  },
   otter: {
-    label: 'Otter', lore: 'Holds its favourite pebble in its paws, the way you keep your best notes.', unlock: { type: 'coins', n: 80 }, defaultName: 'Miso',
+    label: 'Otter', lore: 'Holds its favourite pebble in its paws, the way you keep your best notes.', unlock: { type: 'coins', n: 80 }, defaultName: '',
     face: { eyes: [[83, 80], [117, 80]], er: 5.5, mouth: { x: 100, y: 103, type: 'cat' }, blush: [[71, 94], [129, 94]], zz: [144, 50] },
     art: () => {
       const b = '#8c6549', d = '#6c4b34', l = '#dcc19d';
@@ -83,8 +120,27 @@ const ANIMALS = {
       <path d="M76 99 L62 96 M76 103 L62 105 M124 99 L138 96 M124 103 L138 105" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
     }
   },
+  dog: {
+    label: 'Dog', lore: 'Loyal and happy to see you, every single session.', unlock: { type: 'coins', n: 100 }, defaultName: '',
+    face: { eyes: [[80, 86], [120, 86]], er: 6, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [152, 44] },
+    art: () => {
+      const b = '#dcaa70', e = '#8f6340', l = '#f7e6c9', sp = '#c48a52';
+      return `<path d="M132 160 C150 150 158 132 152 118 C148 114 142 118 144 126 C148 140 140 150 128 152 Z" fill="${b}" ${O}/>
+      <path d="M66 180 C58 146 74 118 100 118 C126 118 142 146 134 180 Z" fill="${b}" ${O}/>
+      <path d="M86 128 Q100 164 114 128 Q100 136 86 128 Z" fill="${l}"/>
+      <ellipse cx="86" cy="178" rx="11" ry="6" fill="${l}" ${O2}/><ellipse cx="114" cy="178" rx="11" ry="6" fill="${l}" ${O2}/>
+      <path d="M56 86 C56 62 76 52 100 52 C124 52 144 62 144 86 C144 112 124 128 100 128 C76 128 56 112 56 86 Z" fill="${b}" ${O}/>
+      <ellipse cx="121" cy="84" rx="14" ry="13" fill="${sp}"/>
+      <ellipse cx="100" cy="109" rx="22" ry="15" fill="${l}"/>
+      <path d="M62 64 C42 62 34 84 40 106 C44 118 58 114 62 102 C65 90 67 76 62 64 Z" fill="${e}" ${O}/>
+      <path d="M138 64 C158 62 166 84 160 106 C156 118 142 114 138 102 C135 90 133 76 138 64 Z" fill="${e}" ${O}/>
+      <ellipse cx="100" cy="101" rx="7.5" ry="5.2" fill="${INK}"/><circle cx="97.5" cy="99.5" r="1.6" fill="#fff" opacity=".8"/>
+      <path d="M74 124 Q100 138 126 124" fill="none" stroke="#d9675a" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="100" cy="135" r="5" fill="#efc15a" ${O2}/>`;
+    }
+  },
   fox: {
-    label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: 'Ember',
+    label: 'Fox', lore: 'Clever and curious. Loves a fresh question more than an answer.', unlock: { type: 'coins', n: 120 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 5.5, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[67, 100], [133, 100]], zz: [148, 42] },
     art: () => {
       const o = '#dc844b', w = '#f7ecdb', k = INK;
@@ -103,7 +159,7 @@ const ANIMALS = {
     }
   },
   horse: {
-    label: 'Horse', lore: 'Strong and gentle. Carries you through the long study days.', unlock: { type: 'coins', n: 160 }, defaultName: 'Maple',
+    label: 'Horse', lore: 'Strong and gentle. Carries you through the long study days.', unlock: { type: 'coins', n: 160 }, defaultName: '',
     face: { eyes: [[80, 80], [120, 80]], er: 5.5, mouth: { x: 100, y: 124, type: 'smile' }, blush: [[64, 96], [136, 96]], zz: [150, 40] },
     art: () => {
       const b = '#b77a4e', d = '#8c5a38', m = '#5a3a2a', l = '#ecd2b2', h = '#4a372c';
@@ -122,7 +178,7 @@ const ANIMALS = {
     }
   },
   deer: {
-    label: 'Deer', lore: 'Quiet and watchful. Notices the small wins you forget to count.', unlock: { type: 'coins', n: 200 }, defaultName: 'Fern',
+    label: 'Deer', lore: 'Quiet and watchful. Notices the small wins you forget to count.', unlock: { type: 'coins', n: 200 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 6, mouth: { x: 100, y: 118, type: 'cat' }, blush: [[66, 102], [134, 102]], zz: [152, 34] },
     art: () => {
       const b = '#c98d5a', d = '#9e6a42', l = '#f3e4cb', a = '#7c5638', k = INK;
@@ -142,8 +198,46 @@ const ANIMALS = {
       <circle cx="90" cy="62" r="2.4" fill="${l}"/><circle cx="110" cy="62" r="2.4" fill="${l}"/><circle cx="100" cy="58" r="2" fill="${l}"/>`;
     }
   },
+  wolf: {
+    label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
+    face: { eyes: [[80, 88], [120, 88]], er: 5.5, mouth: { x: 100, y: 115, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [154, 38] },
+    art: () => {
+      const g = '#919ca6', d = '#5f6b76', l = '#eef0f2';
+      return `<path d="M126 170 C172 174 190 130 168 102 C170 130 154 146 122 150 Z" fill="${g}" ${O}/>
+      <path d="M168 102 C180 114 184 130 180 144 C172 134 166 118 168 102 Z" fill="${l}" ${O2}/>
+      <path d="M64 180 C56 144 72 118 100 118 C128 118 144 144 136 180 Z" fill="${g}" ${O}/>
+      <path d="M80 122 L87 138 L93 128 L100 146 L107 128 L113 138 L120 122 Q100 130 80 122 Z" fill="${l}"/>
+      <ellipse cx="86" cy="179" rx="11" ry="5" fill="${d}"/><ellipse cx="114" cy="179" rx="11" ry="5" fill="${d}"/>
+      <path d="M58 82 L62 24 L94 58 Z" fill="${g}" ${O}/><path d="M142 82 L138 24 L106 58 Z" fill="${g}" ${O}/>
+      <path d="M66 68 L67 38 L85 58 Z" fill="${d}" opacity=".8"/><path d="M134 68 L133 38 L115 58 Z" fill="${d}" opacity=".8"/>
+      <path d="M50 88 C50 62 72 52 100 52 C128 52 150 62 150 88 C150 98 156 104 148 110 C150 118 140 122 136 118 C126 128 114 132 100 132 C86 132 74 128 64 118 C60 122 50 118 52 110 C44 104 50 98 50 88 Z" fill="${g}" ${O}/>
+      <path d="M66 98 C76 106 88 106 100 100 C112 106 124 106 134 98 C134 120 118 130 100 130 C82 130 66 120 66 98 Z" fill="${l}"/>
+      <path d="M100 58 C94 66 92 76 100 86 C108 76 106 66 100 58 Z" fill="${d}" opacity=".55"/>
+      <ellipse cx="100" cy="106" rx="7" ry="5" fill="${INK}"/>`;
+    }
+  },
+  dragon: {
+    label: 'Dragon', lore: 'A tiny dragon with a big heart. Breathes warm courage before exams.', unlock: { type: 'coins', n: 300 }, defaultName: '',
+    face: { eyes: [[80, 86], [120, 86]], er: 6.5, mouth: { x: 100, y: 117, type: 'wide', w: 11 }, blush: [[64, 102], [136, 102]], zz: [156, 38] },
+    art: () => {
+      const b = '#83bca7', w = '#5f9a86', y = '#f3e3b3', h = '#f1cf7d';
+      const wing = `<path d="M70 130 C52 108 34 104 24 114 C34 118 36 126 32 134 C42 132 48 136 50 144 C56 140 64 142 70 146 Z" fill="${w}" ${O}/>`;
+      return `<path d="M128 170 C158 176 176 160 176 140 C184 140 192 132 188 122 C178 126 172 132 170 140 C168 156 152 164 126 160 Z" fill="${b}" ${O}/>
+      ${wing}<g transform="translate(200 0) scale(-1 1)">${wing}</g>
+      <path d="M64 180 C56 146 72 118 100 118 C128 118 144 146 136 180 Z" fill="${b}" ${O}/>
+      <path d="M84 130 C90 124 110 124 116 130 C120 152 114 172 100 174 C86 172 80 152 84 130 Z" fill="${y}" ${O2}/>
+      <path d="M86 142 H114 M86 154 H114 M88 165 H112" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" opacity=".45"/>
+      <ellipse cx="84" cy="179" rx="12" ry="6" fill="${b}" ${O2}/><ellipse cx="116" cy="179" rx="12" ry="6" fill="${b}" ${O2}/>
+      <path d="M70 62 C62 44 64 32 72 28 C76 40 80 50 84 58 Z" fill="${h}" ${O2}/><path d="M130 62 C138 44 136 32 128 28 C124 40 120 50 116 58 Z" fill="${h}" ${O2}/>
+      <path d="M88 58 L94 42 L100 56 L106 42 L112 58 Z" fill="${w}" ${O2}/>
+      <path d="M54 88 C54 62 74 52 100 52 C126 52 146 62 146 88 C146 112 126 128 100 128 C74 128 54 112 54 88 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="111" rx="25" ry="14" fill="${y}"/>
+      <ellipse cx="92" cy="106" rx="2.6" ry="2" fill="${w}"/><ellipse cx="108" cy="106" rx="2.6" ry="2" fill="${w}"/>
+      <path d="M62 74 q4 -4 8 0 M130 74 q4 -4 8 0" fill="none" stroke="${w}" stroke-width="2.2" stroke-linecap="round"/>`;
+    }
+  },
   turtle: {
-    label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: 'Moss',
+    label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
     art: () => {
       const sh = '#7e9a5d', rim = '#64804b', pl = '#a6bb7b', sk = '#bcc78d';
@@ -159,7 +253,7 @@ const ANIMALS = {
     }
   },
   axolotl: {
-    label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: 'Nori',
+    label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: '',
     face: { eyes: [[78, 102], [122, 102]], er: 6.5, mouth: { x: 100, y: 121, type: 'wide', w: 15 }, blush: [[64, 116], [136, 116]], zz: [152, 56] },
     art: () => {
       const p = '#f3bcc1', d = '#e49aa3', g = '#dd7488';
@@ -173,7 +267,7 @@ const ANIMALS = {
     }
   },
   heron: {
-    label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: 'Sage',
+    label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: '',
     face: { eyes: [[85, 56], [100, 56]], er: 4.2, mouth: null, blush: [[79, 67], [103, 68]], blushR: 5, zz: [124, 22] },
     art: (st) => {
       const b = '#a2b3bd', l = '#e5ebed', d = '#5f717c', wg = '#7f919b', bk = '#e2b04f', lg = '#c79f4b';

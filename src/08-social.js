@@ -1,11 +1,5 @@
 /* ---------- the pond (community) ---------- */
-const EXAMPLES = [
-  { id: 'ex-lina', name: 'Lina', pet: 'Miso', animal: 'otter', uni: 'ADU', major: 'Computer Engineering', bio: 'Deep Learning quiz on Thursday. One pebble at a time.', status: 'focus', mins: 50, streak: 6, example: true },
-  { id: 'ex-noor', name: 'Noor', pet: 'Clover', animal: 'rabbit', uni: 'ADU', major: 'Architecture', bio: 'Studio night again.', status: 'rest', mins: 35, streak: 3, example: true },
-  { id: 'ex-sami', name: 'Sami', pet: 'Biscuit', animal: 'capybara', uni: 'ADU', major: 'Mechanical Engineering', bio: 'Calm capybara energy.', status: 'focus', mins: 90, streak: 11, example: true },
-  { id: 'ex-hessa', name: 'Hessa', pet: 'Sunny', animal: 'duckling', uni: 'ADU', major: 'Psychology', bio: '', status: 'idle', mins: 20, streak: 1, example: true },
-  { id: 'ex-rami', name: 'Rami', pet: 'Ember', animal: 'fox', uni: 'ADU', major: 'Data Science', bio: 'Ask me about pandas.', status: 'idle', mins: 0, streak: 0, example: true }
-];
+const EXAMPLES = [];
 const RIPPLE_MSGS = ['You have got this', 'Proud of you', 'Keep going', 'Drink some water', 'Studying with you'];
 let pondFilter = 'all', popFor = null;
 const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], [89, 82], [32, 45], [68, 45], [50, 52], [14, 42], [86, 43], [50, 36], [24, 72], [76, 74], [42, 66], [58, 66], [8, 60], [92, 62]];
@@ -41,7 +35,7 @@ function renderPond(force) {
       ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
   }
   $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r))}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
-    + (pondFilter === 'friends' && !others.length ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : '');
+    + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);
   if (popFor) openPop(popFor, true);
 }
 function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
@@ -106,11 +100,6 @@ function bindPond() {
 
 /* ---------- grind together ---------- */
 let activeCircle = null;
-function exampleCircle() {
-  const k = dayKey();
-  return { example: true, name: 'Library study circle', members: {
-    me: meAsMember(), 'ex-lina': { name: 'Lina', animal: 'otter', pet: 'Miso', day: k, mins: 50 }, 'ex-sami': { name: 'Sami', animal: 'capybara', pet: 'Biscuit', day: k, mins: 90 }, 'ex-noor': { name: 'Noor', animal: 'rabbit', pet: 'Clover', day: '', mins: 0 } } };
-}
 function lotusSVG(members) {
   const n = members.length, studied = members.filter(m => m.studied).length, full = n > 0 && studied === n;
   const P = Math.min(14, Math.max(6, n * 2));
@@ -138,8 +127,8 @@ function renderCircle() {
   tabs.innerHTML = codes.map(c => { const d = NET.circleDocs[c]; return `<button class="btn small ${c === activeCircle ? 'primary' : ''}" data-circle="${esc(c)}">${esc(d ? d.name : c)}</button>`; }).join('');
   let doc, code = activeCircle;
   if (code) doc = NET.circleDocs[code];
-  const isEx = !code;
-  if (isEx) doc = exampleCircle();
+  const isEx = false;
+  if (!code) { view.innerHTML = `<div class="card empty"><span class="hand">No circle yet</span><span>Start one below and share its code, or join a friend's circle with their code.</span></div>`; return; }
   if (doc === undefined) { view.innerHTML = `<div class="card empty"><span class="hand">Finding your circle...</span></div>`; return; }
   if (doc === null) { view.innerHTML = `<div class="card empty"><span>The circle ${esc(code)} was not found.</span><button class="btn small" data-leave="${esc(code)}">Remove it</button></div>`; return; }
   const k = dayKey();

@@ -7,7 +7,7 @@ function checkUnlocks() {
   ANIMAL_KEYS.forEach(k => {
     const a = ANIMALS[k];
     if (a.unlock.type === 'streak' && best >= a.unlock.n && !S.unlocked.includes(k)) {
-      S.unlocked.push(k); S.pets[k] = { name: a.defaultName, bond: 0 };
+      S.unlocked.push(k); S.pets[k] = { name: '', bond: 0 };
       toast(`<b>A ${a.label.toLowerCase()} arrived at the pond.</b> Your ${a.unlock.n}-day streak earned its trust.`, `<span style="width:34px;height:34px;flex:none">${avatarSVG(k, 'happy')}</span>`);
     }
   });
@@ -17,17 +17,17 @@ const BOND_NAMES = ['New friend', 'Getting close', 'Study buddy', 'Close friend'
 function renderZoo() {
   const best = Math.max(bestStreak(), streakNow());
   $('#zoo').innerHTML = ANIMAL_KEYS.map(k => {
-    const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: a.defaultName, bond: 0 };
+    const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
     const st = previewState[k] || (owned ? 'awake' : 'sleeping');
     const lv = bondLevel(p.bond);
     let action;
     if (!owned && a.unlock.type === 'coins') action = `<button class="btn small primary" data-adopt="${k}" ${S.coins < a.unlock.n ? 'disabled' : ''}>${icon('i-coin')}Adopt for ${a.unlock.n}</button>${S.coins < a.unlock.n ? `<span class="muted" style="font-size:.78rem">${a.unlock.n - S.coins} more coins</span>` : ''}`;
     else if (!owned) action = `<span class="muted" style="font-size:.82rem">Arrives at a ${a.unlock.n}-day streak. Your best so far is ${best}.</span>`;
-    else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(p.name)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
+    else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(pn)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
     return `<article class="beast ${owned ? '' : 'locked'} ${active ? 'active' : ''}">
       <div class="pic" data-pet="${k}" title="${owned ? 'Tap to pet' : ''}">${animalSVG(k, st, { label: `${a.label}, ${st}` })}</div>
       ${owned ? '' : `<span class="lock">${icon('i-lock')}${unlockText(a)}</span>`}
-      <h3><span>${owned ? `<span data-namewrap="${k}">${esc(p.name)}</span>` : a.label}</span><span class="sp">${owned ? a.label : ''}</span></h3>
+      <h3><span>${owned ? `<span data-namewrap="${k}">${esc(pn)}</span>` : a.label}</span><span class="sp">${owned && p.name ? a.label : ''}</span></h3>
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
@@ -40,12 +40,12 @@ function bindZoo() {
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
-    const ad = e.target.closest('[data-adopt]'); if (ad) { const k = ad.dataset.adopt, a = ANIMALS[k]; if (S.coins < a.unlock.n) return; S.coins -= a.unlock.n; S.unlocked.push(k); S.pets[k] = { name: a.defaultName, bond: 0 }; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`Welcome, ${a.defaultName} the ${a.label.toLowerCase()}.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(k, 'happy')}</span>`); return; }
+    const ad = e.target.closest('[data-adopt]'); if (ad) { const k = ad.dataset.adopt, a = ANIMALS[k]; if (S.coins < a.unlock.n) return; S.coins -= a.unlock.n; S.unlocked.push(k); S.pets[k] = { name: '', bond: 0 }; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`Welcome, little ${a.label.toLowerCase()}.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(k, 'happy')}</span>`); return; }
     const pp = e.target.closest('[data-pet]'); if (pp && S.unlocked.includes(pp.dataset.pet)) { const k = pp.dataset.pet; previewState[k] = 'happy'; renderZoo(); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2200); return; }
     const rn = e.target.closest('[data-rename]');
     if (rn) {
       const k = rn.dataset.rename, w = $(`[data-namewrap="${k}"]`);
-      w.innerHTML = `<form data-nameform="${k}" style="display:inline-flex; gap:6px"><input class="inp" name="n" maxlength="30" value="${esc(S.pets[k].name)}" style="width:130px; padding:4px 8px" aria-label="New name"><button class="btn small" type="submit">Save</button></form>`;
+      w.innerHTML = `<form data-nameform="${k}" style="display:inline-flex; gap:6px"><input class="inp" name="n" maxlength="30" value="${esc(S.pets[k].name)}" placeholder="Name your ${ANIMALS[k].label.toLowerCase()}" style="width:130px; padding:4px 8px" aria-label="New name"><button class="btn small" type="submit">Save</button></form>`;
       w.querySelector('input').focus();
     }
   });
@@ -128,9 +128,9 @@ function renderProfile() {
   $('#profAv').innerHTML = avatarSVG(S.active, 'happy');
   $('#profName').textContent = myName();
   $('#profLine').textContent = [S.profile.uni, S.profile.major].filter(Boolean).join(' · ') || 'Add your university and major below.';
-  $('#profPet').textContent = `Studying with ${petName()} the ${ANIMALS[S.active].label.toLowerCase()} · ${streakNow()}-day streak`;
+  $('#profPet').textContent = `Studying with ${petTitle()} · ${streakNow()}-day streak`;
   ['Name', 'Uni', 'Major', 'Bio'].forEach(k => { const el = $('#pf' + k); if (document.activeElement !== el) el.value = S.profile[k.toLowerCase()] || ''; });
-  if (document.activeElement !== $('#pfPet')) $('#pfPet').value = petName();
+  if (document.activeElement !== $('#pfPet')) $('#pfPet').value = pet().name || '';
   $('#semList').innerHTML = S.semesters.map(s => `<div class="sem" data-sem="${esc(s.id)}">
     <div class="sem-h"><input class="inp" data-semname value="${esc(s.name)}" maxlength="40" style="max-width:220px; font-family:var(--f-display)" aria-label="Semester name">
       <div class="row">${s.id === S.currentSem ? '<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Current</span>' : '<button class="btn small" data-semcur>Make current</button>'}${S.semesters.length > 1 ? '<span data-semdelwrap><button class="btn small quiet" data-semdel>Remove</button></span>' : ''}</div></div>
@@ -225,15 +225,15 @@ function showWelcome() {
   starterPick = S.active || 'frog';
   const draw = () => { $('#starter').innerHTML = ['frog', 'duckling', 'capybara'].map(k => `<button type="button" data-st="${k}" aria-pressed="${starterPick === k}">${animalSVG(k, starterPick === k ? 'happy' : 'awake')}${ANIMALS[k].label}</button>`).join(''); };
   draw();
-  $('#starter').onclick = e => { const b = e.target.closest('[data-st]'); if (!b) return; const prevDefault = ANIMALS[starterPick].defaultName; starterPick = b.dataset.st; if (!$('#wPet').value || $('#wPet').value === prevDefault) $('#wPet').value = ANIMALS[starterPick].defaultName; draw(); };
-  $('#wName').value = S.profile.name; $('#wPet').value = petName(); $('#wUni').value = S.profile.uni; $('#wMajor').value = S.profile.major;
+  $('#starter').onclick = e => { const b = e.target.closest('[data-st]'); if (!b) return; starterPick = b.dataset.st; $('#wPet').placeholder = `Name your ${ANIMALS[starterPick].label.toLowerCase()}`; draw(); };
+  $('#wName').value = S.profile.name; $('#wPet').value = pet().name || ''; $('#wPet').placeholder = `Name your ${ANIMALS[starterPick].label.toLowerCase()}`; $('#wUni').value = S.profile.uni; $('#wMajor').value = S.profile.major;
   $('#welcome').classList.add('on');
 }
 function bindWelcome() {
   $('#welcomeForm').onsubmit = e => {
     e.preventDefault();
     S.profile.name = clampStr($('#wName').value.trim(), 40); S.profile.uni = clampStr($('#wUni').value.trim(), 60); S.profile.major = clampStr($('#wMajor').value.trim(), 60);
-    S.active = starterPick; S.pets[starterPick].name = clampStr($('#wPet').value.trim(), 30) || ANIMALS[starterPick].defaultName;
+    S.active = starterPick; S.pets[starterPick].name = clampStr($('#wPet').value.trim(), 30);
     S.onboarded = true; save(); $('#welcome').classList.remove('on'); renderAll(); publishPond(); makeHappy(); say(`Hi ${myName()}. I am ${petName()}.`);
   };
   $('#wSkip').onclick = () => { S.onboarded = true; save(); $('#welcome').classList.remove('on'); };
@@ -281,11 +281,11 @@ function renderNotices() {
   if (NET.ready && !NET.db) {
     if (NET.web) {
       const btn = NET.fbReady ? ' <button class="btn small primary" data-signin>Sign in with Google</button>' : '';
-      pondN = noticeHTML('You are seeing example neighbours. Sign in to put your animal in the real pond with everyone else. Your own studying is saved on this device either way.' + btn);
-      togN = noticeHTML('Sign in to start or join a circle. Here is an example circle to show how the lotus blooms.' + btn);
+      pondN = noticeHTML('Sign in to see everyone in the pond and put your animal there too. Your own studying is saved on this device either way.' + btn);
+      togN = noticeHTML('Sign in to start a circle or join one with a code.' + btn);
     } else {
-    pondN = noticeHTML('You are seeing example neighbours. The live shared pond appears when you open Grind from an invite while signed in to Claude. Your own studying is always saved on this device.');
-    togN = noticeHTML('Circles need the live shared pond, so here is an example circle to show how the lotus blooms.');
+    pondN = noticeHTML('The shared pond appears when you open Grind from an invite while signed in to Claude. Your own studying is always saved on this device.');
+    togN = noticeHTML('Circles need the shared pond, which appears when you open Grind from an invite.');
     }
   } else if (NET.db && !NET.canWrite) {
     pondN = noticeHTML('You can watch the pond, but joining it needs an invite with edit access from the pond’s owner.');

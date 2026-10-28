@@ -37,7 +37,7 @@ function defaultState() {
     v: 1, updatedAt: 0, onboarded: false,
     profile: { name: '', uni: '', major: '', bio: '' },
     active: 'frog',
-    pets: { frog: { name: 'Pip', bond: 0 }, duckling: { name: 'Sunny', bond: 0 }, capybara: { name: 'Yuzu', bond: 0 } },
+    pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
     settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, autoRest: true, demo: false },
@@ -49,7 +49,11 @@ function defaultState() {
 }
 function mergeState(s) {
   const d = defaultState();
-  return { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) } };
+  const m = { ...d, ...s, settings: { ...d.settings, ...(s.settings || {}) }, profile: { ...d.profile, ...(s.profile || {}) } };
+  // earlier versions gave every animal a made-up name; students now name their own
+  const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
+  Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });
+  return m;
 }
 function loadLocal() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return mergeState(s); } catch (e) {}
@@ -69,8 +73,9 @@ const curCourses = () => (S.semesters.find(s => s.id === S.currentSem) || S.seme
 const courseById = id => allCourses().find(c => c.id === id);
 const courseName = id => courseById(id)?.name || 'General';
 const courseColor = id => courseById(id)?.color || 'var(--muted)';
-const pet = () => { const p = S.pets[S.active]; return p || { name: ANIMALS[S.active].defaultName, bond: 0 }; };
+const pet = () => { const p = S.pets[S.active]; return p || { name: '', bond: 0 }; };
 const petName = () => pet().name || ANIMALS[S.active].label;
+const petTitle = () => pet().name ? `${pet().name} the ${ANIMALS[S.active].label.toLowerCase()}` : `your ${ANIMALS[S.active].label.toLowerCase()}`;
 const myName = () => S.profile.name || 'Student';
 
 function minutesByDay(filter) {
