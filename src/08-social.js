@@ -275,6 +275,7 @@ function renderFeed() {
     return `<article class="post" data-post="${esc(p.id)}"><div class="post-h"><span class="av">${avatarSVG(p.animal, 'awake')}</span><div class="who"><b>${esc(p.by === me ? 'You' : p.name)}</b><span>${KIND_LABEL[p.kind]}${p.course ? ' · ' + esc(p.course) : ''} · ${ago(p.at)}</span></div>${p.by === me ? `<span data-delpwrap><button class="icon-btn" data-delpost aria-label="Delete post">${icon('i-trash')}</button></span>` : ''}</div>
       ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
       ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
+      ${filesHTML(p)}
       ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
       ${p.likes.length ? `<button type="button" class="liked-by" data-likers aria-expanded="${openLikers.has(p.id)}">${icon('i-heart')}<span>${likedBy(p, me)}</span>${p.likes.length > 1 ? `<span class="lb-more">${openLikers.has(p.id) ? 'Hide' : 'See all'}</span>` : ''}</button>` : ''}
       ${openLikers.has(p.id) ? `<ul class="likers">${likerList(p, me).map(l => `<li><span class="av">${avatarSVG(l.animal, 'happy')}</span><b>${esc(l.name)}</b>${l.me ? '<span class="muted">You</span>' : ''}</li>`).join('')}</ul>` : ''}
@@ -300,27 +301,85 @@ function renderMilestones() {
   $('#milestones').innerHTML = ms.length ? ms.map(m => `<div class="achv">${icon('i-spark')}<div style="flex:1; min-width:0"><b>${esc(m)}</b></div><button class="btn small" data-share="${esc(m)}">Share</button></div>`).join('')
     : `<p class="muted" style="font-size:.88rem">Finish a session or a few pebbles and your wins will show up here, ready to share.</p>`;
 }
+let pendFiles = [];
+const fmtSize = n => n < 1024 ? `${n} B` : n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+function imgToJpeg(file, max, q) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onload = () => { const s = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.naturalWidth * s)); c.height = Math.max(1, Math.round(im.naturalHeight * s)); const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', q)); };
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('image')); };
+    im.src = url;
+  });
+}
+function renderPend() {
+  $('#pendFiles').innerHTML = pendFiles.map(x => `<span class="pend">${x.thumb ? `<img src="${esc(x.thumb)}" alt="">` : icon('i-file')}<span>${esc(x.name)}<small>${x.busy ? 'Preparing...' : fmtSize(x.size)}</small></span><button type="button" class="icon-btn" data-unpend="${esc(x.id)}" aria-label="Remove ${esc(x.name)}">${icon('i-x')}</button></span>`).join('');
+}
+function filesHTML(p) {
+  if (!p.files || !p.files.length) return '';
+  const imgs = p.files.filter(f => f.thumb), docs = p.files.filter(f => !f.thumb);
+  return `<div class="post-files">${imgs.length ? `<div class="pf-imgs n${Math.min(imgs.length, 4)}">${imgs.map(f => `<button type="button" class="pf-img" data-fopen="${esc(f.id)}" aria-label="Open picture ${esc(f.name)}"><img src="${esc(f.thumb)}" alt="${esc(f.name)}" loading="lazy"></button>`).join('')}</div>` : ''}${docs.map(f => `<button type="button" class="attach" data-fopen="${esc(f.id)}">${icon('i-file')}<span>${esc(f.name)}</span><small class="muted">${fmtSize(f.size)} · Download</small></button>`).join('')}</div>`;
+}
+async function openFile(p, fid) {
+  const meta = (p.files || []).find(f => f.id === fid); if (!meta || !NET.db) { toast('Sign in to open shared files.'); return; }
+  let d; try { const s = await NET.db.doc('files/' + fid).get(); d = s.exists ? s.data() : null; } catch (e) { d = null; }
+  if (!d || typeof d.data !== 'string' || !d.data.startsWith('data:')) { toast('That file is no longer available.'); return; }
+  const blob = await (await fetch(d.data)).blob(), url = URL.createObjectURL(blob);
+  if (meta.thumb) {
+    $('#imgBox').innerHTML = `<img src="${url}" alt="${esc(meta.name)}"><div class="row" style="justify-content:space-between"><span class="muted" style="font-size:.85rem">${esc(meta.name)}</span><div class="row"><a class="btn small" href="${url}" download="${esc(meta.name.replace(/\.[a-z0-9]+$/i, '') + '.jpg')}">${icon('i-download')}Download</a><button class="btn small" data-imgclose>Close</button></div></div>`;
+    $('#imgModal').classList.add('on');
+  } else { const a = document.createElement('a'); a.href = url; a.download = meta.name; document.body.appendChild(a); a.click(); a.remove(); }
+}
 function bindCommons() {
+  $('#imgModal').onclick = e => { if (e.target.id === 'imgModal' || e.target.closest('[data-imgclose]')) $('#imgModal').classList.remove('on'); };
   $('#composer').addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (!b) return; postKind = b.dataset.kind; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
-  $('#composer').onsubmit = e => {
+  $('#composer').onsubmit = async e => {
     e.preventDefault();
     const title = $('#postTitle').value.trim(); if (!title) return;
+    if (pendFiles.some(x => x.busy)) { toast('Wait a moment, your files are still being prepared.'); return; }
+    if (pendFiles.length && !sharedPosts()) { toast('Sign in to share pictures and files with the pond.'); return; }
     const link = $('#postLink').value.trim();
-    const p = { by: NET.uid || 'me', name: myName(), animal: S.active, kind: postKind, course: $('#postCourse').value ? courseName($('#postCourse').value) : '', title: clampStr(title, 100), body: clampStr($('#postBody').value.trim(), 2000), link: /^https:\/\//i.test(link) ? link : '', at: Date.now(), likes: [], comments: [] };
-    if (sharedPosts()) { const id = uid(); writeQ('posts/' + id, () => NET.db.doc('posts/' + id).set(p)); }
-    else { S.localPosts.unshift({ id: uid(), ...p }); save(); renderFeed(); }
-    $('#composer').reset(); toast('Shared to the Commons.');
+    const p = { by: NET.uid || 'me', name: myName(), animal: S.active, kind: postKind, course: $('#postCourse').value ? courseName($('#postCourse').value) : '', title: clampStr(title, 100), body: clampStr($('#postBody').value.trim(), 5000), link: /^https:\/\//i.test(link) ? link : '', at: Date.now(), likes: [], comments: [], files: pendFiles.map(({ id, name, type, size, thumb }) => ({ id, name, type, size, thumb })) };
+    if (sharedPosts()) {
+      const btn = $('#composer [type=submit]'); btn.disabled = true; btn.textContent = pendFiles.length ? 'Uploading...' : 'Sharing...';
+      try {
+        await Promise.all(pendFiles.map(x => NET.db.doc('files/' + x.id).set({ by: NET.uid, name: x.name, type: x.type, size: x.size, at: Date.now(), data: x.data })));
+        const id = uid(); await NET.db.doc('posts/' + id).set(p);
+      } catch (err) { btn.disabled = false; btn.textContent = 'Share to the Commons'; toast(err && err.code === 'permission-denied' ? 'The pond would not take that file. The owner may need to update the Firebase rules.' : 'Could not share that just now. Try again.'); return; }
+      btn.disabled = false; btn.textContent = 'Share to the Commons';
+    } else { S.localPosts.unshift({ id: uid(), ...p }); save(); renderFeed(); }
+    $('#composer').reset(); pendFiles = []; renderPend(); toast('Shared to the Commons.');
   };
+  $('#postFiles').onchange = async e => {
+    const list = [...e.target.files]; e.target.value = '';
+    for (const file of list) {
+      if (pendFiles.length >= 4) { toast('Up to 4 pictures or files per post.'); break; }
+      const isImg = /^image\//.test(file.type) && !/svg/.test(file.type);
+      if (!isImg && file.size > 700 * 1024) { toast(`${esc(file.name)} is ${fmtSize(file.size)}. Files can be up to 700 KB, so share a Drive link for this one.`); continue; }
+      const x = { id: uid().replace(/[^a-zA-Z0-9_-]/g, ''), name: clampStr(file.name, 120), type: isImg ? 'image/jpeg' : clampStr(file.type || 'application/octet-stream', 100), size: file.size, thumb: '', data: '', busy: true };
+      pendFiles.push(x); renderPend();
+      try {
+        if (isImg) {
+          x.thumb = await imgToJpeg(file, 420, .7);
+          let d = await imgToJpeg(file, 1800, .82); if (d.length > 900000) d = await imgToJpeg(file, 1280, .72); if (d.length > 900000) d = await imgToJpeg(file, 960, .6);
+          x.data = d; x.size = Math.round(d.length * .75);
+        } else x.data = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+        x.busy = false;
+      } catch (err) { pendFiles = pendFiles.filter(y => y !== x); toast(`${esc(file.name)} could not be read. Try a JPG or PNG picture.`); }
+      renderPend();
+    }
+  };
+  $('#pendFiles').onclick = e => { const b = e.target.closest('[data-unpend]'); if (!b) return; pendFiles = pendFiles.filter(x => x.id !== b.dataset.unpend); renderPend(); };
   $('#milestones').onclick = e => { const b = e.target.closest('[data-share]'); if (!b) return; postKind = 'win'; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x.dataset.kind === 'win')); $('#postTitle').value = b.dataset.share; $('#postBody').focus(); };
   $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
   $('#feed').addEventListener('click', e => {
     const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
     if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; p.likeAnimals = p.likeAnimals || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; delete p.likeAnimals[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); p.likeAnimals[me] = S.active; } }); return; }
+    const fo = e.target.closest('[data-fopen]'); if (fo) { const p = postsNow().find(x => x.id === id); if (p) openFile(p, fo.dataset.fopen); return; }
     if (e.target.closest('[data-likers]')) { openLikers.has(id) ? openLikers.delete(id) : openLikers.add(id); renderFeed(); return; }
     if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
     if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
     if (e.target.closest('[data-delpno]')) { renderFeed(); return; }
-    if (e.target.closest('[data-delpyes]')) { if (sharedPosts()) writeQ('posts/' + id, () => NET.db.doc('posts/' + id).delete()); else { S.localPosts = S.localPosts.filter(p => p.id !== id); save(); renderFeed(); } }
+    if (e.target.closest('[data-delpyes]')) { if (sharedPosts()) { const p = postsNow().find(x => x.id === id); (p && p.files || []).forEach(f => NET.db.doc('files/' + f.id).delete().catch(() => {})); writeQ('posts/' + id, () => NET.db.doc('posts/' + id).delete()); } else { S.localPosts = S.localPosts.filter(p => p.id !== id); save(); renderFeed(); } }
   });
   $('#feed').addEventListener('submit', e => {
     const f = e.target.closest('[data-cform]'); if (!f) return; e.preventDefault();

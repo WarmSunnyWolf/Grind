@@ -139,9 +139,9 @@ function bindPebbles() {
   });
   $('#icsFile').onchange = async e => {
     const f = e.target.files[0]; if (!f) return;
-    try { const n = importICS(await f.text()); toast(n ? `Imported ${n} rocks from your calendar. Break each one into pebbles when you are ready.` : 'No upcoming assignments found in that file.'); }
+    try { const n = importICS(await f.text()); toast(n ? `Imported ${n} deadlines from your calendar. They are in Pebbles and on your Calendar.` : 'No upcoming assignments found in that file.'); }
     catch (err) { toast('That file could not be read. Export the calendar from Blackboard as an .ics file and try again.'); }
-    e.target.value = ''; renderRocks(); renderNextPebble();
+    e.target.value = ''; renderRocks(); renderNextPebble(); renderCal(); renderCalDot();
   };
 }
 function importICS(text) {

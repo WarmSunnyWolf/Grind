@@ -295,7 +295,7 @@ function renderGreeting() {
   $('#meMiniName').textContent = myName();
   $('#meMiniSub').textContent = `with ${petName()}`;
 }
-function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); if (currentView === 'cal') renderCal(); renderCalDot(); if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
+function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
@@ -307,7 +307,8 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes(); bindCal();
+  // one broken feature should never stop the rest of the page from loading
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });

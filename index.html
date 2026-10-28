@@ -323,6 +323,25 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .post .body{white-space:pre-wrap; overflow-wrap:anywhere}
 .post .attach{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:var(--bg); border:1px solid var(--line); font-size:.88rem; overflow-wrap:anywhere}
 .post .attach svg{width:20px; height:20px; flex:none; color:var(--rose)}
+.post button.attach{width:100%; text-align:left; font:inherit; font-size:.88rem; color:var(--ink); cursor:pointer}
+.post button.attach span{flex:1; min-width:0}
+.post-files{display:flex; flex-direction:column; gap:8px}
+.pf-imgs{display:grid; gap:6px; border-radius:14px; overflow:hidden}
+.pf-imgs.n2, .pf-imgs.n4{grid-template-columns:1fr 1fr}
+.pf-imgs.n3{grid-template-columns:2fr 1fr 1fr}
+.pf-img{border:0; padding:0; background:var(--bg); cursor:zoom-in; display:block; aspect-ratio:4/3; overflow:hidden}
+.pf-imgs.n1 .pf-img{aspect-ratio:auto; max-height:420px}
+.pf-img img{width:100%; height:100%; object-fit:cover; display:block}
+.pend-files{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+.pend-files:empty{display:none}
+.pend{display:flex; align-items:center; gap:8px; padding:6px 6px 6px 8px; border-radius:12px; background:var(--bg); border:1px solid var(--line); font-size:.82rem; max-width:100%}
+.pend img, .pend > svg{width:36px; height:36px; border-radius:8px; object-fit:cover; flex:none}
+.pend > svg{width:22px; height:22px; color:var(--rose)}
+.pend span{display:flex; flex-direction:column; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.pend small{color:var(--muted)}
+.pend .icon-btn{width:28px; height:28px}
+.img-box{width:min(1000px,100%); padding:14px; gap:10px}
+.img-box img{width:100%; max-height:calc(100vh - 140px); object-fit:contain; border-radius:16px; background:var(--bg)}
 .post-a{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
 .post-a .btn svg{width:17px}
 .post-a .btn.liked{color:var(--rose); border-color:var(--rose)}
@@ -804,7 +823,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
       <section class="view" id="v-cal">
         <div class="row" style="justify-content:space-between">
           <p class="muted" style="max-width:60ch">Every deadline, exam and lab in one month. Click a day to see it, double click to add. Grind reminds you before things are due, and rocks with a due date from Pebbles show up here too.</p>
-          <div class="row"><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
+          <div class="row"><label class="btn" for="icsFile"><svg><use href="#i-upload"/></svg>Import Blackboard calendar</label><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
         </div>
         <form class="card" id="evForm" hidden>
           <div class="card-h"><h2 id="evFormTitle">Add to your calendar</h2><button type="button" class="icon-btn" id="evCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
@@ -864,7 +883,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
                 <label class="f" style="grid-column:1/-1">Title<input class="inp" id="postTitle" maxlength="100" required placeholder="My summary of lecture 5: backpropagation"></label>
                 <label class="f">Course<select class="inp" id="postCourse"></select></label>
                 <label class="f">Link to file (optional)<input class="inp" id="postLink" type="url" maxlength="300" placeholder="https://drive.google.com/..."></label>
-                <label class="f" style="grid-column:1/-1">Write something<textarea class="inp" id="postBody" maxlength="2000" placeholder="Key ideas, a tip that helped, or what you are proud of."></textarea></label>
+                <label class="f" style="grid-column:1/-1">Your notes<textarea class="inp" id="postBody" maxlength="5000" rows="5" placeholder="Write or paste your notes, key ideas, a tip that helped, or what you are proud of."></textarea></label>
+                <div class="f" style="grid-column:1/-1"><div class="row"><label class="btn small" for="postFiles"><svg><use href="#i-upload"/></svg>Add pictures or files</label><input type="file" id="postFiles" class="sr" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv,.zip"><span class="muted" style="font-size:.8rem">Up to 4. Pictures of any size, other files up to 700 KB. For bigger files, use a link.</span></div><div class="pend-files" id="pendFiles"></div></div>
               </div>
               <div class="row"><button class="btn primary" type="submit">Share to the Commons</button><span class="muted" id="composerNote" style="font-size:.82rem"></span></div>
             </form>
@@ -936,7 +956,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-4">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pebble"/></svg></span><div><span class="eyebrow">Step 4</span><h2>Break big tasks into pebbles</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
+            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Bring in all your Blackboard due dates at once: in Blackboard open <b>Calendar</b>, click the settings gear, choose <b>Share Calendar</b> (or <b>Get external calendar link</b>), copy the link, and paste it into your browser to download the .ics file. Then click <b>Import Blackboard calendar</b> here or on the Calendar page and choose that file.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
           <article class="card g-sec" id="g-4b">
@@ -956,7 +976,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-7">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Share notes in the Commons</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and your notes. You can paste a Google Drive link to a file.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
+            <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and write or paste your notes.</li><li>Click <b>Add pictures or files</b> to attach up to 4: photos of your notes, screenshots, or small PDFs and slides (up to 700 KB). For bigger files, paste a Google Drive link instead.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
             <div class="row"><button class="btn small" data-go="commons">Show me the Commons</button></div>
           </article>
           <article class="card g-sec" id="g-8">
@@ -1072,6 +1092,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Picture"><div class="modal-box img-box" id="imgBox"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="tip" id="tip"></div>
 <script src="firebase-config.js"></script>
@@ -1986,10 +2007,11 @@ function sendRippleNet(toId, msg, kind = 'ripple') {
 function cleanPost(id, d) {
   return {
     id, by: clampStr(d.by, 80), name: clampStr(d.name, 40) || 'Someone', animal: ANIMAL_OK(d.animal), kind: ['note', 'done', 'win'].includes(d.kind) ? d.kind : 'note',
-    course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 2000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
+    course: clampStr(d.course, 60), title: clampStr(d.title, 100), body: clampStr(d.body, 5000), link: /^https:\/\//i.test(d.link || '') ? clampStr(d.link, 300) : '',
     at: +d.at || 0, likes: Array.isArray(d.likes) ? d.likes.slice(0, 500).map(x => clampStr(x, 80)) : [],
     likeAnimals: Object.fromEntries(Object.entries(d.likeAnimals && typeof d.likeAnimals === 'object' ? d.likeAnimals : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), ANIMAL_OK(v)])),
     likeNames: Object.fromEntries(Object.entries(d.likeNames && typeof d.likeNames === 'object' ? d.likeNames : {}).slice(0, 500).map(([k, v]) => [clampStr(k, 80), clampStr(v, 40)])),
+    files: Array.isArray(d.files) ? d.files.slice(0, 4).filter(f => f && typeof f === 'object').map(f => ({ id: clampStr(f.id, 40).replace(/[^a-zA-Z0-9_-]/g, ''), name: clampStr(f.name, 120) || 'file', type: clampStr(f.type, 100), size: Math.max(0, +f.size || 0), thumb: typeof f.thumb === 'string' && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(f.thumb) && f.thumb.length < 120000 ? f.thumb : '' })).filter(f => f.id) : [],
     comments: Array.isArray(d.comments) ? d.comments.slice(-100).map(c => ({ by: clampStr(c.by, 80), name: clampStr(c.name, 40) || 'Someone', text: clampStr(c.text, 500), at: +c.at || 0 })) : []
   };
 }
@@ -2498,9 +2520,9 @@ function bindPebbles() {
   });
   $('#icsFile').onchange = async e => {
     const f = e.target.files[0]; if (!f) return;
-    try { const n = importICS(await f.text()); toast(n ? `Imported ${n} rocks from your calendar. Break each one into pebbles when you are ready.` : 'No upcoming assignments found in that file.'); }
+    try { const n = importICS(await f.text()); toast(n ? `Imported ${n} deadlines from your calendar. They are in Pebbles and on your Calendar.` : 'No upcoming assignments found in that file.'); }
     catch (err) { toast('That file could not be read. Export the calendar from Blackboard as an .ics file and try again.'); }
-    e.target.value = ''; renderRocks(); renderNextPebble();
+    e.target.value = ''; renderRocks(); renderNextPebble(); renderCal(); renderCalDot();
   };
 }
 function importICS(text) {
@@ -2664,8 +2686,8 @@ function bindCal() {
     if (p === 'granted') { S.calAlerts = true; save(); toast('Reminders will also pop up on this device while Grind is open in a tab.'); }
     renderCalAlerts();
   };
-  checkReminders();
-  setInterval(() => { checkReminders(); if (currentView === 'cal') renderCal(); }, 60000);
+  const tick = () => { try { checkReminders(); if (currentView === 'cal') renderCal(); } catch (e) { console.error(e); } };
+  tick(); setInterval(tick, 60000);
 }
 /* ---------- the pond (community) ---------- */
 const EXAMPLES = [];
@@ -2944,6 +2966,7 @@ function renderFeed() {
     return `<article class="post" data-post="${esc(p.id)}"><div class="post-h"><span class="av">${avatarSVG(p.animal, 'awake')}</span><div class="who"><b>${esc(p.by === me ? 'You' : p.name)}</b><span>${KIND_LABEL[p.kind]}${p.course ? ' · ' + esc(p.course) : ''} · ${ago(p.at)}</span></div>${p.by === me ? `<span data-delpwrap><button class="icon-btn" data-delpost aria-label="Delete post">${icon('i-trash')}</button></span>` : ''}</div>
       ${p.kind === 'win' ? `<div class="achv">${icon('i-spark')}<b>${esc(p.title)}</b></div>` : `<h3>${esc(p.title)}</h3>`}
       ${p.body ? `<p class="body">${esc(p.body)}</p>` : ''}
+      ${filesHTML(p)}
       ${p.link ? `<a class="attach" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">${icon('i-file')}<span>${esc(p.link.replace(/^https:\/\//, '').slice(0, 70))}</span></a>` : ''}
       ${p.likes.length ? `<button type="button" class="liked-by" data-likers aria-expanded="${openLikers.has(p.id)}">${icon('i-heart')}<span>${likedBy(p, me)}</span>${p.likes.length > 1 ? `<span class="lb-more">${openLikers.has(p.id) ? 'Hide' : 'See all'}</span>` : ''}</button>` : ''}
       ${openLikers.has(p.id) ? `<ul class="likers">${likerList(p, me).map(l => `<li><span class="av">${avatarSVG(l.animal, 'happy')}</span><b>${esc(l.name)}</b>${l.me ? '<span class="muted">You</span>' : ''}</li>`).join('')}</ul>` : ''}
@@ -2969,27 +2992,85 @@ function renderMilestones() {
   $('#milestones').innerHTML = ms.length ? ms.map(m => `<div class="achv">${icon('i-spark')}<div style="flex:1; min-width:0"><b>${esc(m)}</b></div><button class="btn small" data-share="${esc(m)}">Share</button></div>`).join('')
     : `<p class="muted" style="font-size:.88rem">Finish a session or a few pebbles and your wins will show up here, ready to share.</p>`;
 }
+let pendFiles = [];
+const fmtSize = n => n < 1024 ? `${n} B` : n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+function imgToJpeg(file, max, q) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onload = () => { const s = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.naturalWidth * s)); c.height = Math.max(1, Math.round(im.naturalHeight * s)); const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', q)); };
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('image')); };
+    im.src = url;
+  });
+}
+function renderPend() {
+  $('#pendFiles').innerHTML = pendFiles.map(x => `<span class="pend">${x.thumb ? `<img src="${esc(x.thumb)}" alt="">` : icon('i-file')}<span>${esc(x.name)}<small>${x.busy ? 'Preparing...' : fmtSize(x.size)}</small></span><button type="button" class="icon-btn" data-unpend="${esc(x.id)}" aria-label="Remove ${esc(x.name)}">${icon('i-x')}</button></span>`).join('');
+}
+function filesHTML(p) {
+  if (!p.files || !p.files.length) return '';
+  const imgs = p.files.filter(f => f.thumb), docs = p.files.filter(f => !f.thumb);
+  return `<div class="post-files">${imgs.length ? `<div class="pf-imgs n${Math.min(imgs.length, 4)}">${imgs.map(f => `<button type="button" class="pf-img" data-fopen="${esc(f.id)}" aria-label="Open picture ${esc(f.name)}"><img src="${esc(f.thumb)}" alt="${esc(f.name)}" loading="lazy"></button>`).join('')}</div>` : ''}${docs.map(f => `<button type="button" class="attach" data-fopen="${esc(f.id)}">${icon('i-file')}<span>${esc(f.name)}</span><small class="muted">${fmtSize(f.size)} · Download</small></button>`).join('')}</div>`;
+}
+async function openFile(p, fid) {
+  const meta = (p.files || []).find(f => f.id === fid); if (!meta || !NET.db) { toast('Sign in to open shared files.'); return; }
+  let d; try { const s = await NET.db.doc('files/' + fid).get(); d = s.exists ? s.data() : null; } catch (e) { d = null; }
+  if (!d || typeof d.data !== 'string' || !d.data.startsWith('data:')) { toast('That file is no longer available.'); return; }
+  const blob = await (await fetch(d.data)).blob(), url = URL.createObjectURL(blob);
+  if (meta.thumb) {
+    $('#imgBox').innerHTML = `<img src="${url}" alt="${esc(meta.name)}"><div class="row" style="justify-content:space-between"><span class="muted" style="font-size:.85rem">${esc(meta.name)}</span><div class="row"><a class="btn small" href="${url}" download="${esc(meta.name.replace(/\.[a-z0-9]+$/i, '') + '.jpg')}">${icon('i-download')}Download</a><button class="btn small" data-imgclose>Close</button></div></div>`;
+    $('#imgModal').classList.add('on');
+  } else { const a = document.createElement('a'); a.href = url; a.download = meta.name; document.body.appendChild(a); a.click(); a.remove(); }
+}
 function bindCommons() {
+  $('#imgModal').onclick = e => { if (e.target.id === 'imgModal' || e.target.closest('[data-imgclose]')) $('#imgModal').classList.remove('on'); };
   $('#composer').addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (!b) return; postKind = b.dataset.kind; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
-  $('#composer').onsubmit = e => {
+  $('#composer').onsubmit = async e => {
     e.preventDefault();
     const title = $('#postTitle').value.trim(); if (!title) return;
+    if (pendFiles.some(x => x.busy)) { toast('Wait a moment, your files are still being prepared.'); return; }
+    if (pendFiles.length && !sharedPosts()) { toast('Sign in to share pictures and files with the pond.'); return; }
     const link = $('#postLink').value.trim();
-    const p = { by: NET.uid || 'me', name: myName(), animal: S.active, kind: postKind, course: $('#postCourse').value ? courseName($('#postCourse').value) : '', title: clampStr(title, 100), body: clampStr($('#postBody').value.trim(), 2000), link: /^https:\/\//i.test(link) ? link : '', at: Date.now(), likes: [], comments: [] };
-    if (sharedPosts()) { const id = uid(); writeQ('posts/' + id, () => NET.db.doc('posts/' + id).set(p)); }
-    else { S.localPosts.unshift({ id: uid(), ...p }); save(); renderFeed(); }
-    $('#composer').reset(); toast('Shared to the Commons.');
+    const p = { by: NET.uid || 'me', name: myName(), animal: S.active, kind: postKind, course: $('#postCourse').value ? courseName($('#postCourse').value) : '', title: clampStr(title, 100), body: clampStr($('#postBody').value.trim(), 5000), link: /^https:\/\//i.test(link) ? link : '', at: Date.now(), likes: [], comments: [], files: pendFiles.map(({ id, name, type, size, thumb }) => ({ id, name, type, size, thumb })) };
+    if (sharedPosts()) {
+      const btn = $('#composer [type=submit]'); btn.disabled = true; btn.textContent = pendFiles.length ? 'Uploading...' : 'Sharing...';
+      try {
+        await Promise.all(pendFiles.map(x => NET.db.doc('files/' + x.id).set({ by: NET.uid, name: x.name, type: x.type, size: x.size, at: Date.now(), data: x.data })));
+        const id = uid(); await NET.db.doc('posts/' + id).set(p);
+      } catch (err) { btn.disabled = false; btn.textContent = 'Share to the Commons'; toast(err && err.code === 'permission-denied' ? 'The pond would not take that file. The owner may need to update the Firebase rules.' : 'Could not share that just now. Try again.'); return; }
+      btn.disabled = false; btn.textContent = 'Share to the Commons';
+    } else { S.localPosts.unshift({ id: uid(), ...p }); save(); renderFeed(); }
+    $('#composer').reset(); pendFiles = []; renderPend(); toast('Shared to the Commons.');
   };
+  $('#postFiles').onchange = async e => {
+    const list = [...e.target.files]; e.target.value = '';
+    for (const file of list) {
+      if (pendFiles.length >= 4) { toast('Up to 4 pictures or files per post.'); break; }
+      const isImg = /^image\//.test(file.type) && !/svg/.test(file.type);
+      if (!isImg && file.size > 700 * 1024) { toast(`${esc(file.name)} is ${fmtSize(file.size)}. Files can be up to 700 KB, so share a Drive link for this one.`); continue; }
+      const x = { id: uid().replace(/[^a-zA-Z0-9_-]/g, ''), name: clampStr(file.name, 120), type: isImg ? 'image/jpeg' : clampStr(file.type || 'application/octet-stream', 100), size: file.size, thumb: '', data: '', busy: true };
+      pendFiles.push(x); renderPend();
+      try {
+        if (isImg) {
+          x.thumb = await imgToJpeg(file, 420, .7);
+          let d = await imgToJpeg(file, 1800, .82); if (d.length > 900000) d = await imgToJpeg(file, 1280, .72); if (d.length > 900000) d = await imgToJpeg(file, 960, .6);
+          x.data = d; x.size = Math.round(d.length * .75);
+        } else x.data = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+        x.busy = false;
+      } catch (err) { pendFiles = pendFiles.filter(y => y !== x); toast(`${esc(file.name)} could not be read. Try a JPG or PNG picture.`); }
+      renderPend();
+    }
+  };
+  $('#pendFiles').onclick = e => { const b = e.target.closest('[data-unpend]'); if (!b) return; pendFiles = pendFiles.filter(x => x.id !== b.dataset.unpend); renderPend(); };
   $('#milestones').onclick = e => { const b = e.target.closest('[data-share]'); if (!b) return; postKind = 'win'; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x.dataset.kind === 'win')); $('#postTitle').value = b.dataset.share; $('#postBody').focus(); };
   $('#feedFilter').onclick = e => { const b = e.target.closest('[data-f]'); if (!b) return; feedFilter = b.dataset.f; $$('#feedFilter button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderFeed(); };
   $('#feed').addEventListener('click', e => {
     const art = e.target.closest('[data-post]'); if (!art) return; const id = art.dataset.post; const me = NET.uid || 'me';
     if (e.target.closest('[data-like]')) { postMutate(id, p => { p.likeNames = p.likeNames || {}; p.likeAnimals = p.likeAnimals || {}; if (p.likes.includes(me)) { p.likes = p.likes.filter(x => x !== me); delete p.likeNames[me]; delete p.likeAnimals[me]; } else { p.likes = [...p.likes, me]; p.likeNames[me] = myName(); p.likeAnimals[me] = S.active; } }); return; }
+    const fo = e.target.closest('[data-fopen]'); if (fo) { const p = postsNow().find(x => x.id === id); if (p) openFile(p, fo.dataset.fopen); return; }
     if (e.target.closest('[data-likers]')) { openLikers.has(id) ? openLikers.delete(id) : openLikers.add(id); renderFeed(); return; }
     if (e.target.closest('[data-cm]')) { openComments.has(id) ? openComments.delete(id) : openComments.add(id); renderFeed(); return; }
     if (e.target.closest('[data-delpost]')) { art.querySelector('[data-delpwrap]').innerHTML = `<span class="confirm"><button class="btn small rose" data-delpyes>Delete</button><button class="btn small" data-delpno>Keep</button></span>`; return; }
     if (e.target.closest('[data-delpno]')) { renderFeed(); return; }
-    if (e.target.closest('[data-delpyes]')) { if (sharedPosts()) writeQ('posts/' + id, () => NET.db.doc('posts/' + id).delete()); else { S.localPosts = S.localPosts.filter(p => p.id !== id); save(); renderFeed(); } }
+    if (e.target.closest('[data-delpyes]')) { if (sharedPosts()) { const p = postsNow().find(x => x.id === id); (p && p.files || []).forEach(f => NET.db.doc('files/' + f.id).delete().catch(() => {})); writeQ('posts/' + id, () => NET.db.doc('posts/' + id).delete()); } else { S.localPosts = S.localPosts.filter(p => p.id !== id); save(); renderFeed(); } }
   });
   $('#feed').addEventListener('submit', e => {
     const f = e.target.closest('[data-cform]'); if (!f) return; e.preventDefault();
@@ -3460,7 +3541,7 @@ function renderGreeting() {
   $('#meMiniName').textContent = myName();
   $('#meMiniSub').textContent = `with ${petName()}`;
 }
-function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); if (currentView === 'cal') renderCal(); renderCalDot(); if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
+function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
@@ -3472,7 +3553,8 @@ function boot() {
   $('#pondStage').insertAdjacentHTML('afterbegin', sceneSVG('pond'));
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
-  bindFocus(); bindPebbles(); bindPond(); bindTogether(); bindCommons(); bindZoo(); bindStats(); bindProfile(); bindDrawer(); bindWelcome(); bindFeedback(); bindGuide(); bindSounds(); bindNotes(); bindCal();
+  // one broken feature should never stop the rest of the page from loading
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });

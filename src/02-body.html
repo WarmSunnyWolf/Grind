@@ -197,7 +197,7 @@
       <section class="view" id="v-cal">
         <div class="row" style="justify-content:space-between">
           <p class="muted" style="max-width:60ch">Every deadline, exam and lab in one month. Click a day to see it, double click to add. Grind reminds you before things are due, and rocks with a due date from Pebbles show up here too.</p>
-          <div class="row"><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
+          <div class="row"><label class="btn" for="icsFile"><svg><use href="#i-upload"/></svg>Import Blackboard calendar</label><button class="btn" id="calAlerts" hidden><svg><use href="#i-bell"/></svg>Also alert me on this device</button><button class="btn primary" id="calAdd"><svg><use href="#i-plus"/></svg>Add</button></div>
         </div>
         <form class="card" id="evForm" hidden>
           <div class="card-h"><h2 id="evFormTitle">Add to your calendar</h2><button type="button" class="icon-btn" id="evCancel" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
@@ -257,7 +257,8 @@
                 <label class="f" style="grid-column:1/-1">Title<input class="inp" id="postTitle" maxlength="100" required placeholder="My summary of lecture 5: backpropagation"></label>
                 <label class="f">Course<select class="inp" id="postCourse"></select></label>
                 <label class="f">Link to file (optional)<input class="inp" id="postLink" type="url" maxlength="300" placeholder="https://drive.google.com/..."></label>
-                <label class="f" style="grid-column:1/-1">Write something<textarea class="inp" id="postBody" maxlength="2000" placeholder="Key ideas, a tip that helped, or what you are proud of."></textarea></label>
+                <label class="f" style="grid-column:1/-1">Your notes<textarea class="inp" id="postBody" maxlength="5000" rows="5" placeholder="Write or paste your notes, key ideas, a tip that helped, or what you are proud of."></textarea></label>
+                <div class="f" style="grid-column:1/-1"><div class="row"><label class="btn small" for="postFiles"><svg><use href="#i-upload"/></svg>Add pictures or files</label><input type="file" id="postFiles" class="sr" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv,.zip"><span class="muted" style="font-size:.8rem">Up to 4. Pictures of any size, other files up to 700 KB. For bigger files, use a link.</span></div><div class="pend-files" id="pendFiles"></div></div>
               </div>
               <div class="row"><button class="btn primary" type="submit">Share to the Commons</button><span class="muted" id="composerNote" style="font-size:.82rem"></span></div>
             </form>
@@ -329,7 +330,7 @@
           </article>
           <article class="card g-sec" id="g-4">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pebble"/></svg></span><div><span class="eyebrow">Step 4</span><h2>Break big tasks into pebbles</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Have a Blackboard calendar file? <b>Import Blackboard calendar</b> turns your due dates into rocks.</p>
+            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Bring in all your Blackboard due dates at once: in Blackboard open <b>Calendar</b>, click the settings gear, choose <b>Share Calendar</b> (or <b>Get external calendar link</b>), copy the link, and paste it into your browser to download the .ics file. Then click <b>Import Blackboard calendar</b> here or on the Calendar page and choose that file.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
           <article class="card g-sec" id="g-4b">
@@ -349,7 +350,7 @@
           </article>
           <article class="card g-sec" id="g-7">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-commons"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Share notes in the Commons</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and your notes. You can paste a Google Drive link to a file.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
+            <ol class="g-steps"><li>Open <b>Commons</b>, add a title, the course, and write or paste your notes.</li><li>Click <b>Add pictures or files</b> to attach up to 4: photos of your notes, screenshots, or small PDFs and slides (up to 700 KB). For bigger files, paste a Google Drive link instead.</li><li>Click <b>Share to the Commons</b>. Classmates can like and comment, and you can delete your own posts.</li><li><b>Worth sharing</b> on the side suggests wins to post, like crossing a big rock.</li></ol>
             <div class="row"><button class="btn small" data-go="commons">Show me the Commons</button></div>
           </article>
           <article class="card g-sec" id="g-8">
@@ -465,5 +466,6 @@
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Picture"><div class="modal-box img-box" id="imgBox"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="tip" id="tip"></div>

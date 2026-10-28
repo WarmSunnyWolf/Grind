@@ -134,6 +134,6 @@ function bindCal() {
     if (p === 'granted') { S.calAlerts = true; save(); toast('Reminders will also pop up on this device while Grind is open in a tab.'); }
     renderCalAlerts();
   };
-  checkReminders();
-  setInterval(() => { checkReminders(); if (currentView === 'cal') renderCal(); }, 60000);
+  const tick = () => { try { checkReminders(); if (currentView === 'cal') renderCal(); } catch (e) { console.error(e); } };
+  tick(); setInterval(tick, 60000);
 }

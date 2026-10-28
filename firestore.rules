@@ -21,7 +21,14 @@ service cloud.firestore {
       allow update: if signedIn()
         && request.resource.data.by == resource.data.by
         && request.resource.data.title == resource.data.title
-        && request.resource.data.body == resource.data.body;
+        && request.resource.data.body == resource.data.body
+        && request.resource.data.get('files', null) == resource.data.get('files', null);
+      allow delete: if signedIn() && resource.data.by == request.auth.uid;
+    }
+    // Pictures and files attached to Commons posts. Anyone signed in can open them, only the uploader can add or remove theirs.
+    match /files/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.by == request.auth.uid && request.resource.data.data is string && request.resource.data.data.size() < 1000000;
       allow delete: if signedIn() && resource.data.by == request.auth.uid;
     }
     // Study stats shown on someone's profile card. They choose who can read them: only me, friends, or everyone.
