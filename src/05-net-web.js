@@ -15,6 +15,7 @@ function cleanResident(id, d) {
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
     vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === false ? 'me' : 'everyone',
+    stats: cleanStats(d.stats),
     board: d.board && typeof d.board === 'object' ? { d: clampStr(d.board.d, 10), w: clampStr(d.board.w, 10), m: clampStr(d.board.m, 7), dm: Math.max(0, Math.min(1440, +d.board.dm || 0)), wm: Math.max(0, Math.min(10080, +d.board.wm || 0)), mm: Math.max(0, Math.min(44640, +d.board.mm || 0)) } : null
   };
 }
@@ -162,7 +163,7 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats() };
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats(), stats: S.profile.visibility === 'everyone' ? publicStats() : null };
   const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
   writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));

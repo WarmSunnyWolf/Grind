@@ -126,11 +126,12 @@ async function openPeer(id) {
   $('#peerModal').classList.add('on');
   let st = null;
   if (r.me) st = r.vis === 'me' ? null : r.stats;
+  else if (r.vis === 'everyone' && r.stats) st = r.stats;
   else if (NET.db && r.vis !== 'me') { try { const d = await NET.db.doc('stats/' + id).get(); st = d.exists ? cleanStats((d.data() || {}).stats) : null; } catch (e) { st = null; } }
   if (!$('#peerModal').classList.contains('on')) return;
-  const lock = r.me ? (r.vis === 'me' ? 'Only you can see your stats' : '') : r.vis === 'friends' ? 'Only their friends can see their stats' : 'This profile is private';
+  const lock = r.me ? (r.vis === 'me' ? 'Only you can see your stats' : '') : r.vis === 'friends' ? 'Only their friends can see their stats' : r.vis === 'everyone' ? 'Stats coming soon' : 'This profile is private';
   const why = r.me ? 'Classmates only see your name and animal. Change who can see your stats under Privacy on your profile page.'
-    : r.vis === 'friends' ? 'Their stats show up once they add you as a friend. You can still send them a ripple or add them.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.';
+    : r.vis === 'friends' ? 'Their stats show up once they add you as a friend. You can still send them a ripple or add them.' : r.vis === 'everyone' ? 'Their profile is public. Their stats appear here as soon as they open the latest version of Grind.' : 'They only share their name and animal. You can still send them a ripple or add them as a friend.';
   let body;
   if (!st) {
     body = `<div class="peer-private">${icon('i-lock')}<div><b>${lock}</b><p class="muted" style="font-size:.88rem">${why}</p></div></div>`;
