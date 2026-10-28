@@ -90,7 +90,6 @@ p{margin:0}
 .chip.sync{font-weight:500; color:var(--muted)}
 .chip.sync i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block}
 .chip.sync.on i{background:var(--moss); box-shadow:0 0 0 3px color-mix(in srgb,var(--moss) 25%,transparent)}
-.chip.demo{background:var(--rose); color:#fff; border-color:transparent}
 
 .view{display:none; flex-direction:column; gap:22px; animation:viewin .35s ease}
 .view.on{display:flex}
@@ -257,6 +256,14 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .member-list .av{width:38px; height:38px; border-radius:50%; background:var(--water-hi); flex:none; overflow:hidden}
 .member-list .av svg{width:100%; height:100%}
 .member-list .nm{flex:1; min-width:0}
+.board{margin-bottom:18px}
+.board .card-h{flex-wrap:wrap; gap:10px}
+.board-list li.me{outline:2px solid var(--rose); outline-offset:-2px}
+.board-list .rk{width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:.9rem; color:var(--ink-2,inherit); flex:none}
+.board-list .rk.r1{background:#e8b84a; color:#3b2a05}
+.board-list .rk.r2{background:#c9ced6; color:#2b2f36}
+.board-list .rk.r3{background:#d39a6a; color:#3a2210}
+.board-list .mn{font-weight:700; font-variant-numeric:tabular-nums}
 .member-list .nm b{display:block; font-weight:600; font-size:.92rem}
 .member-list .nm span{font-size:.78rem; color:var(--muted)}
 .code{font-family:var(--f-display); font-size:1.1rem; letter-spacing:.14em; padding:4px 10px; border-radius:10px; background:var(--surface-2); border:1px dashed var(--line-2); user-select:all}

@@ -97,7 +97,6 @@ p{margin:0}
 .chip.sync{font-weight:500; color:var(--muted)}
 .chip.sync i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block}
 .chip.sync.on i{background:var(--moss); box-shadow:0 0 0 3px color-mix(in srgb,var(--moss) 25%,transparent)}
-.chip.demo{background:var(--rose); color:#fff; border-color:transparent}
 
 .view{display:none; flex-direction:column; gap:22px; animation:viewin .35s ease}
 .view.on{display:flex}
@@ -264,6 +263,14 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .member-list .av{width:38px; height:38px; border-radius:50%; background:var(--water-hi); flex:none; overflow:hidden}
 .member-list .av svg{width:100%; height:100%}
 .member-list .nm{flex:1; min-width:0}
+.board{margin-bottom:18px}
+.board .card-h{flex-wrap:wrap; gap:10px}
+.board-list li.me{outline:2px solid var(--rose); outline-offset:-2px}
+.board-list .rk{width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:.9rem; color:var(--ink-2,inherit); flex:none}
+.board-list .rk.r1{background:#e8b84a; color:#3b2a05}
+.board-list .rk.r2{background:#c9ced6; color:#2b2f36}
+.board-list .rk.r3{background:#d39a6a; color:#3a2210}
+.board-list .mn{font-weight:700; font-variant-numeric:tabular-nums}
 .member-list .nm b{display:block; font-weight:600; font-size:.92rem}
 .member-list .nm span{font-size:.78rem; color:var(--muted)}
 .code{font-family:var(--f-display); font-size:1.1rem; letter-spacing:.14em; padding:4px 10px; border-radius:10px; background:var(--surface-2); border:1px dashed var(--line-2); user-select:all}
@@ -632,7 +639,6 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <h1 id="viewTitle">Focus</h1>
         </div>
         <div class="chips">
-          <span class="chip demo" id="demoChip" hidden>Demo speed</span>
           <span class="note-wrap"><button type="button" class="chip note-btn" id="noteBtn" aria-label="Notifications" aria-expanded="false" aria-haspopup="true"><svg><use href="#i-bell"/></svg><b class="note-badge" id="noteBadge" hidden>0</b></button>
             <div class="card note-panel" id="notePanel" hidden role="dialog" aria-label="Notifications"><div class="card-h"><h2>Notifications</h2><button class="icon-btn" data-noteclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div><div id="noteBody"></div></div></span>
           <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
@@ -742,10 +748,11 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 
       <!-- POND -->
       <section class="view" id="v-pond">
-        <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement. There are no rankings in this pond.</p>
+        <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement, and check the leaderboard to see who studied the most.</p>
         <div id="pondNotice"></div>
         <div class="stage pond-stage" id="pondStage"><div class="over" id="pondOver"></div></div>
         <div class="legend"><span><i style="background:var(--accent)"></i>Focusing now</span><span><i style="background:var(--rose)"></i>You</span><span><i style="background:var(--line-2)"></i>Napping or away</span></div>
+        <div class="card board"><div class="card-h"><div><h2>Leaderboard</h2><p class="muted" id="boardNote" style="font-size:.82rem;margin:2px 0 0"></p></div><div class="seg" role="group" id="boardSeg" aria-label="Time period"><button data-board="d" aria-pressed="false">Today</button><button data-board="w" aria-pressed="true">This week</button><button data-board="m" aria-pressed="false">This month</button></div></div><ol class="member-list board-list" id="boardList"></ol></div>
         <div class="grid g-2">
           <div class="card"><div class="card-h"><h2>In the pond</h2><div class="seg" role="group" aria-label="Who to show"><button id="pondAll" aria-pressed="true">Everyone</button><button id="pondFriends" aria-pressed="false">Friends</button></div></div><ul class="member-list" id="pondList"></ul></div>
           <div class="card"><div class="card-h"><h2>Ripples you received</h2></div><ul class="ripple-feed" id="rippleFeed"></ul></div>
@@ -830,7 +837,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
         <div class="g-list">
           <article class="card g-sec" id="g-1">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-user"/></svg></span><div><span class="eyebrow">Step 1</span><h2>Get started</h2></div></div>
-            <ol class="g-steps"><li>Pick an animal, give it a name, and add your university and major. You can change all of this later.</li><li>Click <b>Sign in to join the pond</b> at the top right and choose your Google account.</li><li>Signed in, your progress follows you to any phone or laptop and your animal appears in the shared pond. Without signing in, everything stays in this browser only.</li></ol>
+            <ol class="g-steps"><li>Pick an animal, give it a name, and add your university and major. You can change all of this later.</li><li>Click <b>Sign in to join the pond</b> at the top right and choose your Google account.</li><li>Signed in, everything is saved to your Google account: courses, sessions, coins and animals. It follows you to any phone or laptop and your animal appears in the shared pond. If you studied before signing in, that progress is added to your account.</li></ol>
             <div class="row"><button class="btn small primary" data-signin>Sign in with Google</button></div>
           </article>
           <article class="card g-sec" id="g-2">
@@ -850,7 +857,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-5">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company. Tap <b>See profile</b> to view a classmate's study time and animals, if their profile is public. Choose yours under <b>Privacy</b> on your profile page.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
@@ -865,17 +872,17 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) up to the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 9</span><h2>See your progress</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li>Pick a semester at the top to look back at one term.</li></ol>
+            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
             <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
           </article>
           <article class="card g-sec" id="g-10">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 10</span><h2>Make it yours</h2></div></div>
-            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off. <b>Demo speed</b> makes one minute pass in one second, for presenting.</li><li>Export your data or sign out from the same panel.</li></ol>
+            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
           <article class="card g-sec g-share" id="g-11">
@@ -951,12 +958,11 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <section><span class="eyebrow">Session</span>
     <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
     <div class="toggle"><span>Start rest automatically after focus</span><button class="switch" role="switch" id="swAuto" aria-checked="true" aria-label="Auto rest"></button></div>
-    <div class="toggle"><span><b>Demo speed</b><br><span class="muted" style="font-size:.82rem">One minute passes in one second. For presenting.</span></span><button class="switch" role="switch" id="swDemo" aria-checked="false" aria-label="Demo speed"></button></div>
   </section>
   <section><span class="eyebrow">Your data</span>
     <p class="muted" style="font-size:.84rem" id="dataWhere"></p>
     <div id="acctRow" class="row"></div>
-    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button><button class="btn small" id="sampleBtn">Add a sample week</button></div>
+    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button></div>
     <div id="resetWrap"><button class="btn small quiet" id="resetBtn"><svg><use href="#i-trash"/></svg>Start over</button></div>
   </section>
 </aside>
@@ -1450,6 +1456,9 @@ function mergeState(s) {
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
   Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });
+  // demo speed and the sample week are gone; drop their leftovers
+  m.settings.demo = false;
+  if (Array.isArray(m.sessions)) m.sessions = m.sessions.filter(x => !x.sample);
   return m;
 }
 function loadLocal() {
@@ -1500,6 +1509,13 @@ function bestStreak() {
   return Math.max(best, S.bestStreak || 0);
 }
 const todayMins = () => minutesByDay()[dayKey()] || 0;
+const weekStart = (d = new Date()) => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
+// leaderboard minutes, keyed by period so old numbers drop off by themselves (weeks start on Monday)
+function boardStats() {
+  const d = dayKey(), w = dayKey(weekStart()), mo = d.slice(0, 7), b = { d, w, m: mo, dm: 0, wm: 0, mm: 0 };
+  S.sessions.forEach(s => { const k = dayKey(s.start); if (k === d) b.dm += s.mins; if (k >= w) b.wm += s.mins; if (k.slice(0, 7) === mo) b.mm += s.mins; });
+  return b;
+}
 function publicStats() {
   const week = dayKey(addDays(new Date(), -6));
   return {
@@ -1709,7 +1725,8 @@ function cleanResident(id, d) {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
     status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
-    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me'
+    vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === true ? 'everyone' : 'me',
+    board: d.board && typeof d.board === 'object' ? { d: clampStr(d.board.d, 10), w: clampStr(d.board.w, 10), m: clampStr(d.board.m, 7), dm: Math.max(0, Math.min(1440, +d.board.dm || 0)), wm: Math.max(0, Math.min(10080, +d.board.wm || 0)), mm: Math.max(0, Math.min(44640, +d.board.mm || 0)) } : null
   };
 }
 function liveStatus(r) {
@@ -1856,7 +1873,7 @@ function myStatus() {
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility };
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats() };
   const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
   writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
@@ -1943,7 +1960,7 @@ function say(text) {
   const el = $('#speech'); el.textContent = text; el.classList.add('show');
   clearTimeout(speechT); speechT = setTimeout(() => el.classList.remove('show'), 3400);
 }
-const phaseMs = (min) => min * 60000 / (S.settings.demo ? 60 : 1);
+const phaseMs = (min) => min * 60000;
 
 function computeHero() {
   if (Date.now() < happyUntil) return 'happy';
@@ -1984,7 +2001,7 @@ function renderTimer() {
     pauseB.hidden = t.pausedLeft != null || t.phase !== 'focus';
     stopB.hidden = t.phase !== 'focus'; skipB.hidden = t.phase !== 'rest';
   }
-  const nominalLeft = left * (S.settings.demo ? 60 : 1);
+  const nominalLeft = left;
   const mm = Math.floor(nominalLeft / 60000), ss = Math.floor(nominalLeft / 1000) % 60;
   const txt = `${pad2(mm)}:${pad2(ss)}`;
   const clock = $('#clock');
@@ -2456,7 +2473,25 @@ function renderPond(force) {
   }
   $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r))}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
     + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);
+  renderBoard();
   if (popFor) openPop(popFor, true);
+}
+let boardPeriod = 'w';
+function renderBoard() {
+  const el = $('#boardList'); if (!el) return;
+  const mine = boardStats(), key = mine[boardPeriod], f = boardPeriod + 'm';
+  const rows = NET.pond.filter(r => r.id !== NET.uid && r.vis !== 'me' && r.board && r.board[boardPeriod] === key && r.board[f] > 0)
+    .map(r => ({ id: r.id, name: r.name, animal: r.animal, mins: r.board[f] }));
+  if (S.profile.visibility !== 'me') rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, mins: mine[f] });
+  rows.sort((a, b) => b.mins - a.mins);
+  const top = rows.filter(r => r.mins > 0).slice(0, 10);
+  const meRow = rows.find(r => r.me), myRank = meRow && meRow.mins ? rows.indexOf(meRow) + 1 : 0;
+  const ends = boardPeriod === 'd' ? 'Resets at midnight' : boardPeriod === 'w' ? 'Resets Monday' : 'Resets on the 1st';
+  $('#boardNote').textContent = ends + (S.profile.visibility === 'me' ? '. You are hidden because your profile is set to Only me.' : '');
+  let rank = 0, prev = -1;
+  el.innerHTML = top.length ? top.map((r, i) => { if (r.mins !== prev) { rank = i + 1; prev = r.mins; } return `<li class="${r.me ? 'me' : ''}"><span class="rk${rank <= 3 ? ' r' + rank : ''}">${rank}</span><span class="av">${avatarSVG(r.animal, 'awake')}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)}</b></span><span class="mn">${fmtMin(r.mins)}</span></li>`; }).join('')
+    + (meRow && myRank > 10 ? `<li class="me"><span class="rk">${myRank}</span><span class="av">${avatarSVG(S.active, 'awake')}</span><span class="nm"><b>You</b></span><span class="mn">${fmtMin(meRow.mins)}</span></li>` : '')
+    : `<li class="muted" style="background:none">No one has studied ${boardPeriod === 'd' ? 'today' : boardPeriod === 'w' ? 'this week' : 'this month'} yet. Start a focus session to take the top spot.</li>`;
 }
 function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
 function openPop(id, refresh) {
@@ -2574,6 +2609,7 @@ function bindPond() {
     sendRipple(popFor, m); f.m.value = '';
   });
   $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
+  $('#boardSeg').onclick = e => { const b = e.target.closest('[data-board]'); if (!b) return; boardPeriod = b.dataset.board; $$('#boardSeg button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderBoard(); };
   $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };
   $('#pondFriends').onclick = () => { pondFilter = 'friends'; $('#pondAll').setAttribute('aria-pressed', false); $('#pondFriends').setAttribute('aria-pressed', true); renderPond(true); };
 }
@@ -2970,7 +3006,7 @@ function renderStats() {
   $('#heatLegend').innerHTML = `<span>Less</span>${[0, 1, 2, 3, 4].map(l => `<i style="width:13px;height:13px;border-radius:4px;background:${shade(l)}"></i>`).join('')}<span>More</span>`;
   // sessions table
   const recent = ses.slice().sort((a, b) => b.start - a.start).slice(0, 12);
-  $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}${s.sample ? ' <span class="pill example">Sample</span>' : ''}</td></tr>`).join('')}</tbody>`
+  $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}</td></tr>`).join('')}</tbody>`
     : `<tbody><tr><td class="muted" style="border:0">No sessions yet. Your first focus session will appear here.</td></tr></tbody>`;
 }
 function bindStats() {
@@ -3038,12 +3074,11 @@ function renderDrawer() {
   $('#presets').innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button class="preset" data-preset="${k}" aria-pressed="${S.settings.preset === k}"><span class="sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(p.name)}</button>`).join('');
   $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
   $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
-  [['#swSound', 'sound'], ['#swAuto', 'autoRest'], ['#swDemo', 'demo']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
+  [['#swSound', 'sound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
   $('#dataWhere').textContent = NET.db && NET.canWrite ? `Your progress is saved to your account and on this device. The pond, ripples, circles and posts are shared with everyone${NET.web ? ' who signs in' : ' invited'}.` : 'Your progress is saved in this browser on this device. Export it to keep a copy.';
   $('#acctRow').innerHTML = !NET.web ? '' : NET.db ? `<span class="muted" style="font-size:.84rem">Signed in${NET.userName ? ' as ' + esc(NET.userName) : ''}</span><button class="btn small quiet" id="signOutBtn">Sign out</button>` : '<button class="btn small primary" id="signInBtn2">Sign in with Google</button>';
   $('#signOutBtn') && ($('#signOutBtn').onclick = () => signOut());
   $('#signInBtn2') && ($('#signInBtn2').onclick = () => signIn());
-  $('#sampleBtn').textContent = S.sessions.some(s => s.sample) ? 'Remove sample week' : 'Add a sample week';
 }
 function bindDrawer() {
   $('#openCustomize').onclick = $('#openCustomize2').onclick = () => openDrawer(true);
@@ -3058,23 +3093,14 @@ function bindDrawer() {
   $('#cReset').onclick = () => { S.settings.custom = {}; save(); applyTheme(); };
   $('#fxSeg').onclick = e => { const b = e.target.closest('[data-fx]'); if (!b) return; S.settings.fx = b.dataset.fx; save(); renderDrawer(); if (REDUCED) FX.forEach(o => { fxSize(o); fxSeed(o); fxDraw(o, 0); }); };
   $('#skySeg').onclick = e => { const b = e.target.closest('[data-sky]'); if (!b) return; S.settings.sky = b.dataset.sky; save(); applySky(); renderDrawer(); };
-  const sw = (id, k, after) => { $(id).onclick = () => { if (S.timer && k === 'demo') { toast('Finish or stop the current session before changing demo speed.'); return; } S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
-  sw('#swSound', 'sound'); sw('#swAuto', 'autoRest'); sw('#swDemo', 'demo', () => { renderChips(); renderTimer(); });
+  const sw = (id, k, after) => { $(id).onclick = () => { S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
+  sw('#swSound', 'sound'); sw('#swAuto', 'autoRest');
   $('#exportBtn').onclick = async () => {
     const data = JSON.stringify(S, null, 2);
     const dl = await NET.downloadsP;
     if (dl) { try { await dl.save({ filename: `grind-${dayKey()}.json`, data }); return; } catch (e) { if (e && e.code === 'declined') return; } }
     if (NET.web) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = `grind-${dayKey()}.json`; document.body.appendChild(a); a.click(); a.remove(); return; }
     try { await navigator.clipboard.writeText(data); toast('Your data was copied as text. Paste it into a file to keep it.'); } catch (e) { toast('Export is not available in this view.'); }
-  };
-  $('#sampleBtn').onclick = () => {
-    if (S.sessions.some(s => s.sample)) { S.sessions = S.sessions.filter(s => !s.sample); toast('Sample week removed.'); }
-    else {
-      const cs = curCourses(); const pattern = [50, 25, 0, 75, 40, 100, 30];
-      pattern.forEach((m, i) => { if (!m) return; const d = addDays(new Date(), -(7 - i)); d.setHours(14 + (i % 4), 10, 0, 0); let left = m; while (left > 0) { const len = Math.min(left, 25 + (i % 2) * 25); S.sessions.push({ id: uid(), start: +d, mins: len, courseId: cs.length ? cs[(i + left) % cs.length].id : '', completed: true, animal: S.active, sample: true }); d.setMinutes(d.getMinutes() + len + 5); left -= len; } });
-      toast('A sample week was added so you can see the journal. Remove it here any time.');
-    }
-    save(); renderAll();
   };
   $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; };
   function restoreReset() { $('#resetWrap').innerHTML = `<button class="btn small quiet" id="resetBtn">${icon('i-trash')}Start over</button>`; bindReset(); }
@@ -3128,7 +3154,6 @@ function renderChips() {
   const st = streakNow();
   $('#streakChip').textContent = `${st} day${st === 1 ? '' : 's'}`;
   $('#coinChip').textContent = S.coins;
-  $('#demoChip').hidden = !S.settings.demo;
 }
 function renderSync() {
   const c = $('#syncChip');

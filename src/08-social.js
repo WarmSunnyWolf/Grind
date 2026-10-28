@@ -36,7 +36,25 @@ function renderPond(force) {
   }
   $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r))}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
     + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);
+  renderBoard();
   if (popFor) openPop(popFor, true);
+}
+let boardPeriod = 'w';
+function renderBoard() {
+  const el = $('#boardList'); if (!el) return;
+  const mine = boardStats(), key = mine[boardPeriod], f = boardPeriod + 'm';
+  const rows = NET.pond.filter(r => r.id !== NET.uid && r.vis !== 'me' && r.board && r.board[boardPeriod] === key && r.board[f] > 0)
+    .map(r => ({ id: r.id, name: r.name, animal: r.animal, mins: r.board[f] }));
+  if (S.profile.visibility !== 'me') rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, mins: mine[f] });
+  rows.sort((a, b) => b.mins - a.mins);
+  const top = rows.filter(r => r.mins > 0).slice(0, 10);
+  const meRow = rows.find(r => r.me), myRank = meRow && meRow.mins ? rows.indexOf(meRow) + 1 : 0;
+  const ends = boardPeriod === 'd' ? 'Resets at midnight' : boardPeriod === 'w' ? 'Resets Monday' : 'Resets on the 1st';
+  $('#boardNote').textContent = ends + (S.profile.visibility === 'me' ? '. You are hidden because your profile is set to Only me.' : '');
+  let rank = 0, prev = -1;
+  el.innerHTML = top.length ? top.map((r, i) => { if (r.mins !== prev) { rank = i + 1; prev = r.mins; } return `<li class="${r.me ? 'me' : ''}"><span class="rk${rank <= 3 ? ' r' + rank : ''}">${rank}</span><span class="av">${avatarSVG(r.animal, 'awake')}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)}</b></span><span class="mn">${fmtMin(r.mins)}</span></li>`; }).join('')
+    + (meRow && myRank > 10 ? `<li class="me"><span class="rk">${myRank}</span><span class="av">${avatarSVG(S.active, 'awake')}</span><span class="nm"><b>You</b></span><span class="mn">${fmtMin(meRow.mins)}</span></li>` : '')
+    : `<li class="muted" style="background:none">No one has studied ${boardPeriod === 'd' ? 'today' : boardPeriod === 'w' ? 'this week' : 'this month'} yet. Start a focus session to take the top spot.</li>`;
 }
 function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
 function openPop(id, refresh) {
@@ -154,6 +172,7 @@ function bindPond() {
     sendRipple(popFor, m); f.m.value = '';
   });
   $('#pondList').addEventListener('click', e => { const b = e.target.closest('[data-ripple]'); if (b) sendRipple(b.dataset.ripple, pick(RIPPLE_MSGS)); });
+  $('#boardSeg').onclick = e => { const b = e.target.closest('[data-board]'); if (!b) return; boardPeriod = b.dataset.board; $$('#boardSeg button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderBoard(); };
   $('#pondAll').onclick = () => { pondFilter = 'all'; $('#pondAll').setAttribute('aria-pressed', true); $('#pondFriends').setAttribute('aria-pressed', false); renderPond(true); };
   $('#pondFriends').onclick = () => { pondFilter = 'friends'; $('#pondAll').setAttribute('aria-pressed', false); $('#pondFriends').setAttribute('aria-pressed', true); renderPond(true); };
 }

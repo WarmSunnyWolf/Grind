@@ -15,7 +15,7 @@ function say(text) {
   const el = $('#speech'); el.textContent = text; el.classList.add('show');
   clearTimeout(speechT); speechT = setTimeout(() => el.classList.remove('show'), 3400);
 }
-const phaseMs = (min) => min * 60000 / (S.settings.demo ? 60 : 1);
+const phaseMs = (min) => min * 60000;
 
 function computeHero() {
   if (Date.now() < happyUntil) return 'happy';
@@ -56,7 +56,7 @@ function renderTimer() {
     pauseB.hidden = t.pausedLeft != null || t.phase !== 'focus';
     stopB.hidden = t.phase !== 'focus'; skipB.hidden = t.phase !== 'rest';
   }
-  const nominalLeft = left * (S.settings.demo ? 60 : 1);
+  const nominalLeft = left;
   const mm = Math.floor(nominalLeft / 60000), ss = Math.floor(nominalLeft / 1000) % 60;
   const txt = `${pad2(mm)}:${pad2(ss)}`;
   const clock = $('#clock');

@@ -82,6 +82,9 @@ function mergeState(s) {
   // earlier versions gave every animal a made-up name; students now name their own
   const OLD_NAMES = { frog: 'Pip', duckling: 'Sunny', capybara: 'Yuzu', rabbit: 'Clover', otter: 'Miso', fox: 'Ember', horse: 'Maple', deer: 'Fern', turtle: 'Moss', axolotl: 'Nori', heron: 'Sage' };
   Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });
+  // demo speed and the sample week are gone; drop their leftovers
+  m.settings.demo = false;
+  if (Array.isArray(m.sessions)) m.sessions = m.sessions.filter(x => !x.sample);
   return m;
 }
 function loadLocal() {
@@ -132,6 +135,13 @@ function bestStreak() {
   return Math.max(best, S.bestStreak || 0);
 }
 const todayMins = () => minutesByDay()[dayKey()] || 0;
+const weekStart = (d = new Date()) => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
+// leaderboard minutes, keyed by period so old numbers drop off by themselves (weeks start on Monday)
+function boardStats() {
+  const d = dayKey(), w = dayKey(weekStart()), mo = d.slice(0, 7), b = { d, w, m: mo, dm: 0, wm: 0, mm: 0 };
+  S.sessions.forEach(s => { const k = dayKey(s.start); if (k === d) b.dm += s.mins; if (k >= w) b.wm += s.mins; if (k.slice(0, 7) === mo) b.mm += s.mins; });
+  return b;
+}
 function publicStats() {
   const week = dayKey(addDays(new Date(), -6));
   return {

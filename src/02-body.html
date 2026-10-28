@@ -73,7 +73,6 @@
           <h1 id="viewTitle">Focus</h1>
         </div>
         <div class="chips">
-          <span class="chip demo" id="demoChip" hidden>Demo speed</span>
           <span class="note-wrap"><button type="button" class="chip note-btn" id="noteBtn" aria-label="Notifications" aria-expanded="false" aria-haspopup="true"><svg><use href="#i-bell"/></svg><b class="note-badge" id="noteBadge" hidden>0</b></button>
             <div class="card note-panel" id="notePanel" hidden role="dialog" aria-label="Notifications"><div class="card-h"><h2>Notifications</h2><button class="icon-btn" data-noteclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div><div id="noteBody"></div></div></span>
           <span class="chip" title="Daily streak"><svg><use href="#i-firefly"/></svg><span class="num" id="streakChip">0 days</span></span>
@@ -183,10 +182,11 @@
 
       <!-- POND -->
       <section class="view" id="v-pond">
-        <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement. There are no rankings in this pond.</p>
+        <p class="muted" style="max-width:62ch">Everyone's animal lives here together. A glowing name means that student is focusing right now. Tap an animal to send a ripple of encouragement, and check the leaderboard to see who studied the most.</p>
         <div id="pondNotice"></div>
         <div class="stage pond-stage" id="pondStage"><div class="over" id="pondOver"></div></div>
         <div class="legend"><span><i style="background:var(--accent)"></i>Focusing now</span><span><i style="background:var(--rose)"></i>You</span><span><i style="background:var(--line-2)"></i>Napping or away</span></div>
+        <div class="card board"><div class="card-h"><div><h2>Leaderboard</h2><p class="muted" id="boardNote" style="font-size:.82rem;margin:2px 0 0"></p></div><div class="seg" role="group" id="boardSeg" aria-label="Time period"><button data-board="d" aria-pressed="false">Today</button><button data-board="w" aria-pressed="true">This week</button><button data-board="m" aria-pressed="false">This month</button></div></div><ol class="member-list board-list" id="boardList"></ol></div>
         <div class="grid g-2">
           <div class="card"><div class="card-h"><h2>In the pond</h2><div class="seg" role="group" aria-label="Who to show"><button id="pondAll" aria-pressed="true">Everyone</button><button id="pondFriends" aria-pressed="false">Friends</button></div></div><ul class="member-list" id="pondList"></ul></div>
           <div class="card"><div class="card-h"><h2>Ripples you received</h2></div><ul class="ripple-feed" id="rippleFeed"></ul></div>
@@ -271,7 +271,7 @@
         <div class="g-list">
           <article class="card g-sec" id="g-1">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-user"/></svg></span><div><span class="eyebrow">Step 1</span><h2>Get started</h2></div></div>
-            <ol class="g-steps"><li>Pick an animal, give it a name, and add your university and major. You can change all of this later.</li><li>Click <b>Sign in to join the pond</b> at the top right and choose your Google account.</li><li>Signed in, your progress follows you to any phone or laptop and your animal appears in the shared pond. Without signing in, everything stays in this browser only.</li></ol>
+            <ol class="g-steps"><li>Pick an animal, give it a name, and add your university and major. You can change all of this later.</li><li>Click <b>Sign in to join the pond</b> at the top right and choose your Google account.</li><li>Signed in, everything is saved to your Google account: courses, sessions, coins and animals. It follows you to any phone or laptop and your animal appears in the shared pond. If you studied before signing in, that progress is added to your account.</li></ol>
             <div class="row"><button class="btn small primary" data-signin>Sign in with Google</button></div>
           </article>
           <article class="card g-sec" id="g-2">
@@ -291,7 +291,7 @@
           </article>
           <article class="card g-sec" id="g-5">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>, a short note like "You got this", or to add them as a friend.</li><li>Switch to <b>Friends</b> to see only your people. There are no rankings, only company. Tap <b>See profile</b> to view a classmate's study time and animals, if their profile is public. Choose yours under <b>Privacy</b> on your profile page.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
@@ -306,17 +306,17 @@
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 8</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) up to the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 9</span><h2>See your progress</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li>Pick a semester at the top to look back at one term.</li></ol>
+            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
             <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
           </article>
           <article class="card g-sec" id="g-10">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 10</span><h2>Make it yours</h2></div></div>
-            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off. <b>Demo speed</b> makes one minute pass in one second, for presenting.</li><li>Export your data or sign out from the same panel.</li></ol>
+            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
           <article class="card g-sec g-share" id="g-11">
@@ -392,12 +392,11 @@
   <section><span class="eyebrow">Session</span>
     <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
     <div class="toggle"><span>Start rest automatically after focus</span><button class="switch" role="switch" id="swAuto" aria-checked="true" aria-label="Auto rest"></button></div>
-    <div class="toggle"><span><b>Demo speed</b><br><span class="muted" style="font-size:.82rem">One minute passes in one second. For presenting.</span></span><button class="switch" role="switch" id="swDemo" aria-checked="false" aria-label="Demo speed"></button></div>
   </section>
   <section><span class="eyebrow">Your data</span>
     <p class="muted" style="font-size:.84rem" id="dataWhere"></p>
     <div id="acctRow" class="row"></div>
-    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button><button class="btn small" id="sampleBtn">Add a sample week</button></div>
+    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button></div>
     <div id="resetWrap"><button class="btn small quiet" id="resetBtn"><svg><use href="#i-trash"/></svg>Start over</button></div>
   </section>
 </aside>

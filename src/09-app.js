@@ -109,7 +109,7 @@ function renderStats() {
   $('#heatLegend').innerHTML = `<span>Less</span>${[0, 1, 2, 3, 4].map(l => `<i style="width:13px;height:13px;border-radius:4px;background:${shade(l)}"></i>`).join('')}<span>More</span>`;
   // sessions table
   const recent = ses.slice().sort((a, b) => b.start - a.start).slice(0, 12);
-  $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}${s.sample ? ' <span class="pill example">Sample</span>' : ''}</td></tr>`).join('')}</tbody>`
+  $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}</td></tr>`).join('')}</tbody>`
     : `<tbody><tr><td class="muted" style="border:0">No sessions yet. Your first focus session will appear here.</td></tr></tbody>`;
 }
 function bindStats() {
@@ -177,12 +177,11 @@ function renderDrawer() {
   $('#presets').innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button class="preset" data-preset="${k}" aria-pressed="${S.settings.preset === k}"><span class="sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(p.name)}</button>`).join('');
   $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
   $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
-  [['#swSound', 'sound'], ['#swAuto', 'autoRest'], ['#swDemo', 'demo']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
+  [['#swSound', 'sound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
   $('#dataWhere').textContent = NET.db && NET.canWrite ? `Your progress is saved to your account and on this device. The pond, ripples, circles and posts are shared with everyone${NET.web ? ' who signs in' : ' invited'}.` : 'Your progress is saved in this browser on this device. Export it to keep a copy.';
   $('#acctRow').innerHTML = !NET.web ? '' : NET.db ? `<span class="muted" style="font-size:.84rem">Signed in${NET.userName ? ' as ' + esc(NET.userName) : ''}</span><button class="btn small quiet" id="signOutBtn">Sign out</button>` : '<button class="btn small primary" id="signInBtn2">Sign in with Google</button>';
   $('#signOutBtn') && ($('#signOutBtn').onclick = () => signOut());
   $('#signInBtn2') && ($('#signInBtn2').onclick = () => signIn());
-  $('#sampleBtn').textContent = S.sessions.some(s => s.sample) ? 'Remove sample week' : 'Add a sample week';
 }
 function bindDrawer() {
   $('#openCustomize').onclick = $('#openCustomize2').onclick = () => openDrawer(true);
@@ -197,23 +196,14 @@ function bindDrawer() {
   $('#cReset').onclick = () => { S.settings.custom = {}; save(); applyTheme(); };
   $('#fxSeg').onclick = e => { const b = e.target.closest('[data-fx]'); if (!b) return; S.settings.fx = b.dataset.fx; save(); renderDrawer(); if (REDUCED) FX.forEach(o => { fxSize(o); fxSeed(o); fxDraw(o, 0); }); };
   $('#skySeg').onclick = e => { const b = e.target.closest('[data-sky]'); if (!b) return; S.settings.sky = b.dataset.sky; save(); applySky(); renderDrawer(); };
-  const sw = (id, k, after) => { $(id).onclick = () => { if (S.timer && k === 'demo') { toast('Finish or stop the current session before changing demo speed.'); return; } S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
-  sw('#swSound', 'sound'); sw('#swAuto', 'autoRest'); sw('#swDemo', 'demo', () => { renderChips(); renderTimer(); });
+  const sw = (id, k, after) => { $(id).onclick = () => { S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
+  sw('#swSound', 'sound'); sw('#swAuto', 'autoRest');
   $('#exportBtn').onclick = async () => {
     const data = JSON.stringify(S, null, 2);
     const dl = await NET.downloadsP;
     if (dl) { try { await dl.save({ filename: `grind-${dayKey()}.json`, data }); return; } catch (e) { if (e && e.code === 'declined') return; } }
     if (NET.web) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = `grind-${dayKey()}.json`; document.body.appendChild(a); a.click(); a.remove(); return; }
     try { await navigator.clipboard.writeText(data); toast('Your data was copied as text. Paste it into a file to keep it.'); } catch (e) { toast('Export is not available in this view.'); }
-  };
-  $('#sampleBtn').onclick = () => {
-    if (S.sessions.some(s => s.sample)) { S.sessions = S.sessions.filter(s => !s.sample); toast('Sample week removed.'); }
-    else {
-      const cs = curCourses(); const pattern = [50, 25, 0, 75, 40, 100, 30];
-      pattern.forEach((m, i) => { if (!m) return; const d = addDays(new Date(), -(7 - i)); d.setHours(14 + (i % 4), 10, 0, 0); let left = m; while (left > 0) { const len = Math.min(left, 25 + (i % 2) * 25); S.sessions.push({ id: uid(), start: +d, mins: len, courseId: cs.length ? cs[(i + left) % cs.length].id : '', completed: true, animal: S.active, sample: true }); d.setMinutes(d.getMinutes() + len + 5); left -= len; } });
-      toast('A sample week was added so you can see the journal. Remove it here any time.');
-    }
-    save(); renderAll();
   };
   $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; };
   function restoreReset() { $('#resetWrap').innerHTML = `<button class="btn small quiet" id="resetBtn">${icon('i-trash')}Start over</button>`; bindReset(); }
@@ -267,7 +257,6 @@ function renderChips() {
   const st = streakNow();
   $('#streakChip').textContent = `${st} day${st === 1 ? '' : 's'}`;
   $('#coinChip').textContent = S.coins;
-  $('#demoChip').hidden = !S.settings.demo;
 }
 function renderSync() {
   const c = $('#syncChip');
