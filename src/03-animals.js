@@ -283,6 +283,28 @@ const ANIMALS = {
       <circle cx="86" cy="78" r="3" fill="${d}"/><circle cx="112" cy="76" r="2.4" fill="${d}"/><circle cx="126" cy="84" r="2" fill="${d}"/><circle cx="120" cy="160" r="3" fill="${d}"/><circle cx="138" cy="150" r="2.4" fill="${d}"/>`;
     }
   },
+  swan: {
+    label: 'Swan', lore: 'Glides across the pond without a ripple. Calm focus, graceful finish.', unlock: { type: 'coins', n: 180 }, defaultName: '',
+    face: { eyes: [[74, 52], [88, 52]], er: 4.2, mouth: null, blush: [[70, 62], [94, 62]], blushR: 5, zz: [118, 22] },
+    art: (st) => {
+      const w = '#fbf8f1', sh = '#e6e1d6', bk = '#e98a45', k = INK;
+      const neck = 'M86 152 C60 130 50 104 64 84 C72 72 78 66 78 54';
+      const beak = st === 'happy'
+        ? `<path d="M64 54 L40 52 L62 60 Z" fill="${bk}" ${O2}/><path d="M63 61 L42 66 L64 64 Z" fill="${bk}" ${O2}/>`
+        : `<path d="M64 53 C54 54 46 57 40 61 C48 64 56 64 64 63 Z" fill="${bk}" ${O2}/>`;
+      return `<path d="M150 146 L186 122 L170 156 Z" fill="${w}" ${O}/>
+      <path d="M58 150 C56 132 76 122 112 122 C150 122 172 134 170 152 C168 172 142 182 110 182 C78 182 60 172 58 150 Z" fill="${w}" ${O}/>
+      <path d="${neck}" fill="none" stroke="${k}" stroke-width="22" stroke-linecap="round"/>
+      <path d="${neck}" fill="none" stroke="${w}" stroke-width="16" stroke-linecap="round"/>
+      <ellipse cx="86" cy="154" rx="14" ry="13" fill="${w}"/>
+      <path d="M96 140 C112 116 150 110 176 122 C170 146 140 160 106 158 C100 152 96 146 96 140 Z" fill="${sh}" ${O}/>
+      <path d="M118 136 C132 130 146 130 158 134 M114 148 C130 142 146 142 160 146" fill="none" stroke="#c9c2b4" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="80" cy="54" r="18" fill="${w}" ${O}/>
+      <path d="M66 46 C62 50 62 58 66 62 L62 58 C60 54 61 50 66 46 Z" fill="${k}"/>
+      ${beak}
+      <path d="M48 186 C70 180 90 190 110 186 C130 182 150 190 172 186" fill="none" stroke="#8fb7c4" stroke-width="3" stroke-linecap="round" opacity=".7"/>`;
+    }
+  },
   heron: {
     label: 'Heron', lore: 'Patient guardian of the pond. Lands after a 30-day streak.', unlock: { type: 'streak', n: 30 }, defaultName: '',
     face: { eyes: [[85, 56], [100, 56]], er: 4.2, mouth: null, blush: [[79, 67], [103, 68]], blushR: 5, zz: [124, 22] },
