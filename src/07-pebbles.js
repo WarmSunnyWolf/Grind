@@ -21,7 +21,7 @@ function crossingSVG(rock) {
     <path d="M600 0 H548 C530 30 534 90 550 120 H600 Z" fill="var(--bank)" stroke="var(--pad-2)" stroke-width="2"/>
     <g transform="translate(578 40)"><path d="M0 0 C-8 -5 -10 -14 -5 -19 C-2 -13 0 -8 0 0 Z M0 0 C8 -5 10 -14 5 -19 C2 -13 0 -8 0 0 Z M0 0 C-4 -8 -3 -18 0 -23 C3 -18 4 -8 0 0 Z" fill="${all ? 'var(--bloom)' : 'var(--line-2)'}" stroke="${INK}" stroke-width="1.4"/></g>
     ${stones.map(s => `<ellipse cx="${s.x}" cy="${s.y + 6}" rx="24" ry="7" fill="var(--water-2)" opacity=".6"/><path d="M${s.x - 24} ${s.y + 2} C${s.x - 24} ${s.y - 10} ${s.x - 10} ${s.y - 13} ${s.x} ${s.y - 13} C${s.x + 14} ${s.y - 13} ${s.x + 24} ${s.y - 8} ${s.x + 24} ${s.y + 1} C${s.x + 24} ${s.y + 8} ${s.x + 12} ${s.y + 10} ${s.x} ${s.y + 10} C${s.x - 12} ${s.y + 10} ${s.x - 24} ${s.y + 8} ${s.x - 24} ${s.y + 2} Z" fill="${s.done ? '#b9ad97' : 'none'}" stroke="${s.done ? INK : 'var(--water-hi)'}" stroke-width="2.2" ${s.done ? '' : 'stroke-dasharray="5 5"'}/>`).join('')}
-    ${animalSVG(S.active, all ? 'happy' : 'awake', { nested: true, x: ax - 30, y: ay - 56, w: 60, label: petName() })}
+    ${animalSVG(S.active, all ? 'happy' : 'awake', { look: myLook(), nested: true, x: ax - 30, y: ay - 56, w: 60, label: petName() })}
   </svg>`;
 }
 function renderRockFilter() {

@@ -12,8 +12,8 @@ function renderFeedback() {
   $('#fbArea').innerHTML = FB_AREAS.map(a => `<button type="button" class="cchip" data-area="${esc(a)}" aria-pressed="${fbArea === a}">${esc(a)}</button>`).join('');
   if (!$('#fbName').value && S.profile.name) $('#fbName').value = S.profile.name;
   $('#fbSide').innerHTML = fbSent
-    ? `<div class="pic">${animalSVG(S.active, 'happy')}</div><h3 style="text-align:center">Thank you</h3><p class="muted" style="text-align:center; font-size:.88rem; margin-top:6px">${esc(petName())} delivered your note to the team. You can send another any time.</p>`
-    : `<div class="pic">${animalSVG(S.active, 'awake')}</div><p class="hand" style="text-align:center; font-size:1.45rem; margin-top:4px">Every note helps us make the pond calmer.</p>`;
+    ? `<div class="pic">${animalSVG(S.active, 'happy', { look: myLook() })}</div><h3 style="text-align:center">Thank you</h3><p class="muted" style="text-align:center; font-size:.88rem; margin-top:6px">${esc(petName())} delivered your note to the team. You can send another any time.</p>`
+    : `<div class="pic">${animalSVG(S.active, 'awake', { look: myLook() })}</div><p class="hand" style="text-align:center; font-size:1.45rem; margin-top:4px">Every note helps us make the pond calmer.</p>`;
   $('#fbNote').textContent = feedbackTarget() ? '' : (NET.web ? 'Feedback starts working once the site is connected to its database.' : 'Feedback is saved on this device for now.');
 }
 function bindFeedback() {

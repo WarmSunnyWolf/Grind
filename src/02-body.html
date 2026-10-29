@@ -1,5 +1,6 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
+    <filter id="tint-rose" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="-40"/></filter><filter id="tint-gold" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="25"/></filter><filter id="tint-mint" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="90"/></filter><filter id="tint-sky" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="170"/></filter><filter id="tint-lilac" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="230"/></filter>
     <filter id="gr-wob" x="-5%" y="-5%" width="110%" height="110%">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
@@ -86,7 +87,7 @@
               <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
               <span class="eyebrow">How to spend</span>
-              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits in Sanctuary</span><b>15 to 60</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
@@ -275,7 +276,7 @@
 
       <!-- SANCTUARY -->
       <section class="view" id="v-sanctuary">
-        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Eighteen animals live around the pond. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-two animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p></div>
         <div class="zoo" id="zoo"></div>
       </section>
 
@@ -357,7 +358,7 @@
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the swan (180), the wolf (240) and the dragon (300). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the swan (180), the wolf (240), the dragon (300), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals to try on hats, glasses, bow ties and scarves (15 to 60 coins, and they fit every animal), or change its colour for free. Classmates see the outfit in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -468,6 +469,7 @@
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="dressModal" role="dialog" aria-modal="true" aria-label="Dress up"><div class="modal-box dress-box" id="dressBox"></div></div>
 <div class="modal" id="icsModal" role="dialog" aria-modal="true" aria-labelledby="icsTitle"><div class="modal-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><h2 id="icsTitle">Import from Blackboard</h2><button class="icon-btn" data-icsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
   <ol class="g-steps"><li>In Blackboard, open <b>Calendar</b>, click the gear, and choose <b>Share Calendar</b>. Click <b>Copy</b>.</li><li>Paste the link below and click <b>Import</b>.</li></ol>

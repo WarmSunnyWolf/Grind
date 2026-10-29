@@ -25,18 +25,19 @@ function renderZoo() {
     else if (!owned) action = `<span class="muted" style="font-size:.82rem">Arrives at a ${a.unlock.n}-day streak. Your best so far is ${best}.</span>`;
     else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(pn)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
     return `<article class="beast ${owned ? '' : 'locked'} ${active ? 'active' : ''}">
-      <div class="pic" data-pet="${k}" title="${owned ? 'Tap to pet' : ''}">${animalSVG(k, st, { label: `${a.label}, ${st}` })}</div>
+      <div class="pic" data-pet="${k}" title="${owned ? 'Tap to pet' : ''}">${animalSVG(k, st, { label: `${a.label}, ${st}`, look: owned ? myLook(k) : null })}</div>
       ${owned ? '' : `<span class="lock">${icon('i-lock')}${unlockText(a)}</span>`}
       <h3><span>${owned ? `<span data-namewrap="${k}">${esc(pn)}</span>` : a.label}</span><span class="sp">${owned && p.name ? a.label : ''}</span></h3>
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
-      <div class="row">${action}${owned ? `<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
+      <div class="row">${action}${owned ? `<button class="btn small" data-dress="${k}">Dress up</button><button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
     </article>`;
   }).join('');
 }
 function bindZoo() {
   $('#zoo').addEventListener('click', e => {
+    const dr = e.target.closest('[data-dress]'); if (dr) { openDress(dr.dataset.dress); return; }
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
@@ -125,7 +126,7 @@ function bindStats() {
 
 /* ---------- profile ---------- */
 function renderProfile() {
-  $('#profAv').innerHTML = avatarSVG(S.active, 'happy');
+  $('#profAv').innerHTML = avatarSVG(S.active, 'happy', myLook());
   $('#profName').textContent = myName();
   $('#profLine').textContent = [S.profile.uni, S.profile.major].filter(Boolean).join(' · ') || 'Add your university and major below.';
   $('#profPet').textContent = `Studying with ${petTitle()} · ${streakNow()}-day streak`;
@@ -141,7 +142,7 @@ function renderProfile() {
 function renderFriends() {
   $$('#visSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.vis === S.profile.visibility));
   const fr = S.friends.map(id => NET.pond.find(r => r.id === id) || EXAMPLES.find(e => e.id === id)).filter(Boolean);
-  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake')}</span>${esc(r.name)}${r.vis === 'me' ? `<span class="muted" style="font-size:.75rem">Private</span>` : ''}</button>`).join('')
+  $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake', r.look)}</span>${esc(r.name)}${r.vis === 'me' ? `<span class="muted" style="font-size:.75rem">Private</span>` : ''}</button>`).join('')
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
 function bindProfile() {
@@ -291,7 +292,7 @@ function renderGreeting() {
   const h = new Date().getHours();
   const g = h < 5 ? 'Up late' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 22 ? 'Good evening' : 'Up late';
   $('#greetHand').textContent = `${g}${S.profile.name ? ', ' + S.profile.name : ''}`;
-  $('#meMiniAv').innerHTML = avatarSVG(S.active, 'awake');
+  $('#meMiniAv').innerHTML = avatarSVG(S.active, 'awake', myLook());
   $('#meMiniName').textContent = myName();
   $('#meMiniSub').textContent = `with ${petName()}`;
 }
@@ -308,7 +309,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });

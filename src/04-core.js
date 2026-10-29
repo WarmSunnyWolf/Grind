@@ -43,7 +43,7 @@ function defaultState() {
     settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
-    rocks: [exampleRock()], events: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
+    rocks: [exampleRock()], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
     seenRipple: 0, visV2: true, timer: null, lastCourse: '', openRock: 'example-rock',
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true, quran: { reciter: 'afs', surah: 1 }, link: '' }
   };
@@ -64,6 +64,7 @@ function mergeAccount(remote, local, uid) {
   m.localPosts = byId(m.localPosts || [], local.localPosts || []);
   m.events = byId(m.events || [], local.events || []);
   m.unlocked = [...new Set([...(m.unlocked || []), ...(local.unlocked || [])])];
+  m.wardrobe = [...new Set([...(m.wardrobe || []), ...(local.wardrobe || [])])];
   Object.entries(local.pets || {}).forEach(([k, p]) => { if (!m.pets[k]) m.pets[k] = p; else { m.pets[k].bond = Math.max(m.pets[k].bond || 0, p.bond || 0); if (!m.pets[k].name && p.name) m.pets[k].name = p.name; } });
   const earned = Math.max(0, (local.coinsEarned || 20) - 20);
   m.coins = (m.coins || 0) + earned; m.coinsEarned = (m.coinsEarned || 0) + earned;

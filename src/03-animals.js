@@ -253,6 +253,75 @@ const ANIMALS = {
       <path d="M62 74 q4 -4 8 0 M130 74 q4 -4 8 0" fill="none" stroke="${w}" stroke-width="2.2" stroke-linecap="round"/>`;
     }
   },
+  triceratops: {
+    label: 'Triceratops', lore: 'Three horns, one goal. Charges through a reading list without stopping.', unlock: { type: 'coins', n: 220 }, defaultName: '',
+    face: { eyes: [[80, 86], [120, 86]], er: 5.5, mouth: { x: 100, y: 121, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [152, 40] },
+    art: () => {
+      const b = '#86a9c9', d = '#6a8db0', fr = '#f0b97a', l = '#c9dcea', h = '#f7ecd6';
+      return `<path d="M132 160 C164 162 182 146 186 128 C172 142 152 148 128 146 Z" fill="${b}" ${O}/>
+      <path d="M34 94 C32 52 62 26 100 26 C138 26 168 52 166 94 Z" fill="${fr}" ${O}/>
+      <circle cx="46" cy="70" r="5" fill="${d}" opacity=".5"/><circle cx="66" cy="44" r="5" fill="${d}" opacity=".5"/><circle cx="100" cy="34" r="5" fill="${d}" opacity=".5"/><circle cx="134" cy="44" r="5" fill="${d}" opacity=".5"/><circle cx="154" cy="70" r="5" fill="${d}" opacity=".5"/>
+      <rect x="64" y="156" width="22" height="24" rx="9" fill="${d}" ${O}/><rect x="114" y="156" width="22" height="24" rx="9" fill="${d}" ${O}/>
+      <path d="M56 176 C50 144 70 122 100 122 C130 122 150 144 144 176 C140 182 60 182 56 176 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="160" rx="24" ry="15" fill="${l}"/>
+      <path d="M54 92 C54 68 74 58 100 58 C126 58 146 68 146 92 C146 118 126 134 100 134 C74 134 54 118 54 92 Z" fill="${b}" ${O}/>
+      <path d="M78 66 L66 36 L90 60 Z" fill="${h}" ${O2}/><path d="M122 66 L134 36 L110 60 Z" fill="${h}" ${O2}/>
+      <ellipse cx="100" cy="114" rx="24" ry="15" fill="${l}" ${O2}/>
+      <path d="M93 104 L100 86 L107 104 Z" fill="${h}" ${O2}/>`;
+    }
+  },
+  stegosaurus: {
+    label: 'Stegosaurus', lore: 'Slow and steady, with a plate for every finished pebble.', unlock: { type: 'coins', n: 260 }, defaultName: '',
+    face: { eyes: [[84, 84], [116, 84]], er: 5, mouth: { x: 100, y: 106, type: 'wide', w: 12 }, blush: [[72, 98], [128, 98]], zz: [148, 40] },
+    art: () => {
+      const b = '#9bbd6a', d = '#7c9c50', pl = '#e6a86a', l = '#d7e6b0';
+      return `<path d="M134 162 C166 164 182 150 186 132 C172 144 154 150 130 148 Z" fill="${b}" ${O}/>
+      <path d="M176 138 L190 124 L184 144 Z" fill="${pl}" ${O2}/><path d="M184 130 L198 120 L188 138 Z" fill="${pl}" ${O2}/>
+      <path d="M0 12 L-10 0 L-7 -15 L0 -22 L7 -15 L10 0 Z" transform="translate(46 148) rotate(-62) scale(1.25)" fill="${pl}" ${O2}/><path d="M0 12 L-10 0 L-7 -15 L0 -22 L7 -15 L10 0 Z" transform="translate(50 124) rotate(-42) scale(1.25)" fill="${pl}" ${O2}/><path d="M0 12 L-10 0 L-7 -15 L0 -22 L7 -15 L10 0 Z" transform="translate(64 104) rotate(-22) scale(1.25)" fill="${pl}" ${O2}/><path d="M0 12 L-10 0 L-7 -15 L0 -22 L7 -15 L10 0 Z" transform="translate(154 148) rotate(62) scale(1.25)" fill="${pl}" ${O2}/><path d="M0 12 L-10 0 L-7 -15 L0 -22 L7 -15 L10 0 Z" transform="translate(150 124) rotate(42) scale(1.25)" fill="${pl}" ${O2}/><path d="M0 12 L-10 0 L-7 -15 L0 -22 L7 -15 L10 0 Z" transform="translate(136 104) rotate(22) scale(1.25)" fill="${pl}" ${O2}/>
+      <rect x="62" y="158" width="22" height="22" rx="9" fill="${d}" ${O}/><rect x="116" y="158" width="22" height="22" rx="9" fill="${d}" ${O}/>
+      <path d="M54 178 C48 142 70 116 100 116 C130 116 152 142 146 178 C142 184 58 184 54 178 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="160" rx="24" ry="16" fill="${l}"/>
+      <circle cx="66" cy="148" r="4" fill="${d}"/><circle cx="136" cy="146" r="5" fill="${d}"/><circle cx="128" cy="166" r="3" fill="${d}"/>
+      <path d="M86 58 L92 42 L99 56 Z M99 56 L104 38 L110 56 Z M110 58 L116 44 L121 60 Z" fill="${pl}" ${O2}/>
+      <path d="M60 86 C60 64 78 54 100 54 C122 54 140 64 140 86 C140 110 122 124 100 124 C78 124 60 110 60 86 Z" fill="${b}" ${O}/>
+      <circle cx="76" cy="66" r="3" fill="${d}"/><circle cx="126" cy="68" r="2.5" fill="${d}"/>`;
+    }
+  },
+  longneck: {
+    label: 'Longneck', lore: 'Sees the whole syllabus from up high. Never panics about a deadline.', unlock: { type: 'coins', n: 280 }, defaultName: '',
+    face: { eyes: [[63, 44], [81, 44]], er: 4.2, mouth: { x: 72, y: 53, type: 'cat' }, blush: [[56, 52], [89, 52]], blushR: 5, zz: [100, 20] },
+    art: () => {
+      const b = '#a9c7d8', d = '#87a9bd', l = '#dbe9f0';
+      const neck = 'M88 138 C74 110 66 84 70 52';
+      return `<path d="M140 160 C172 160 188 146 194 128 C178 142 160 150 136 148 Z" fill="${b}" ${O}/>
+      <rect x="128" y="150" width="20" height="30" rx="8" fill="${d}" ${O}/><rect x="60" y="150" width="20" height="30" rx="8" fill="${d}" ${O}/>
+      <ellipse cx="106" cy="146" rx="52" ry="30" fill="${b}" ${O}/>
+      <rect x="84" y="156" width="20" height="26" rx="8" fill="${b}" ${O}/><rect x="114" y="156" width="20" height="26" rx="8" fill="${b}" ${O}/>
+      <circle cx="118" cy="132" r="5" fill="${d}"/><circle cx="136" cy="142" r="4" fill="${d}"/><circle cx="104" cy="126" r="3" fill="${d}"/>
+      <path d="${neck}" fill="none" stroke="${INK}" stroke-width="28" stroke-linecap="round"/>
+      <path d="${neck}" fill="none" stroke="${b}" stroke-width="22" stroke-linecap="round"/>
+      <ellipse cx="90" cy="140" rx="14" ry="12" fill="${b}"/>
+      <path d="M74 96 C76 84 78 72 77 62" fill="none" stroke="${l}" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+      <ellipse cx="72" cy="46" rx="24" ry="18" fill="${b}" ${O}/>`;
+    }
+  },
+  trex: {
+    label: 'T. rex', lore: 'Tiny arms, huge ambition. Roars at procrastination.', unlock: { type: 'coins', n: 320 }, defaultName: '',
+    face: { eyes: [[78, 82], [122, 82]], er: 6, mouth: { x: 100, y: 113, type: 'wide', w: 18 }, blush: [[62, 100], [138, 100]], zz: [152, 38] },
+    art: () => {
+      const b = '#d9874f', d = '#b96c3a', l = '#f2d3a2';
+      return `<path d="M130 160 C168 160 188 136 186 110 C176 134 156 144 128 146 Z" fill="${b}" ${O}/>
+      <ellipse cx="80" cy="176" rx="16" ry="7" fill="${d}" ${O}/><ellipse cx="120" cy="176" rx="16" ry="7" fill="${d}" ${O}/>
+      <path d="M62 180 C54 146 70 120 100 120 C130 120 146 146 138 180 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="158" rx="22" ry="18" fill="${l}"/>
+      <ellipse cx="70" cy="144" rx="8" ry="5" fill="${b}" ${O2} transform="rotate(30 70 144)"/><ellipse cx="130" cy="144" rx="8" ry="5" fill="${b}" ${O2} transform="rotate(-30 130 144)"/>
+      <path d="M82 50 L88 34 L97 47 Z M98 46 L104 30 L112 46 Z M113 49 L120 36 L126 52 Z" fill="${d}" ${O2}/>
+      <path d="M46 84 C46 58 70 46 100 46 C130 46 154 58 154 84 C154 112 132 128 100 128 C68 128 46 112 46 84 Z" fill="${b}" ${O}/>
+      <ellipse cx="91" cy="100" rx="2.8" ry="2" fill="${INK}"/><ellipse cx="109" cy="100" rx="2.8" ry="2" fill="${INK}"/>
+      <path d="M86 112 L89 119 L92 112 Z M108 112 L111 119 L114 112 Z" fill="#fff" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="66" cy="64" r="3" fill="${d}"/><circle cx="136" cy="62" r="3.5" fill="${d}"/><circle cx="144" cy="74" r="2.4" fill="${d}"/>`;
+    }
+  },
   turtle: {
     label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
@@ -385,7 +454,7 @@ function animalSVG(kind, state = 'awake', opts = {}) {
   const tag = opts.nested ? `<svg x="${opts.x || 0}" y="${opts.y || 0}" width="${opts.w || 200}" height="${opts.w || 200}"` : '<svg';
   return `${tag} class="ga ${state}" viewBox="0 0 200 200" role="img" aria-label="${label}" overflow="visible">
     <ellipse cx="100" cy="182" rx="60" ry="8" fill="rgba(40,30,20,.16)"/>
-    <g class="bod"><g filter="url(#gr-wob)">${a.art(state)}</g>${faceSVG(f, state)}</g>${extras}</svg>`;
+    <g class="bod"><g${tintFilter(opts.look)}><g filter="url(#gr-wob)">${a.art(state)}</g></g>${faceSVG(f, state)}${lookLayers(kind, opts.look).over}</g>${extras}</svg>`;
 }
 
 /* Animal sitting on its own lily pad */
@@ -398,11 +467,11 @@ function onPadSVG(kind, state, opts = {}) {
       <path d="M0 0 L-72 9 M0 0 L-26 21 M0 0 L44 18 M0 0 L84 4 M0 0 L-90 -6" stroke="var(--pad-2)" stroke-width="2" opacity=".6" stroke-linecap="round"/>
       ${bloom ? `<g transform="translate(-86 -12)"><path d="M0 0 C-10 -6 -12 -18 -6 -24 C-2 -16 0 -10 0 0 Z M0 0 C10 -6 12 -18 6 -24 C2 -16 0 -10 0 0 Z M0 0 C-5 -10 -4 -22 0 -28 C4 -22 5 -10 0 0 Z" fill="var(--bloom)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>` : ''}
     </g>
-    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label })}
+    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label, look: opts.look })}
   </svg>`;
 }
 
 /* Small round avatar portrait */
-function avatarSVG(kind, state = 'awake') {
-  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
+function avatarSVG(kind, state = 'awake', look) {
+  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label, look }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
 }

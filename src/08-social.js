@@ -6,7 +6,7 @@ const SLOTS_WIDE = [[50, 74], [22, 58], [78, 60], [35, 88], [65, 89], [11, 80], 
 const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], [20, 40], [80, 42], [50, 32], [50, 92], [16, 76], [84, 78]];
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
-  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats() };
+  const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats(), look: myLook() };
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -27,14 +27,14 @@ function renderPond(force) {
   const slots = wide ? SLOTS_WIDE : SLOTS_TALL;
   const list = [me, ...others.sort((a, b) => hashStr(a.id) - hashStr(b.id))];
   const placed = list.slice(0, slots.length);
-  const sig = JSON.stringify(placed.map(r => [r.id, r.animal, r.name, r.pet, resState(r), r.status])) + wide;
+  const sig = JSON.stringify(placed.map(r => [r.id, r.animal, r.name, r.pet, resState(r), r.status, r.look])) + wide;
   if (force || sig !== lastPondSig) {
     lastPondSig = sig;
     const over = $('#pondOver');
     over.innerHTML = placed.map((r, i) => `<button class="resident ${r.me ? 'me' : ''}" style="left:${slots[i][0]}%; top:${slots[i][1]}%" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
-      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
   }
-  $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r))}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
+  $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r), r.look)}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
     + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);
   renderBoard();
   if (popFor) openPop(popFor, true);
@@ -44,16 +44,16 @@ function renderBoard() {
   const el = $('#boardList'); if (!el) return;
   const mine = boardStats(), key = mine[boardPeriod], f = boardPeriod + 'm';
   const rows = NET.pond.filter(r => r.id !== NET.uid && r.vis !== 'me' && r.board && r.board[boardPeriod] === key && r.board[f] > 0)
-    .map(r => ({ id: r.id, name: r.name, animal: r.animal, mins: r.board[f] }));
-  if (S.profile.visibility !== 'me') rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, mins: mine[f] });
+    .map(r => ({ id: r.id, name: r.name, animal: r.animal, look: r.look, mins: r.board[f] }));
+  if (S.profile.visibility !== 'me') rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, look: myLook(), mins: mine[f] });
   rows.sort((a, b) => b.mins - a.mins);
   const top = rows.filter(r => r.mins > 0).slice(0, 10);
   const meRow = rows.find(r => r.me), myRank = meRow && meRow.mins ? rows.indexOf(meRow) + 1 : 0;
   const ends = boardPeriod === 'd' ? 'Resets at midnight' : boardPeriod === 'w' ? 'Resets Monday' : 'Resets on the 1st';
   $('#boardNote').textContent = ends + (S.profile.visibility === 'me' ? '. You are hidden because your profile is set to Only me.' : '');
   let rank = 0, prev = -1;
-  el.innerHTML = top.length ? top.map((r, i) => { if (r.mins !== prev) { rank = i + 1; prev = r.mins; } return `<li class="${r.me ? 'me' : ''}"><span class="rk${rank <= 3 ? ' r' + rank : ''}">${rank}</span><span class="av">${avatarSVG(r.animal, 'awake')}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)}</b></span><span class="mn">${fmtMin(r.mins)}</span></li>`; }).join('')
-    + (meRow && myRank > 10 ? `<li class="me"><span class="rk">${myRank}</span><span class="av">${avatarSVG(S.active, 'awake')}</span><span class="nm"><b>You</b></span><span class="mn">${fmtMin(meRow.mins)}</span></li>` : '')
+  el.innerHTML = top.length ? top.map((r, i) => { if (r.mins !== prev) { rank = i + 1; prev = r.mins; } return `<li class="${r.me ? 'me' : ''}"><span class="rk${rank <= 3 ? ' r' + rank : ''}">${rank}</span><span class="av">${avatarSVG(r.animal, 'awake', r.look)}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)}</b></span><span class="mn">${fmtMin(r.mins)}</span></li>`; }).join('')
+    + (meRow && myRank > 10 ? `<li class="me"><span class="rk">${myRank}</span><span class="av">${avatarSVG(S.active, 'awake', myLook())}</span><span class="nm"><b>You</b></span><span class="mn">${fmtMin(meRow.mins)}</span></li>` : '')
     : `<li class="muted" style="background:none">No one has studied ${boardPeriod === 'd' ? 'today' : boardPeriod === 'w' ? 'this week' : 'this month'} yet. Start a focus session to take the top spot.</li>`;
 }
 function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
@@ -121,7 +121,7 @@ async function openPeer(id) {
   const { me, others } = residents();
   const r = [me, ...others].find(x => x.id === id); if (!r) return;
   const box = $('#peerBox');
-  const head = `<div class="row" style="justify-content:space-between; align-items:flex-start"><div class="row" style="gap:14px; flex-wrap:nowrap"><span class="peer-av">${avatarSVG(r.animal, 'happy')}</span><div><h2 style="font-size:1.5rem">${esc(r.me ? myName() : r.name)}</h2><p class="muted" style="font-size:.88rem">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'Student')}</p>${r.bio ? `<p class="hand" style="color:var(--rose); font-size:1.25rem">${esc(r.bio)}</p>` : ''}</div></div><button class="icon-btn" data-peerclose aria-label="Close">${icon('i-x')}</button></div>`;
+  const head = `<div class="row" style="justify-content:space-between; align-items:flex-start"><div class="row" style="gap:14px; flex-wrap:nowrap"><span class="peer-av">${avatarSVG(r.animal, 'happy', r.look)}</span><div><h2 style="font-size:1.5rem">${esc(r.me ? myName() : r.name)}</h2><p class="muted" style="font-size:.88rem">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'Student')}</p>${r.bio ? `<p class="hand" style="color:var(--rose); font-size:1.25rem">${esc(r.bio)}</p>` : ''}</div></div><button class="icon-btn" data-peerclose aria-label="Close">${icon('i-x')}</button></div>`;
   box.innerHTML = head + `<p class="muted">Loading…</p>`;
   $('#peerModal').classList.add('on');
   let st = null;
