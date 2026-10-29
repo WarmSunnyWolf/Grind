@@ -217,20 +217,26 @@ const ANIMALS = {
   },
   wolf: {
     label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
-    face: { eyes: [[80, 88], [120, 88]], er: 5.5, mouth: { x: 100, y: 115, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [154, 38] },
+    face: { eyes: [[81, 88], [119, 88]], er: 5.6, mouth: { x: 100, y: 117, type: 'cat' }, blush: [[66, 107], [134, 107]], zz: [156, 36] },
     art: () => {
-      const g = '#919ca6', d = '#5f6b76', l = '#eef0f2';
-      return `<path d="M126 170 C172 174 190 130 168 102 C170 130 154 146 122 150 Z" fill="${g}" ${O}/>
-      <path d="M168 102 C180 114 184 130 180 144 C172 134 166 118 168 102 Z" fill="${l}" ${O2}/>
-      <path d="M64 180 C56 144 72 118 100 118 C128 118 144 144 136 180 Z" fill="${g}" ${O}/>
-      <path d="M80 122 L87 138 L93 128 L100 146 L107 128 L113 138 L120 122 Q100 130 80 122 Z" fill="${l}"/>
-      <ellipse cx="86" cy="179" rx="11" ry="5" fill="${d}"/><ellipse cx="114" cy="179" rx="11" ry="5" fill="${d}"/>
-      <path d="M58 82 L62 24 L94 58 Z" fill="${g}" ${O}/><path d="M142 82 L138 24 L106 58 Z" fill="${g}" ${O}/>
-      <path d="M66 68 L67 38 L85 58 Z" fill="${d}" opacity=".8"/><path d="M134 68 L133 38 L115 58 Z" fill="${d}" opacity=".8"/>
-      <path d="M50 88 C50 62 72 52 100 52 C128 52 150 62 150 88 C150 98 156 104 148 110 C150 118 140 122 136 118 C126 128 114 132 100 132 C86 132 74 128 64 118 C60 122 50 118 52 110 C44 104 50 98 50 88 Z" fill="${g}" ${O}/>
-      <path d="M66 98 C76 106 88 106 100 100 C112 106 124 106 134 98 C134 120 118 130 100 130 C82 130 66 120 66 98 Z" fill="${l}"/>
-      <path d="M100 58 C94 66 92 76 100 86 C108 76 106 66 100 58 Z" fill="${d}" opacity=".55"/>
-      <ellipse cx="100" cy="106" rx="7" ry="5" fill="${INK}"/>`;
+      const g = '#7f8d9c', d = '#4d5a68', l = '#f1f1ea', p = '#e3aca6', s = '#a7b3bf';
+      return `<path d="M126 170 C178 178 198 126 170 90 C168 106 164 120 154 128 C148 142 138 150 122 152 Z" fill="${g}" ${O}/>
+      <path d="M170 90 C186 104 192 124 186 142 C178 132 170 120 164 108 C166 102 168 96 170 90 Z" fill="${l}" ${O2}/>
+      <path d="M150 140 C160 132 166 124 170 114 M140 152 C152 148 160 142 166 134" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
+      <path d="M62 180 C54 146 70 116 100 116 C130 116 146 146 138 180 Z" fill="${g}" ${O}/>
+      <path d="M90 158 C89 166 89 172 90 178 M110 158 C111 166 111 172 110 178" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".5"/>
+      <ellipse cx="84" cy="179" rx="12" ry="5.5" fill="${l}" ${O2}/><ellipse cx="116" cy="179" rx="12" ry="5.5" fill="${l}" ${O2}/>
+      <path d="M66 124 C70 140 75 150 82 155 L88 146 L94 165 L100 152 L106 165 L112 146 L118 155 C125 150 130 140 134 124 Q100 140 66 124 Z" fill="${l}" ${O2}/>
+      <path d="M56 86 L57 20 L95 56 Z" fill="${g}" ${O}/><path d="M144 86 L143 20 L105 56 Z" fill="${g}" ${O}/>
+      <path d="M64 72 L64 36 L86 58 Z" fill="${p}"/><path d="M136 72 L136 36 L114 58 Z" fill="${p}"/>
+      <path d="M62 62 L68 56 M64 70 L72 64 M138 62 L132 56 M136 70 L128 64" stroke="${l}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M86 54 L92 42 L98 52 L104 42 L112 54 Z" fill="${g}" ${O2}/>
+      <path d="M48 86 C48 60 72 50 100 50 C128 50 152 60 152 86 C152 94 160 100 154 108 C160 115 152 123 144 120 C132 132 116 137 100 137 C84 137 68 132 56 120 C48 123 40 115 46 108 C40 100 48 94 48 86 Z" fill="${g}" ${O}/>
+      <path d="M57 82 C62 62 80 54 100 54 C120 54 138 62 143 82 C131 75 117 77 108 87 L100 94 L92 87 C83 77 69 75 57 82 Z" fill="${d}" opacity=".5"/>
+      <ellipse cx="82" cy="76" rx="5.5" ry="3.6" fill="${l}"/><ellipse cx="118" cy="76" rx="5.5" ry="3.6" fill="${l}"/>
+      <path d="M62 98 C73 106 87 108 100 101 C113 108 127 106 138 98 C140 121 121 135 100 135 C79 135 60 121 62 98 Z" fill="${l}"/>
+      <path d="M52 112 L44 110 M54 118 L48 120 M148 112 L156 110 M146 118 L152 120" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+      <path d="M91 104 C91 99 109 99 109 104 C109 109 103 112 100 112 C97 112 91 109 91 104 Z" fill="${INK}"/><ellipse cx="96.5" cy="102.5" rx="2.4" ry="1.5" fill="#fff" opacity=".7"/>`;
     }
   },
   dragon: {
@@ -448,13 +454,14 @@ function animalSVG(kind, state = 'awake', opts = {}) {
   const f = a.face;
   const label = opts.label || `${a.label}, ${state === 'sleeping' ? 'napping' : state}`;
   const [zx, zy] = f.zz;
+  const L = lookLayers(kind, opts.look, state, opts.studying);
   const extras = state === 'sleeping'
-    ? `<g class="zz"><text x="${zx}" y="${zy}" font-size="24">z</text><text x="${zx + 12}" y="${zy - 12}" font-size="19">z</text><text x="${zx + 22}" y="${zy - 24}" font-size="15">z</text></g>`
+    ? L.zz || `<g class="zz"><text x="${zx}" y="${zy}" font-size="24">z</text><text x="${zx + 12}" y="${zy - 12}" font-size="19">z</text><text x="${zx + 22}" y="${zy - 24}" font-size="15">z</text></g>`
     : state === 'happy' ? sparkle(zx - 2, zy + 6, 11) + sparkle(36, zy + 26, 9) + sparkle(zx + 20, zy + 46, 7) : '';
   const tag = opts.nested ? `<svg x="${opts.x || 0}" y="${opts.y || 0}" width="${opts.w || 200}" height="${opts.w || 200}"` : '<svg';
   return `${tag} class="ga ${state}" viewBox="0 0 200 200" role="img" aria-label="${label}" overflow="visible">
     <ellipse cx="100" cy="182" rx="60" ry="8" fill="rgba(40,30,20,.16)"/>
-    <g class="bod"><g${tintFilter(opts.look)}><g filter="url(#gr-wob)">${a.art(state)}</g></g>${faceSVG(f, state)}${lookLayers(kind, opts.look).over}</g>${extras}</svg>`;
+    <g class="bod">${L.under}<g filter="url(#gr-wob)">${recolor(kind, opts.look, a.art(state))}</g>${faceSVG(f, state)}${L.over}</g>${extras}</svg>`;
 }
 
 /* Animal sitting on its own lily pad */
@@ -467,11 +474,11 @@ function onPadSVG(kind, state, opts = {}) {
       <path d="M0 0 L-72 9 M0 0 L-26 21 M0 0 L44 18 M0 0 L84 4 M0 0 L-90 -6" stroke="var(--pad-2)" stroke-width="2" opacity=".6" stroke-linecap="round"/>
       ${bloom ? `<g transform="translate(-86 -12)"><path d="M0 0 C-10 -6 -12 -18 -6 -24 C-2 -16 0 -10 0 0 Z M0 0 C10 -6 12 -18 6 -24 C2 -16 0 -10 0 0 Z M0 0 C-5 -10 -4 -22 0 -28 C4 -22 5 -10 0 0 Z" fill="var(--bloom)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>` : ''}
     </g>
-    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label, look: opts.look })}
+    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label, look: opts.look, studying: opts.studying })}
   </svg>`;
 }
 
 /* Small round avatar portrait */
-function avatarSVG(kind, state = 'awake', look) {
-  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label, look }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
+function avatarSVG(kind, state = 'awake', look, studying) {
+  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label, look, studying }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
 }

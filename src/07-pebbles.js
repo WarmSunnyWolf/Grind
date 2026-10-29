@@ -39,8 +39,8 @@ function renderRocks() {
     const d = r.pebbles.filter(p => p.done).length, n = r.pebbles.length, open = S.openRock === r.id;
     const draft = aiDrafts[r.id];
     return `<article class="rock" data-rock="${esc(r.id)}">
-      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt(courseColor(r.courseId))}
-        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${courseColor(r.courseId)}"></i>${esc(courseName(r.courseId))}</span>${r.due ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${isDone(r) ? '<span class="pill" style="background:var(--moss);color:#fff">Crossed</span>' : ''}</div></div>
+      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt((okColor(r.color) || courseColor(r.courseId)))}
+        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${(okColor(r.color) || courseColor(r.courseId))}"></i>${esc(courseName(r.courseId))}</span>${r.due ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${isDone(r) ? '<span class="pill" style="background:var(--moss);color:#fff">Crossed</span>' : ''}</div></div>
         <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width:90px"><span class="muted num" style="font-size:.82rem">${d} of ${n} pebbles</span><span class="prog-bar" style="width:90px"><i style="width:${n ? d / n * 100 : 0}%"></i></span></div>
       </div>
       ${open ? `<div class="rock-body">
@@ -48,7 +48,7 @@ function renderRocks() {
         ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(p => `<li class="peb ${p.done ? 'done' : ''}"><button class="chk" data-peb="${esc(p.id)}" aria-label="${p.done ? 'Mark not done' : 'Mark done'}: ${esc(p.text)}">${icon('i-check')}</button><span class="tx">${esc(p.text)}</span><span class="mins">${p.mins || 15} min</span><button class="icon-btn" style="width:30px;height:30px" data-delpeb="${esc(p.id)}" aria-label="Remove pebble">${icon('i-x')}</button></li>`).join('')}</ul>` : '<p class="muted">No pebbles yet. Add the smallest first step you can think of, or let Claude break it down.</p>'}
         ${draft ? aiBox(r.id, draft) : ''}
         <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="15" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
-        <div class="row"><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
+        <div class="row"><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button><span class="rock-colors" role="group" aria-label="Rock colour">${['', ...EV_COLORS].map(c => `<button type="button" class="rc ${(okColor(r.color) || '') === c ? 'on' : ''}" data-rockc="${c}" title="${c ? 'Colour' : 'Course colour'}" style="background:${c || courseColor(r.courseId)}">${c ? '' : '<small>A</small>'}</button>`).join('')}</span><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
       </div>` : ''}
     </article>`;
   }).join('');
@@ -125,6 +125,7 @@ function bindPebbles() {
     if (e.target.closest('[data-aiclose]')) { delete aiDrafts[id]; renderRocks(); return; }
     if (e.target.closest('[data-aiadd]')) { const d = aiDrafts[id]; d.items.forEach(p => r.pebbles.push({ id: uid(), text: p.text, mins: p.mins, done: false })); delete aiDrafts[id]; save(); renderRocks(); renderNextPebble(); toast(`${d.items.length} pebbles added. Start with the first one.`); return; }
     if (e.target.closest('[data-focusrock]')) { const p = r.pebbles.find(x => !x.done); if (p) { S.settings.focus = Math.min(120, p.mins || 15); syncRanges(); renderCourseSelects(); $('#courseSel').value = r.courseId || ''; go('focus'); if (!S.timer) startPhase('focus'); } return; }
+    const rc = e.target.closest('[data-rockc]'); if (rc) { const r = S.rocks.find(x => x.id === art.dataset.rock); if (r) { r.color = okColor(rc.dataset.rockc); save(); renderRocks(); } return; }
     if (e.target.closest('[data-delrock]')) { art.querySelector('[data-delwrap]').innerHTML = `<span class="confirm">Remove this rock and its pebbles? <button class="btn small rose" data-delyes>Remove</button><button class="btn small" data-delno>Keep it</button></span>`; return; }
     if (e.target.closest('[data-delyes]')) { S.rocks = S.rocks.filter(x => x.id !== id); save(); renderRocks(); renderNextPebble(); return; }
     if (e.target.closest('[data-delno]')) { renderRocks(); return; }

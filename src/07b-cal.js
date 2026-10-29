@@ -2,14 +2,17 @@
 const EV_TYPES = { deadline: 'Deadline', exam: 'Exam or quiz', lab: 'Lab', meeting: 'Meeting', other: 'Other' };
 const REMIND_OPTS = [[-1, 'No reminder'], [60, '1 hour before'], [180, '3 hours before'], [1440, '1 day before'], [2880, '2 days before'], [10080, '1 week before']];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-let calMonth = dayKey().slice(0, 7), calDay = dayKey(), calEdit = null;
+let calMonth = dayKey().slice(0, 7), calDay = dayKey(), calEdit = null, calRock = null, evColor = '';
+const EV_COLORS = ['#d9675a', '#e9905a', '#e8b84a', '#8fb069', '#4f9a94', '#5b7fa0', '#8a6aa0', '#d77fa1', '#8f6340', '#5f6b76'];
+const okColor = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c : '';
+const itemColor = it => okColor(it.color) || courseColor(it.courseId);
 
 // an event without a time is anchored at 9 in the morning, so "1 day before" lands the morning before
 const evAt = e => { const d = keyToDate(e.date); const [h, m] = (e.time || '09:00').split(':').map(Number); d.setHours(h || 0, m || 0, 0, 0); return +d; };
 const fmtClock = t => (t ? new Date(`2000-01-01T${t}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '');
 function calItems() {
   const ev = (S.events || []).map(e => ({ ...e, kind: 'event' }));
-  const rocks = S.rocks.filter(r => r.due && !r.example && !(r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done))).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, type: 'deadline', remind: 1440 }));
+  const rocks = S.rocks.filter(r => r.due && !r.example && !(r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done))).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, color: r.color, type: 'deadline', remind: 1440 }));
   return [...ev, ...rocks].sort((a, b) => evAt(a) - evAt(b));
 }
 function whenText(it) {
@@ -21,7 +24,7 @@ function whenText(it) {
   const d = keyToDate(it.date); return `${WD[d.getDay()]} ${d.getDate()} ${MO[d.getMonth()]}${t}`;
 }
 function chipHTML(it) {
-  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}" style="--c:${courseColor(it.courseId)}" data-calev="${esc(it.id)}" title="${esc(it.title)}">${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
+  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}" style="--c:${itemColor(it)}" data-calev="${esc(it.id)}" title="${esc(it.title)}">${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
 }
 function renderCal() {
   if (!$('#calGrid')) return;
@@ -33,7 +36,7 @@ function renderCal() {
   let cells = '';
   for (let i = 0; i < weeks * 7; i++) {
     const d = addDays(start, i), k = dayKey(d), list = byDay[k] || [], out = d.getMonth() !== m - 1;
-    cells += `<div class="cal-day${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${courseColor(it.courseId)}"></i>`).join('')}</span>` : ''}</div>`;
+    cells += `<div class="cal-day${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${itemColor(it)}"></i>`).join('')}</span>` : ''}</div>`;
   }
   $('#calGrid').innerHTML = cells;
   // the selected day
@@ -47,25 +50,35 @@ function renderCal() {
 }
 function itemRow(it) {
   const n = Math.round((keyToDate(it.date) - keyToDate(dayKey())) / 864e5);
-  return `<li><span class="bar" style="background:${courseColor(it.courseId)}"></span><span class="nm"><b>${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
+  return `<li><span class="bar" style="background:${itemColor(it)}"></span><span class="nm"><b>${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
 }
 function renderCalAlerts() {
   const b = $('#calAlerts'); if (!b) return;
   const has = 'Notification' in window, p = has ? Notification.permission : 'denied';
   b.hidden = !has || p === 'denied' || (p === 'granted' && S.calAlerts !== false);
 }
+function renderEvColors() {
+  const course = courseColor($('#evCourse').value);
+  $('#evColors').innerHTML = `<button type="button" class="ev-c auto ${evColor ? '' : 'on'}" data-evc="" aria-pressed="${!evColor}" title="Use the course colour"><i style="background:${course}"></i>Course colour</button>`
+    + EV_COLORS.map(c => `<button type="button" class="ev-c ${evColor === c ? 'on' : ''}" data-evc="${c}" aria-pressed="${evColor === c}" aria-label="Colour ${c}"><i style="background:${c}"></i></button>`).join('')
+    + `<label class="ev-c pick ${evColor && !EV_COLORS.includes(evColor) ? 'on' : ''}" title="Pick any colour"><i style="background:${evColor && !EV_COLORS.includes(evColor) ? evColor : 'conic-gradient(#d9675a,#e8b84a,#8fb069,#5b7fa0,#8a6aa0,#d9675a)'}"></i>Any<input type="color" id="evPick" value="${evColor || '#5b7fa0'}" class="sr"></label>`;
+}
 function openEvForm(it) {
   calEdit = it && it.kind === 'event' ? it.id : null;
+  calRock = it && it.kind === 'rock' ? it.rockId : null;
+  evColor = okColor(it && it.color);
   const f = $('#evForm'), e = it || { title: '', date: calDay, time: '', courseId: S.lastCourse || '', type: 'deadline', remind: 1440 };
-  $('#evFormTitle').textContent = calEdit ? 'Edit' : 'Add to your calendar';
+  $('#evFormTitle').textContent = calRock ? 'Edit rock' : calEdit ? 'Edit' : 'Add to your calendar';
+  $$('#evForm .ev-only').forEach(x => x.hidden = !!calRock); $('#evOpenRock').hidden = !calRock;
   $('#evCourse').innerHTML = `<option value="">General</option>` + curCourses().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
   $('#evType').innerHTML = Object.entries(EV_TYPES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
   $('#evRemind').innerHTML = REMIND_OPTS.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
   $('#evTitle').value = e.title; $('#evDate').value = e.date; $('#evTime').value = e.time || ''; $('#evCourse').value = e.courseId || ''; $('#evType').value = e.type || 'deadline'; $('#evRemind').value = String(e.remind ?? 1440);
   $('#evDel').hidden = !calEdit;
+  renderEvColors();
   f.hidden = false; $('#evTitle').focus();
 }
-function closeEvForm() { $('#evForm').hidden = true; calEdit = null; }
+function closeEvForm() { $('#evForm').hidden = true; calEdit = null; calRock = null; }
 
 /* reminders: checked every minute while the site is open, and once when it loads */
 function reminderList() {
@@ -105,7 +118,6 @@ function bindCal() {
     if (ev) {
       e.stopPropagation();
       const it = calItems().find(x => x.id === ev.dataset.calev); if (!it) return;
-      if (it.kind === 'rock') { S.openRock = it.rockId; save(); go('pebbles'); return; }
       calDay = it.date; renderCal(); openEvForm(it); return;
     }
     const d = e.target.closest('[data-calday]');
@@ -114,11 +126,20 @@ function bindCal() {
   $('#calGrid').addEventListener('dblclick', e => { const d = e.target.closest('[data-calday]'); if (d && !e.target.closest('[data-calev]')) { calDay = d.dataset.calday; openEvForm(); } });
   $('#calGrid').addEventListener('keydown', e => { const d = e.target.closest('[data-calday]'); if (d && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); d.click(); } });
   $('#evCancel').onclick = closeEvForm;
+  $('#evColors').addEventListener('click', e => { const b = e.target.closest('[data-evc]'); if (!b) return; evColor = okColor(b.dataset.evc); renderEvColors(); });
+  $('#evColors').addEventListener('input', e => { if (e.target.id === 'evPick') { evColor = okColor(e.target.value); renderEvColors(); } });
+  $('#evCourse').addEventListener('change', renderEvColors);
+  $('#evOpenRock').onclick = () => { if (!calRock) return; S.openRock = calRock; save(); closeEvForm(); go('pebbles'); };
   $('#evForm').addEventListener('submit', e => {
     e.preventDefault();
     const title = $('#evTitle').value.trim(), date = $('#evDate').value;
     if (!title || !date) return;
-    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value };
+    if (calRock) {
+      const r = S.rocks.find(x => x.id === calRock);
+      if (r) { r.title = clampStr(title, 120); r.due = date; r.courseId = $('#evCourse').value; r.color = evColor; }
+      calDay = date; calMonth = date.slice(0, 7); closeEvForm(); save(); renderCal(); renderRocks(); toast('Rock saved.'); return;
+    }
+    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value, color: evColor };
     S.events = S.events || [];
     if (calEdit) { const x = S.events.find(v => v.id === calEdit); if (x) Object.assign(x, data); }
     else S.events.push({ id: uid(), createdAt: Date.now(), ...data });

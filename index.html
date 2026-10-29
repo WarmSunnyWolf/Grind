@@ -226,6 +226,15 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .cal-list .bar{width:4px; align-self:stretch; border-radius:4px; flex:none}
 .cal-list .nm b{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .cal-list .nm > span{font-size:.8rem; color:var(--muted)}
+.rock-colors{display:inline-flex; flex-wrap:wrap; gap:4px; align-items:center}
+.rc{width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(0,0,0,.2); padding:0; cursor:pointer; display:grid; place-items:center}
+.rc small{font-size:.6rem; color:#fff; font-weight:700}
+.rc.on{box-shadow:0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink)}
+.ev-colors{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
+.ev-c{display:inline-flex; align-items:center; gap:6px; padding:4px; border-radius:999px; border:1.5px solid var(--line); background:var(--bg); font:inherit; font-size:.8rem; color:var(--ink); cursor:pointer}
+.ev-c.auto, .ev-c.pick{padding-right:10px}
+.ev-c i{width:22px; height:22px; border-radius:50%; display:block; border:1.5px solid rgba(0,0,0,.18)}
+.ev-c.on{border-color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--ink)}
 .pill.soon{background:var(--rose); color:#fff; border-color:transparent}
 .toast-ic svg{width:22px; height:22px}
 @media (max-width:720px){
@@ -589,11 +598,14 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .dress-av svg{width:100%; height:100%}
 .dress-none{width:58px; height:58px; border-radius:50%; display:grid; place-items:center; background:var(--surface-2); color:var(--muted)}
 .dress-none svg{width:20px; height:20px}
-.dress-tints{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
-.tint{display:flex; align-items:center; gap:6px; padding:6px 10px 6px 6px; border-radius:999px; border:1.5px solid var(--line); background:var(--bg); font:inherit; font-size:.8rem; color:var(--ink); cursor:pointer}
-.tint i{width:18px; height:18px; border-radius:50%; border:1.5px solid var(--ink)}
-.tint.on{border-color:var(--accent); box-shadow:inset 0 0 0 1.5px var(--accent)}
-@media (max-width:720px){ .dress{grid-template-columns:1fr} .dress-pic{position:static; max-width:220px; margin:0 auto; padding:8px} .dress-tile{width:78px} .dress-av, .dress-none{width:48px; height:48px} }
+.dress-side{display:flex; flex-direction:column; gap:10px; position:sticky; top:0}
+.dress-side .dress-pic{position:static}
+.dress-pose{justify-content:center; align-self:center}
+.dress-foot{justify-content:flex-end; position:sticky; bottom:-26px; background:var(--surface); padding:10px 0 4px; margin-bottom:-6px}
+.emote{animation:emoteBob 2.6s ease-in-out infinite}
+@keyframes emoteBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.emote{animation:none}}
+@media (max-width:720px){ .dress-side{position:static} .dress{grid-template-columns:1fr} .dress-pic{position:static; max-width:220px; margin:0 auto; padding:8px} .dress-tile{width:78px} .dress-av, .dress-none{width:48px; height:48px} }
 .coin-btn{cursor:pointer}
 .coin-panel .coin-big{font-size:.95rem; margin:0 0 12px}
 .coin-panel .coin-big b{font-size:1.6rem}
@@ -652,7 +664,6 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <filter id="tint-rose" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="-40"/></filter><filter id="tint-gold" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="25"/></filter><filter id="tint-mint" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="90"/></filter><filter id="tint-sky" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="170"/></filter><filter id="tint-lilac" color-interpolation-filters="sRGB"><feColorMatrix type="hueRotate" values="230"/></filter>
     <filter id="gr-wob" x="-5%" y="-5%" width="110%" height="110%">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
@@ -739,7 +750,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
               <span class="eyebrow">How to spend</span>
-              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits in Sanctuary</span><b>15 to 60</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits and costumes</span><b>40 to 450</b></li><li><span>Fur coats and emotes</span><b>120 to 200</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
@@ -859,12 +870,13 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <div class="form-grid">
             <label class="f" style="grid-column:1/-1">What is it?<input class="inp" id="evTitle" required maxlength="100" placeholder="Data Com midterm"></label>
             <label class="f">Date<input class="inp" type="date" id="evDate" required></label>
-            <label class="f">Time (optional)<input class="inp" type="time" id="evTime"></label>
+            <label class="f ev-only">Time (optional)<input class="inp" type="time" id="evTime"></label>
             <label class="f">Course<select class="inp" id="evCourse"></select></label>
-            <label class="f">Type<select class="inp" id="evType"></select></label>
-            <label class="f">Remind me<select class="inp" id="evRemind"></select></label>
+            <label class="f ev-only">Type<select class="inp" id="evType"></select></label>
+            <label class="f ev-only">Remind me<select class="inp" id="evRemind"></select></label>
+            <div class="f" style="grid-column:1/-1">Colour<div class="ev-colors" id="evColors"></div></div>
           </div>
-          <div class="row" style="margin-top:14px"><button class="btn primary" type="submit"><svg><use href="#i-check"/></svg>Save</button><button class="btn quiet" type="button" id="evDel" hidden><svg><use href="#i-trash"/></svg>Delete</button></div>
+          <div class="row" style="margin-top:14px"><button class="btn primary" type="submit"><svg><use href="#i-check"/></svg>Save</button><button class="btn" type="button" id="evOpenRock" hidden><svg><use href="#i-pebble"/></svg>Open in Pebbles</button><button class="btn quiet" type="button" id="evDel" hidden><svg><use href="#i-trash"/></svg>Delete</button></div>
         </form>
         <div class="card cal-card">
           <div class="cal-head"><h2 id="calTitle">Month</h2><div class="row"><button class="icon-btn" id="calPrev" aria-label="Previous month"><svg style="transform:rotate(180deg)"><use href="#i-chev"/></svg></button><button class="btn small" id="calToday">Today</button><button class="icon-btn" id="calNext" aria-label="Next month"><svg><use href="#i-chev"/></svg></button></div></div>
@@ -1010,7 +1022,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the swan (180), the wolf (240), the dragon (300), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals to try on hats, glasses, bow ties and scarves (15 to 60 coins, and they fit every animal), or change its colour for free. Classmates see the outfit in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the swan (180), the wolf (240), the dragon (300), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -1353,20 +1365,26 @@ const ANIMALS = {
   },
   wolf: {
     label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
-    face: { eyes: [[80, 88], [120, 88]], er: 5.5, mouth: { x: 100, y: 115, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [154, 38] },
+    face: { eyes: [[81, 88], [119, 88]], er: 5.6, mouth: { x: 100, y: 117, type: 'cat' }, blush: [[66, 107], [134, 107]], zz: [156, 36] },
     art: () => {
-      const g = '#919ca6', d = '#5f6b76', l = '#eef0f2';
-      return `<path d="M126 170 C172 174 190 130 168 102 C170 130 154 146 122 150 Z" fill="${g}" ${O}/>
-      <path d="M168 102 C180 114 184 130 180 144 C172 134 166 118 168 102 Z" fill="${l}" ${O2}/>
-      <path d="M64 180 C56 144 72 118 100 118 C128 118 144 144 136 180 Z" fill="${g}" ${O}/>
-      <path d="M80 122 L87 138 L93 128 L100 146 L107 128 L113 138 L120 122 Q100 130 80 122 Z" fill="${l}"/>
-      <ellipse cx="86" cy="179" rx="11" ry="5" fill="${d}"/><ellipse cx="114" cy="179" rx="11" ry="5" fill="${d}"/>
-      <path d="M58 82 L62 24 L94 58 Z" fill="${g}" ${O}/><path d="M142 82 L138 24 L106 58 Z" fill="${g}" ${O}/>
-      <path d="M66 68 L67 38 L85 58 Z" fill="${d}" opacity=".8"/><path d="M134 68 L133 38 L115 58 Z" fill="${d}" opacity=".8"/>
-      <path d="M50 88 C50 62 72 52 100 52 C128 52 150 62 150 88 C150 98 156 104 148 110 C150 118 140 122 136 118 C126 128 114 132 100 132 C86 132 74 128 64 118 C60 122 50 118 52 110 C44 104 50 98 50 88 Z" fill="${g}" ${O}/>
-      <path d="M66 98 C76 106 88 106 100 100 C112 106 124 106 134 98 C134 120 118 130 100 130 C82 130 66 120 66 98 Z" fill="${l}"/>
-      <path d="M100 58 C94 66 92 76 100 86 C108 76 106 66 100 58 Z" fill="${d}" opacity=".55"/>
-      <ellipse cx="100" cy="106" rx="7" ry="5" fill="${INK}"/>`;
+      const g = '#7f8d9c', d = '#4d5a68', l = '#f1f1ea', p = '#e3aca6', s = '#a7b3bf';
+      return `<path d="M126 170 C178 178 198 126 170 90 C168 106 164 120 154 128 C148 142 138 150 122 152 Z" fill="${g}" ${O}/>
+      <path d="M170 90 C186 104 192 124 186 142 C178 132 170 120 164 108 C166 102 168 96 170 90 Z" fill="${l}" ${O2}/>
+      <path d="M150 140 C160 132 166 124 170 114 M140 152 C152 148 160 142 166 134" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
+      <path d="M62 180 C54 146 70 116 100 116 C130 116 146 146 138 180 Z" fill="${g}" ${O}/>
+      <path d="M90 158 C89 166 89 172 90 178 M110 158 C111 166 111 172 110 178" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".5"/>
+      <ellipse cx="84" cy="179" rx="12" ry="5.5" fill="${l}" ${O2}/><ellipse cx="116" cy="179" rx="12" ry="5.5" fill="${l}" ${O2}/>
+      <path d="M66 124 C70 140 75 150 82 155 L88 146 L94 165 L100 152 L106 165 L112 146 L118 155 C125 150 130 140 134 124 Q100 140 66 124 Z" fill="${l}" ${O2}/>
+      <path d="M56 86 L57 20 L95 56 Z" fill="${g}" ${O}/><path d="M144 86 L143 20 L105 56 Z" fill="${g}" ${O}/>
+      <path d="M64 72 L64 36 L86 58 Z" fill="${p}"/><path d="M136 72 L136 36 L114 58 Z" fill="${p}"/>
+      <path d="M62 62 L68 56 M64 70 L72 64 M138 62 L132 56 M136 70 L128 64" stroke="${l}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M86 54 L92 42 L98 52 L104 42 L112 54 Z" fill="${g}" ${O2}/>
+      <path d="M48 86 C48 60 72 50 100 50 C128 50 152 60 152 86 C152 94 160 100 154 108 C160 115 152 123 144 120 C132 132 116 137 100 137 C84 137 68 132 56 120 C48 123 40 115 46 108 C40 100 48 94 48 86 Z" fill="${g}" ${O}/>
+      <path d="M57 82 C62 62 80 54 100 54 C120 54 138 62 143 82 C131 75 117 77 108 87 L100 94 L92 87 C83 77 69 75 57 82 Z" fill="${d}" opacity=".5"/>
+      <ellipse cx="82" cy="76" rx="5.5" ry="3.6" fill="${l}"/><ellipse cx="118" cy="76" rx="5.5" ry="3.6" fill="${l}"/>
+      <path d="M62 98 C73 106 87 108 100 101 C113 108 127 106 138 98 C140 121 121 135 100 135 C79 135 60 121 62 98 Z" fill="${l}"/>
+      <path d="M52 112 L44 110 M54 118 L48 120 M148 112 L156 110 M146 118 L152 120" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+      <path d="M91 104 C91 99 109 99 109 104 C109 109 103 112 100 112 C97 112 91 109 91 104 Z" fill="${INK}"/><ellipse cx="96.5" cy="102.5" rx="2.4" ry="1.5" fill="#fff" opacity=".7"/>`;
     }
   },
   dragon: {
@@ -1584,13 +1602,14 @@ function animalSVG(kind, state = 'awake', opts = {}) {
   const f = a.face;
   const label = opts.label || `${a.label}, ${state === 'sleeping' ? 'napping' : state}`;
   const [zx, zy] = f.zz;
+  const L = lookLayers(kind, opts.look, state, opts.studying);
   const extras = state === 'sleeping'
-    ? `<g class="zz"><text x="${zx}" y="${zy}" font-size="24">z</text><text x="${zx + 12}" y="${zy - 12}" font-size="19">z</text><text x="${zx + 22}" y="${zy - 24}" font-size="15">z</text></g>`
+    ? L.zz || `<g class="zz"><text x="${zx}" y="${zy}" font-size="24">z</text><text x="${zx + 12}" y="${zy - 12}" font-size="19">z</text><text x="${zx + 22}" y="${zy - 24}" font-size="15">z</text></g>`
     : state === 'happy' ? sparkle(zx - 2, zy + 6, 11) + sparkle(36, zy + 26, 9) + sparkle(zx + 20, zy + 46, 7) : '';
   const tag = opts.nested ? `<svg x="${opts.x || 0}" y="${opts.y || 0}" width="${opts.w || 200}" height="${opts.w || 200}"` : '<svg';
   return `${tag} class="ga ${state}" viewBox="0 0 200 200" role="img" aria-label="${label}" overflow="visible">
     <ellipse cx="100" cy="182" rx="60" ry="8" fill="rgba(40,30,20,.16)"/>
-    <g class="bod"><g${tintFilter(opts.look)}><g filter="url(#gr-wob)">${a.art(state)}</g></g>${faceSVG(f, state)}${lookLayers(kind, opts.look).over}</g>${extras}</svg>`;
+    <g class="bod">${L.under}<g filter="url(#gr-wob)">${recolor(kind, opts.look, a.art(state))}</g>${faceSVG(f, state)}${L.over}</g>${extras}</svg>`;
 }
 
 /* Animal sitting on its own lily pad */
@@ -1603,13 +1622,13 @@ function onPadSVG(kind, state, opts = {}) {
       <path d="M0 0 L-72 9 M0 0 L-26 21 M0 0 L44 18 M0 0 L84 4 M0 0 L-90 -6" stroke="var(--pad-2)" stroke-width="2" opacity=".6" stroke-linecap="round"/>
       ${bloom ? `<g transform="translate(-86 -12)"><path d="M0 0 C-10 -6 -12 -18 -6 -24 C-2 -16 0 -10 0 0 Z M0 0 C10 -6 12 -18 6 -24 C2 -16 0 -10 0 0 Z M0 0 C-5 -10 -4 -22 0 -28 C4 -22 5 -10 0 0 Z" fill="var(--bloom)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>` : ''}
     </g>
-    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label, look: opts.look })}
+    ${animalSVG(kind, state, { nested: true, x: 20, y: 6, w: 200, label: opts.label, look: opts.look, studying: opts.studying })}
   </svg>`;
 }
 
 /* Small round avatar portrait */
-function avatarSVG(kind, state = 'awake', look) {
-  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label, look }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
+function avatarSVG(kind, state = 'awake', look, studying) {
+  return animalSVG(kind, state, { label: (ANIMALS[kind] || ANIMALS.frog).label, look, studying }).replace('viewBox="0 0 200 200"', 'viewBox="10 20 180 180"');
 }
 /* ---------- the wardrobe: accessories and colours for each animal ---------- */
 // where a hat sits and where a bow tie goes on each animal: [x, y, scale]
@@ -1622,75 +1641,156 @@ const ANCHORS = {
   stegosaurus: { hat: [100, 56, .85], neck: [100, 126, .85] }, longneck: { hat: [72, 30, .6], neck: [76, 82, .6] }, trex: { hat: [100, 48, 1], neck: [100, 130, .85] },
   turtle: { hat: [168, 106, .55], neck: [160, 146, .5] }, axolotl: { hat: [100, 68, 1], neck: [100, 138, .8] }, swan: { hat: [80, 38, .55], neck: [74, 92, .5] }, heron: { hat: [92, 37, .6], neck: [86, 86, .5] }
 };
+// real fur coats: each one swaps the animal's own colours for new ones
+const COATS = {"frog":{"golden":{"label":"Golden","map":{"#8fb069":"#e8c15a","#6d8c4c":"#c99b34","#d9e3a8":"#f6e7a6"}},"blue":{"label":"Poison dart blue","map":{"#8fb069":"#5b8fd0","#6d8c4c":"#3f6aa8","#d9e3a8":"#a9c9ef"}},"berry":{"label":"Strawberry","map":{"#8fb069":"#e0746a","#6d8c4c":"#b9514a","#d9e3a8":"#f4c0a8"}}},"duckling":{"snow":{"label":"Snow white","map":{"#f4d06f":"#f7f4ea","#e3b552":"#e2ddd0"}},"pink":{"label":"Bubblegum","map":{"#f4d06f":"#f6b3c4","#e3b552":"#e591a7"}},"mint":{"label":"Mint","map":{"#f4d06f":"#bfe3c4","#e3b552":"#9ccaa3"}}},"capybara":{"cocoa":{"label":"Cocoa","map":{"#b98b63":"#7a5640","#94694a":"#5c3f2e","#d2ab85":"#a57c5f"}},"honey":{"label":"Honey","map":{"#b98b63":"#d9a85f","#94694a":"#b5843f","#d2ab85":"#efcb8f"}},"snow":{"label":"Snow","map":{"#b98b63":"#e8ddd0","#94694a":"#c9b9a6","#d2ab85":"#f6efe6"}}},"rabbit":{"choc":{"label":"Chocolate","map":{"#efe6d8":"#8c6549"}},"grey":{"label":"Silver grey","map":{"#efe6d8":"#b9b6b3"}},"cinnamon":{"label":"Cinnamon","map":{"#efe6d8":"#d8a271","#eab4ad":"#f0c2b0"}}},"butterfly":{"monarch":{"label":"Monarch","map":{"#c9b3ea":"#f0a04b","#f3b9c8":"#e07a3a","#fbe7a6":"#fff3d6","#a78fcf":"#9a5a22"}},"morpho":{"label":"Blue morpho","map":{"#c9b3ea":"#5aa7e0","#f3b9c8":"#3f86c9","#fbe7a6":"#dff1ff","#a78fcf":"#2d5f93"}},"lime":{"label":"Lime","map":{"#c9b3ea":"#b9dd7a","#f3b9c8":"#f4e07a","#fbe7a6":"#fffbe0","#a78fcf":"#7fa64a"}}},"kitty":{"tabby":{"label":"Grey tabby","map":{"#f1c58c":"#b3b6bb","#d99a58":"#868b93","#fbf1e2":"#f2f2f2"}},"black":{"label":"Black cat","map":{"#f1c58c":"#4a4442","#d99a58":"#2f2b2a","#fbf1e2":"#d9d2cc"}},"cream":{"label":"Cream","map":{"#f1c58c":"#f6e6c8","#d99a58":"#e3c89a"}}},"otter":{"sea":{"label":"Sea otter","map":{"#8c6549":"#b08a68","#6c4b34":"#8c6a4e","#dcc19d":"#efdcc0"}},"dark":{"label":"Dark river","map":{"#8c6549":"#5a4234","#6c4b34":"#3f2e24","#dcc19d":"#c7a989"}},"silver":{"label":"Silver","map":{"#8c6549":"#9ea3a6","#6c4b34":"#767c80","#dcc19d":"#e3e5e6"}}},"dog":{"lab":{"label":"Black lab","map":{"#dcaa70":"#4a4442","#8f6340":"#2f2b2a","#f7e6c9":"#d9cfc4","#c48a52":"#3a3533"}},"dalmatian":{"label":"Dalmatian","map":{"#dcaa70":"#f6f3ec","#8f6340":"#3f3a37","#f7e6c9":"#ffffff","#c48a52":"#3f3a37"}},"golden":{"label":"Golden retriever","map":{"#dcaa70":"#e8bd6a","#8f6340":"#c48a3c","#f7e6c9":"#f8e7c0","#c48a52":"#d9a14f"}}},"panda":{"brown":{"label":"Brown panda","map":{"#3f3a37":"#6b4a36","#f6f3ec":"#f0e2cc"}},"blue":{"label":"Midnight blue","map":{"#3f3a37":"#33475e"}},"lilac":{"label":"Lilac","map":{"#3f3a37":"#8a7fb0","#f6f3ec":"#f7f3fb"}}},"fox":{"arctic":{"label":"Arctic fox","map":{"#dc844b":"#e9edf0","#f7ecdb":"#ffffff"}},"silver":{"label":"Silver fox","map":{"#dc844b":"#7f8794","#f7ecdb":"#eef0f2"}},"fennec":{"label":"Fennec sand","map":{"#dc844b":"#e8c48f","#f7ecdb":"#fbf1de"}}},"horse":{"black":{"label":"Black stallion","map":{"#b77a4e":"#3f3a37","#8c5a38":"#2b2725","#5a3a2a":"#1f1c1b","#ecd2b2":"#8a817a","#4a372c":"#1f1c1b"}},"white":{"label":"White mare","map":{"#b77a4e":"#f2eee8","#8c5a38":"#d6cfc5","#5a3a2a":"#c9c2b8","#ecd2b2":"#ffffff","#4a372c":"#b9b0a5"}},"palomino":{"label":"Palomino","map":{"#b77a4e":"#e6be78","#8c5a38":"#c79a52","#5a3a2a":"#f7ecd6","#ecd2b2":"#f8e8cc","#4a372c":"#efe3c8"}}},"deer":{"reindeer":{"label":"Reindeer","map":{"#c98d5a":"#8c6a52","#9e6a42":"#6b4f3c","#f3e4cb":"#e8dccb","#7c5638":"#c9b08a"}},"snow":{"label":"Snow deer","map":{"#c98d5a":"#efe6da","#9e6a42":"#cfc2b2","#f3e4cb":"#ffffff","#7c5638":"#b9a58a"}},"red":{"label":"Red fawn","map":{"#c98d5a":"#b5703e","#9e6a42":"#8c5230","#f3e4cb":"#f6e3c5"}}},"wolf":{"arctic":{"label":"Arctic wolf","map":{"#7f8d9c":"#e9edf0","#4d5a68":"#b4bec7","#f1f1ea":"#ffffff","#a7b3bf":"#d3dae0"}},"black":{"label":"Black wolf","map":{"#7f8d9c":"#3e434a","#4d5a68":"#202429","#f1f1ea":"#c9ccd0","#a7b3bf":"#5b6169"}},"timber":{"label":"Timber wolf","map":{"#7f8d9c":"#9a7a5c","#4d5a68":"#5e4a38","#f1f1ea":"#f1e6d6","#a7b3bf":"#b89a7c"}},"red":{"label":"Red wolf","map":{"#7f8d9c":"#c27a4e","#4d5a68":"#7a4a2e","#f1f1ea":"#f5e6d3","#a7b3bf":"#d89a72"}}},"dragon":{"ruby":{"label":"Ruby","map":{"#83bca7":"#d9675a","#5f9a86":"#a8483e","#f3e3b3":"#f6dcb4"}},"sapphire":{"label":"Sapphire","map":{"#83bca7":"#6f9fd8","#5f9a86":"#4d78b0","#f3e3b3":"#e6eefb"}},"gold":{"label":"Gold","map":{"#83bca7":"#e8c15a","#5f9a86":"#c99b34","#f3e3b3":"#fbf0c8","#f1cf7d":"#f7ecd6"}},"shadow":{"label":"Shadow","map":{"#83bca7":"#5b5470","#5f9a86":"#3d3850","#f3e3b3":"#c9c2dc","#f1cf7d":"#b9a6e0"}}},"triceratops":{"green":{"label":"Forest","map":{"#86a9c9":"#8fb069","#6a8db0":"#6d8c4c","#c9dcea":"#d9e3a8"}},"violet":{"label":"Violet","map":{"#86a9c9":"#a78fcf","#6a8db0":"#8670b3","#c9dcea":"#e3d9f4","#f0b97a":"#f3b9c8"}},"sunset":{"label":"Sunset","map":{"#86a9c9":"#e9905a","#6a8db0":"#c36d3a","#c9dcea":"#f6d6b8","#f0b97a":"#e8b84a"}}},"stegosaurus":{"ocean":{"label":"Ocean","map":{"#9bbd6a":"#6fa6c9","#7c9c50":"#4f86ab","#d7e6b0":"#cfe4f1","#e6a86a":"#f3b9c8"}},"lava":{"label":"Lava","map":{"#9bbd6a":"#b9514a","#7c9c50":"#8f3a34","#d7e6b0":"#f0c0a8","#e6a86a":"#f4d06f"}},"lilac":{"label":"Lilac","map":{"#9bbd6a":"#b9a6d6","#7c9c50":"#9682bd","#d7e6b0":"#ece4f6","#e6a86a":"#8fcfaa"}}},"longneck":{"leaf":{"label":"Leaf green","map":{"#a9c7d8":"#9bbd6a","#87a9bd":"#7c9c50","#dbe9f0":"#d7e6b0"}},"peach":{"label":"Peach","map":{"#a9c7d8":"#f2b28f","#87a9bd":"#d98e6a","#dbe9f0":"#fbe1d2"}},"lavender":{"label":"Lavender","map":{"#a9c7d8":"#b9a6d6","#87a9bd":"#9682bd","#dbe9f0":"#ece4f6"}}},"trex":{"jungle":{"label":"Jungle","map":{"#d9874f":"#7fa65a","#b96c3a":"#5e8540","#f2d3a2":"#dfe8b8"}},"midnight":{"label":"Midnight","map":{"#d9874f":"#4f5f86","#b96c3a":"#36446a","#f2d3a2":"#c9d2ea"}},"bubblegum":{"label":"Bubblegum","map":{"#d9874f":"#ef9db5","#b96c3a":"#d5768f","#f2d3a2":"#fbe0e8"}}},"turtle":{"sea":{"label":"Sea turtle","map":{"#7e9a5d":"#6f9a8f","#64804b":"#4f7a70","#a6bb7b":"#9cc4b8","#bcc78d":"#b8d8c8"}},"golden":{"label":"Golden","map":{"#7e9a5d":"#c9a14f","#64804b":"#a07e36","#a6bb7b":"#e3c47a"}},"rose":{"label":"Rose shell","map":{"#7e9a5d":"#c98a95","#64804b":"#a8697a","#a6bb7b":"#e6b4bd"}}},"axolotl":{"wild":{"label":"Wild","map":{"#f3bcc1":"#8a8178","#e49aa3":"#6c645c","#dd7488":"#c96a7a"}},"golden":{"label":"Golden","map":{"#f3bcc1":"#f4d98a","#e49aa3":"#e6bf62","#dd7488":"#e98a6a"}},"blue":{"label":"Blue","map":{"#f3bcc1":"#a9c7e8","#e49aa3":"#83a6cf","#dd7488":"#5b7fbf"}}},"swan":{"black":{"label":"Black swan","map":{"#fbf8f1":"#46404a","#e6e1d6":"#2e2a31","#e98a45":"#d9534f"}},"blush":{"label":"Blush pink","map":{"#fbf8f1":"#f8d3da","#e6e1d6":"#eeb0be"}}},"heron":{"egret":{"label":"White egret","map":{"#a2b3bd":"#f4f2ed","#e5ebed":"#ffffff","#5f717c":"#c9cdd1","#7f919b":"#e3e6e8","#e2b04f":"#f0c64e"}},"purple":{"label":"Purple heron","map":{"#a2b3bd":"#a5869a","#e5ebed":"#efe1e6","#5f717c":"#5e4a58","#7f919b":"#7a6070"}}}};
+const COAT_COST = 150;
 const WARDROBE = {
-  bow: { slot: 'head', label: 'Big bow', cost: 15 }, beanie: { slot: 'head', label: 'Knit beanie', cost: 25 }, flowers: { slot: 'head', label: 'Flower crown', cost: 35 },
-  grad: { slot: 'head', label: 'Graduation cap', cost: 40 }, crown: { slot: 'head', label: 'Golden crown', cost: 60 },
-  glasses: { slot: 'face', label: 'Study glasses', cost: 20 }, shades: { slot: 'face', label: 'Sunglasses', cost: 30 },
-  bowtie: { slot: 'neck', label: 'Bow tie', cost: 20 }, scarf: { slot: 'neck', label: 'Cosy scarf', cost: 25 }
+  chef: { slot: 'outfit', label: 'Chef', cost: 250 }, wizard: { slot: 'outfit', label: 'Wizard', cost: 300 }, pirate: { slot: 'outfit', label: 'Pirate', cost: 300 },
+  hero: { slot: 'outfit', label: 'Superhero', cost: 350 }, royal: { slot: 'outfit', label: 'Royal', cost: 450 },
+  bow: { slot: 'head', label: 'Big bow', cost: 40 }, beanie: { slot: 'head', label: 'Knit beanie', cost: 60 }, flowers: { slot: 'head', label: 'Flower crown', cost: 80 },
+  grad: { slot: 'head', label: 'Graduation cap', cost: 100 }, crown: { slot: 'head', label: 'Golden crown', cost: 150 },
+  glasses: { slot: 'face', label: 'Study glasses', cost: 50 }, shades: { slot: 'face', label: 'Sunglasses', cost: 70 },
+  bowtie: { slot: 'neck', label: 'Bow tie', cost: 50 }, scarf: { slot: 'neck', label: 'Cosy scarf', cost: 60 },
+  f_none: { slot: 'emoteF', label: 'Just the book', cost: 0 }, f_think: { slot: 'emoteF', label: 'Thinking', cost: 0 }, f_bulb: { slot: 'emoteF', label: 'Big idea', cost: 120 }, f_notes: { slot: 'emoteF', label: 'Humming', cost: 120 },
+  f_coffee: { slot: 'emoteF', label: 'Coffee break', cost: 150 }, f_star: { slot: 'emoteF', label: 'Star student', cost: 150 }, f_heart: { slot: 'emoteF', label: 'Loving it', cost: 150 }, f_fire: { slot: 'emoteF', label: 'On fire', cost: 200 },
+  n_zz: { slot: 'emoteN', label: 'Snoring', cost: 0 }, n_moon: { slot: 'emoteN', label: 'Moon and stars', cost: 120 }, n_heart: { slot: 'emoteN', label: 'Sweet dreams', cost: 150 }, n_sheep: { slot: 'emoteN', label: 'Counting sheep', cost: 200 }
 };
-const SLOTS = { head: 'Head', face: 'Eyes', neck: 'Neck' };
-const TINTS = { natural: { label: 'Natural', deg: 0, sw: '#b9a27e' }, rose: { label: 'Rose', deg: -40, sw: '#e2a0b4' }, gold: { label: 'Gold', deg: 25, sw: '#e6c260' }, mint: { label: 'Mint', deg: 90, sw: '#8fcfaa' }, sky: { label: 'Sky', deg: 170, sw: '#8db8e0' }, lilac: { label: 'Lilac', deg: 230, sw: '#b9a2e0' } };
+const SLOTS = { outfit: 'Costumes', head: 'Head', face: 'Eyes', neck: 'Neck' };
+const EMOTE_SLOTS = { emoteF: 'While focusing', emoteN: 'While napping' };
+const FREE_ITEMS = ['f_none', 'f_think', 'n_zz'];
+const ownsItem = id => FREE_ITEMS.includes(id) || (S.wardrobe || []).includes(id);
 function cleanLook(l) {
   if (!l || typeof l !== 'object') return null;
   const o = {};
-  Object.keys(SLOTS).forEach(sl => { if (WARDROBE[l[sl]] && WARDROBE[l[sl]].slot === sl) o[sl] = l[sl]; });
-  if (TINTS[l.tint] && l.tint !== 'natural') o.tint = l.tint;
+  [...Object.keys(SLOTS), ...Object.keys(EMOTE_SLOTS)].forEach(sl => { if (WARDROBE[l[sl]] && WARDROBE[l[sl]].slot === sl) o[sl] = l[sl]; });
+  if (typeof l.coat === 'string' && /^[a-z]{1,16}$/.test(l.coat)) o.coat = l.coat;
   return Object.keys(o).length ? o : null;
 }
 const myLook = (k = S.active) => cleanLook((S.pets[k] || {}).look);
+function recolor(kind, look, art) {
+  const c = look && look.coat && COATS[kind] && COATS[kind][look.coat]; if (!c) return art;
+  return art.replace(/#[0-9a-f]{6}\b/gi, h => c.map[h.toLowerCase()] || h);
+}
+const T = (x, y, s) => `transform="translate(${x} ${y}) scale(${s})"`;
 function headItem(id, [x, y, s]) {
-  const t = `transform="translate(${x} ${y}) scale(${s})"`;
+  const t = T(x, y, s);
   if (id === 'beanie') return `<g ${t}><path d="M-30 6 C-30 -22 -16 -34 0 -34 C16 -34 30 -22 30 6 Z" fill="#c95f5a" ${O2}/><path d="M-18 -24 L-14 4 M-6 -32 L-5 4 M6 -32 L5 4 M18 -24 L14 4" stroke="#a84843" stroke-width="2" stroke-linecap="round"/><rect x="-33" y="-2" width="66" height="12" rx="6" fill="#f3e6d2" ${O2}/><circle cx="0" cy="-37" r="7" fill="#f3e6d2" ${O2}/></g>`;
   if (id === 'grad') return `<g ${t}><path d="M-20 -10 L-20 6 C-8 12 8 12 20 6 L20 -10 Z" fill="#2e3a44" ${O2}/><path d="M-40 -14 L0 -29 L40 -14 L0 1 Z" fill="#3b4a56" ${O2}/><path d="M0 -14 L30 -10 L31 8" stroke="#e8b84a" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="31" cy="10" r="3.6" fill="#e8b84a" ${O2}/><circle cx="0" cy="-14" r="2.6" fill="#e8b84a"/></g>`;
-  if (id === 'crown') return `<g ${t}><path d="M-24 6 L-28 -22 L-12 -8 L0 -28 L12 -8 L28 -22 L24 6 Z" fill="#f0c64e" ${O2}/><circle cx="0" cy="-4" r="3.6" fill="#d86a6a" ${O2}/><circle cx="-14" cy="-1" r="2.6" fill="#6aa0d8"/><circle cx="14" cy="-1" r="2.6" fill="#6aa0d8"/><circle cx="0" cy="-28" r="2.6" fill="#f7e3a0" ${O2}/></g>`;
+  if (id === 'crown') return `<g ${t}><path d="M-26 6 L-30 -24 L-13 -9 L0 -31 L13 -9 L30 -24 L26 6 Z" fill="#f0c64e" ${O2}/><path d="M-26 0 H26" stroke="#c99b34" stroke-width="2"/><circle cx="0" cy="-5" r="4" fill="#d86a6a" ${O2}/><circle cx="-15" cy="-2" r="3" fill="#6aa0d8" stroke="${INK}" stroke-width="1.4"/><circle cx="15" cy="-2" r="3" fill="#6aa0d8" stroke="${INK}" stroke-width="1.4"/><circle cx="0" cy="-31" r="3" fill="#f7e3a0" ${O2}/><circle cx="-30" cy="-24" r="2.6" fill="#f7e3a0" ${O2}/><circle cx="30" cy="-24" r="2.6" fill="#f7e3a0" ${O2}/></g>`;
   if (id === 'flowers') {
     const fl = [[-30, 6, '#f2a7b5'], [-16, -3, '#fbf8f1'], [0, -6, '#f4d06f'], [16, -3, '#fbf8f1'], [30, 6, '#f2a7b5']];
     return `<g ${t}><path d="M-34 10 C-20 -8 20 -8 34 10" fill="none" stroke="#7d9a52" stroke-width="3.5" stroke-linecap="round"/>${fl.map(([fx, fy, c]) => `<g transform="translate(${fx} ${fy})">${[0, 72, 144, 216, 288].map(a => `<ellipse cx="0" cy="-5" rx="3.6" ry="5" fill="${c}" stroke="${INK}" stroke-width="1.6" transform="rotate(${a})"/>`).join('')}<circle r="2.8" fill="#e8b84a" stroke="${INK}" stroke-width="1.4"/></g>`).join('')}</g>`;
   }
   if (id === 'bow') return `<g ${t}><g transform="translate(20 0) rotate(18)"><path d="M0 0 C-10 -16 -28 -14 -26 0 C-28 14 -10 16 0 0 Z" fill="#e27d97" ${O2}/><path d="M0 0 C10 -16 28 -14 26 0 C28 14 10 16 0 0 Z" fill="#e27d97" ${O2}/><circle r="5.5" fill="#c95f7a" ${O2}/></g></g>`;
+  if (id === 'wizard') return `<g ${t}><path d="M-30 4 C-14 -2 14 -2 30 4 L10 -58 C6 -68 -2 -66 -6 -60 Z" fill="#5b4a8a" ${O2}/><path d="M-6 -60 C-14 -64 -20 -60 -22 -54" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="0" cy="4" rx="40" ry="8" fill="#4a3b75" ${O2}/>${star(-8, -22, 5)}${star(8, -40, 4)}${star(12, -12, 3.4)}</g>`;
+  if (id === 'pirate') return `<g ${t}><path d="M-42 2 C-30 -30 -14 -26 0 -34 C14 -26 30 -30 42 2 C20 -6 -20 -6 -42 2 Z" fill="#2b2725" ${O2}/><path d="M-36 -4 C-16 -12 16 -12 36 -4" fill="none" stroke="#e8b84a" stroke-width="2.6"/><circle cx="0" cy="-17" r="5" fill="#f3efe6" ${O2}/><path d="M-8 -9 L8 -2 M8 -9 L-8 -2" stroke="#f3efe6" stroke-width="2.4" stroke-linecap="round"/></g>`;
+  if (id === 'chef') return `<g ${t}><rect x="-20" y="-24" width="40" height="28" rx="4" fill="#ffffff" ${O2}/><circle cx="-16" cy="-30" r="12" fill="#ffffff" ${O2}/><circle cx="16" cy="-30" r="12" fill="#ffffff" ${O2}/><circle cx="0" cy="-38" r="14" fill="#ffffff" ${O2}/><path d="M-20 -4 H20" stroke="#d8d2c6" stroke-width="2.4"/><path d="M-12 -14 V-4 M0 -16 V-4 M12 -14 V-4" stroke="#e6e1d6" stroke-width="2"/></g>`;
+  if (id === 'royal') return headItem('crown', [x, y, s * 1.15]);
   return '';
 }
+function star(x, y, r) { const p = []; for (let i = 0; i < 10; i++) { const a = Math.PI / 5 * i - Math.PI / 2, rr = i % 2 ? r * .45 : r; p.push(`${(x + Math.cos(a) * rr).toFixed(1)} ${(y + Math.sin(a) * rr).toFixed(1)}`); } return `<path d="M${p.join(' L')} Z" fill="#f4d97c" stroke="${INK}" stroke-width="1.2" stroke-linejoin="round"/>`; }
 function neckItem(id, [x, y, s]) {
-  const t = `transform="translate(${x} ${y}) scale(${s})"`;
+  const t = T(x, y, s);
   if (id === 'bowtie') return `<g ${t}><path d="M0 0 L-17 -10 L-17 10 Z M0 0 L17 -10 L17 10 Z" fill="#3b5f8a" ${O2}/><circle r="4.6" fill="#2e4b70" ${O2}/></g>`;
   if (id === 'scarf') return `<g ${t}><path d="M12 4 L22 32 L8 34 L3 8 Z" fill="#d9874f" ${O2}/><path d="M-32 -6 C-14 6 14 6 32 -6 L32 6 C14 18 -14 18 -32 6 Z" fill="#e9a35f" ${O2}/><path d="M-20 2 L-20 12 M-6 5 L-6 15 M8 5 L8 15 M22 1 L22 11" stroke="#c06f37" stroke-width="2"/></g>`;
+  if (id === 'chef') return `<g ${t}><path d="M-22 -4 C-10 4 10 4 22 -4 L0 22 Z" fill="#d9534f" ${O2}/><circle cx="0" cy="2" r="4" fill="#b8423e" ${O2}/></g>`;
+  if (id === 'royal') return `<g ${t}><path d="M-34 -6 C-16 8 16 8 34 -6 L34 6 C16 20 -16 20 -34 6 Z" fill="#fbf8f1" ${O2}/>${[-24, -10, 6, 20].map((dx, i) => `<path d="M${dx} ${4 + (i % 2) * 3} l2 4 l2 -4 z" fill="${INK}"/>`).join('')}<circle cx="0" cy="10" r="4" fill="#f0c64e" ${O2}/></g>`;
+  if (id === 'hero' || id === 'wizard') return `<g ${t}><circle cx="-22" cy="0" r="4.6" fill="#f0c64e" ${O2}/><circle cx="22" cy="0" r="4.6" fill="#f0c64e" ${O2}/></g>`;
   return '';
+}
+function capeUnder(id, [x, y, s]) {
+  const col = { hero: ['#d9534f', '#b8423e'], wizard: ['#5b4a8a', '#463870'], royal: ['#b8323b', '#8f2530'] }[id]; if (!col) return '';
+  const w0 = 34 * s, w1 = Math.max(58, 86 * s), y0 = y - 6 * s, yb = 180, mid = (y0 + yb) / 2;
+  const sp = id === 'wizard' ? star(x - w1 * .7, yb - 18, 4) + star(x + w1 * .75, mid + 10, 3.6) + star(x - w1 * .5, mid - 4, 3) : '';
+  const trim = id === 'royal' ? `<path d="M${x - w1} ${yb - 4} Q${x} ${yb + 6} ${x + w1} ${yb - 4}" fill="none" stroke="#fbf8f1" stroke-width="7" stroke-linecap="round"/>` : '';
+  return `<path d="M${x - w0} ${y0} C${x - w0 - 20 * s} ${mid} ${x - w1 - 4} ${yb - 20} ${x - w1} ${yb - 2} Q${x} ${yb + 8} ${x + w1} ${yb - 2} C${x + w1 + 4} ${yb - 20} ${x + w0 + 20 * s} ${mid} ${x + w0} ${y0} Z" fill="${col[0]}" ${O}/><path d="M${x - w1 * .55} ${yb - 4} C${x - w1 * .5} ${mid + 20} ${x - w0 * .6} ${mid} ${x - w0 * .4} ${y0 + 10}" fill="none" stroke="${col[1]}" stroke-width="2.4" stroke-linecap="round"/>${sp}${trim}`;
 }
 function faceItem(id, f) {
   if (f.eyes.length < 2) return '';
-  const r = f.er * 2.1, [[x1, y1], [x2, y2]] = f.eyes, fill = id === 'shades' ? '#2e2a28' : 'rgba(255,255,255,.22)';
+  const er = f.er, [[x1, y1], [x2, y2]] = f.eyes;
+  if (id === 'hero') {
+    const r = er * 1.7, pad = er * 2.8, h = er * 2.2, yy = (y1 + y2) / 2;
+    return `<path fill-rule="evenodd" d="M${x1 - pad} ${yy - h * .6} C${x1} ${yy - h * 1.1} ${x2} ${yy - h * 1.1} ${x2 + pad} ${yy - h * .6} L${x2 + pad * .9} ${yy + h * .7} C${(x1 + x2) / 2 + 6} ${yy + h * .4} ${(x1 + x2) / 2 - 6} ${yy + h * .4} ${x1 - pad * .9} ${yy + h * .7} Z M${x1 - r} ${y1} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z M${x2 - r} ${y2} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z" fill="#2e3a6e" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/>`;
+  }
+  if (id === 'pirate') { const r = er * 1.9; return `<path d="M${x2 - r * 2.2} ${y2 - r * 2.4} L${x2 + r * 2.4} ${y2 + r * .6}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="${x2}" cy="${y2}" rx="${r}" ry="${r * .9}" fill="#2b2725" ${O2}/>`; }
+  if (id !== 'glasses' && id !== 'shades') return '';
+  const r = er * 2.1, fill = id === 'shades' ? '#2e2a28' : 'rgba(255,255,255,.22)';
   const lens = (x, y) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${INK}" stroke-width="2.4"/>${id === 'shades' ? `<path d="M${x - r * .5} ${y - r * .3} Q${x - r * .2} ${y - r * .65} ${x + r * .2} ${y - r * .6}" stroke="#fff" stroke-width="1.6" fill="none" opacity=".7" stroke-linecap="round"/>` : ''}`;
   return `<g class="acc-face">${lens(x1, y1)}${lens(x2, y2)}<path d="M${x1 + r} ${y1} Q${(x1 + x2) / 2} ${Math.min(y1, y2) - r * .35} ${x2 - r} ${y2}" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>`;
 }
-function lookLayers(kind, look) {
-  const a = ANCHORS[kind], l = cleanLook(look); if (!l || !a) return { under: '', over: '' };
-  return { over: (l.neck ? neckItem(l.neck, a.neck) : '') + (l.face ? faceItem(l.face, ANIMALS[kind].face) : '') + (l.head ? headItem(l.head, a.hat) : '') };
+const OUTFITS = { chef: { head: 'chef', neck: 'chef' }, wizard: { head: 'wizard', neck: 'wizard', cape: 1 }, pirate: { head: 'pirate', face: 'pirate' }, hero: { face: 'hero', neck: 'hero', cape: 1 }, royal: { head: 'royal', neck: 'royal', cape: 1 } };
+function bookSVG([x, y, s]) {
+  return `<g class="study-book" ${T(x, y + 22 * s, s * 1.05)}><path d="M-33 -3 L-33 19 C-22 15 -10 15 0 21 C10 15 22 15 33 19 L33 -3 Z" fill="#b8504b" ${O2}/><path d="M0 -2 C-10 -9 -22 -9 -30 -5 L-30 15 C-22 11 -10 11 0 17 Z" fill="#fbf8f1" ${O2}/><path d="M0 -2 C10 -9 22 -9 30 -5 L30 15 C22 11 10 11 0 17 Z" fill="#fbf8f1" ${O2}/><path d="M-24 -1 C-17 -3 -10 -3 -5 0 M-24 5 C-17 3 -10 3 -5 6 M5 0 C10 -3 17 -3 24 -1 M5 6 C10 3 17 3 24 5" stroke="#c9c2b4" stroke-width="1.6" stroke-linecap="round" fill="none"/></g>`;
 }
-const tintFilter = look => { const l = cleanLook(look); return l && l.tint ? ` filter="url(#tint-${l.tint})"` : ''; };
+function emoteIcon(id) {
+  if (id === 'think') return `<circle cx="-7" cy="0" r="2.6" fill="${INK}"/><circle cx="0" cy="0" r="2.6" fill="${INK}"/><circle cx="7" cy="0" r="2.6" fill="${INK}"/>`;
+  if (id === 'bulb') return `<path d="M0 -10 C-7 -10 -10 -4 -8 1 C-7 4 -4 5 -4 8 H4 C4 5 7 4 8 1 C10 -4 7 -10 0 -10 Z" fill="#f4d97c" ${O2}/><path d="M-3 11 H3" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/><path d="M-13 -9 L-10 -7 M13 -9 L10 -7 M0 -15 V-13" stroke="#e8b84a" stroke-width="2" stroke-linecap="round"/>`;
+  if (id === 'notes') return `<path d="M-6 6 V-8 L7 -11 V3" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/><ellipse cx="-8.5" cy="6.5" rx="3.6" ry="2.8" fill="${INK}"/><ellipse cx="4.5" cy="3.5" rx="3.6" ry="2.8" fill="${INK}"/>`;
+  if (id === 'coffee') return `<path d="M-9 -3 H6 V5 C6 9 3 11 -1 11 H-2 C-6 11 -9 9 -9 5 Z" fill="#f3e6d2" ${O2}/><path d="M6 0 C10 0 10 6 6 6" fill="none" stroke="${INK}" stroke-width="2"/><path d="M-5 -6 C-7 -9 -3 -10 -5 -13 M0 -6 C-2 -9 2 -10 0 -13" stroke="#a7a19a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M-9 0 H6" stroke="#8f6340" stroke-width="2.4"/>`;
+  if (id === 'star') return star(0, 0, 10);
+  if (id === 'heart') return `<path d="M0 9 C-12 1 -11 -9 -5 -9 C-2 -9 0 -6 0 -5 C0 -6 2 -9 5 -9 C11 -9 12 1 0 9 Z" fill="#e8798f" ${O2}/>`;
+  if (id === 'fire') return `<path d="M0 -12 C2 -6 9 -3 8 4 C7 9 3 11 0 11 C-4 11 -8 8 -8 3 C-8 -2 -4 -3 -3 -7 C-1 -4 0 -2 1 0 C2 -4 1 -8 0 -12 Z" fill="#ef8a4a" ${O2}/><path d="M0 3 C2 5 2 8 0 9 C-2 8 -2 5 0 3 Z" fill="#f4d97c"/>`;
+  if (id === 'moon') return `<path d="M3 -10 A10 10 0 1 0 9 6 A8 8 0 1 1 3 -10 Z" fill="#f4d97c" ${O2}/>${star(9, -7, 3.2)}`;
+  if (id === 'sheep') return `<g><circle cx="-4" cy="0" r="5" fill="#fbf8f1" stroke="${INK}" stroke-width="1.6"/><circle cx="2" cy="-2" r="5" fill="#fbf8f1" stroke="${INK}" stroke-width="1.6"/><circle cx="3" cy="3" r="5" fill="#fbf8f1" stroke="${INK}" stroke-width="1.6"/><circle cx="-3" cy="4" r="4.4" fill="#fbf8f1" stroke="${INK}" stroke-width="1.6"/><ellipse cx="10" cy="0" rx="3.4" ry="4" fill="${INK}"/><path d="M-4 8 V11 M3 8 V11" stroke="${INK}" stroke-width="2" stroke-linecap="round"/></g>`;
+  return '';
+}
+function emoteSVG(id, [zx, zy]) {
+  const icon = emoteIcon(id); if (!icon) return '';
+  const x = Math.min(176, zx + 4), y = Math.max(22, zy + 4);
+  return `<g transform="translate(${x} ${y})"><g class="emote"><circle cx="-16" cy="22" r="3" fill="#fbf8f1" stroke="${INK}" stroke-width="1.6"/><circle cx="-9" cy="15" r="4.4" fill="#fbf8f1" stroke="${INK}" stroke-width="1.6"/><ellipse cx="4" cy="0" rx="19" ry="16" fill="#fbf8f1" stroke="${INK}" stroke-width="2"/><g transform="translate(4 0)">${icon}</g></g></g>`;
+}
+// all the layers a look adds around the animal: capes go behind it, the rest in front
+function lookLayers(kind, look, state, studying) {
+  const a = ANCHORS[kind] || ANCHORS.frog, f = ANIMALS[kind].face, l = cleanLook(look) || {}, out = { under: '', over: '', zz: null };
+  const fit = l.outfit ? OUTFITS[l.outfit] : null;
+  const head = fit ? fit.head : l.head, face = fit && fit.face ? fit.face : l.face, neck = fit && fit.neck ? fit.neck : l.neck;
+  if (fit && fit.cape) out.under = capeUnder(l.outfit, a.neck);
+  if (studying && state !== 'sleeping') out.over += bookSVG(a.neck);
+  if (neck) out.over += neckItem(neck, a.neck);
+  if (face && state !== 'sleeping' || face === 'hero' || face === 'pirate') out.over += faceItem(face, f);
+  if (head) out.over += headItem(head, a.hat);
+  if (studying && state !== 'sleeping') { const e = (l.emoteF || 'f_think').slice(2); if (e !== 'none') out.over += emoteSVG(e, f.zz); }
+  if (state === 'sleeping' && l.emoteN && l.emoteN !== 'n_zz') out.zz = emoteSVG(l.emoteN.slice(2), f.zz);
+  return out;
+}
 
 /* the dress-up window in Sanctuary */
-let dressFor = null, tryOn = null;
-function openDress(k) { dressFor = k; tryOn = null; renderDress(); $('#dressModal').classList.add('on'); }
+let dressFor = null, tryOn = null, dressPose = 'happy';
+function openDress(k) { dressFor = k; tryOn = null; dressPose = 'happy'; renderDress(); $('#dressModal').classList.add('on'); }
 function closeDress() { $('#dressModal').classList.remove('on'); dressFor = null; tryOn = null; }
+const coatsOwned = k => (S.pets[k] && Array.isArray(S.pets[k].coats) ? S.pets[k].coats : []);
+function itemPrice(slot, id) { return slot === 'coat' ? COAT_COST : WARDROBE[id].cost; }
+function itemLabel(slot, id) { return slot === 'coat' ? COATS[dressFor][id].label : WARDROBE[id].label; }
+function itemOwned(slot, id) { return slot === 'coat' ? coatsOwned(dressFor).includes(id) : ownsItem(id); }
 function renderDress() {
   const k = dressFor; if (!k) return;
-  const p = S.pets[k], cur = cleanLook(p.look) || {}, view = { ...cur, ...(tryOn || {}) }, own = S.wardrobe || [];
+  const p = S.pets[k], cur = cleanLook(p.look) || {}, view = { ...cur, ...(tryOn || {}) };
+  const poseOf = slot => slot === 'emoteF' ? 'study' : slot === 'emoteN' ? 'sleeping' : 'awake';
+  const pic = (look, pose) => avatarSVG(k, pose === 'study' ? 'awake' : pose, look, pose === 'study');
   const tile = (slot, id) => {
-    const it = WARDROBE[id], on = id === 'none' ? !view[slot] : view[slot] === id, has = id === 'none' || own.includes(id);
-    const prev = id === 'none' ? '' : avatarSVG(k, 'awake', { ...view, [slot]: id });
-    return `<button type="button" class="dress-tile ${on ? 'on' : ''}" data-dsel="${slot}:${id}" aria-pressed="${on}">${id === 'none' ? `<span class="dress-none">${icon('i-x')}</span>` : `<span class="dress-av">${prev}</span>`}<b>${id === 'none' ? 'None' : it.label}</b><small>${id === 'none' ? '&nbsp;' : has ? 'Yours' : `${icon('i-coin')}${it.cost}`}</small></button>`;
+    const isNone = id === 'none', on = isNone ? !view[slot] : view[slot] === id, has = isNone || itemOwned(slot, id);
+    const lk = { ...view }; if (isNone) delete lk[slot]; else lk[slot] = id;
+    if (slot === 'outfit' && !isNone) { delete lk.head; delete lk.face; delete lk.neck; }
+    return `<button type="button" class="dress-tile ${on ? 'on' : ''}" data-dsel="${slot}:${id}" aria-pressed="${on}"><span class="dress-av">${pic(lk, poseOf(slot))}</span><b>${isNone ? (slot === 'coat' ? 'Natural' : 'None') : esc(itemLabel(slot, id))}</b><small>${isNone || has ? (on ? 'Wearing' : 'Yours') : `${icon('i-coin')}${itemPrice(slot, id)}`}</small></button>`;
   };
-  const pending = tryOn && Object.entries(tryOn).find(([, id]) => !own.includes(id));
+  const pending = tryOn && Object.entries(tryOn).find(([sl, id]) => !itemOwned(sl, id));
   const name = p.name || ANIMALS[k].label;
+  const section = (lab, slot, ids, none = true) => `<div><span class="eyebrow">${lab}</span><div class="dress-row">${none ? tile(slot, 'none') : ''}${ids.map(id => tile(slot, id)).join('')}</div></div>`;
+  const ofSlot = sl => Object.keys(WARDROBE).filter(id => WARDROBE[id].slot === sl);
+  const pose = dressPose;
   $('#dressBox').innerHTML = `<div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="eyebrow">Wardrobe</span><h2>Dress up ${esc(name)}</h2></div><button class="icon-btn" data-dclose aria-label="Close">${icon('i-x')}</button></div>
     <div class="dress">
-      <div class="dress-pic">${animalSVG(k, 'happy', { look: view, label: name })}</div>
+      <div class="dress-side"><div class="dress-pic">${animalSVG(k, pose === 'study' ? 'awake' : pose, { look: view, label: name, studying: pose === 'study' })}</div>
+        <div class="seg dress-pose" role="group" aria-label="Preview">${[['happy', 'Happy'], ['study', 'Studying'], ['sleeping', 'Napping']].map(([v, t]) => `<button type="button" data-dpose="${v}" aria-pressed="${pose === v}">${t}</button>`).join('')}</div></div>
       <div class="dress-opts">
-        ${Object.entries(SLOTS).map(([slot, lab]) => `<div><span class="eyebrow">${lab}</span><div class="dress-row">${tile(slot, 'none')}${Object.keys(WARDROBE).filter(id => WARDROBE[id].slot === slot).map(id => tile(slot, id)).join('')}</div></div>`).join('')}
-        <div><span class="eyebrow">Colour · free</span><div class="dress-tints">${Object.entries(TINTS).map(([t, v]) => `<button type="button" class="tint ${(view.tint || 'natural') === t ? 'on' : ''}" data-dtint="${t}" aria-pressed="${(view.tint || 'natural') === t}"><i style="background:${v.sw}"></i>${v.label}</button>`).join('')}</div><p class="muted" style="font-size:.76rem; margin:6px 0 0">Colours show best on colourful animals. White and grey fur stays the same.</p></div>
+        ${section('Costumes · replace hat, eyes and neck', 'outfit', ofSlot('outfit'))}
+        ${section('Head', 'head', ofSlot('head'))}${section('Eyes', 'face', ofSlot('face'))}${section('Neck', 'neck', ofSlot('neck'))}
+        ${COATS[k] ? section(`Fur coat for this ${ANIMALS[k].label.toLowerCase()} · ${COAT_COST} coins each`, 'coat', Object.keys(COATS[k])) : ''}
+        ${section('While focusing · your animal reads a book and shows this', 'emoteF', ofSlot('emoteF'), false)}
+        ${section('While napping', 'emoteN', ofSlot('emoteN'), false)}
       </div>
     </div>
-    <div class="row" style="justify-content:flex-end">${pending ? `<span class="muted" style="font-size:.84rem">Trying on the ${WARDROBE[pending[1]].label.toLowerCase()}. You have ${S.coins} coins.</span><button class="btn" data-dcancel>Take it off</button><button class="btn primary" data-dbuy ${S.coins < WARDROBE[pending[1]].cost ? 'disabled' : ''}>${icon('i-coin')}Buy for ${WARDROBE[pending[1]].cost}</button>` : `<span class="muted" style="font-size:.84rem">Bought items work on every animal.</span><button class="btn primary" data-dclose>Done</button>`}</div>`;
+    <div class="row dress-foot">${pending ? `<span class="muted" style="font-size:.84rem">Trying on ${esc(itemLabel(pending[0], pending[1]))}. You have ${S.coins} coins.</span><button class="btn" data-dcancel>Take it off</button><button class="btn primary" data-dbuy ${S.coins < itemPrice(pending[0], pending[1]) ? 'disabled' : ''}>${icon('i-coin')}Buy for ${itemPrice(pending[0], pending[1])}</button>` : `<span class="muted" style="font-size:.84rem">Outfits and emotes work on every animal. Coats belong to one animal.</span><button class="btn primary" data-dclose>Done</button>`}</div>`;
 }
 function setLook(k, look) {
   S.pets[k].look = cleanLook(look); save();
@@ -1701,21 +1801,25 @@ function bindDress() {
     if (e.target.id === 'dressModal' || e.target.closest('[data-dclose]')) { closeDress(); return; }
     const k = dressFor; if (!k) return;
     const cur = cleanLook(S.pets[k].look) || {};
+    const ps = e.target.closest('[data-dpose]'); if (ps) { dressPose = ps.dataset.dpose; renderDress(); return; }
     const sel = e.target.closest('[data-dsel]');
     if (sel) {
       const [slot, id] = sel.dataset.dsel.split(':');
+      if (slot === 'emoteF') dressPose = 'study'; else if (slot === 'emoteN') dressPose = 'sleeping'; else if (dressPose !== 'happy') dressPose = 'awake' === dressPose ? 'happy' : dressPose;
       if (id === 'none') { tryOn = null; delete cur[slot]; setLook(k, cur); }
-      else if ((S.wardrobe || []).includes(id)) { tryOn = null; if (cur[slot] === id) delete cur[slot]; else cur[slot] = id; setLook(k, cur); }
+      else if (itemOwned(slot, id)) { tryOn = null; if (cur[slot] === id && slot !== 'emoteF' && slot !== 'emoteN') delete cur[slot]; else cur[slot] = id; setLook(k, cur); }
       else tryOn = { [slot]: id };
       renderDress(); return;
     }
-    const tn = e.target.closest('[data-dtint]'); if (tn) { cur.tint = tn.dataset.dtint; setLook(k, cur); renderDress(); return; }
     if (e.target.closest('[data-dcancel]')) { tryOn = null; renderDress(); return; }
     if (e.target.closest('[data-dbuy]') && tryOn) {
-      const [slot, id] = Object.entries(tryOn)[0], it = WARDROBE[id];
-      if (S.coins < it.cost) return;
-      S.coins -= it.cost; S.wardrobe = [...new Set([...(S.wardrobe || []), id])]; cur[slot] = id; tryOn = null;
-      setLook(k, cur); renderChips(); renderDress(); toast(`The ${it.label.toLowerCase()} is yours. It fits every animal.`);
+      const [slot, id] = Object.entries(tryOn)[0], cost = itemPrice(slot, id), label = itemLabel(slot, id);
+      if (S.coins < cost) return;
+      S.coins -= cost;
+      if (slot === 'coat') S.pets[k].coats = [...new Set([...coatsOwned(k), id])];
+      else S.wardrobe = [...new Set([...(S.wardrobe || []), id])];
+      cur[slot] = id; tryOn = null;
+      setLook(k, cur); renderChips(); renderDress(); toast(`${esc(label)} is yours.`);
     }
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && dressFor) closeDress(); });
@@ -2325,12 +2429,12 @@ function computeHero() {
   return napAfterStop ? 'sleeping' : 'awake';
 }
 function renderHero(force) {
-  const st = computeHero();
+  const st = computeHero(), studying = !!(S.timer && S.timer.phase === 'focus' && !S.timer.pausedLeft);
   const el = $('#heroPet');
-  el.classList.toggle('focus', !!(S.timer && S.timer.phase === 'focus' && !S.timer.pausedLeft));
-  if (!force && st === heroState) return;
-  heroState = st;
-  el.innerHTML = onPadSVG(S.active, st, { look: myLook(), label: `${petTitle()}, ${st === 'sleeping' ? 'napping' : st}` });
+  el.classList.toggle('focus', studying);
+  if (!force && st + studying === heroState) return;
+  heroState = st + studying;
+  el.innerHTML = onPadSVG(S.active, st, { look: myLook(), studying: studying && st !== 'sleeping', label: `${petTitle()}, ${st === 'sleeping' ? 'napping' : st}` });
   $('#petName').textContent = petName();
   $('#petSpecies').textContent = `${ANIMALS[S.active].label}${st === 'sleeping' ? ' · napping' : st === 'happy' ? ' · happy' : S.timer?.phase === 'focus' ? ' · awake with you' : ''}`;
 }
@@ -2721,8 +2825,8 @@ function renderRocks() {
     const d = r.pebbles.filter(p => p.done).length, n = r.pebbles.length, open = S.openRock === r.id;
     const draft = aiDrafts[r.id];
     return `<article class="rock" data-rock="${esc(r.id)}">
-      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt(courseColor(r.courseId))}
-        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${courseColor(r.courseId)}"></i>${esc(courseName(r.courseId))}</span>${r.due ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${isDone(r) ? '<span class="pill" style="background:var(--moss);color:#fff">Crossed</span>' : ''}</div></div>
+      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt((okColor(r.color) || courseColor(r.courseId)))}
+        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${(okColor(r.color) || courseColor(r.courseId))}"></i>${esc(courseName(r.courseId))}</span>${r.due ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${isDone(r) ? '<span class="pill" style="background:var(--moss);color:#fff">Crossed</span>' : ''}</div></div>
         <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width:90px"><span class="muted num" style="font-size:.82rem">${d} of ${n} pebbles</span><span class="prog-bar" style="width:90px"><i style="width:${n ? d / n * 100 : 0}%"></i></span></div>
       </div>
       ${open ? `<div class="rock-body">
@@ -2730,7 +2834,7 @@ function renderRocks() {
         ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(p => `<li class="peb ${p.done ? 'done' : ''}"><button class="chk" data-peb="${esc(p.id)}" aria-label="${p.done ? 'Mark not done' : 'Mark done'}: ${esc(p.text)}">${icon('i-check')}</button><span class="tx">${esc(p.text)}</span><span class="mins">${p.mins || 15} min</span><button class="icon-btn" style="width:30px;height:30px" data-delpeb="${esc(p.id)}" aria-label="Remove pebble">${icon('i-x')}</button></li>`).join('')}</ul>` : '<p class="muted">No pebbles yet. Add the smallest first step you can think of, or let Claude break it down.</p>'}
         ${draft ? aiBox(r.id, draft) : ''}
         <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="15" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
-        <div class="row"><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
+        <div class="row"><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button><span class="rock-colors" role="group" aria-label="Rock colour">${['', ...EV_COLORS].map(c => `<button type="button" class="rc ${(okColor(r.color) || '') === c ? 'on' : ''}" data-rockc="${c}" title="${c ? 'Colour' : 'Course colour'}" style="background:${c || courseColor(r.courseId)}">${c ? '' : '<small>A</small>'}</button>`).join('')}</span><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
       </div>` : ''}
     </article>`;
   }).join('');
@@ -2807,6 +2911,7 @@ function bindPebbles() {
     if (e.target.closest('[data-aiclose]')) { delete aiDrafts[id]; renderRocks(); return; }
     if (e.target.closest('[data-aiadd]')) { const d = aiDrafts[id]; d.items.forEach(p => r.pebbles.push({ id: uid(), text: p.text, mins: p.mins, done: false })); delete aiDrafts[id]; save(); renderRocks(); renderNextPebble(); toast(`${d.items.length} pebbles added. Start with the first one.`); return; }
     if (e.target.closest('[data-focusrock]')) { const p = r.pebbles.find(x => !x.done); if (p) { S.settings.focus = Math.min(120, p.mins || 15); syncRanges(); renderCourseSelects(); $('#courseSel').value = r.courseId || ''; go('focus'); if (!S.timer) startPhase('focus'); } return; }
+    const rc = e.target.closest('[data-rockc]'); if (rc) { const r = S.rocks.find(x => x.id === art.dataset.rock); if (r) { r.color = okColor(rc.dataset.rockc); save(); renderRocks(); } return; }
     if (e.target.closest('[data-delrock]')) { art.querySelector('[data-delwrap]').innerHTML = `<span class="confirm">Remove this rock and its pebbles? <button class="btn small rose" data-delyes>Remove</button><button class="btn small" data-delno>Keep it</button></span>`; return; }
     if (e.target.closest('[data-delyes]')) { S.rocks = S.rocks.filter(x => x.id !== id); save(); renderRocks(); renderNextPebble(); return; }
     if (e.target.closest('[data-delno]')) { renderRocks(); return; }
@@ -2873,14 +2978,17 @@ function importICS(text) {
 const EV_TYPES = { deadline: 'Deadline', exam: 'Exam or quiz', lab: 'Lab', meeting: 'Meeting', other: 'Other' };
 const REMIND_OPTS = [[-1, 'No reminder'], [60, '1 hour before'], [180, '3 hours before'], [1440, '1 day before'], [2880, '2 days before'], [10080, '1 week before']];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-let calMonth = dayKey().slice(0, 7), calDay = dayKey(), calEdit = null;
+let calMonth = dayKey().slice(0, 7), calDay = dayKey(), calEdit = null, calRock = null, evColor = '';
+const EV_COLORS = ['#d9675a', '#e9905a', '#e8b84a', '#8fb069', '#4f9a94', '#5b7fa0', '#8a6aa0', '#d77fa1', '#8f6340', '#5f6b76'];
+const okColor = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c : '';
+const itemColor = it => okColor(it.color) || courseColor(it.courseId);
 
 // an event without a time is anchored at 9 in the morning, so "1 day before" lands the morning before
 const evAt = e => { const d = keyToDate(e.date); const [h, m] = (e.time || '09:00').split(':').map(Number); d.setHours(h || 0, m || 0, 0, 0); return +d; };
 const fmtClock = t => (t ? new Date(`2000-01-01T${t}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '');
 function calItems() {
   const ev = (S.events || []).map(e => ({ ...e, kind: 'event' }));
-  const rocks = S.rocks.filter(r => r.due && !r.example && !(r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done))).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, type: 'deadline', remind: 1440 }));
+  const rocks = S.rocks.filter(r => r.due && !r.example && !(r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done))).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, color: r.color, type: 'deadline', remind: 1440 }));
   return [...ev, ...rocks].sort((a, b) => evAt(a) - evAt(b));
 }
 function whenText(it) {
@@ -2892,7 +3000,7 @@ function whenText(it) {
   const d = keyToDate(it.date); return `${WD[d.getDay()]} ${d.getDate()} ${MO[d.getMonth()]}${t}`;
 }
 function chipHTML(it) {
-  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}" style="--c:${courseColor(it.courseId)}" data-calev="${esc(it.id)}" title="${esc(it.title)}">${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
+  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}" style="--c:${itemColor(it)}" data-calev="${esc(it.id)}" title="${esc(it.title)}">${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
 }
 function renderCal() {
   if (!$('#calGrid')) return;
@@ -2904,7 +3012,7 @@ function renderCal() {
   let cells = '';
   for (let i = 0; i < weeks * 7; i++) {
     const d = addDays(start, i), k = dayKey(d), list = byDay[k] || [], out = d.getMonth() !== m - 1;
-    cells += `<div class="cal-day${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${courseColor(it.courseId)}"></i>`).join('')}</span>` : ''}</div>`;
+    cells += `<div class="cal-day${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${itemColor(it)}"></i>`).join('')}</span>` : ''}</div>`;
   }
   $('#calGrid').innerHTML = cells;
   // the selected day
@@ -2918,25 +3026,35 @@ function renderCal() {
 }
 function itemRow(it) {
   const n = Math.round((keyToDate(it.date) - keyToDate(dayKey())) / 864e5);
-  return `<li><span class="bar" style="background:${courseColor(it.courseId)}"></span><span class="nm"><b>${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
+  return `<li><span class="bar" style="background:${itemColor(it)}"></span><span class="nm"><b>${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
 }
 function renderCalAlerts() {
   const b = $('#calAlerts'); if (!b) return;
   const has = 'Notification' in window, p = has ? Notification.permission : 'denied';
   b.hidden = !has || p === 'denied' || (p === 'granted' && S.calAlerts !== false);
 }
+function renderEvColors() {
+  const course = courseColor($('#evCourse').value);
+  $('#evColors').innerHTML = `<button type="button" class="ev-c auto ${evColor ? '' : 'on'}" data-evc="" aria-pressed="${!evColor}" title="Use the course colour"><i style="background:${course}"></i>Course colour</button>`
+    + EV_COLORS.map(c => `<button type="button" class="ev-c ${evColor === c ? 'on' : ''}" data-evc="${c}" aria-pressed="${evColor === c}" aria-label="Colour ${c}"><i style="background:${c}"></i></button>`).join('')
+    + `<label class="ev-c pick ${evColor && !EV_COLORS.includes(evColor) ? 'on' : ''}" title="Pick any colour"><i style="background:${evColor && !EV_COLORS.includes(evColor) ? evColor : 'conic-gradient(#d9675a,#e8b84a,#8fb069,#5b7fa0,#8a6aa0,#d9675a)'}"></i>Any<input type="color" id="evPick" value="${evColor || '#5b7fa0'}" class="sr"></label>`;
+}
 function openEvForm(it) {
   calEdit = it && it.kind === 'event' ? it.id : null;
+  calRock = it && it.kind === 'rock' ? it.rockId : null;
+  evColor = okColor(it && it.color);
   const f = $('#evForm'), e = it || { title: '', date: calDay, time: '', courseId: S.lastCourse || '', type: 'deadline', remind: 1440 };
-  $('#evFormTitle').textContent = calEdit ? 'Edit' : 'Add to your calendar';
+  $('#evFormTitle').textContent = calRock ? 'Edit rock' : calEdit ? 'Edit' : 'Add to your calendar';
+  $$('#evForm .ev-only').forEach(x => x.hidden = !!calRock); $('#evOpenRock').hidden = !calRock;
   $('#evCourse').innerHTML = `<option value="">General</option>` + curCourses().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
   $('#evType').innerHTML = Object.entries(EV_TYPES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
   $('#evRemind').innerHTML = REMIND_OPTS.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
   $('#evTitle').value = e.title; $('#evDate').value = e.date; $('#evTime').value = e.time || ''; $('#evCourse').value = e.courseId || ''; $('#evType').value = e.type || 'deadline'; $('#evRemind').value = String(e.remind ?? 1440);
   $('#evDel').hidden = !calEdit;
+  renderEvColors();
   f.hidden = false; $('#evTitle').focus();
 }
-function closeEvForm() { $('#evForm').hidden = true; calEdit = null; }
+function closeEvForm() { $('#evForm').hidden = true; calEdit = null; calRock = null; }
 
 /* reminders: checked every minute while the site is open, and once when it loads */
 function reminderList() {
@@ -2976,7 +3094,6 @@ function bindCal() {
     if (ev) {
       e.stopPropagation();
       const it = calItems().find(x => x.id === ev.dataset.calev); if (!it) return;
-      if (it.kind === 'rock') { S.openRock = it.rockId; save(); go('pebbles'); return; }
       calDay = it.date; renderCal(); openEvForm(it); return;
     }
     const d = e.target.closest('[data-calday]');
@@ -2985,11 +3102,20 @@ function bindCal() {
   $('#calGrid').addEventListener('dblclick', e => { const d = e.target.closest('[data-calday]'); if (d && !e.target.closest('[data-calev]')) { calDay = d.dataset.calday; openEvForm(); } });
   $('#calGrid').addEventListener('keydown', e => { const d = e.target.closest('[data-calday]'); if (d && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); d.click(); } });
   $('#evCancel').onclick = closeEvForm;
+  $('#evColors').addEventListener('click', e => { const b = e.target.closest('[data-evc]'); if (!b) return; evColor = okColor(b.dataset.evc); renderEvColors(); });
+  $('#evColors').addEventListener('input', e => { if (e.target.id === 'evPick') { evColor = okColor(e.target.value); renderEvColors(); } });
+  $('#evCourse').addEventListener('change', renderEvColors);
+  $('#evOpenRock').onclick = () => { if (!calRock) return; S.openRock = calRock; save(); closeEvForm(); go('pebbles'); };
   $('#evForm').addEventListener('submit', e => {
     e.preventDefault();
     const title = $('#evTitle').value.trim(), date = $('#evDate').value;
     if (!title || !date) return;
-    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value };
+    if (calRock) {
+      const r = S.rocks.find(x => x.id === calRock);
+      if (r) { r.title = clampStr(title, 120); r.due = date; r.courseId = $('#evCourse').value; r.color = evColor; }
+      calDay = date; calMonth = date.slice(0, 7); closeEvForm(); save(); renderCal(); renderRocks(); toast('Rock saved.'); return;
+    }
+    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value, color: evColor };
     S.events = S.events || [];
     if (calEdit) { const x = S.events.find(v => v.id === calEdit); if (x) Object.assign(x, data); }
     else S.events.push({ id: uid(), createdAt: Date.now(), ...data });
@@ -3042,7 +3168,7 @@ function renderPond(force) {
     lastPondSig = sig;
     const over = $('#pondOver');
     over.innerHTML = placed.map((r, i) => `<button class="resident ${r.me ? 'me' : ''}" style="left:${slots[i][0]}%; top:${slots[i][1]}%" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
-      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
   }
   $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r), r.look)}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
     + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);

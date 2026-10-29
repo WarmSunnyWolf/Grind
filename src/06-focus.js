@@ -25,12 +25,12 @@ function computeHero() {
   return napAfterStop ? 'sleeping' : 'awake';
 }
 function renderHero(force) {
-  const st = computeHero();
+  const st = computeHero(), studying = !!(S.timer && S.timer.phase === 'focus' && !S.timer.pausedLeft);
   const el = $('#heroPet');
-  el.classList.toggle('focus', !!(S.timer && S.timer.phase === 'focus' && !S.timer.pausedLeft));
-  if (!force && st === heroState) return;
-  heroState = st;
-  el.innerHTML = onPadSVG(S.active, st, { look: myLook(), label: `${petTitle()}, ${st === 'sleeping' ? 'napping' : st}` });
+  el.classList.toggle('focus', studying);
+  if (!force && st + studying === heroState) return;
+  heroState = st + studying;
+  el.innerHTML = onPadSVG(S.active, st, { look: myLook(), studying: studying && st !== 'sleeping', label: `${petTitle()}, ${st === 'sleeping' ? 'napping' : st}` });
   $('#petName').textContent = petName();
   $('#petSpecies').textContent = `${ANIMALS[S.active].label}${st === 'sleeping' ? ' · napping' : st === 'happy' ? ' · happy' : S.timer?.phase === 'focus' ? ' · awake with you' : ''}`;
 }

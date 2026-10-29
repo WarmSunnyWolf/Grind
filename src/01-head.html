@@ -219,6 +219,15 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .cal-list .bar{width:4px; align-self:stretch; border-radius:4px; flex:none}
 .cal-list .nm b{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .cal-list .nm > span{font-size:.8rem; color:var(--muted)}
+.rock-colors{display:inline-flex; flex-wrap:wrap; gap:4px; align-items:center}
+.rc{width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(0,0,0,.2); padding:0; cursor:pointer; display:grid; place-items:center}
+.rc small{font-size:.6rem; color:#fff; font-weight:700}
+.rc.on{box-shadow:0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink)}
+.ev-colors{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
+.ev-c{display:inline-flex; align-items:center; gap:6px; padding:4px; border-radius:999px; border:1.5px solid var(--line); background:var(--bg); font:inherit; font-size:.8rem; color:var(--ink); cursor:pointer}
+.ev-c.auto, .ev-c.pick{padding-right:10px}
+.ev-c i{width:22px; height:22px; border-radius:50%; display:block; border:1.5px solid rgba(0,0,0,.18)}
+.ev-c.on{border-color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--ink)}
 .pill.soon{background:var(--rose); color:#fff; border-color:transparent}
 .toast-ic svg{width:22px; height:22px}
 @media (max-width:720px){
@@ -582,11 +591,14 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .dress-av svg{width:100%; height:100%}
 .dress-none{width:58px; height:58px; border-radius:50%; display:grid; place-items:center; background:var(--surface-2); color:var(--muted)}
 .dress-none svg{width:20px; height:20px}
-.dress-tints{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
-.tint{display:flex; align-items:center; gap:6px; padding:6px 10px 6px 6px; border-radius:999px; border:1.5px solid var(--line); background:var(--bg); font:inherit; font-size:.8rem; color:var(--ink); cursor:pointer}
-.tint i{width:18px; height:18px; border-radius:50%; border:1.5px solid var(--ink)}
-.tint.on{border-color:var(--accent); box-shadow:inset 0 0 0 1.5px var(--accent)}
-@media (max-width:720px){ .dress{grid-template-columns:1fr} .dress-pic{position:static; max-width:220px; margin:0 auto; padding:8px} .dress-tile{width:78px} .dress-av, .dress-none{width:48px; height:48px} }
+.dress-side{display:flex; flex-direction:column; gap:10px; position:sticky; top:0}
+.dress-side .dress-pic{position:static}
+.dress-pose{justify-content:center; align-self:center}
+.dress-foot{justify-content:flex-end; position:sticky; bottom:-26px; background:var(--surface); padding:10px 0 4px; margin-bottom:-6px}
+.emote{animation:emoteBob 2.6s ease-in-out infinite}
+@keyframes emoteBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.emote{animation:none}}
+@media (max-width:720px){ .dress-side{position:static} .dress{grid-template-columns:1fr} .dress-pic{position:static; max-width:220px; margin:0 auto; padding:8px} .dress-tile{width:78px} .dress-av, .dress-none{width:48px; height:48px} }
 .coin-btn{cursor:pointer}
 .coin-panel .coin-big{font-size:.95rem; margin:0 0 12px}
 .coin-panel .coin-big b{font-size:1.6rem}
