@@ -64,6 +64,7 @@
       <button class="me-mini" data-go="profile" id="meMini"><span class="av" id="meMiniAv"></span><span><b id="meMiniName">Student</b><span id="meMiniSub">Profile and courses</span></span></button>
       <button class="ghost-btn" data-go="guide"><svg><use href="#i-info"/></svg>How to use Grind</button>
       <button class="ghost-btn" data-go="feedback"><svg><use href="#i-comment"/></svg>Send feedback</button>
+      <button class="ghost-btn" data-go="activity" data-owneronly hidden><svg><use href="#i-chart"/></svg>Who is using Grind</button>
       <button class="ghost-btn" id="openCustomize"><svg><use href="#i-gear"/></svg>Customize</button>
     </div>
   </aside>
@@ -386,6 +387,7 @@
         </div>
       </section>
 
+      <section class="view" id="v-activity"><div id="actBody"></div></section>
       <section class="view" id="v-feedback">
         <p class="muted" style="max-width:62ch">Grind is a student project. Tell us what helps you study and what gets in the way. It takes about a minute, and you do not need to sign in.</p>
         <div class="grid g-focus">
@@ -407,6 +409,7 @@
             <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Your answers go straight to the student team behind Grind. Nobody else can read them. Leave the name and contact empty to stay anonymous.</p></div>
           </div>
         </div>
+        <div class="row" data-owneronly hidden style="margin-top:16px"><button class="btn" data-go="activity"><svg><use href="#i-chart"/></svg>See who is using Grind</button></div>
         <div id="fbInbox"></div>
       </section>
 
@@ -425,7 +428,7 @@
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
         </form>
         <div class="card"><div class="card-h"><h2>Privacy</h2></div>
-          <p class="muted" style="font-size:.86rem; margin-bottom:12px">Who can see your study time, streak, coins earned and animals when they tap you in the pond. Your name and animal are always shown there. Your rocks, notes and courses are never shared.</p>
+          <p class="muted" style="font-size:.86rem; margin-bottom:12px">Who can see your study time, streak, coins earned and animals when they tap you in the pond. Your name and animal are always shown there. Your rocks, notes and courses are never shared. The site owner can see when you were last active, so they know Grind is being used.</p>
           <div class="vis-seg" id="visSeg" role="group" aria-label="Who can see your stats">
             <button type="button" data-vis="me"><svg><use href="#i-lock"/></svg><b>Only me</b><span>Nobody else sees your stats</span></button>
             <button type="button" data-vis="friends"><svg><use href="#i-friend"/></svg><b>Friends</b><span>Only people you added as friends</span></button>

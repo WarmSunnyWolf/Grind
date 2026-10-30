@@ -70,3 +70,68 @@ function renderInbox() {
       ${f.like ? `<span class="lbl">Likes</span><p>${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">Change or add</span><p>${esc(f.improve)}</p>` : ''}
       <span class="muted" style="font-size:.82rem">From ${esc(f.name || 'someone anonymous')}${f.contact ? ' · ' + esc(f.contact) : ''}</span></div>`).join('') : '<p class="muted">No feedback yet. Share the link and notes will appear here.</p>'}</div>`;
 }
+
+/* ---------- owner activity ----------
+   Only the owner can read feedback, so a successful read tells us this is the owner.
+   Students set to Only me show just when they were last active. */
+async function checkOwner() {
+  NET.isOwner = false;
+  if (NET.web && NET.db) { try { await NET.db.collection('feedback').limit(1).get(); NET.isOwner = true; } catch (e) {} }
+  $$('[data-owneronly]').forEach(b => { b.hidden = !NET.isOwner; });
+}
+let actFilter = '';
+async function loadActivity() {
+  const box = $('#actBody');
+  if (!NET.isOwner) { box.innerHTML = `<div class="card"><p class="muted">Only the site owner can see this page. Sign in with the owner's Google account.</p></div>`; return; }
+  box.innerHTML = '<div class="card"><p class="muted">Loading students...</p></div>';
+  try {
+    const s = await NET.db.collection('pond').orderBy('updatedAt', 'desc').limit(2000).get();
+    NET.allPond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
+    renderActivity();
+  } catch (e) { box.innerHTML = '<div class="card"><p class="muted">Could not load students just now. Try Refresh.</p></div>'; }
+}
+function actRows() {
+  const today = dayKey(), wk = dayKey(weekStart()), now = Date.now();
+  return (NET.allPond || []).map(r => {
+    const hidden = r.vis === 'me', b = r.board;
+    return { ...r, hidden, live: liveStatus(r),
+      today: hidden ? null : (r.todayKey === today ? r.todayMins : 0),
+      week: hidden ? null : (b && b.w === wk ? b.wm : 0),
+      activeToday: r.todayKey === today || now - r.updatedAt < 864e5 };
+  });
+}
+function renderActivity() {
+  const box = $('#actBody'), rows = actRows(), now = Date.now();
+  const q = actFilter.toLowerCase();
+  const shown = rows.filter(r => !q || `${r.name} ${r.uni} ${r.major}`.toLowerCase().includes(q));
+  const tile = (n, l) => `<div class="act-tile"><b>${n}</b><span>${l}</span></div>`;
+  const mins = m => m === null ? '<span class="muted">Private</span>' : m ? fmtMin(m) : '<span class="muted">0</span>';
+  const live = r => r.live === 'focus' ? '<span class="act-live">Focusing</span>' : r.live === 'rest' ? '<span class="act-live rest">Resting</span>' : r.live === 'idle' ? '<span class="muted">Online</span>' : '';
+  box.innerHTML = `<div class="act-tiles">
+      ${tile(rows.length, 'students signed up')}${tile(rows.filter(r => r.activeToday).length, 'active in the last day')}${tile(rows.filter(r => now - r.updatedAt < 7 * 864e5).length, 'active this week')}${tile(rows.filter(r => r.live === 'focus').length, 'focusing right now')}${tile(fmtMin(rows.reduce((a, r) => a + (r.today || 0), 0)), 'studied today')}
+    </div>
+    <div class="card">
+      <div class="card-h"><div><h2>Every student</h2><p class="muted" style="font-size:.84rem">Newest activity first. Only you can see this page.</p></div>
+        <div class="row"><input class="inp" id="actSearch" type="search" placeholder="Search name, university, major" aria-label="Search students" value="${esc(actFilter)}" style="min-width:0; width:220px"><button class="btn small" data-actreload>Refresh</button><button class="btn small" data-actcopy ${rows.length ? '' : 'disabled'}>Copy as table</button></div></div>
+      ${shown.length ? `<div class="act-list" role="table" aria-label="Students">
+        <div class="act-row act-h" role="row"><span role="columnheader">Student</span><span role="columnheader">Last active</span><span role="columnheader">Today</span><span role="columnheader">This week</span><span role="columnheader">Streak</span></div>
+        ${shown.map(r => `<div class="act-row" role="row"><span class="act-who" role="cell"><span class="av">${avatarSVG(r.animal, 'happy', r.look)}</span><span><b>${esc(r.name)}</b><small class="muted">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'No university yet')}</small></span></span>
+          <span role="cell">${r.updatedAt ? ago(r.updatedAt) : 'never'} ${live(r)}</span><span role="cell" data-l="Today">${mins(r.today)}</span><span role="cell" data-l="This week">${mins(r.week)}</span><span role="cell" data-l="Streak">${r.hidden ? '<span class="muted">Private</span>' : r.streak + ' d'}</span></div>`).join('')}
+      </div>` : `<p class="muted">${rows.length ? 'No student matches that search.' : 'Nobody has signed in yet.'}</p>`}
+      <p class="muted" style="font-size:.8rem; margin-top:12px">Grind keeps each student's latest activity, not a full history. Sign-up and last sign-in dates for every Google account are in Firebase, under Authentication.</p>
+    </div>`;
+}
+function bindActivity() {
+  $('#v-activity').addEventListener('click', async e => {
+    if (e.target.closest('[data-actreload]')) { loadActivity(); return; }
+    if (e.target.closest('[data-actcopy]')) {
+      const txt = ['Name\tUniversity\tMajor\tLast active\tToday (min)\tThis week (min)\tStreak', ...actRows().map(r => [r.name, r.uni, r.major, r.updatedAt ? new Date(r.updatedAt).toLocaleString() : '', r.today ?? 'private', r.week ?? 'private', r.hidden ? 'private' : r.streak].join('\t'))].join('\n');
+      try { await navigator.clipboard.writeText(txt); toast('Copied. Paste it into Excel or Google Sheets.'); } catch (err) { toast('Copy is not available here.'); }
+    }
+  });
+  $('#v-activity').addEventListener('input', e => {
+    if (e.target.id !== 'actSearch') return;
+    actFilter = e.target.value; const pos = e.target.selectionStart;
+    renderActivity(); const i = $('#actSearch'); i.focus(); try { i.setSelectionRange(pos, pos); } catch (err) {}
+  });
+}

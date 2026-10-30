@@ -621,6 +621,20 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .news-list .note-t{display:flex; flex-direction:column; gap:2px}
 .news-list .note-t .muted{font-size:.85rem; line-height:1.45}
 .news-list .av{width:48px; height:48px}
+.act-tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px}
+.act-tile{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px 18px; display:flex; flex-direction:column; gap:2px}
+.act-tile b{font-family:var(--font-display, inherit); font-size:1.7rem; line-height:1.1}
+.act-tile span{color:var(--muted); font-size:.84rem}
+.act-list{display:flex; flex-direction:column; margin-top:6px}
+.act-row{display:grid; grid-template-columns:minmax(0,2.4fr) 1.3fr .9fr .9fr .7fr; gap:12px; align-items:center; padding:10px 8px; border-top:1px solid var(--line); font-size:.88rem}
+.act-h{border-top:0; color:var(--muted); font-size:.74rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase}
+.act-who{display:flex; align-items:center; gap:10px; min-width:0}
+.act-who .av{flex:none; width:38px; height:38px; border-radius:50%; overflow:hidden; background:var(--surface-2)}
+.act-who b{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.act-who small{display:block; font-size:.76rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.act-live{display:inline-block; margin-left:4px; padding:1px 8px; border-radius:999px; background:var(--accent); color:var(--accent-ink); font-size:.72rem; font-weight:700}
+.act-live.rest{background:var(--surface-2); color:var(--ink)}
+@media (max-width:700px){.act-h{display:none} .act-row{grid-template-columns:1fr 1fr 1fr; row-gap:6px} .act-who{grid-column:1/-1} .act-row>span:nth-child(2){grid-column:1/-1} .act-row [data-l]::before{content:attr(data-l) ": "; color:var(--muted); font-size:.76rem}}
 .g-news{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px}
 .g-news li{display:flex; gap:12px; align-items:baseline; line-height:1.5}
 .g-news-d{flex:none; width:52px; font-size:.78rem; color:var(--muted); font-weight:600}
@@ -735,6 +749,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
       <button class="me-mini" data-go="profile" id="meMini"><span class="av" id="meMiniAv"></span><span><b id="meMiniName">Student</b><span id="meMiniSub">Profile and courses</span></span></button>
       <button class="ghost-btn" data-go="guide"><svg><use href="#i-info"/></svg>How to use Grind</button>
       <button class="ghost-btn" data-go="feedback"><svg><use href="#i-comment"/></svg>Send feedback</button>
+      <button class="ghost-btn" data-go="activity" data-owneronly hidden><svg><use href="#i-chart"/></svg>Who is using Grind</button>
       <button class="ghost-btn" id="openCustomize"><svg><use href="#i-gear"/></svg>Customize</button>
     </div>
   </aside>
@@ -1057,6 +1072,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
         </div>
       </section>
 
+      <section class="view" id="v-activity"><div id="actBody"></div></section>
       <section class="view" id="v-feedback">
         <p class="muted" style="max-width:62ch">Grind is a student project. Tell us what helps you study and what gets in the way. It takes about a minute, and you do not need to sign in.</p>
         <div class="grid g-focus">
@@ -1078,6 +1094,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Your answers go straight to the student team behind Grind. Nobody else can read them. Leave the name and contact empty to stay anonymous.</p></div>
           </div>
         </div>
+        <div class="row" data-owneronly hidden style="margin-top:16px"><button class="btn" data-go="activity"><svg><use href="#i-chart"/></svg>See who is using Grind</button></div>
         <div id="fbInbox"></div>
       </section>
 
@@ -1096,7 +1113,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit">Save profile</button></div>
         </form>
         <div class="card"><div class="card-h"><h2>Privacy</h2></div>
-          <p class="muted" style="font-size:.86rem; margin-bottom:12px">Who can see your study time, streak, coins earned and animals when they tap you in the pond. Your name and animal are always shown there. Your rocks, notes and courses are never shared.</p>
+          <p class="muted" style="font-size:.86rem; margin-bottom:12px">Who can see your study time, streak, coins earned and animals when they tap you in the pond. Your name and animal are always shown there. Your rocks, notes and courses are never shared. The site owner can see when you were last active, so they know Grind is being used.</p>
           <div class="vis-seg" id="visSeg" role="group" aria-label="Who can see your stats">
             <button type="button" data-vis="me"><svg><use href="#i-lock"/></svg><b>Only me</b><span>Nobody else sees your stats</span></button>
             <button type="button" data-vis="friends"><svg><use href="#i-friend"/></svg><b>Friends</b><span>Only people you added as friends</span></button>
@@ -2311,7 +2328,8 @@ function disconnect() {
   (NET.unsubs || []).forEach(u => { try { u(); } catch (e) {} });
   NET.unsubs = [];
   Object.values(NET.circleUnsub).forEach(u => { try { u(); } catch (e) {} });
-  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {} });
+  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, isOwner: false, allPond: null });
+  $$('[data-owneronly]').forEach(b => { b.hidden = true; });
   renderAll(); renderDrawer();
 }
 async function connect(u) {
@@ -2330,6 +2348,7 @@ async function connect(u) {
     NET.syncing = false; save(); remoteSave();
   } catch (e) { NET.syncing = false; NET.db = null; NET.canWrite = false; toast('Could not load your account just now. Your progress stays on this device. Try signing in again.'); renderAll(); return; }
   renderAll();
+  try { checkOwner(); } catch (e) {}
   NET.unsubs.push(db.collection('pond').orderBy('updatedAt', 'desc').limit(80).onSnapshot(s => {
     NET.pond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
     renderPond(); renderFriends(); renderCircle();
@@ -3643,6 +3662,71 @@ function renderInbox() {
       ${f.like ? `<span class="lbl">Likes</span><p>${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">Change or add</span><p>${esc(f.improve)}</p>` : ''}
       <span class="muted" style="font-size:.82rem">From ${esc(f.name || 'someone anonymous')}${f.contact ? ' · ' + esc(f.contact) : ''}</span></div>`).join('') : '<p class="muted">No feedback yet. Share the link and notes will appear here.</p>'}</div>`;
 }
+
+/* ---------- owner activity ----------
+   Only the owner can read feedback, so a successful read tells us this is the owner.
+   Students set to Only me show just when they were last active. */
+async function checkOwner() {
+  NET.isOwner = false;
+  if (NET.web && NET.db) { try { await NET.db.collection('feedback').limit(1).get(); NET.isOwner = true; } catch (e) {} }
+  $$('[data-owneronly]').forEach(b => { b.hidden = !NET.isOwner; });
+}
+let actFilter = '';
+async function loadActivity() {
+  const box = $('#actBody');
+  if (!NET.isOwner) { box.innerHTML = `<div class="card"><p class="muted">Only the site owner can see this page. Sign in with the owner's Google account.</p></div>`; return; }
+  box.innerHTML = '<div class="card"><p class="muted">Loading students...</p></div>';
+  try {
+    const s = await NET.db.collection('pond').orderBy('updatedAt', 'desc').limit(2000).get();
+    NET.allPond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
+    renderActivity();
+  } catch (e) { box.innerHTML = '<div class="card"><p class="muted">Could not load students just now. Try Refresh.</p></div>'; }
+}
+function actRows() {
+  const today = dayKey(), wk = dayKey(weekStart()), now = Date.now();
+  return (NET.allPond || []).map(r => {
+    const hidden = r.vis === 'me', b = r.board;
+    return { ...r, hidden, live: liveStatus(r),
+      today: hidden ? null : (r.todayKey === today ? r.todayMins : 0),
+      week: hidden ? null : (b && b.w === wk ? b.wm : 0),
+      activeToday: r.todayKey === today || now - r.updatedAt < 864e5 };
+  });
+}
+function renderActivity() {
+  const box = $('#actBody'), rows = actRows(), now = Date.now();
+  const q = actFilter.toLowerCase();
+  const shown = rows.filter(r => !q || `${r.name} ${r.uni} ${r.major}`.toLowerCase().includes(q));
+  const tile = (n, l) => `<div class="act-tile"><b>${n}</b><span>${l}</span></div>`;
+  const mins = m => m === null ? '<span class="muted">Private</span>' : m ? fmtMin(m) : '<span class="muted">0</span>';
+  const live = r => r.live === 'focus' ? '<span class="act-live">Focusing</span>' : r.live === 'rest' ? '<span class="act-live rest">Resting</span>' : r.live === 'idle' ? '<span class="muted">Online</span>' : '';
+  box.innerHTML = `<div class="act-tiles">
+      ${tile(rows.length, 'students signed up')}${tile(rows.filter(r => r.activeToday).length, 'active in the last day')}${tile(rows.filter(r => now - r.updatedAt < 7 * 864e5).length, 'active this week')}${tile(rows.filter(r => r.live === 'focus').length, 'focusing right now')}${tile(fmtMin(rows.reduce((a, r) => a + (r.today || 0), 0)), 'studied today')}
+    </div>
+    <div class="card">
+      <div class="card-h"><div><h2>Every student</h2><p class="muted" style="font-size:.84rem">Newest activity first. Only you can see this page.</p></div>
+        <div class="row"><input class="inp" id="actSearch" type="search" placeholder="Search name, university, major" aria-label="Search students" value="${esc(actFilter)}" style="min-width:0; width:220px"><button class="btn small" data-actreload>Refresh</button><button class="btn small" data-actcopy ${rows.length ? '' : 'disabled'}>Copy as table</button></div></div>
+      ${shown.length ? `<div class="act-list" role="table" aria-label="Students">
+        <div class="act-row act-h" role="row"><span role="columnheader">Student</span><span role="columnheader">Last active</span><span role="columnheader">Today</span><span role="columnheader">This week</span><span role="columnheader">Streak</span></div>
+        ${shown.map(r => `<div class="act-row" role="row"><span class="act-who" role="cell"><span class="av">${avatarSVG(r.animal, 'happy', r.look)}</span><span><b>${esc(r.name)}</b><small class="muted">${esc([r.uni, r.major].filter(Boolean).join(' · ') || 'No university yet')}</small></span></span>
+          <span role="cell">${r.updatedAt ? ago(r.updatedAt) : 'never'} ${live(r)}</span><span role="cell" data-l="Today">${mins(r.today)}</span><span role="cell" data-l="This week">${mins(r.week)}</span><span role="cell" data-l="Streak">${r.hidden ? '<span class="muted">Private</span>' : r.streak + ' d'}</span></div>`).join('')}
+      </div>` : `<p class="muted">${rows.length ? 'No student matches that search.' : 'Nobody has signed in yet.'}</p>`}
+      <p class="muted" style="font-size:.8rem; margin-top:12px">Grind keeps each student's latest activity, not a full history. Sign-up and last sign-in dates for every Google account are in Firebase, under Authentication.</p>
+    </div>`;
+}
+function bindActivity() {
+  $('#v-activity').addEventListener('click', async e => {
+    if (e.target.closest('[data-actreload]')) { loadActivity(); return; }
+    if (e.target.closest('[data-actcopy]')) {
+      const txt = ['Name\tUniversity\tMajor\tLast active\tToday (min)\tThis week (min)\tStreak', ...actRows().map(r => [r.name, r.uni, r.major, r.updatedAt ? new Date(r.updatedAt).toLocaleString() : '', r.today ?? 'private', r.week ?? 'private', r.hidden ? 'private' : r.streak].join('\t'))].join('\n');
+      try { await navigator.clipboard.writeText(txt); toast('Copied. Paste it into Excel or Google Sheets.'); } catch (err) { toast('Copy is not available here.'); }
+    }
+  });
+  $('#v-activity').addEventListener('input', e => {
+    if (e.target.id !== 'actSearch') return;
+    actFilter = e.target.value; const pos = e.target.selectionStart;
+    renderActivity(); const i = $('#actSearch'); i.focus(); try { i.setSelectionRange(pos, pos); } catch (err) {}
+  });
+}
 /* ---------- what's new ----------
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
@@ -4014,7 +4098,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind' };
+const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -4034,6 +4118,7 @@ function go(v) {
   if (v === 'cal') renderCal();
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
   if (v === 'guide') renderGuide();
+  if (v === 'activity') loadActivity();
   window.scrollTo({ top: 0 });
 }
 function renderChips() {
@@ -4091,7 +4176,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });

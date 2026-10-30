@@ -97,7 +97,8 @@ function disconnect() {
   (NET.unsubs || []).forEach(u => { try { u(); } catch (e) {} });
   NET.unsubs = [];
   Object.values(NET.circleUnsub).forEach(u => { try { u(); } catch (e) {} });
-  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {} });
+  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, isOwner: false, allPond: null });
+  $$('[data-owneronly]').forEach(b => { b.hidden = true; });
   renderAll(); renderDrawer();
 }
 async function connect(u) {
@@ -116,6 +117,7 @@ async function connect(u) {
     NET.syncing = false; save(); remoteSave();
   } catch (e) { NET.syncing = false; NET.db = null; NET.canWrite = false; toast('Could not load your account just now. Your progress stays on this device. Try signing in again.'); renderAll(); return; }
   renderAll();
+  try { checkOwner(); } catch (e) {}
   NET.unsubs.push(db.collection('pond').orderBy('updatedAt', 'desc').limit(80).onSnapshot(s => {
     NET.pond = s.docs.filter(d => d.exists).map(d => cleanResident(d.id, d.data() || {}));
     renderPond(); renderFriends(); renderCircle();
