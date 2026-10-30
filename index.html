@@ -263,6 +263,75 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .chk svg{width:16px; height:16px; opacity:0; color:var(--accent-ink)}
 .peb.done .chk{background:var(--moss); border-color:var(--moss)}
 .peb.done .chk svg{opacity:1}
+.peb{position:relative}
+.peb .tx{cursor:text}
+.icon-btn.sm{width:30px; height:30px}
+.icon-btn.sm svg{width:15px; height:15px}
+.peb .icon-btn.sm{opacity:.55}
+.peb:hover .icon-btn.sm, .peb .icon-btn.sm:focus-visible{opacity:1}
+.peb.just{animation:pebGlow 1.2s ease-out}
+.peb.just .chk{animation:chkPop .5s cubic-bezier(.3,1.8,.5,1)}
+.coin-pop{position:absolute; left:34px; top:-4px; font-weight:800; font-size:.86rem; color:#b8862a; pointer-events:none; animation:coinUp 1.1s ease-out forwards}
+@keyframes chkPop{0%{transform:scale(.6)} 60%{transform:scale(1.3)} 100%{transform:scale(1)}}
+@keyframes pebGlow{0%{background:color-mix(in srgb, var(--moss) 30%, var(--bg))} 100%{background:var(--bg)}}
+@keyframes coinUp{0%{opacity:0; transform:translateY(8px) scale(.8)} 20%{opacity:1; transform:translateY(0) scale(1.15)} 100%{opacity:0; transform:translateY(-22px) scale(1)}}
+.peb.editing{padding:6px}
+.peb-edit{display:flex; gap:6px; align-items:center; width:100%; flex-wrap:wrap}
+.peb-edit .inp[name=t]{flex:1; min-width:160px}
+.rock-edit{background:var(--bg); border-radius:16px; padding:14px}
+.confirm-row{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px; border-radius:14px; background:var(--surface-2)}
+.prog-bar i{transition:width .7s cubic-bezier(.3,1.2,.5,1)}
+.hopper.hop{animation:hop .6s cubic-bezier(.35,.7,.45,1) both}
+@keyframes hop{0%{transform:translate(var(--dx),var(--dy))} 45%{transform:translate(calc(var(--dx) * .45), calc(var(--dy) * .45 - 34px))} 100%{transform:translate(0,0)}}
+.splash{transform-box:fill-box; transform-origin:center; animation:splash .9s ease-out .45s both}
+.splash.s2{animation-delay:.6s}
+@keyframes splash{0%{transform:scale(.7); opacity:1} 100%{transform:scale(2.1); opacity:0}}
+.stone-new{transform-box:fill-box; transform-origin:center bottom; animation:stoneIn .5s cubic-bezier(.3,1.6,.5,1) .35s both}
+@keyframes stoneIn{0%{transform:translateY(-14px) scale(.3); opacity:0} 100%{transform:none; opacity:1}}
+.lotus-open{transform-box:fill-box; transform-origin:center bottom; animation:lotus .9s cubic-bezier(.3,1.6,.5,1)}
+@keyframes lotus{0%{transform:scale(.4)} 100%{transform:scale(1)}}
+.rock.crossed{background:color-mix(in srgb, var(--surface) 70%, var(--bg))}
+.rock.crossed .rock-head h3{color:var(--muted)}
+.crossed-pill{background:var(--moss)!important; color:#fff!important; display:inline-flex; align-items:center; gap:4px}
+.crossed-pill svg{width:12px; height:12px}
+.crossed-toggle{align-self:flex-start}
+.crossed-toggle[aria-expanded=true] svg{transform:rotate(90deg)}
+.cairn-card{display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:center; padding:18px 22px}
+.cairn-pic{width:120px; height:120px; display:grid; place-items:end center}
+.cairn{max-width:100%; max-height:100%}
+.cairn-st.new{transform-box:fill-box; transform-origin:center bottom; animation:stoneDrop .7s cubic-bezier(.3,1.5,.5,1) .5s both}
+@keyframes stoneDrop{0%{transform:translateY(-40px); opacity:0} 100%{transform:none; opacity:1}}
+.cairn-txt h2{margin:2px 0 4px}
+.cairn-txt p{font-size:.86rem; margin:0 0 10px}
+.cairn-stats{display:flex; gap:22px; flex-wrap:wrap}
+.cairn-stats div, .cross-stats div{display:flex; flex-direction:column}
+.cairn-stats b{font-size:1.4rem; line-height:1.1}
+.cairn-stats span, .cross-stats span{font-size:.78rem; color:var(--muted)}
+.week-peb{display:flex; gap:8px; align-items:flex-end}
+.week-peb > div{display:flex; flex-direction:column; align-items:center; gap:4px; width:22px}
+.week-peb b{font-size:.72rem; color:var(--muted); font-weight:700}
+.week-peb .today b{color:var(--ink)}
+.wp-st{display:flex; flex-direction:column-reverse; align-items:center; gap:2px; height:64px; justify-content:flex-start; border-bottom:2px solid var(--line); width:100%; padding-bottom:3px}
+.wp-st i{width:16px; height:9px; border-radius:50% 50% 45% 45%; background:var(--moss); border:1.5px solid var(--ink)}
+.wp-st small{font-size:.66rem; color:var(--muted)}
+.cross-box{position:relative; overflow:hidden; text-align:center; width:min(560px,100%)}
+.cross-scene{border-radius:18px; overflow:hidden; border:1px solid var(--line)}
+.cross-scene > svg{display:block; width:100%; height:auto}
+.cross-txt .hand{color:var(--rose); font-size:1.5rem}
+.cross-txt h2{font-size:1.7rem; margin:2px 0 0; overflow-wrap:anywhere}
+.cross-stats{display:flex; justify-content:center; gap:10px; flex-wrap:wrap}
+.cross-stats div{background:var(--surface-2); border-radius:16px; padding:10px 16px; min-width:110px; align-items:center}
+.cross-stats b{font-size:1.35rem; line-height:1.2}
+.cross-stats em{font-style:normal}
+.cross-cairn{display:flex; align-items:center; justify-content:center; gap:14px; text-align:left}
+.cross-cairn .cairn{width:90px; height:90px}
+.cross-cairn p{margin:0; font-size:.9rem}
+.petals{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2}
+.petals i{position:absolute; top:-20px; width:10px; height:14px; border-radius:80% 0 80% 0; border:1px solid rgba(59,47,39,.35); opacity:0; animation:petal var(--t) ease-in var(--d) forwards}
+@keyframes petal{0%{opacity:0; transform:translate(0,0) rotate(var(--r))} 10%{opacity:1} 100%{opacity:0; transform:translate(var(--x), 620px) rotate(calc(var(--r) + 420deg))}}
+@media (max-width:900px){.cairn-card{grid-template-columns:auto 1fr} .week-peb{grid-column:1/-1; justify-content:space-between}}
+@media (max-width:520px){.cairn-card{gap:14px; padding:16px} .cairn-pic{width:84px; height:96px} .cairn-stats{gap:14px} .cairn-stats b{font-size:1.15rem}}
+@media (prefers-reduced-motion: reduce){.hopper.hop, .splash, .stone-new, .lotus-open, .cairn-st.new, .peb.just, .peb.just .chk, .petals i, .coin-pop{animation:none!important} .petals{display:none}}
 .add-peb{display:flex; gap:8px}
 .add-peb .inp{flex:1}
 .ai-box{border:1px dashed var(--line-2); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; background:color-mix(in srgb, var(--water-hi) 30%, transparent)}
@@ -706,6 +775,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#d9b25a" stroke="#8a6a2a" stroke-width="1.4"/><circle cx="12" cy="12" r="6.8" fill="none" stroke="#a98236" stroke-width="1" stroke-dasharray="1.6 1.4"/><path d="M8.6 14.8c.1-4 2.6-6.4 6.8-6.7.1 4.1-2.5 6.6-6.8 6.7zM8.6 14.8l3.8-3.6" fill="#f3dc95" stroke="#8a6a2a" stroke-width="1.1" stroke-linecap="round"/></symbol>
   <symbol id="i-firefly" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="8" fill="url(#gr-glow)"/><ellipse cx="9.3" cy="9.3" rx="3.2" ry="2" transform="rotate(-35 9.3 9.3)" fill="#e8ecef" stroke="#3a2e26" stroke-width="1"/><ellipse cx="14.7" cy="9.3" rx="3.2" ry="2" transform="rotate(35 14.7 9.3)" fill="#e8ecef" stroke="#3a2e26" stroke-width="1"/><ellipse cx="12" cy="12" rx="2.4" ry="3.4" fill="#4a3b2c" stroke="#3a2e26" stroke-width="1"/><ellipse cx="12" cy="15.6" rx="2.6" ry="2.8" fill="#f2df7a" stroke="#3a2e26" stroke-width="1"/><path d="M11 8.2l-1.3-2.2M13 8.2l1.3-2.2" stroke="#3a2e26" stroke-width="1" stroke-linecap="round"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></g></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10.1A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.5C19.5 15.6 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
@@ -878,6 +948,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </div>
         </form>
         <div class="row" id="rockFilter"></div>
+        <div class="card cairn-card" id="cairnCard"></div>
         <div class="rock-list" id="rockList"></div>
       </section>
 
@@ -1025,7 +1096,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-4">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pebble"/></svg></span><div><span class="eyebrow">Step 4</span><h2>Break big tasks into pebbles</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done to lay a stepping stone. <b>Focus on next</b> starts the timer on the next pebble of that rock. To delete a rock, click <b>Remove rock</b> on its card.</li></ol><p class="g-tip">Bring in all your Blackboard due dates at once: in Blackboard open <b>Calendar</b>, click the gear, choose <b>Share Calendar</b> and click <b>Copy</b>. Then click <b>Import Blackboard calendar</b> here or on the Calendar page and paste the link. Past events are skipped.</p>
+            <ol class="g-steps"><li>Open <b>Pebbles</b> and click <b>New rock</b>. A rock is a big task, like a quiz or a report. Add its course and due date.</li><li>Add small pebbles under it, each something you could start right now, like "Rewatch lecture 5". Or click <b>Break it down</b> to get a split you can edit.</li><li>Tick a pebble when it is done. A stepping stone splashes into the pond and your animal hops onto it. <b>Focus on next pebble</b> starts the timer on the next one.</li><li>Click a pebble's text, or its pencil, to rename it, change its minutes or move it up and down. Click <b>Edit</b> on a rock to change its name, course, due date or notes.</li><li>When the whole task is done, tick the last pebble or click <b>Finish rock</b>. Your animal reaches the far bank, you see how much you did and how early, and the rock adds a stone to <b>your cairn</b> at the top of the page. The cairn keeps every rock you ever crossed. Crossed rocks move to <b>Show crossed rocks</b> at the bottom, and <b>Not done yet</b> reopens one.</li></ol><p class="g-tip">Bring in all your Blackboard due dates at once: in Blackboard open <b>Calendar</b>, click the gear, choose <b>Share Calendar</b> and click <b>Copy</b>. Then click <b>Import Blackboard calendar</b> here or on the Calendar page and paste the link. Past events are skipped.</p>
             <div class="row"><button class="btn small" data-go="pebbles">Show me pebbles</button></div>
           </article>
           <article class="card g-sec" id="g-4b">
@@ -1163,6 +1234,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="crossModal" role="dialog" aria-modal="true" aria-label="Rock crossed"><div class="modal-box cross-box" id="crossBox"></div></div>
 <div class="modal" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="newsTitle"><div class="modal-box news-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="hand" style="color:var(--rose); font-size:1.3rem">Fresh in the pond</span><h2 id="newsTitle">What's new in Grind</h2></div><button class="icon-btn" data-newsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
   <div id="newsBody"></div>
@@ -1932,7 +2004,7 @@ function defaultState() {
     settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
-    rocks: [exampleRock()], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
+    rocks: [exampleRock()], crossLog: [], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
     seenRipple: 0, visV2: true, timer: null, lastCourse: '', openRock: 'example-rock',
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true, quran: { reciter: 'afs', surah: 1 }, link: '' }
   };
@@ -1979,8 +2051,13 @@ function mergeState(s) {
   // demo speed and the sample week are gone; drop their leftovers
   m.settings.demo = false;
   if (Array.isArray(m.sessions)) m.sessions = m.sessions.filter(x => !x.sample);
+  // a rock is finished once it has crossedAt; older versions only knew "every pebble ticked"
+  (m.rocks || []).forEach(r => { if (!r.crossedAt && r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done)) r.crossedAt = Math.max(0, ...r.pebbles.map(p => +p.doneAt || 0)) || Date.now(); });
+  if (!Array.isArray(s.crossLog)) m.crossLog = (m.rocks || []).filter(r => r.crossedAt && !r.example).map(r => crossEntry(r)).sort((a, b) => a.at - b.at);
   return m;
 }
+function rockDone(r) { return !!r.crossedAt; }
+function crossEntry(r) { return { id: r.id, title: r.title, courseId: r.courseId || '', color: r.color || '', at: r.crossedAt, pebbles: r.pebbles.length, due: r.due || '' }; }
 function loadLocal() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return mergeState(s); } catch (e) {}
   return defaultState();
@@ -2049,7 +2126,7 @@ function publicStats() {
   };
 }
 function nextPebble() {
-  const rocks = S.rocks.filter(r => r.pebbles.some(p => !p.done));
+  const rocks = S.rocks.filter(r => !r.crossedAt && r.pebbles.some(p => !p.done));
   rocks.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
   for (const r of rocks) { const p = r.pebbles.find(p => !p.done); if (p) return { rock: r, peb: p }; }
   return null;
@@ -2855,54 +2932,113 @@ const aiDrafts = {};
 function rockArt(color) {
   return `<svg class="rk" viewBox="0 0 52 42" aria-hidden="true"><path d="M3 32 C1 18 12 6 26 5 C40 4 50 14 49 26 C48 37 37 40 25 40 C13 40 4 38 3 32 Z" fill="${color}" stroke="${INK}" stroke-width="2.4"/><path d="M12 22 C16 15 22 12 29 12" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M30 30 l6 -4 M18 32 l5 1" stroke="${INK}" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/></svg>`;
 }
-function crossingSVG(rock) {
+let lastLaid = null, editRock = null, editPeb = null, showCrossed = false, finishAsk = null;
+function crossPos(stones, all) {
+  const lastDone = [...stones].reverse().find(s => s.done);
+  return all ? { x: 548, y: 58 } : lastDone ? { x: lastDone.x, y: lastDone.y } : { x: 46, y: 62 };
+}
+function crossingSVG(rock, final) {
   const n = Math.max(1, rock.pebbles.length), done = rock.pebbles.filter(p => p.done).length;
   const x0 = 92, x1 = 508;
   const stones = rock.pebbles.map((p, i) => {
     const x = n === 1 ? 300 : x0 + (x1 - x0) * i / (n - 1), y = 70 + Math.sin(i * 1.3) * 9;
-    return { x, y, done: p.done };
+    return { x, y, done: p.done, id: p.id };
   });
-  const lastDone = [...stones].reverse().find(s => s.done);
-  const all = done === rock.pebbles.length && rock.pebbles.length > 0;
-  const ax = all ? 548 : lastDone ? lastDone.x : 46, ay = all ? 58 : lastDone ? lastDone.y : 62;
+  const all = final || rockDone(rock);
+  const at = crossPos(stones, all);
+  // the animal hops from where it stood before the newest stone was laid
+  const laid = !final && lastLaid && lastLaid.rock === rock.id ? lastLaid.peb : null;
+  let hop = '';
+  if (laid) {
+    const before = crossPos(stones.map(s => s.id === laid ? { ...s, done: false } : s), lastLaid.crossed ? false : all);
+    hop = ` hop" style="--dx:${before.x - at.x}px; --dy:${before.y - at.y}px`;
+  }
   return `<svg viewBox="0 0 600 120" role="img" aria-label="${done} of ${rock.pebbles.length} stepping stones laid">
     <rect width="600" height="120" fill="var(--water)"/>
     <path d="M70 26 h60 M250 18 h50 M420 30 h70 M160 104 h50 M360 108 h60" stroke="var(--water-hi)" stroke-width="3" stroke-linecap="round" opacity=".8"/>
     <path d="M0 0 H52 C70 30 66 90 50 120 H0 Z" fill="var(--bank)" stroke="var(--pad-2)" stroke-width="2"/>
     <path d="M600 0 H548 C530 30 534 90 550 120 H600 Z" fill="var(--bank)" stroke="var(--pad-2)" stroke-width="2"/>
-    <g transform="translate(578 40)"><path d="M0 0 C-8 -5 -10 -14 -5 -19 C-2 -13 0 -8 0 0 Z M0 0 C8 -5 10 -14 5 -19 C2 -13 0 -8 0 0 Z M0 0 C-4 -8 -3 -18 0 -23 C3 -18 4 -8 0 0 Z" fill="${all ? 'var(--bloom)' : 'var(--line-2)'}" stroke="${INK}" stroke-width="1.4"/></g>
-    ${stones.map(s => `<ellipse cx="${s.x}" cy="${s.y + 6}" rx="24" ry="7" fill="var(--water-2)" opacity=".6"/><path d="M${s.x - 24} ${s.y + 2} C${s.x - 24} ${s.y - 10} ${s.x - 10} ${s.y - 13} ${s.x} ${s.y - 13} C${s.x + 14} ${s.y - 13} ${s.x + 24} ${s.y - 8} ${s.x + 24} ${s.y + 1} C${s.x + 24} ${s.y + 8} ${s.x + 12} ${s.y + 10} ${s.x} ${s.y + 10} C${s.x - 12} ${s.y + 10} ${s.x - 24} ${s.y + 8} ${s.x - 24} ${s.y + 2} Z" fill="${s.done ? '#b9ad97' : 'none'}" stroke="${s.done ? INK : 'var(--water-hi)'}" stroke-width="2.2" ${s.done ? '' : 'stroke-dasharray="5 5"'}/>`).join('')}
-    ${animalSVG(S.active, all ? 'happy' : 'awake', { look: myLook(), nested: true, x: ax - 30, y: ay - 56, w: 60, label: petName() })}
+    <g transform="translate(578 40)"><g class="${all ? 'lotus-open' : ''}"><path d="M0 0 C-8 -5 -10 -14 -5 -19 C-2 -13 0 -8 0 0 Z M0 0 C8 -5 10 -14 5 -19 C2 -13 0 -8 0 0 Z M0 0 C-4 -8 -3 -18 0 -23 C3 -18 4 -8 0 0 Z" fill="${all ? 'var(--bloom)' : 'var(--line-2)'}" stroke="${INK}" stroke-width="1.4"/></g></g>
+    ${stones.map(s => `<ellipse cx="${s.x}" cy="${s.y + 6}" rx="24" ry="7" fill="var(--water-2)" opacity=".6"/>${s.id === laid ? `<ellipse class="splash" cx="${s.x}" cy="${s.y + 4}" rx="26" ry="9" fill="none" stroke="var(--water-hi)" stroke-width="3"/><ellipse class="splash s2" cx="${s.x}" cy="${s.y + 4}" rx="26" ry="9" fill="none" stroke="var(--water-hi)" stroke-width="2"/>` : ''}<path class="${s.id === laid ? 'stone-new' : ''}" d="M${s.x - 24} ${s.y + 2} C${s.x - 24} ${s.y - 10} ${s.x - 10} ${s.y - 13} ${s.x} ${s.y - 13} C${s.x + 14} ${s.y - 13} ${s.x + 24} ${s.y - 8} ${s.x + 24} ${s.y + 1} C${s.x + 24} ${s.y + 8} ${s.x + 12} ${s.y + 10} ${s.x} ${s.y + 10} C${s.x - 12} ${s.y + 10} ${s.x - 24} ${s.y + 8} ${s.x - 24} ${s.y + 2} Z" fill="${s.done ? '#b9ad97' : 'none'}" stroke="${s.done ? INK : 'var(--water-hi)'}" stroke-width="2.2" ${s.done ? '' : 'stroke-dasharray="5 5"'}/>`).join('')}
+    <g class="hopper${hop}">${animalSVG(S.active, all ? 'happy' : 'awake', { look: myLook(), nested: true, x: at.x - 30, y: at.y - 56, w: 60, label: petName() })}</g>
   </svg>`;
+}
+/* the cairn: one stone for every rock ever crossed, even if the rock is deleted later */
+function cairnSVG(max = 9, freshId) {
+  const log = (S.crossLog || []).slice(-max), n = log.length, h = 24, W = 120, H = Math.max(1, n) * (h - 5) + 40;
+  let y = H - 8, out = `<ellipse cx="${W / 2}" cy="${H - 6}" rx="54" ry="5" fill="${INK}" opacity=".1"/>`;
+  if (!n) out += `<path d="M14 ${y - 2} C14 ${y - 20} 40 ${y - 24} 60 ${y - 24} C84 ${y - 24} 106 ${y - 18} 106 ${y - 3} C106 ${y + 2} 86 ${y + 3} 60 ${y + 3} C34 ${y + 3} 14 ${y + 2} 14 ${y - 2} Z" fill="none" stroke="var(--line-2)" stroke-width="2.2" stroke-dasharray="6 5"/>`;
+  log.forEach((c, i) => {
+    const w = Math.max(44, 96 - i * 6), x = W / 2 + (i ? (i % 2 ? 4 : -4) : 0), col = okColor(c.color) || courseColor(c.courseId), t = y - h / 2 - 2, bt = y + 1;
+    out += `<g class="cairn-st${c.id === freshId ? ' new' : ''}"><title>${esc(c.title)} · ${new Date(c.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</title>
+      <path d="M${x - w / 2} ${y - 4} C${x - w / 2} ${t} ${x - w / 4} ${t - 2} ${x} ${t - 2} C${x + w / 4} ${t - 2} ${x + w / 2} ${t} ${x + w / 2} ${y - 3} C${x + w / 2} ${bt} ${x + w / 4} ${bt + 1} ${x} ${bt + 1} C${x - w / 4} ${bt + 1} ${x - w / 2} ${bt} ${x - w / 2} ${y - 4} Z" fill="${col}" stroke="${INK}" stroke-width="2.2"/>
+      <path d="M${x - w / 4} ${t + 3} q${w / 8} -3 ${w / 4} -2" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>`;
+    y -= h - 5;
+  });
+  if (n) { const ty = y - 2; out += `<g transform="translate(${W / 2} ${ty})"><path d="M0 0 C0 -6 0 -10 0 -12" stroke="#5f8a4a" stroke-width="2.4" stroke-linecap="round"/><path d="M0 -8 C-8 -10 -11 -16 -9 -20 C-3 -18 0 -14 0 -8 Z M0 -10 C7 -13 11 -18 9 -22 C3 -20 0 -16 0 -10 Z" fill="#8fb069" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>`; }
+  return `<svg class="cairn" viewBox="0 ${n ? Math.min(0, y - 30) : 0} ${W} ${H - (n ? Math.min(0, y - 30) : 0)}" role="img" aria-label="${n} rocks crossed">${out}</svg>`;
+}
+function weekCounts() {
+  const w = weekStart().getTime();
+  return { peb: (S.pebLog || []).filter(x => x.at >= w).length, rocks: (S.crossLog || []).filter(x => x.at >= w).length };
+}
+function renderCairn() {
+  const el = $('#cairnCard'); if (!el) return;
+  const total = (S.crossLog || []).length, wk = weekCounts(), ws = weekStart();
+  const days = Array.from({ length: 7 }, (_, i) => { const d = addDays(ws, i), k = dayKey(d); return { l: d.toLocaleDateString(undefined, { weekday: 'narrow' }), n: (S.pebLog || []).filter(x => dayKey(new Date(x.at)) === k).length, today: k === dayKey() }; });
+  el.innerHTML = `<div class="cairn-pic">${cairnSVG(9)}</div>
+    <div class="cairn-txt">
+      <span class="eyebrow">Your cairn</span>
+      <h2>${total ? `${total} ${total === 1 ? 'rock' : 'rocks'} crossed` : 'Cross a rock to start your cairn'}</h2>
+      <p class="muted">Every rock you finish adds a stone that stays, even after you remove the rock.${total > 9 ? ` Showing the newest 9.` : ''}</p>
+      <div class="cairn-stats"><div><b>${wk.peb}</b><span>pebbles this week</span></div><div><b>${wk.rocks}</b><span>rocks this week</span></div><div><b>${(S.pebLog || []).length}</b><span>pebbles all time</span></div></div>
+    </div>
+    <div class="week-peb" aria-label="Pebbles laid each day this week">${days.map(d => `<div class="${d.today ? 'today' : ''}"><span class="wp-st">${Array.from({ length: Math.min(5, d.n) }, () => '<i></i>').join('')}${d.n > 5 ? `<small>+${d.n - 5}</small>` : ''}</span><b>${d.l}</b></div>`).join('')}</div>`;
 }
 function renderRockFilter() {
   const cs = curCourses();
   $('#rockFilter').innerHTML = `<div class="seg" role="group" aria-label="Filter by course"><button data-c="all" aria-pressed="${rockFilter === 'all'}">All</button>${cs.map(c => `<button data-c="${esc(c.id)}" aria-pressed="${rockFilter === c.id}">${esc(c.name)}</button>`).join('')}<button data-c="" aria-pressed="${rockFilter === ''}">General</button></div>`;
 }
-function renderRocks() {
-  renderRockFilter();
-  let rocks = S.rocks.filter(r => rockFilter === 'all' || (r.courseId || '') === rockFilter);
-  const isDone = r => r.pebbles.length && r.pebbles.every(p => p.done);
-  rocks.sort((a, b) => (isDone(a) - isDone(b)) || (a.due || '9999').localeCompare(b.due || '9999') || b.createdAt - a.createdAt);
-  const el = $('#rockList');
-  if (!rocks.length) { el.innerHTML = `<div class="card flat empty"><span class="hand">No rocks here.</span><span>Add a big task and split it into pebbles, or import your Blackboard calendar.</span></div>`; return; }
-  el.innerHTML = rocks.map(r => {
-    const d = r.pebbles.filter(p => p.done).length, n = r.pebbles.length, open = S.openRock === r.id;
-    const draft = aiDrafts[r.id];
-    return `<article class="rock" data-rock="${esc(r.id)}">
-      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt((okColor(r.color) || courseColor(r.courseId)))}
-        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${(okColor(r.color) || courseColor(r.courseId))}"></i>${esc(courseName(r.courseId))}</span>${r.due ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${isDone(r) ? '<span class="pill" style="background:var(--moss);color:#fff">Crossed</span>' : ''}</div></div>
-        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width:90px"><span class="muted num" style="font-size:.82rem">${d} of ${n} pebbles</span><span class="prog-bar" style="width:90px"><i style="width:${n ? d / n * 100 : 0}%"></i></span></div>
+function rockCard(r) {
+  const d = r.pebbles.filter(p => p.done).length, n = r.pebbles.length, open = S.openRock === r.id, done = rockDone(r);
+  const draft = aiDrafts[r.id], col = okColor(r.color) || courseColor(r.courseId), justPct = lastLaid && lastLaid.rock === r.id ? lastLaid.pct : null;
+  const pct = n ? d / n * 100 : done ? 100 : 0;
+  const cOpts = `<option value="">General</option>` + curCourses().map(c => `<option value="${esc(c.id)}" ${c.id === r.courseId ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+  const pebLi = p => editPeb === p.id
+    ? `<li class="peb editing"><form class="peb-edit" data-pebedit="${esc(p.id)}"><input class="inp" name="t" maxlength="120" value="${esc(p.text)}" aria-label="Pebble"><input class="inp" name="m" type="number" min="1" max="120" value="${p.mins || 15}" aria-label="Minutes" style="max-width:76px"><button type="button" class="icon-btn sm" data-pebmove="-1" aria-label="Move up"><svg style="transform:rotate(-90deg)"><use href="#i-chev"/></svg></button><button type="button" class="icon-btn sm" data-pebmove="1" aria-label="Move down"><svg style="transform:rotate(90deg)"><use href="#i-chev"/></svg></button><button class="btn small primary" type="submit">Save</button><button type="button" class="btn small" data-pebcancel>Cancel</button></form></li>`
+    : `<li class="peb ${p.done ? 'done' : ''} ${lastLaid && lastLaid.peb === p.id ? 'just' : ''}"><button class="chk" data-peb="${esc(p.id)}" aria-label="${p.done ? 'Mark not done' : 'Mark done'}: ${esc(p.text)}">${icon('i-check')}</button><span class="tx" data-pebtx="${esc(p.id)}" title="Click to edit">${esc(p.text)}</span>${lastLaid && lastLaid.peb === p.id ? `<span class="coin-pop">+3</span>` : ''}<span class="mins">${p.mins || 15} min</span><button class="icon-btn sm" data-editpeb="${esc(p.id)}" aria-label="Edit pebble">${icon('i-edit')}</button><button class="icon-btn sm" data-delpeb="${esc(p.id)}" aria-label="Remove pebble">${icon('i-x')}</button></li>`;
+  return `<article class="rock ${done ? 'crossed' : ''}" data-rock="${esc(r.id)}">
+      <div class="rock-head" data-toggle role="button" tabindex="0" aria-expanded="${open}">${rockArt(col)}
+        <div class="meta"><h3>${esc(r.title)}</h3><div class="sub"><span class="pill"><i style="background:${col}"></i>${esc(courseName(r.courseId))}</span>${r.due && !done ? `<span class="due">${dueText(r.due)}</span>` : ''}${r.example ? '<span class="pill example">Example</span>' : ''}${done ? `<span class="pill crossed-pill">${icon('i-check')}Crossed ${new Date(r.crossedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>` : ''}</div></div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width:90px"><span class="muted num" style="font-size:.82rem">${n ? `${d} of ${n} pebbles` : done ? 'Done' : 'No pebbles'}</span><span class="prog-bar" style="width:90px"><i style="width:${justPct !== null ? justPct : pct}%" ${justPct !== null ? `data-to="${pct}"` : ''}></i></span></div>
       </div>
       ${open ? `<div class="rock-body">
+        ${editRock === r.id ? `<form class="rock-edit form-grid" data-rockedit>
+          <label class="f" style="grid-column:1/-1">Task<input class="inp" name="title" required maxlength="120" value="${esc(r.title)}"></label>
+          <label class="f">Course<select class="inp" name="course">${cOpts}</select></label>
+          <label class="f">Due date<input class="inp" name="due" type="date" value="${esc(r.due || '')}"></label>
+          <label class="f" style="grid-column:1/-1">Notes<textarea class="inp" name="notes" maxlength="300" rows="2">${esc(r.notes || '')}</textarea></label>
+          <div class="row" style="grid-column:1/-1; justify-content:flex-end"><button type="button" class="btn small" data-rockcancel>Cancel</button><button class="btn small primary" type="submit">Save changes</button></div>
+        </form>` : ''}
         <div class="crossing">${crossingSVG(r)}</div>
-        ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(p => `<li class="peb ${p.done ? 'done' : ''}"><button class="chk" data-peb="${esc(p.id)}" aria-label="${p.done ? 'Mark not done' : 'Mark done'}: ${esc(p.text)}">${icon('i-check')}</button><span class="tx">${esc(p.text)}</span><span class="mins">${p.mins || 15} min</span><button class="icon-btn" style="width:30px;height:30px" data-delpeb="${esc(p.id)}" aria-label="Remove pebble">${icon('i-x')}</button></li>`).join('')}</ul>` : '<p class="muted">No pebbles yet. Add the smallest first step you can think of, or let Claude break it down.</p>'}
+        ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(pebLi).join('')}</ul>` : `<p class="muted">${done ? 'Finished without pebbles. Nice and simple.' : 'No pebbles yet. Add the smallest first step you can think of, let Claude break it down, or just finish the rock when it is done.'}</p>`}
         ${draft ? aiBox(r.id, draft) : ''}
         <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="15" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
-        <div class="row"><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button><span class="rock-colors" role="group" aria-label="Rock colour">${['', ...EV_COLORS].map(c => `<button type="button" class="rc ${(okColor(r.color) || '') === c ? 'on' : ''}" data-rockc="${c}" title="${c ? 'Colour' : 'Course colour'}" style="background:${c || courseColor(r.courseId)}">${c ? '' : '<small>A</small>'}</button>`).join('')}</span><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
+        ${finishAsk === r.id ? `<div class="confirm-row"><span>Mark the ${n - d} ${n - d === 1 ? 'pebble' : 'pebbles'} left as done and cross the rock?</span><button class="btn small primary" data-finishyes>Yes, cross it</button><button class="btn small" data-finishno>Not yet</button></div>` : ''}
+        <div class="row">${done ? `<button class="btn small" data-reopen>Not done yet</button>` : `<button class="btn small primary" data-finish>${icon('i-check')}Finish rock</button><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button>`}<button class="btn small" data-editrock>${icon('i-edit')}Edit</button><span class="rock-colors" role="group" aria-label="Rock colour">${['', ...EV_COLORS].map(c => `<button type="button" class="rc ${(okColor(r.color) || '') === c ? 'on' : ''}" data-rockc="${c}" title="${c ? 'Colour' : 'Course colour'}" style="background:${c || courseColor(r.courseId)}">${c ? '' : '<small>A</small>'}</button>`).join('')}</span><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
       </div>` : ''}
     </article>`;
-  }).join('');
+}
+function renderRocks() {
+  renderRockFilter(); renderCairn();
+  const rocks = S.rocks.filter(r => rockFilter === 'all' || (r.courseId || '') === rockFilter);
+  const active = rocks.filter(r => !rockDone(r)).sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999') || b.createdAt - a.createdAt);
+  const crossed = rocks.filter(rockDone).sort((a, b) => b.crossedAt - a.crossedAt);
+  const el = $('#rockList');
+  if (!rocks.length) { el.innerHTML = `<div class="card flat empty"><span class="hand">No rocks here.</span><span>Add a big task and split it into pebbles, or import your Blackboard calendar.</span></div>`; return; }
+  el.innerHTML = (active.length ? active.map(rockCard).join('') : `<div class="card flat empty"><span class="hand">Every rock is crossed.</span><span>Enjoy it. Add a new rock when the next big task comes up.</span></div>`)
+    + (crossed.length ? `<button class="btn small quiet crossed-toggle" data-showcrossed aria-expanded="${showCrossed}">${icon('i-chev')}${showCrossed ? 'Hide' : 'Show'} ${crossed.length} crossed ${crossed.length === 1 ? 'rock' : 'rocks'}</button>${showCrossed ? crossed.map(rockCard).join('') : ''}` : '');
+  requestAnimationFrame(() => requestAnimationFrame(() => $$('#rockList [data-to]').forEach(b => { b.style.width = b.dataset.to + '%'; })));
 }
 function aiBox(id, d) {
   if (d.loading) return `<div class="ai-box"><span class="hand">Claude is thinking about small first steps...</span></div>`;
@@ -2936,24 +3072,108 @@ Reply with only JSON in this shape: {"pebbles":[{"text":"under 90 characters","m
   }
   renderRocks();
 }
+function plop() {
+  if (!S.settings.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime, o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(820, now); o.frequency.exponentialRampToValueAtTime(190, now + .16);
+    g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(.22, now + .012); g.gain.exponentialRampToValueAtTime(.0001, now + .28);
+    o.connect(g).connect(audioCtx.destination); o.start(now); o.stop(now + .3);
+  } catch (e) {}
+}
+function fanfare() {
+  if (!S.settings.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    [[523.25, 0], [659.25, .11], [783.99, .22], [1046.5, .33], [783.99, .5], [1046.5, .58], [1318.5, .66]].forEach(([f, d], i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = i > 3 ? 'sine' : 'triangle'; o.frequency.value = f;
+      g.gain.setValueAtTime(.0001, now + d); g.gain.exponentialRampToValueAtTime(.13, now + d + .02); g.gain.exponentialRampToValueAtTime(.0001, now + d + (i === 6 ? 1.4 : .5));
+      o.connect(g).connect(audioCtx.destination); o.start(now + d); o.stop(now + d + 1.5);
+    });
+  } catch (e) {}
+}
+function crossRock(r) {
+  r.crossedAt = Date.now();
+  if (!r.example) { S.crossLog = (S.crossLog || []).filter(x => x.id !== r.id); S.crossLog.push(crossEntry(r)); }
+  addCoins(10);
+  S.lastCrossed = { title: r.title, at: Date.now() };
+  makeHappy(5000); say('We crossed the whole pond!');
+  setTimeout(() => celebrateRock(r), 700);
+}
+function uncrossRock(r) {
+  if (!r.crossedAt) return;
+  delete r.crossedAt;
+  S.coins = Math.max(0, S.coins - 10);
+  S.crossLog = (S.crossLog || []).filter(x => x.id !== r.id);
+}
+function layPebble(r, p) {
+  p.done = true; p.doneAt = Date.now();
+  S.pebLog.push({ id: p.id, at: p.doneAt, text: p.text, rock: r.title, courseId: r.courseId });
+}
 function togglePebble(rockId, pebId) {
   const r = S.rocks.find(x => x.id === rockId); if (!r) return;
   const p = r.pebbles.find(x => x.id === pebId); if (!p) return;
-  const wasAll = r.pebbles.every(x => x.done);
-  p.done = !p.done;
-  if (p.done) {
-    p.doneAt = Date.now();
-    S.pebLog.push({ id: p.id, at: p.doneAt, text: p.text, rock: r.title, courseId: r.courseId });
-    addCoins(3, 'for laying a stepping stone');
-    if (r.pebbles.every(x => x.done)) { addCoins(10, `for crossing “${r.title}”`); S.lastCrossed = { title: r.title, at: Date.now() }; makeHappy(4000); say('We crossed the whole pond!'); }
+  const n = r.pebbles.length, before = r.pebbles.filter(x => x.done).length;
+  if (!p.done) {
+    layPebble(r, p);
+    addCoins(3, currentView === 'pebbles' ? '' : 'for laying a stepping stone');
+    const crossed = r.pebbles.every(x => x.done);
+    lastLaid = { rock: r.id, peb: p.id, pct: before / n * 100, crossed };
+    clearTimeout(togglePebble.t); togglePebble.t = setTimeout(() => { lastLaid = null; }, 1500);
+    plop();
+    if (crossed && !r.crossedAt) crossRock(r);
     checkUnlocks();
   } else {
+    p.done = false;
     S.pebLog = S.pebLog.filter(x => x.id !== p.id);
-    S.coins = Math.max(0, S.coins - 3 - (wasAll ? 10 : 0));
+    S.coins = Math.max(0, S.coins - 3);
+    uncrossRock(r);
   }
   save(); renderAllLight(); afterProgress();
 }
+function finishRock(r) {
+  const left = r.pebbles.filter(p => !p.done);
+  left.forEach(p => layPebble(r, p));
+  if (left.length) addCoins(3 * left.length);
+  lastLaid = { rock: r.id, peb: left.length ? left[left.length - 1].id : null, pct: (r.pebbles.length - left.length) / Math.max(1, r.pebbles.length) * 100, crossed: true };
+  clearTimeout(togglePebble.t); togglePebble.t = setTimeout(() => { lastLaid = null; }, 1500);
+  finishAsk = null; plop();
+  crossRock(r); checkUnlocks();
+  save(); renderAllLight(); afterProgress();
+}
+function celebrateRock(r) {
+  const n = r.pebbles.length, mins = r.pebbles.reduce((a, p) => a + (p.mins || 15), 0), coins = 10 + 3 * n;
+  let when = null;
+  if (r.due) {
+    const days = Math.round((new Date(r.due + 'T00:00') - new Date(dayKey() + 'T00:00')) / 864e5);
+    when = days > 0 ? [days, days === 1 ? 'day early' : 'days early'] : days === 0 ? ['On time', 'finished on the due day'] : [-days, -days === 1 ? 'day past due, still done' : 'days past due, still done'];
+  }
+  const wk = weekCounts().rocks, total = (S.crossLog || []).length;
+  const cols = ['var(--bloom)', 'var(--rose)', 'var(--accent)', '#f1c26b', okColor(r.color) || courseColor(r.courseId)];
+  const petals = Array.from({ length: 28 }, (_, i) => `<i style="left:${(i * 37) % 100}%; --d:${((i * 7) % 10) / 10}s; --t:${2.4 + (i % 5) * .35}s; --r:${(i * 53) % 360}deg; --x:${(i % 2 ? 1 : -1) * (20 + (i * 11) % 40)}px; background:${cols[i % cols.length]}"></i>`).join('');
+  const tile = (b, l) => `<div><b>${b}</b><span>${l}</span></div>`;
+  $('#crossBox').innerHTML = `<div class="petals" aria-hidden="true">${petals}</div>
+    <div class="cross-scene">${crossingSVG(r, true)}</div>
+    <div class="cross-txt"><span class="hand">You crossed the pond</span><h2>${esc(r.title)}</h2><p class="muted">${esc(courseName(r.courseId))}</p></div>
+    <div class="cross-stats">${n ? tile(n, n === 1 ? 'pebble laid' : 'pebbles laid') + tile(fmtMin(mins), 'of work planned and done') : tile('1', 'rock finished')}${when ? tile(when[0], when[1]) : ''}${tile(`+<em data-count="${coins}">0</em>`, 'coins earned')}</div>
+    ${r.example ? '' : `<div class="cross-cairn">${cairnSVG(6, r.id)}<p><b>${wk === 1 ? 'Your first rock this week.' : `${wk} rocks crossed this week.`}</b><br><span class="muted">Your cairn is ${total} ${total === 1 ? 'stone' : 'stones'} tall now.</span></p></div>`}
+    <div class="row" style="justify-content:flex-end"><button class="btn" data-crossshare>Share the win</button><button class="btn primary" data-crossclose>Keep going</button></div>`;
+  $('#crossBox').dataset.title = r.title;
+  $('#crossModal').classList.add('on');
+  fanfare();
+  const c = $('#crossBox [data-count]'), t0 = performance.now();
+  const step = t => { const k = Math.min(1, (t - t0) / 900); c.textContent = Math.round(coins * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
 function bindPebbles() {
+  $('#crossModal').addEventListener('click', e => {
+    if (e.target.closest('[data-crossshare]')) { $('#crossModal').classList.remove('on'); go('commons'); postKind = 'win'; $$('#composer [data-kind]').forEach(x => x.setAttribute('aria-pressed', x.dataset.kind === 'win')); $('#postTitle').value = `Crossed “${$('#crossBox').dataset.title}”`; $('#postBody').focus(); return; }
+    if (e.target.id === 'crossModal' || e.target.closest('[data-crossclose]')) $('#crossModal').classList.remove('on');
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#crossModal').classList.remove('on'); });
   $('#newRockBtn').onclick = () => { $('#rockForm').hidden = false; renderCourseSelects(); $('#rockCourse').value = rockFilter !== 'all' ? rockFilter : (S.lastCourse || ''); $('#rockTitle').focus(); };
   $('#rockCancel').onclick = () => { $('#rockForm').hidden = true; };
   const addRock = (split) => {
@@ -2967,10 +3187,20 @@ function bindPebbles() {
   $('#rockAddSplit').onclick = () => addRock(true);
   $('#rockFilter').onclick = e => { const b = e.target.closest('button[data-c]'); if (!b) return; rockFilter = b.dataset.c; renderRocks(); };
   $('#rockList').addEventListener('click', e => {
+    if (e.target.closest('[data-showcrossed]')) { showCrossed = !showCrossed; renderRocks(); return; }
     const art = e.target.closest('[data-rock]'); if (!art) return;
     const id = art.dataset.rock, r = S.rocks.find(x => x.id === id);
     if (e.target.closest('[data-toggle]')) { S.openRock = S.openRock === id ? null : id; renderRocks(); return; }
     const chk = e.target.closest('[data-peb]'); if (chk) { togglePebble(id, chk.dataset.peb); return; }
+    const ep = e.target.closest('[data-editpeb]') || e.target.closest('[data-pebtx]'); if (ep) { editPeb = ep.dataset.editpeb || ep.dataset.pebtx; renderRocks(); const i = $(`[data-pebedit="${CSS.escape(editPeb)}"] input`); if (i) { i.focus(); i.select(); } return; }
+    if (e.target.closest('[data-pebcancel]')) { editPeb = null; renderRocks(); return; }
+    const mv = e.target.closest('[data-pebmove]'); if (mv) { const i = r.pebbles.findIndex(p => p.id === editPeb), j = i + +mv.dataset.pebmove; if (i >= 0 && j >= 0 && j < r.pebbles.length) { const f = mv.closest('form'), cur = r.pebbles[i]; cur.text = clampStr(f.t.value.trim(), 120) || cur.text; cur.mins = Math.min(120, Math.max(1, +f.m.value || cur.mins || 15)); [r.pebbles[i], r.pebbles[j]] = [r.pebbles[j], r.pebbles[i]]; save(); renderRocks(); renderNextPebble(); $(`[data-pebedit="${CSS.escape(editPeb)}"] [data-pebmove="${mv.dataset.pebmove}"]`)?.focus(); } return; }
+    if (e.target.closest('[data-editrock]')) { editRock = editRock === id ? null : id; renderRocks(); $(`[data-rock="${CSS.escape(id)}"] [data-rockedit] input`)?.focus(); return; }
+    if (e.target.closest('[data-rockcancel]')) { editRock = null; renderRocks(); return; }
+    if (e.target.closest('[data-finish]')) { if (r.pebbles.some(p => !p.done)) { finishAsk = id; renderRocks(); } else finishRock(r); return; }
+    if (e.target.closest('[data-finishyes]')) { finishRock(r); return; }
+    if (e.target.closest('[data-finishno]')) { finishAsk = null; renderRocks(); return; }
+    if (e.target.closest('[data-reopen]')) { uncrossRock(r); save(); renderAllLight(); afterProgress(); toast('Rock reopened. Its stone left the cairn for now.'); return; }
     const dp = e.target.closest('[data-delpeb]'); if (dp) { r.pebbles = r.pebbles.filter(p => p.id !== dp.dataset.delpeb); save(); renderRocks(); renderNextPebble(); return; }
     if (e.target.closest('[data-ai]')) { breakDown(id); return; }
     if (e.target.closest('[data-aiclose]')) { delete aiDrafts[id]; renderRocks(); return; }
@@ -2982,9 +3212,26 @@ function bindPebbles() {
     if (e.target.closest('[data-delno]')) { renderRocks(); return; }
   });
   $('#rockList').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-toggle]')) { e.preventDefault(); e.target.click(); } });
+  $('#rockList').addEventListener('keydown', e => { if (e.key === 'Escape' && (editPeb || editRock)) { editPeb = null; editRock = null; renderRocks(); } });
   $('#rockList').addEventListener('submit', e => {
+    const pe = e.target.closest('[data-pebedit]');
+    if (pe) {
+      e.preventDefault();
+      const r = S.rocks.find(x => x.id === pe.closest('[data-rock]').dataset.rock), p = r && r.pebbles.find(x => x.id === pe.dataset.pebedit);
+      if (p) { p.text = clampStr(pe.t.value.trim(), 120) || p.text; p.mins = Math.min(120, Math.max(1, +pe.m.value || 15)); }
+      editPeb = null; save(); renderRocks(); renderNextPebble(); return;
+    }
+    const re = e.target.closest('[data-rockedit]');
+    if (re) {
+      e.preventDefault();
+      const r = S.rocks.find(x => x.id === re.closest('[data-rock]').dataset.rock); if (!r) return;
+      r.title = clampStr(re.title.value.trim(), 120) || r.title; r.courseId = re.course.value; r.due = re.due.value || ''; r.notes = clampStr(re.notes.value.trim(), 300); delete r.example;
+      const c = (S.crossLog || []).find(x => x.id === r.id); if (c) Object.assign(c, { title: r.title, courseId: r.courseId });
+      editRock = null; save(); renderAllLight(); toast('Rock updated.'); return;
+    }
     const f = e.target.closest('[data-addpeb]'); if (!f) return; e.preventDefault();
     const r = S.rocks.find(x => x.id === f.closest('[data-rock]').dataset.rock); const t = f.t.value.trim(); if (!t) return;
+    if (r.crossedAt) { uncrossRock(r); toast('New pebble added, so the rock is open again.'); }
     r.pebbles.push({ id: uid(), text: clampStr(t, 120), mins: Math.min(120, Math.max(1, +f.m.value || 15)), done: false });
     save(); renderRocks(); renderNextPebble();
     const nf = $(`[data-rock="${CSS.escape(r.id)}"] [data-addpeb] input`); nf && nf.focus();
@@ -3053,7 +3300,7 @@ const evAt = e => { const d = keyToDate(e.date); const [h, m] = (e.time || '09:0
 const fmtClock = t => (t ? new Date(`2000-01-01T${t}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '');
 function calItems() {
   const ev = (S.events || []).map(e => ({ ...e, kind: 'event' }));
-  const rocks = S.rocks.filter(r => r.due && !r.example && !(r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done))).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, color: r.color, type: 'deadline', remind: 1440 }));
+  const rocks = S.rocks.filter(r => r.due && !r.example && !rockDone(r)).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, color: r.color, type: 'deadline', remind: 1440 }));
   return [...ev, ...rocks].sort((a, b) => evAt(a) - evAt(b));
 }
 function whenText(it) {
@@ -3731,6 +3978,7 @@ function bindActivity() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'cairn', at: Date.UTC(2026, 9, 30, 11, 0), title: 'Edit your rocks and build a cairn', text: 'Rename any rock or pebble, change its minutes, course or due date, and finish a rock in one tap. Every rock you cross now gets a celebration and adds a stone to your cairn.', go: 'pebbles' },
   { id: 'spider', at: Date.UTC(2026, 9, 30, 1, 0), title: 'A spider joined the Sanctuary', text: 'A fuzzy jumping spider with eight legs and eight eyes. Adopt it for 90 coins and try its four fur coats.', go: 'sanctuary', animal: 'spider' },
   { id: 'looks', at: Date.UTC(2026, 9, 29, 20, 0), title: 'Costumes, fur coats and emotes', text: 'Dress your animal as a chef, wizard, pirate, hero or royal, give it a real fur coat, and buy emotes for when it studies or naps. While you focus, your animal now reads a book.', go: 'sanctuary', animal: 'wolf' },
   { id: 'colours', at: Date.UTC(2026, 9, 29, 19, 0), title: 'Colour your deadlines', text: 'Pick a colour for any calendar task or rock so the important ones stand out.', go: 'cal' },

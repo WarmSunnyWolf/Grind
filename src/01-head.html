@@ -256,6 +256,75 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .chk svg{width:16px; height:16px; opacity:0; color:var(--accent-ink)}
 .peb.done .chk{background:var(--moss); border-color:var(--moss)}
 .peb.done .chk svg{opacity:1}
+.peb{position:relative}
+.peb .tx{cursor:text}
+.icon-btn.sm{width:30px; height:30px}
+.icon-btn.sm svg{width:15px; height:15px}
+.peb .icon-btn.sm{opacity:.55}
+.peb:hover .icon-btn.sm, .peb .icon-btn.sm:focus-visible{opacity:1}
+.peb.just{animation:pebGlow 1.2s ease-out}
+.peb.just .chk{animation:chkPop .5s cubic-bezier(.3,1.8,.5,1)}
+.coin-pop{position:absolute; left:34px; top:-4px; font-weight:800; font-size:.86rem; color:#b8862a; pointer-events:none; animation:coinUp 1.1s ease-out forwards}
+@keyframes chkPop{0%{transform:scale(.6)} 60%{transform:scale(1.3)} 100%{transform:scale(1)}}
+@keyframes pebGlow{0%{background:color-mix(in srgb, var(--moss) 30%, var(--bg))} 100%{background:var(--bg)}}
+@keyframes coinUp{0%{opacity:0; transform:translateY(8px) scale(.8)} 20%{opacity:1; transform:translateY(0) scale(1.15)} 100%{opacity:0; transform:translateY(-22px) scale(1)}}
+.peb.editing{padding:6px}
+.peb-edit{display:flex; gap:6px; align-items:center; width:100%; flex-wrap:wrap}
+.peb-edit .inp[name=t]{flex:1; min-width:160px}
+.rock-edit{background:var(--bg); border-radius:16px; padding:14px}
+.confirm-row{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px; border-radius:14px; background:var(--surface-2)}
+.prog-bar i{transition:width .7s cubic-bezier(.3,1.2,.5,1)}
+.hopper.hop{animation:hop .6s cubic-bezier(.35,.7,.45,1) both}
+@keyframes hop{0%{transform:translate(var(--dx),var(--dy))} 45%{transform:translate(calc(var(--dx) * .45), calc(var(--dy) * .45 - 34px))} 100%{transform:translate(0,0)}}
+.splash{transform-box:fill-box; transform-origin:center; animation:splash .9s ease-out .45s both}
+.splash.s2{animation-delay:.6s}
+@keyframes splash{0%{transform:scale(.7); opacity:1} 100%{transform:scale(2.1); opacity:0}}
+.stone-new{transform-box:fill-box; transform-origin:center bottom; animation:stoneIn .5s cubic-bezier(.3,1.6,.5,1) .35s both}
+@keyframes stoneIn{0%{transform:translateY(-14px) scale(.3); opacity:0} 100%{transform:none; opacity:1}}
+.lotus-open{transform-box:fill-box; transform-origin:center bottom; animation:lotus .9s cubic-bezier(.3,1.6,.5,1)}
+@keyframes lotus{0%{transform:scale(.4)} 100%{transform:scale(1)}}
+.rock.crossed{background:color-mix(in srgb, var(--surface) 70%, var(--bg))}
+.rock.crossed .rock-head h3{color:var(--muted)}
+.crossed-pill{background:var(--moss)!important; color:#fff!important; display:inline-flex; align-items:center; gap:4px}
+.crossed-pill svg{width:12px; height:12px}
+.crossed-toggle{align-self:flex-start}
+.crossed-toggle[aria-expanded=true] svg{transform:rotate(90deg)}
+.cairn-card{display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:center; padding:18px 22px}
+.cairn-pic{width:120px; height:120px; display:grid; place-items:end center}
+.cairn{max-width:100%; max-height:100%}
+.cairn-st.new{transform-box:fill-box; transform-origin:center bottom; animation:stoneDrop .7s cubic-bezier(.3,1.5,.5,1) .5s both}
+@keyframes stoneDrop{0%{transform:translateY(-40px); opacity:0} 100%{transform:none; opacity:1}}
+.cairn-txt h2{margin:2px 0 4px}
+.cairn-txt p{font-size:.86rem; margin:0 0 10px}
+.cairn-stats{display:flex; gap:22px; flex-wrap:wrap}
+.cairn-stats div, .cross-stats div{display:flex; flex-direction:column}
+.cairn-stats b{font-size:1.4rem; line-height:1.1}
+.cairn-stats span, .cross-stats span{font-size:.78rem; color:var(--muted)}
+.week-peb{display:flex; gap:8px; align-items:flex-end}
+.week-peb > div{display:flex; flex-direction:column; align-items:center; gap:4px; width:22px}
+.week-peb b{font-size:.72rem; color:var(--muted); font-weight:700}
+.week-peb .today b{color:var(--ink)}
+.wp-st{display:flex; flex-direction:column-reverse; align-items:center; gap:2px; height:64px; justify-content:flex-start; border-bottom:2px solid var(--line); width:100%; padding-bottom:3px}
+.wp-st i{width:16px; height:9px; border-radius:50% 50% 45% 45%; background:var(--moss); border:1.5px solid var(--ink)}
+.wp-st small{font-size:.66rem; color:var(--muted)}
+.cross-box{position:relative; overflow:hidden; text-align:center; width:min(560px,100%)}
+.cross-scene{border-radius:18px; overflow:hidden; border:1px solid var(--line)}
+.cross-scene > svg{display:block; width:100%; height:auto}
+.cross-txt .hand{color:var(--rose); font-size:1.5rem}
+.cross-txt h2{font-size:1.7rem; margin:2px 0 0; overflow-wrap:anywhere}
+.cross-stats{display:flex; justify-content:center; gap:10px; flex-wrap:wrap}
+.cross-stats div{background:var(--surface-2); border-radius:16px; padding:10px 16px; min-width:110px; align-items:center}
+.cross-stats b{font-size:1.35rem; line-height:1.2}
+.cross-stats em{font-style:normal}
+.cross-cairn{display:flex; align-items:center; justify-content:center; gap:14px; text-align:left}
+.cross-cairn .cairn{width:90px; height:90px}
+.cross-cairn p{margin:0; font-size:.9rem}
+.petals{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2}
+.petals i{position:absolute; top:-20px; width:10px; height:14px; border-radius:80% 0 80% 0; border:1px solid rgba(59,47,39,.35); opacity:0; animation:petal var(--t) ease-in var(--d) forwards}
+@keyframes petal{0%{opacity:0; transform:translate(0,0) rotate(var(--r))} 10%{opacity:1} 100%{opacity:0; transform:translate(var(--x), 620px) rotate(calc(var(--r) + 420deg))}}
+@media (max-width:900px){.cairn-card{grid-template-columns:auto 1fr} .week-peb{grid-column:1/-1; justify-content:space-between}}
+@media (max-width:520px){.cairn-card{gap:14px; padding:16px} .cairn-pic{width:84px; height:96px} .cairn-stats{gap:14px} .cairn-stats b{font-size:1.15rem}}
+@media (prefers-reduced-motion: reduce){.hopper.hop, .splash, .stone-new, .lotus-open, .cairn-st.new, .peb.just, .peb.just .chk, .petals i, .coin-pop{animation:none!important} .petals{display:none}}
 .add-peb{display:flex; gap:8px}
 .add-peb .inp{flex:1}
 .ai-box{border:1px dashed var(--line-2); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px; background:color-mix(in srgb, var(--water-hi) 30%, transparent)}

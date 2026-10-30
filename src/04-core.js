@@ -43,7 +43,7 @@ function defaultState() {
     settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
-    rocks: [exampleRock()], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
+    rocks: [exampleRock()], crossLog: [], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
     seenRipple: 0, visV2: true, timer: null, lastCourse: '', openRock: 'example-rock',
     sounds: { owned: ['rain'], pick: 'rain', vol: .5, withFocus: true, quran: { reciter: 'afs', surah: 1 }, link: '' }
   };
@@ -90,8 +90,13 @@ function mergeState(s) {
   // demo speed and the sample week are gone; drop their leftovers
   m.settings.demo = false;
   if (Array.isArray(m.sessions)) m.sessions = m.sessions.filter(x => !x.sample);
+  // a rock is finished once it has crossedAt; older versions only knew "every pebble ticked"
+  (m.rocks || []).forEach(r => { if (!r.crossedAt && r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done)) r.crossedAt = Math.max(0, ...r.pebbles.map(p => +p.doneAt || 0)) || Date.now(); });
+  if (!Array.isArray(s.crossLog)) m.crossLog = (m.rocks || []).filter(r => r.crossedAt && !r.example).map(r => crossEntry(r)).sort((a, b) => a.at - b.at);
   return m;
 }
+function rockDone(r) { return !!r.crossedAt; }
+function crossEntry(r) { return { id: r.id, title: r.title, courseId: r.courseId || '', color: r.color || '', at: r.crossedAt, pebbles: r.pebbles.length, due: r.due || '' }; }
 function loadLocal() {
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return mergeState(s); } catch (e) {}
   return defaultState();
@@ -160,7 +165,7 @@ function publicStats() {
   };
 }
 function nextPebble() {
-  const rocks = S.rocks.filter(r => r.pebbles.some(p => !p.done));
+  const rocks = S.rocks.filter(r => !r.crossedAt && r.pebbles.some(p => !p.done));
   rocks.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
   for (const r of rocks) { const p = r.pebbles.find(p => !p.done); if (p) return { rock: r, peb: p }; }
   return null;
