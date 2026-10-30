@@ -120,6 +120,34 @@ const ANIMALS = {
       <path d="M76 99 L62 96 M76 103 L62 105 M124 99 L138 96 M124 103 L138 105" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
     }
   },
+  spider: {
+    label: 'Spider', lore: 'A fuzzy jumping spider with eight legs and eight eyes. Catches every idea in its web.', unlock: { type: 'coins', n: 90 }, defaultName: '',
+    face: { eyes: [[84, 108], [116, 108]], er: 8, mouth: { x: 100, y: 132, type: 'cat' }, blush: [[66, 126], [134, 126]], blushR: 7, zz: [152, 50] },
+    art: (st) => {
+      const b = '#4f4a63', d = '#353144', f = '#8b7fb3', c = '#f1c26b', w = '#d9d3e6';
+      const up = st === 'happy' ? -10 : 0;
+      const legs = [
+        `M66 112 C52 ${92 + up} 34 ${70 + up} 22 ${78 + up} C14 ${84 + up} 16 ${98 + up} 20 ${108 + up}`,
+        'M62 128 C46 116 26 108 16 122 C10 132 12 150 14 166',
+        'M64 142 C50 136 34 136 28 150 C24 160 26 172 30 182',
+        'M72 154 C62 156 52 162 50 172 C49 176 50 180 52 184'
+      ];
+      const side = legs.map(l => `<path d="${l}" fill="none" stroke="${INK}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="${l}" fill="none" stroke="${b}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`).join('')
+        + `<path d="M28 150 l-6 -3 M16 122 l-6 -1 M22 ${78 + up} l-4 -4" stroke="${f}" stroke-width="2.4" stroke-linecap="round"/>`;
+      return `<ellipse cx="100" cy="182" rx="56" ry="5" fill="${INK}" opacity=".12"/>
+      ${side}<g transform="translate(200 0) scale(-1 1)">${side}</g>
+      <path d="M100 172 C72 172 54 154 54 126 C54 94 74 74 100 74 C126 74 146 94 146 126 C146 154 128 172 100 172 Z" fill="${b}" ${O}/>
+      <path d="M70 88 C80 78 120 78 130 88 C122 84 112 82 100 82 C88 82 78 84 70 88 Z" fill="${d}"/>
+      <path d="M80 80 L84 70 L90 78 L96 66 L100 76 L104 66 L110 78 L116 70 L120 80" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M78 150 C86 160 114 160 122 150 C118 166 108 170 100 170 C92 170 82 166 78 150 Z" fill="${f}" opacity=".55"/>
+      <path d="M60 140 C64 152 70 160 78 165 M140 140 C136 152 130 160 122 165" fill="none" stroke="${f}" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
+      ${st === 'sleeping' ? '' : `<circle cx="84" cy="108" r="14" fill="${w}" ${O2}/><circle cx="116" cy="108" r="14" fill="${w}" ${O2}/>
+      <circle cx="68" cy="96" r="5" fill="${INK}"/><circle cx="132" cy="96" r="5" fill="${INK}"/>
+      <circle cx="78" cy="88" r="3.4" fill="${INK}"/><circle cx="122" cy="88" r="3.4" fill="${INK}"/>
+      <circle cx="69" cy="94.5" r="1.4" fill="#fff" opacity=".8"/><circle cx="133" cy="94.5" r="1.4" fill="#fff" opacity=".8"/>`}
+      <path d="M92 146 C91 152 93 156 97 155 M108 146 C109 152 107 156 103 155" fill="${c}" ${O2}/>`;
+    }
+  },
   dog: {
     label: 'Dog', lore: 'Loyal and happy to see you, every single session.', unlock: { type: 'coins', n: 100 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 6, mouth: { x: 100, y: 112, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [152, 44] },

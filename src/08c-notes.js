@@ -1,9 +1,45 @@
+/* ---------- what's new ----------
+   Add an entry at the top for every update students should hear about. It shows once as a
+   "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
+const UPDATES = [
+  { id: 'spider', at: Date.UTC(2026, 9, 30, 1, 0), title: 'A spider joined the Sanctuary', text: 'A fuzzy jumping spider with eight legs and eight eyes. Adopt it for 90 coins and try its four fur coats.', go: 'sanctuary', animal: 'spider' },
+  { id: 'looks', at: Date.UTC(2026, 9, 29, 20, 0), title: 'Costumes, fur coats and emotes', text: 'Dress your animal as a chef, wizard, pirate, hero or royal, give it a real fur coat, and buy emotes for when it studies or naps. While you focus, your animal now reads a book.', go: 'sanctuary', animal: 'wolf' },
+  { id: 'colours', at: Date.UTC(2026, 9, 29, 19, 0), title: 'Colour your deadlines', text: 'Pick a colour for any calendar task or rock so the important ones stand out.', go: 'cal' },
+  { id: 'dinos', at: Date.UTC(2026, 9, 29, 12, 0), title: 'Dinosaurs and a swan', text: 'A triceratops, a stegosaurus, a longneck, a T. rex and a swan are waiting in the Sanctuary.', go: 'sanctuary', animal: 'trex', bell: false },
+  { id: 'quran', at: Date.UTC(2026, 9, 28, 20, 0), title: 'Quran and your own music', text: 'Listen to Quran recitation for free while you focus, or paste your own YouTube, Spotify or SoundCloud link.', go: 'focus', bell: false },
+  { id: 'cal', at: Date.UTC(2026, 9, 28, 14, 0), title: 'Calendar and reminders', text: 'Plan deadlines on a monthly calendar, get reminded before they are due, and import your Blackboard calendar.', go: 'cal', bell: false },
+  { id: 'board', at: Date.UTC(2026, 9, 28, 10, 0), title: 'Leaderboard', text: 'See who studied the most today, this week and this month on The Pond.', go: 'pond', bell: false }
+];
+// students who join after an update do not need to hear about it
+function newsFloor() {
+  if (typeof S.newsFrom !== 'number') { S.newsFrom = S.onboarded ? 0 : Date.now(); save(); }
+  return S.newsFrom;
+}
+function freshNews() {
+  const floor = Math.max(newsFloor(), Date.now() - 14 * 864e5);
+  return UPDATES.filter(u => u.bell !== false && u.at > floor);
+}
+function newsPic(u) { return `<span class="av${u.animal ? '' : ' note-ic'}">${u.animal ? avatarSVG(u.animal, 'happy') : icon('i-spark')}</span>`; }
+function maybeShowNews() {
+  if (!S.onboarded || $('.modal.on')) return;
+  const list = freshNews().filter(u => u.at > (S.newsPop || 0));
+  if (!list.length) return;
+  $('#newsBody').innerHTML = `<ul class="note-list news-list">${list.slice(0, 4).map(u => `<li>${newsPic(u)}<span class="note-t"><b>${esc(u.title)}</b><span class="muted">${esc(u.text)}</span></span><button class="btn small" data-newsgo="${u.go}">Show me</button></li>`).join('')}</ul>`;
+  $('#newsModal').classList.add('on');
+}
+function closeNews() { $('#newsModal').classList.remove('on'); S.newsPop = Date.now(); save(); }
+function renderGuideNews() {
+  const el = $('#gNews'); if (!el) return;
+  el.innerHTML = UPDATES.slice(0, 6).map(u => `<li><span class="g-news-d">${new Date(u.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span><span><b>${esc(u.title)}.</b> ${esc(u.text)}</span></li>`).join('');
+}
+
 /* ---------- notification center ---------- */
 function collectNotes() {
   const out = [];
   NET.ripples.forEach(r => out.push(r.kind === 'friend'
     ? { at: r.at, kind: 'friend', who: r.name, animal: r.animal, from: r.from, text: 'added you as a friend.' }
     : { at: r.at, kind: 'ripple', who: r.name, animal: r.animal, from: r.from, text: `sent you a ripple: “${r.msg}”` }));
+  freshNews().forEach(u => out.push({ at: u.at, kind: 'update', who: '', news: u, text: `New in Grind: ${u.title}. ${u.text}` }));
   (S.remLog || []).forEach(r => out.push({ at: r.at, kind: 'remind', who: '', animal: S.active, text: r.text }));
   const me = NET.uid;
   if (me) (NET.posts || []).filter(p => p.by === me).forEach(p => {
@@ -46,8 +82,9 @@ function renderNotes() {
   else if (!list.length) body = `<div class="note-empty"><p>Nothing yet. Deadline reminders, ripples, new friends, likes and comments on your posts will show up here.</p></div>`;
   else body = `<ul class="note-list">${list.map(n => {
     const act = n.kind === 'friend' ? (S.friends.includes(n.from) ? '<span class="muted" style="font-size:.78rem">Friends</span>' : `<button class="btn small primary" data-noteadd="${esc(n.from)}">Add back</button>`)
+      : n.kind === 'update' ? `<button class="btn small" data-notego="${n.news.go}">Show me</button>`
       : n.kind === 'remind' ? `<button class="btn small" data-notego="cal">Calendar</button>` : n.kind === 'ripple' ? `<button class="btn small" data-notego="pond">Pond</button>` : `<button class="btn small" data-notego="commons">See post</button>`;
-    const pic = n.kind === 'remind' ? `<span class="av note-ic">${icon('i-bell')}</span>` : n.kind === 'like' ? `<span class="av note-ic">${icon('i-heart')}</span>` : n.kind === 'comment' ? `<span class="av note-ic">${icon('i-comment')}</span>` : `<span class="av">${avatarSVG(n.animal, 'happy')}</span>`;
+    const pic = n.kind === 'update' ? newsPic(n.news) : n.kind === 'remind' ? `<span class="av note-ic">${icon('i-bell')}</span>` : n.kind === 'like' ? `<span class="av note-ic">${icon('i-heart')}</span>` : n.kind === 'comment' ? `<span class="av note-ic">${icon('i-comment')}</span>` : `<span class="av">${avatarSVG(n.animal, 'happy')}</span>`;
     return `<li class="${n.unread ? 'new' : ''}">${pic}<span class="note-t">${n.who ? `<b>${esc(n.who)}</b> ` : ''}${esc(n.text)}<small>${n.kind === 'like' ? 'just now' : ago(n.at)}</small></span>${act}</li>`;
   }).join('')}</ul>`;
   if ('Notification' in window && Notification.permission === 'default') body += `<div class="note-foot"><button class="btn small" data-notealerts>${icon('i-bell')}Also alert me on this device</button></div>`;
@@ -89,5 +126,12 @@ function bindNotes() {
   });
   document.addEventListener('click', () => { if (!$('#notePanel').hidden) openNotes(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#notePanel').hidden) openNotes(false); });
-  renderNotes();
+  $('#newsModal').addEventListener('click', e => {
+    const g = e.target.closest('[data-newsgo]');
+    if (g) { closeNews(); go(g.dataset.newsgo); return; }
+    if (e.target.id === 'newsModal' || e.target.closest('[data-newsclose]')) closeNews();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#newsModal').classList.contains('on')) closeNews(); });
+  renderNotes(); renderGuideNews();
+  setTimeout(maybeShowNews, 1800);
 }

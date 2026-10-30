@@ -617,6 +617,13 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .note-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px}
 .note-list li{display:flex; align-items:center; gap:10px; padding:8px; border-radius:14px}
 .note-list li.new{background:var(--surface-2)}
+.news-list li{align-items:flex-start; background:var(--surface-2)}
+.news-list .note-t{display:flex; flex-direction:column; gap:2px}
+.news-list .note-t .muted{font-size:.85rem; line-height:1.45}
+.news-list .av{width:48px; height:48px}
+.g-news{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px}
+.g-news li{display:flex; gap:12px; align-items:baseline; line-height:1.5}
+.g-news-d{flex:none; width:52px; font-size:.78rem; color:var(--muted); font-weight:600}
 .note-list .av{flex:none; width:38px; height:38px; border-radius:50%; overflow:hidden; background:var(--surface-2); display:grid; place-items:center}
 .note-list .av svg{width:100%; height:100%}
 .note-list .note-ic{color:var(--rose)} .note-list .note-ic svg{width:18px; height:18px}
@@ -964,6 +971,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <h2>Everything Grind can do, step by step</h2>
             <p class="muted">Grind is a calm space to study. Time your focus, split big tasks into small pebbles, and study next to your classmates' animals. Read it top to bottom, or tap a step to jump straight to it.</p>
             <div class="g-toc" id="gToc">
+              <a href="#g-new" data-gjump="new"><b><svg style="width:13px;height:13px"><use href="#i-spark"/></svg></b>What's new</a>
               <a href="#g-1" data-gjump="1"><b>1</b>Get started</a>
               <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
               <a href="#g-3" data-gjump="3"><b>3</b>Time a study session</a>
@@ -980,6 +988,11 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <div class="g-hero-pic" id="gHeroPic" aria-hidden="true"></div>
         </div>
         <div class="g-list">
+          <article class="card g-sec" id="g-new">
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-spark"/></svg></span><div><span class="eyebrow">Latest</span><h2>What's new</h2></div></div>
+            <ul class="g-news" id="gNews"></ul>
+            <p class="g-tip">New updates also pop up once when you open Grind and stay in the <b>bell</b> for two weeks.</p>
+          </article>
           <article class="card g-sec" id="g-1">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-user"/></svg></span><div><span class="eyebrow">Step 1</span><h2>Get started</h2></div></div>
             <ol class="g-steps"><li>Pick an animal, give it a name, and add your university and major. You can change all of this later.</li><li>Click <b>Sign in to join the pond</b> at the top right and choose your Google account.</li><li>Signed in, everything is saved to your Google account: courses, sessions, coins and animals. It follows you to any phone or laptop and your animal appears in the shared pond. If you studied before signing in, that progress is added to your account.</li></ol>
@@ -1007,7 +1020,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-5">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-pond"/></svg></span><div><span class="eyebrow">Step 6</span><h2>Meet people in the pond</h2></div></div>
-            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts, with a soft sound. Turn the sound off in <b>Customize</b>.</li></ol>
+            <ol class="g-steps"><li>Open <b>The Pond</b>. Everyone who is signed in lives here, and a glowing name means that person is focusing right now.</li><li>Tap any animal to send a <b>ripple</b>. Pick a quick one like "Lock in" or "Let him cook", or type your own in <b>Or write your own</b>. You can also add them as a friend from there.</li><li>The <b>Leaderboard</b> shows who studied the most <b>Today</b>, <b>This week</b> or <b>This month</b>. It resets by itself at midnight, every Monday, and on the 1st of each month.</li><li>Switch the list to <b>Friends</b> to see only your people. Tap <b>See profile</b> to view a classmate's study time and animals. Under <b>Privacy</b> on your profile page, choose who sees yours: <b>Only me</b>, <b>Friends</b> or <b>Everyone</b>. Only me also keeps you off the leaderboard.</li><li>The <b>bell</b> at the top tells you when someone sends a ripple, adds you as a friend, or likes or comments on your posts, with a soft sound. It also tells you when Grind gets something new. Turn the sound off in <b>Customize</b>.</li></ol>
             <div class="row"><button class="btn small" data-go="pond">Show me the pond</button></div>
           </article>
           <article class="card g-sec" id="g-6">
@@ -1022,7 +1035,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50) and kitty (60) to the panda (140), the swan (180), the wolf (240), the dragon (300), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), kitty (60) and spider (90) to the panda (140), the swan (180), the wolf (240), the dragon (300), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -1133,6 +1146,11 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="newsTitle"><div class="modal-box news-box">
+  <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="hand" style="color:var(--rose); font-size:1.3rem">Fresh in the pond</span><h2 id="newsTitle">What's new in Grind</h2></div><button class="icon-btn" data-newsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <div id="newsBody"></div>
+  <div class="row" style="justify-content:space-between"><a href="#guide" class="muted" data-go="guide" data-newsclose style="font-size:.85rem">See every update in the guide</a><button class="btn primary" data-newsclose>Got it</button></div>
+</div></div>
 <div class="modal" id="dressModal" role="dialog" aria-modal="true" aria-label="Dress up"><div class="modal-box dress-box" id="dressBox"></div></div>
 <div class="modal" id="icsModal" role="dialog" aria-modal="true" aria-labelledby="icsTitle"><div class="modal-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><h2 id="icsTitle">Import from Blackboard</h2><button class="icon-btn" data-icsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
@@ -1266,6 +1284,34 @@ const ANIMALS = {
       <ellipse cx="84" cy="134" rx="8" ry="7" fill="${d}" ${O2}/><ellipse cx="116" cy="134" rx="8" ry="7" fill="${d}" ${O2}/>
       <path d="M93 91 Q100 87 107 91 Q104 97 100 97 Q96 97 93 91 Z" fill="${INK}"/>
       <path d="M76 99 L62 96 M76 103 L62 105 M124 99 L138 96 M124 103 L138 105" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
+    }
+  },
+  spider: {
+    label: 'Spider', lore: 'A fuzzy jumping spider with eight legs and eight eyes. Catches every idea in its web.', unlock: { type: 'coins', n: 90 }, defaultName: '',
+    face: { eyes: [[84, 108], [116, 108]], er: 8, mouth: { x: 100, y: 132, type: 'cat' }, blush: [[66, 126], [134, 126]], blushR: 7, zz: [152, 50] },
+    art: (st) => {
+      const b = '#4f4a63', d = '#353144', f = '#8b7fb3', c = '#f1c26b', w = '#d9d3e6';
+      const up = st === 'happy' ? -10 : 0;
+      const legs = [
+        `M66 112 C52 ${92 + up} 34 ${70 + up} 22 ${78 + up} C14 ${84 + up} 16 ${98 + up} 20 ${108 + up}`,
+        'M62 128 C46 116 26 108 16 122 C10 132 12 150 14 166',
+        'M64 142 C50 136 34 136 28 150 C24 160 26 172 30 182',
+        'M72 154 C62 156 52 162 50 172 C49 176 50 180 52 184'
+      ];
+      const side = legs.map(l => `<path d="${l}" fill="none" stroke="${INK}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="${l}" fill="none" stroke="${b}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`).join('')
+        + `<path d="M28 150 l-6 -3 M16 122 l-6 -1 M22 ${78 + up} l-4 -4" stroke="${f}" stroke-width="2.4" stroke-linecap="round"/>`;
+      return `<ellipse cx="100" cy="182" rx="56" ry="5" fill="${INK}" opacity=".12"/>
+      ${side}<g transform="translate(200 0) scale(-1 1)">${side}</g>
+      <path d="M100 172 C72 172 54 154 54 126 C54 94 74 74 100 74 C126 74 146 94 146 126 C146 154 128 172 100 172 Z" fill="${b}" ${O}/>
+      <path d="M70 88 C80 78 120 78 130 88 C122 84 112 82 100 82 C88 82 78 84 70 88 Z" fill="${d}"/>
+      <path d="M80 80 L84 70 L90 78 L96 66 L100 76 L104 66 L110 78 L116 70 L120 80" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M78 150 C86 160 114 160 122 150 C118 166 108 170 100 170 C92 170 82 166 78 150 Z" fill="${f}" opacity=".55"/>
+      <path d="M60 140 C64 152 70 160 78 165 M140 140 C136 152 130 160 122 165" fill="none" stroke="${f}" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
+      ${st === 'sleeping' ? '' : `<circle cx="84" cy="108" r="14" fill="${w}" ${O2}/><circle cx="116" cy="108" r="14" fill="${w}" ${O2}/>
+      <circle cx="68" cy="96" r="5" fill="${INK}"/><circle cx="132" cy="96" r="5" fill="${INK}"/>
+      <circle cx="78" cy="88" r="3.4" fill="${INK}"/><circle cx="122" cy="88" r="3.4" fill="${INK}"/>
+      <circle cx="69" cy="94.5" r="1.4" fill="#fff" opacity=".8"/><circle cx="133" cy="94.5" r="1.4" fill="#fff" opacity=".8"/>`}
+      <path d="M92 146 C91 152 93 156 97 155 M108 146 C109 152 107 156 103 155" fill="${c}" ${O2}/>`;
     }
   },
   dog: {
@@ -1635,14 +1681,14 @@ function avatarSVG(kind, state = 'awake', look, studying) {
 const ANCHORS = {
   frog: { hat: [100, 96, .9], neck: [100, 138, .9] }, duckling: { hat: [90, 58, .85], neck: [94, 124, .8] }, capybara: { hat: [86, 48, .95], neck: [86, 140, .9] },
   rabbit: { hat: [100, 72, .85], neck: [100, 142, .8] }, butterfly: { hat: [100, 74, .45], neck: [100, 104, .4] }, kitty: { hat: [100, 60, .95], neck: [100, 128, .85] },
-  otter: { hat: [100, 54, .95], neck: [100, 122, .85] }, dog: { hat: [100, 58, .95], neck: [100, 130, .85] }, panda: { hat: [100, 56, .95], neck: [100, 134, .85] },
+  otter: { hat: [100, 54, .95], neck: [100, 122, .85] }, dog: { hat: [100, 58, .95], neck: [100, 130, .85] }, spider: { hat: [100, 76, .9], neck: [100, 156, .8] }, panda: { hat: [100, 56, .95], neck: [100, 134, .85] },
   fox: { hat: [100, 56, .95], neck: [100, 126, .85] }, horse: { hat: [100, 54, .85], neck: [100, 142, .85] }, deer: { hat: [100, 60, .9], neck: [100, 134, .85] },
   wolf: { hat: [100, 58, .95], neck: [100, 130, .85] }, dragon: { hat: [100, 60, .9], neck: [100, 134, .85] }, triceratops: { hat: [100, 60, .85], neck: [100, 134, .85] },
   stegosaurus: { hat: [100, 56, .85], neck: [100, 126, .85] }, longneck: { hat: [72, 30, .6], neck: [76, 82, .6] }, trex: { hat: [100, 48, 1], neck: [100, 130, .85] },
   turtle: { hat: [168, 106, .55], neck: [160, 146, .5] }, axolotl: { hat: [100, 68, 1], neck: [100, 138, .8] }, swan: { hat: [80, 38, .55], neck: [74, 92, .5] }, heron: { hat: [92, 37, .6], neck: [86, 86, .5] }
 };
 // real fur coats: each one swaps the animal's own colours for new ones
-const COATS = {"frog":{"golden":{"label":"Golden","map":{"#8fb069":"#e8c15a","#6d8c4c":"#c99b34","#d9e3a8":"#f6e7a6"}},"blue":{"label":"Poison dart blue","map":{"#8fb069":"#5b8fd0","#6d8c4c":"#3f6aa8","#d9e3a8":"#a9c9ef"}},"berry":{"label":"Strawberry","map":{"#8fb069":"#e0746a","#6d8c4c":"#b9514a","#d9e3a8":"#f4c0a8"}}},"duckling":{"snow":{"label":"Snow white","map":{"#f4d06f":"#f7f4ea","#e3b552":"#e2ddd0"}},"pink":{"label":"Bubblegum","map":{"#f4d06f":"#f6b3c4","#e3b552":"#e591a7"}},"mint":{"label":"Mint","map":{"#f4d06f":"#bfe3c4","#e3b552":"#9ccaa3"}}},"capybara":{"cocoa":{"label":"Cocoa","map":{"#b98b63":"#7a5640","#94694a":"#5c3f2e","#d2ab85":"#a57c5f"}},"honey":{"label":"Honey","map":{"#b98b63":"#d9a85f","#94694a":"#b5843f","#d2ab85":"#efcb8f"}},"snow":{"label":"Snow","map":{"#b98b63":"#e8ddd0","#94694a":"#c9b9a6","#d2ab85":"#f6efe6"}}},"rabbit":{"choc":{"label":"Chocolate","map":{"#efe6d8":"#8c6549"}},"grey":{"label":"Silver grey","map":{"#efe6d8":"#b9b6b3"}},"cinnamon":{"label":"Cinnamon","map":{"#efe6d8":"#d8a271","#eab4ad":"#f0c2b0"}}},"butterfly":{"monarch":{"label":"Monarch","map":{"#c9b3ea":"#f0a04b","#f3b9c8":"#e07a3a","#fbe7a6":"#fff3d6","#a78fcf":"#9a5a22"}},"morpho":{"label":"Blue morpho","map":{"#c9b3ea":"#5aa7e0","#f3b9c8":"#3f86c9","#fbe7a6":"#dff1ff","#a78fcf":"#2d5f93"}},"lime":{"label":"Lime","map":{"#c9b3ea":"#b9dd7a","#f3b9c8":"#f4e07a","#fbe7a6":"#fffbe0","#a78fcf":"#7fa64a"}}},"kitty":{"tabby":{"label":"Grey tabby","map":{"#f1c58c":"#b3b6bb","#d99a58":"#868b93","#fbf1e2":"#f2f2f2"}},"black":{"label":"Black cat","map":{"#f1c58c":"#4a4442","#d99a58":"#2f2b2a","#fbf1e2":"#d9d2cc"}},"cream":{"label":"Cream","map":{"#f1c58c":"#f6e6c8","#d99a58":"#e3c89a"}}},"otter":{"sea":{"label":"Sea otter","map":{"#8c6549":"#b08a68","#6c4b34":"#8c6a4e","#dcc19d":"#efdcc0"}},"dark":{"label":"Dark river","map":{"#8c6549":"#5a4234","#6c4b34":"#3f2e24","#dcc19d":"#c7a989"}},"silver":{"label":"Silver","map":{"#8c6549":"#9ea3a6","#6c4b34":"#767c80","#dcc19d":"#e3e5e6"}}},"dog":{"lab":{"label":"Black lab","map":{"#dcaa70":"#4a4442","#8f6340":"#2f2b2a","#f7e6c9":"#d9cfc4","#c48a52":"#3a3533"}},"dalmatian":{"label":"Dalmatian","map":{"#dcaa70":"#f6f3ec","#8f6340":"#3f3a37","#f7e6c9":"#ffffff","#c48a52":"#3f3a37"}},"golden":{"label":"Golden retriever","map":{"#dcaa70":"#e8bd6a","#8f6340":"#c48a3c","#f7e6c9":"#f8e7c0","#c48a52":"#d9a14f"}}},"panda":{"brown":{"label":"Brown panda","map":{"#3f3a37":"#6b4a36","#f6f3ec":"#f0e2cc"}},"blue":{"label":"Midnight blue","map":{"#3f3a37":"#33475e"}},"lilac":{"label":"Lilac","map":{"#3f3a37":"#8a7fb0","#f6f3ec":"#f7f3fb"}}},"fox":{"arctic":{"label":"Arctic fox","map":{"#dc844b":"#e9edf0","#f7ecdb":"#ffffff"}},"silver":{"label":"Silver fox","map":{"#dc844b":"#7f8794","#f7ecdb":"#eef0f2"}},"fennec":{"label":"Fennec sand","map":{"#dc844b":"#e8c48f","#f7ecdb":"#fbf1de"}}},"horse":{"black":{"label":"Black stallion","map":{"#b77a4e":"#3f3a37","#8c5a38":"#2b2725","#5a3a2a":"#1f1c1b","#ecd2b2":"#8a817a","#4a372c":"#1f1c1b"}},"white":{"label":"White mare","map":{"#b77a4e":"#f2eee8","#8c5a38":"#d6cfc5","#5a3a2a":"#c9c2b8","#ecd2b2":"#ffffff","#4a372c":"#b9b0a5"}},"palomino":{"label":"Palomino","map":{"#b77a4e":"#e6be78","#8c5a38":"#c79a52","#5a3a2a":"#f7ecd6","#ecd2b2":"#f8e8cc","#4a372c":"#efe3c8"}}},"deer":{"reindeer":{"label":"Reindeer","map":{"#c98d5a":"#8c6a52","#9e6a42":"#6b4f3c","#f3e4cb":"#e8dccb","#7c5638":"#c9b08a"}},"snow":{"label":"Snow deer","map":{"#c98d5a":"#efe6da","#9e6a42":"#cfc2b2","#f3e4cb":"#ffffff","#7c5638":"#b9a58a"}},"red":{"label":"Red fawn","map":{"#c98d5a":"#b5703e","#9e6a42":"#8c5230","#f3e4cb":"#f6e3c5"}}},"wolf":{"arctic":{"label":"Arctic wolf","map":{"#7f8d9c":"#e9edf0","#4d5a68":"#b4bec7","#f1f1ea":"#ffffff","#a7b3bf":"#d3dae0"}},"black":{"label":"Black wolf","map":{"#7f8d9c":"#3e434a","#4d5a68":"#202429","#f1f1ea":"#c9ccd0","#a7b3bf":"#5b6169"}},"timber":{"label":"Timber wolf","map":{"#7f8d9c":"#9a7a5c","#4d5a68":"#5e4a38","#f1f1ea":"#f1e6d6","#a7b3bf":"#b89a7c"}},"red":{"label":"Red wolf","map":{"#7f8d9c":"#c27a4e","#4d5a68":"#7a4a2e","#f1f1ea":"#f5e6d3","#a7b3bf":"#d89a72"}}},"dragon":{"ruby":{"label":"Ruby","map":{"#83bca7":"#d9675a","#5f9a86":"#a8483e","#f3e3b3":"#f6dcb4"}},"sapphire":{"label":"Sapphire","map":{"#83bca7":"#6f9fd8","#5f9a86":"#4d78b0","#f3e3b3":"#e6eefb"}},"gold":{"label":"Gold","map":{"#83bca7":"#e8c15a","#5f9a86":"#c99b34","#f3e3b3":"#fbf0c8","#f1cf7d":"#f7ecd6"}},"shadow":{"label":"Shadow","map":{"#83bca7":"#5b5470","#5f9a86":"#3d3850","#f3e3b3":"#c9c2dc","#f1cf7d":"#b9a6e0"}}},"triceratops":{"green":{"label":"Forest","map":{"#86a9c9":"#8fb069","#6a8db0":"#6d8c4c","#c9dcea":"#d9e3a8"}},"violet":{"label":"Violet","map":{"#86a9c9":"#a78fcf","#6a8db0":"#8670b3","#c9dcea":"#e3d9f4","#f0b97a":"#f3b9c8"}},"sunset":{"label":"Sunset","map":{"#86a9c9":"#e9905a","#6a8db0":"#c36d3a","#c9dcea":"#f6d6b8","#f0b97a":"#e8b84a"}}},"stegosaurus":{"ocean":{"label":"Ocean","map":{"#9bbd6a":"#6fa6c9","#7c9c50":"#4f86ab","#d7e6b0":"#cfe4f1","#e6a86a":"#f3b9c8"}},"lava":{"label":"Lava","map":{"#9bbd6a":"#b9514a","#7c9c50":"#8f3a34","#d7e6b0":"#f0c0a8","#e6a86a":"#f4d06f"}},"lilac":{"label":"Lilac","map":{"#9bbd6a":"#b9a6d6","#7c9c50":"#9682bd","#d7e6b0":"#ece4f6","#e6a86a":"#8fcfaa"}}},"longneck":{"leaf":{"label":"Leaf green","map":{"#a9c7d8":"#9bbd6a","#87a9bd":"#7c9c50","#dbe9f0":"#d7e6b0"}},"peach":{"label":"Peach","map":{"#a9c7d8":"#f2b28f","#87a9bd":"#d98e6a","#dbe9f0":"#fbe1d2"}},"lavender":{"label":"Lavender","map":{"#a9c7d8":"#b9a6d6","#87a9bd":"#9682bd","#dbe9f0":"#ece4f6"}}},"trex":{"jungle":{"label":"Jungle","map":{"#d9874f":"#7fa65a","#b96c3a":"#5e8540","#f2d3a2":"#dfe8b8"}},"midnight":{"label":"Midnight","map":{"#d9874f":"#4f5f86","#b96c3a":"#36446a","#f2d3a2":"#c9d2ea"}},"bubblegum":{"label":"Bubblegum","map":{"#d9874f":"#ef9db5","#b96c3a":"#d5768f","#f2d3a2":"#fbe0e8"}}},"turtle":{"sea":{"label":"Sea turtle","map":{"#7e9a5d":"#6f9a8f","#64804b":"#4f7a70","#a6bb7b":"#9cc4b8","#bcc78d":"#b8d8c8"}},"golden":{"label":"Golden","map":{"#7e9a5d":"#c9a14f","#64804b":"#a07e36","#a6bb7b":"#e3c47a"}},"rose":{"label":"Rose shell","map":{"#7e9a5d":"#c98a95","#64804b":"#a8697a","#a6bb7b":"#e6b4bd"}}},"axolotl":{"wild":{"label":"Wild","map":{"#f3bcc1":"#8a8178","#e49aa3":"#6c645c","#dd7488":"#c96a7a"}},"golden":{"label":"Golden","map":{"#f3bcc1":"#f4d98a","#e49aa3":"#e6bf62","#dd7488":"#e98a6a"}},"blue":{"label":"Blue","map":{"#f3bcc1":"#a9c7e8","#e49aa3":"#83a6cf","#dd7488":"#5b7fbf"}}},"swan":{"black":{"label":"Black swan","map":{"#fbf8f1":"#46404a","#e6e1d6":"#2e2a31","#e98a45":"#d9534f"}},"blush":{"label":"Blush pink","map":{"#fbf8f1":"#f8d3da","#e6e1d6":"#eeb0be"}}},"heron":{"egret":{"label":"White egret","map":{"#a2b3bd":"#f4f2ed","#e5ebed":"#ffffff","#5f717c":"#c9cdd1","#7f919b":"#e3e6e8","#e2b04f":"#f0c64e"}},"purple":{"label":"Purple heron","map":{"#a2b3bd":"#a5869a","#e5ebed":"#efe1e6","#5f717c":"#5e4a58","#7f919b":"#7a6070"}}}};
+const COATS = {"frog":{"golden":{"label":"Golden","map":{"#8fb069":"#e8c15a","#6d8c4c":"#c99b34","#d9e3a8":"#f6e7a6"}},"blue":{"label":"Poison dart blue","map":{"#8fb069":"#5b8fd0","#6d8c4c":"#3f6aa8","#d9e3a8":"#a9c9ef"}},"berry":{"label":"Strawberry","map":{"#8fb069":"#e0746a","#6d8c4c":"#b9514a","#d9e3a8":"#f4c0a8"}}},"duckling":{"snow":{"label":"Snow white","map":{"#f4d06f":"#f7f4ea","#e3b552":"#e2ddd0"}},"pink":{"label":"Bubblegum","map":{"#f4d06f":"#f6b3c4","#e3b552":"#e591a7"}},"mint":{"label":"Mint","map":{"#f4d06f":"#bfe3c4","#e3b552":"#9ccaa3"}}},"capybara":{"cocoa":{"label":"Cocoa","map":{"#b98b63":"#7a5640","#94694a":"#5c3f2e","#d2ab85":"#a57c5f"}},"honey":{"label":"Honey","map":{"#b98b63":"#d9a85f","#94694a":"#b5843f","#d2ab85":"#efcb8f"}},"snow":{"label":"Snow","map":{"#b98b63":"#e8ddd0","#94694a":"#c9b9a6","#d2ab85":"#f6efe6"}}},"rabbit":{"choc":{"label":"Chocolate","map":{"#efe6d8":"#8c6549"}},"grey":{"label":"Silver grey","map":{"#efe6d8":"#b9b6b3"}},"cinnamon":{"label":"Cinnamon","map":{"#efe6d8":"#d8a271","#eab4ad":"#f0c2b0"}}},"butterfly":{"monarch":{"label":"Monarch","map":{"#c9b3ea":"#f0a04b","#f3b9c8":"#e07a3a","#fbe7a6":"#fff3d6","#a78fcf":"#9a5a22"}},"morpho":{"label":"Blue morpho","map":{"#c9b3ea":"#5aa7e0","#f3b9c8":"#3f86c9","#fbe7a6":"#dff1ff","#a78fcf":"#2d5f93"}},"lime":{"label":"Lime","map":{"#c9b3ea":"#b9dd7a","#f3b9c8":"#f4e07a","#fbe7a6":"#fffbe0","#a78fcf":"#7fa64a"}}},"kitty":{"tabby":{"label":"Grey tabby","map":{"#f1c58c":"#b3b6bb","#d99a58":"#868b93","#fbf1e2":"#f2f2f2"}},"black":{"label":"Black cat","map":{"#f1c58c":"#4a4442","#d99a58":"#2f2b2a","#fbf1e2":"#d9d2cc"}},"cream":{"label":"Cream","map":{"#f1c58c":"#f6e6c8","#d99a58":"#e3c89a"}}},"otter":{"sea":{"label":"Sea otter","map":{"#8c6549":"#b08a68","#6c4b34":"#8c6a4e","#dcc19d":"#efdcc0"}},"dark":{"label":"Dark river","map":{"#8c6549":"#5a4234","#6c4b34":"#3f2e24","#dcc19d":"#c7a989"}},"silver":{"label":"Silver","map":{"#8c6549":"#9ea3a6","#6c4b34":"#767c80","#dcc19d":"#e3e5e6"}}},"dog":{"lab":{"label":"Black lab","map":{"#dcaa70":"#4a4442","#8f6340":"#2f2b2a","#f7e6c9":"#d9cfc4","#c48a52":"#3a3533"}},"dalmatian":{"label":"Dalmatian","map":{"#dcaa70":"#f6f3ec","#8f6340":"#3f3a37","#f7e6c9":"#ffffff","#c48a52":"#3f3a37"}},"golden":{"label":"Golden retriever","map":{"#dcaa70":"#e8bd6a","#8f6340":"#c48a3c","#f7e6c9":"#f8e7c0","#c48a52":"#d9a14f"}}},"panda":{"brown":{"label":"Brown panda","map":{"#3f3a37":"#6b4a36","#f6f3ec":"#f0e2cc"}},"blue":{"label":"Midnight blue","map":{"#3f3a37":"#33475e"}},"lilac":{"label":"Lilac","map":{"#3f3a37":"#8a7fb0","#f6f3ec":"#f7f3fb"}}},"fox":{"arctic":{"label":"Arctic fox","map":{"#dc844b":"#e9edf0","#f7ecdb":"#ffffff"}},"silver":{"label":"Silver fox","map":{"#dc844b":"#7f8794","#f7ecdb":"#eef0f2"}},"fennec":{"label":"Fennec sand","map":{"#dc844b":"#e8c48f","#f7ecdb":"#fbf1de"}}},"horse":{"black":{"label":"Black stallion","map":{"#b77a4e":"#3f3a37","#8c5a38":"#2b2725","#5a3a2a":"#1f1c1b","#ecd2b2":"#8a817a","#4a372c":"#1f1c1b"}},"white":{"label":"White mare","map":{"#b77a4e":"#f2eee8","#8c5a38":"#d6cfc5","#5a3a2a":"#c9c2b8","#ecd2b2":"#ffffff","#4a372c":"#b9b0a5"}},"palomino":{"label":"Palomino","map":{"#b77a4e":"#e6be78","#8c5a38":"#c79a52","#5a3a2a":"#f7ecd6","#ecd2b2":"#f8e8cc","#4a372c":"#efe3c8"}}},"deer":{"reindeer":{"label":"Reindeer","map":{"#c98d5a":"#8c6a52","#9e6a42":"#6b4f3c","#f3e4cb":"#e8dccb","#7c5638":"#c9b08a"}},"snow":{"label":"Snow deer","map":{"#c98d5a":"#efe6da","#9e6a42":"#cfc2b2","#f3e4cb":"#ffffff","#7c5638":"#b9a58a"}},"red":{"label":"Red fawn","map":{"#c98d5a":"#b5703e","#9e6a42":"#8c5230","#f3e4cb":"#f6e3c5"}}},"wolf":{"arctic":{"label":"Arctic wolf","map":{"#7f8d9c":"#e9edf0","#4d5a68":"#b4bec7","#f1f1ea":"#ffffff","#a7b3bf":"#d3dae0"}},"black":{"label":"Black wolf","map":{"#7f8d9c":"#3e434a","#4d5a68":"#202429","#f1f1ea":"#c9ccd0","#a7b3bf":"#5b6169"}},"timber":{"label":"Timber wolf","map":{"#7f8d9c":"#9a7a5c","#4d5a68":"#5e4a38","#f1f1ea":"#f1e6d6","#a7b3bf":"#b89a7c"}},"red":{"label":"Red wolf","map":{"#7f8d9c":"#c27a4e","#4d5a68":"#7a4a2e","#f1f1ea":"#f5e6d3","#a7b3bf":"#d89a72"}}},"dragon":{"ruby":{"label":"Ruby","map":{"#83bca7":"#d9675a","#5f9a86":"#a8483e","#f3e3b3":"#f6dcb4"}},"sapphire":{"label":"Sapphire","map":{"#83bca7":"#6f9fd8","#5f9a86":"#4d78b0","#f3e3b3":"#e6eefb"}},"gold":{"label":"Gold","map":{"#83bca7":"#e8c15a","#5f9a86":"#c99b34","#f3e3b3":"#fbf0c8","#f1cf7d":"#f7ecd6"}},"shadow":{"label":"Shadow","map":{"#83bca7":"#5b5470","#5f9a86":"#3d3850","#f3e3b3":"#c9c2dc","#f1cf7d":"#b9a6e0"}}},"triceratops":{"green":{"label":"Forest","map":{"#86a9c9":"#8fb069","#6a8db0":"#6d8c4c","#c9dcea":"#d9e3a8"}},"violet":{"label":"Violet","map":{"#86a9c9":"#a78fcf","#6a8db0":"#8670b3","#c9dcea":"#e3d9f4","#f0b97a":"#f3b9c8"}},"sunset":{"label":"Sunset","map":{"#86a9c9":"#e9905a","#6a8db0":"#c36d3a","#c9dcea":"#f6d6b8","#f0b97a":"#e8b84a"}}},"stegosaurus":{"ocean":{"label":"Ocean","map":{"#9bbd6a":"#6fa6c9","#7c9c50":"#4f86ab","#d7e6b0":"#cfe4f1","#e6a86a":"#f3b9c8"}},"lava":{"label":"Lava","map":{"#9bbd6a":"#b9514a","#7c9c50":"#8f3a34","#d7e6b0":"#f0c0a8","#e6a86a":"#f4d06f"}},"lilac":{"label":"Lilac","map":{"#9bbd6a":"#b9a6d6","#7c9c50":"#9682bd","#d7e6b0":"#ece4f6","#e6a86a":"#8fcfaa"}}},"longneck":{"leaf":{"label":"Leaf green","map":{"#a9c7d8":"#9bbd6a","#87a9bd":"#7c9c50","#dbe9f0":"#d7e6b0"}},"peach":{"label":"Peach","map":{"#a9c7d8":"#f2b28f","#87a9bd":"#d98e6a","#dbe9f0":"#fbe1d2"}},"lavender":{"label":"Lavender","map":{"#a9c7d8":"#b9a6d6","#87a9bd":"#9682bd","#dbe9f0":"#ece4f6"}}},"trex":{"jungle":{"label":"Jungle","map":{"#d9874f":"#7fa65a","#b96c3a":"#5e8540","#f2d3a2":"#dfe8b8"}},"midnight":{"label":"Midnight","map":{"#d9874f":"#4f5f86","#b96c3a":"#36446a","#f2d3a2":"#c9d2ea"}},"bubblegum":{"label":"Bubblegum","map":{"#d9874f":"#ef9db5","#b96c3a":"#d5768f","#f2d3a2":"#fbe0e8"}}},"turtle":{"sea":{"label":"Sea turtle","map":{"#7e9a5d":"#6f9a8f","#64804b":"#4f7a70","#a6bb7b":"#9cc4b8","#bcc78d":"#b8d8c8"}},"golden":{"label":"Golden","map":{"#7e9a5d":"#c9a14f","#64804b":"#a07e36","#a6bb7b":"#e3c47a"}},"rose":{"label":"Rose shell","map":{"#7e9a5d":"#c98a95","#64804b":"#a8697a","#a6bb7b":"#e6b4bd"}}},"axolotl":{"wild":{"label":"Wild","map":{"#f3bcc1":"#8a8178","#e49aa3":"#6c645c","#dd7488":"#c96a7a"}},"golden":{"label":"Golden","map":{"#f3bcc1":"#f4d98a","#e49aa3":"#e6bf62","#dd7488":"#e98a6a"}},"blue":{"label":"Blue","map":{"#f3bcc1":"#a9c7e8","#e49aa3":"#83a6cf","#dd7488":"#5b7fbf"}}},"swan":{"black":{"label":"Black swan","map":{"#fbf8f1":"#46404a","#e6e1d6":"#2e2a31","#e98a45":"#d9534f"}},"blush":{"label":"Blush pink","map":{"#fbf8f1":"#f8d3da","#e6e1d6":"#eeb0be"}}},"heron":{"egret":{"label":"White egret","map":{"#a2b3bd":"#f4f2ed","#e5ebed":"#ffffff","#5f717c":"#c9cdd1","#7f919b":"#e3e6e8","#e2b04f":"#f0c64e"}},"purple":{"label":"Purple heron","map":{"#a2b3bd":"#a5869a","#e5ebed":"#efe1e6","#5f717c":"#5e4a58","#7f919b":"#7a6070"}}},"spider":{"peacock":{"label":"Peacock","map":{"#4f4a63":"#3f6aa8","#353144":"#24406e","#8b7fb3":"#e8904a"}},"redback":{"label":"Red back","map":{"#4f4a63":"#3a3535","#353144":"#211e1e","#8b7fb3":"#d9534f"}},"golden":{"label":"Golden orb","map":{"#4f4a63":"#d9a85f","#353144":"#a07436","#8b7fb3":"#f6e3b0"}},"mint":{"label":"Mint","map":{"#4f4a63":"#7fbfa6","#353144":"#4f8f78","#8b7fb3":"#e0f3ea"}}}};
 const COAT_COST = 150;
 const WARDROBE = {
   chef: { slot: 'outfit', label: 'Chef', cost: 250 }, wizard: { slot: 'outfit', label: 'Wizard', cost: 300 }, pirate: { slot: 'outfit', label: 'Pirate', cost: 300 },
@@ -3597,12 +3643,48 @@ function renderInbox() {
       ${f.like ? `<span class="lbl">Likes</span><p>${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">Change or add</span><p>${esc(f.improve)}</p>` : ''}
       <span class="muted" style="font-size:.82rem">From ${esc(f.name || 'someone anonymous')}${f.contact ? ' · ' + esc(f.contact) : ''}</span></div>`).join('') : '<p class="muted">No feedback yet. Share the link and notes will appear here.</p>'}</div>`;
 }
+/* ---------- what's new ----------
+   Add an entry at the top for every update students should hear about. It shows once as a
+   "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
+const UPDATES = [
+  { id: 'spider', at: Date.UTC(2026, 9, 30, 1, 0), title: 'A spider joined the Sanctuary', text: 'A fuzzy jumping spider with eight legs and eight eyes. Adopt it for 90 coins and try its four fur coats.', go: 'sanctuary', animal: 'spider' },
+  { id: 'looks', at: Date.UTC(2026, 9, 29, 20, 0), title: 'Costumes, fur coats and emotes', text: 'Dress your animal as a chef, wizard, pirate, hero or royal, give it a real fur coat, and buy emotes for when it studies or naps. While you focus, your animal now reads a book.', go: 'sanctuary', animal: 'wolf' },
+  { id: 'colours', at: Date.UTC(2026, 9, 29, 19, 0), title: 'Colour your deadlines', text: 'Pick a colour for any calendar task or rock so the important ones stand out.', go: 'cal' },
+  { id: 'dinos', at: Date.UTC(2026, 9, 29, 12, 0), title: 'Dinosaurs and a swan', text: 'A triceratops, a stegosaurus, a longneck, a T. rex and a swan are waiting in the Sanctuary.', go: 'sanctuary', animal: 'trex', bell: false },
+  { id: 'quran', at: Date.UTC(2026, 9, 28, 20, 0), title: 'Quran and your own music', text: 'Listen to Quran recitation for free while you focus, or paste your own YouTube, Spotify or SoundCloud link.', go: 'focus', bell: false },
+  { id: 'cal', at: Date.UTC(2026, 9, 28, 14, 0), title: 'Calendar and reminders', text: 'Plan deadlines on a monthly calendar, get reminded before they are due, and import your Blackboard calendar.', go: 'cal', bell: false },
+  { id: 'board', at: Date.UTC(2026, 9, 28, 10, 0), title: 'Leaderboard', text: 'See who studied the most today, this week and this month on The Pond.', go: 'pond', bell: false }
+];
+// students who join after an update do not need to hear about it
+function newsFloor() {
+  if (typeof S.newsFrom !== 'number') { S.newsFrom = S.onboarded ? 0 : Date.now(); save(); }
+  return S.newsFrom;
+}
+function freshNews() {
+  const floor = Math.max(newsFloor(), Date.now() - 14 * 864e5);
+  return UPDATES.filter(u => u.bell !== false && u.at > floor);
+}
+function newsPic(u) { return `<span class="av${u.animal ? '' : ' note-ic'}">${u.animal ? avatarSVG(u.animal, 'happy') : icon('i-spark')}</span>`; }
+function maybeShowNews() {
+  if (!S.onboarded || $('.modal.on')) return;
+  const list = freshNews().filter(u => u.at > (S.newsPop || 0));
+  if (!list.length) return;
+  $('#newsBody').innerHTML = `<ul class="note-list news-list">${list.slice(0, 4).map(u => `<li>${newsPic(u)}<span class="note-t"><b>${esc(u.title)}</b><span class="muted">${esc(u.text)}</span></span><button class="btn small" data-newsgo="${u.go}">Show me</button></li>`).join('')}</ul>`;
+  $('#newsModal').classList.add('on');
+}
+function closeNews() { $('#newsModal').classList.remove('on'); S.newsPop = Date.now(); save(); }
+function renderGuideNews() {
+  const el = $('#gNews'); if (!el) return;
+  el.innerHTML = UPDATES.slice(0, 6).map(u => `<li><span class="g-news-d">${new Date(u.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span><span><b>${esc(u.title)}.</b> ${esc(u.text)}</span></li>`).join('');
+}
+
 /* ---------- notification center ---------- */
 function collectNotes() {
   const out = [];
   NET.ripples.forEach(r => out.push(r.kind === 'friend'
     ? { at: r.at, kind: 'friend', who: r.name, animal: r.animal, from: r.from, text: 'added you as a friend.' }
     : { at: r.at, kind: 'ripple', who: r.name, animal: r.animal, from: r.from, text: `sent you a ripple: “${r.msg}”` }));
+  freshNews().forEach(u => out.push({ at: u.at, kind: 'update', who: '', news: u, text: `New in Grind: ${u.title}. ${u.text}` }));
   (S.remLog || []).forEach(r => out.push({ at: r.at, kind: 'remind', who: '', animal: S.active, text: r.text }));
   const me = NET.uid;
   if (me) (NET.posts || []).filter(p => p.by === me).forEach(p => {
@@ -3645,8 +3727,9 @@ function renderNotes() {
   else if (!list.length) body = `<div class="note-empty"><p>Nothing yet. Deadline reminders, ripples, new friends, likes and comments on your posts will show up here.</p></div>`;
   else body = `<ul class="note-list">${list.map(n => {
     const act = n.kind === 'friend' ? (S.friends.includes(n.from) ? '<span class="muted" style="font-size:.78rem">Friends</span>' : `<button class="btn small primary" data-noteadd="${esc(n.from)}">Add back</button>`)
+      : n.kind === 'update' ? `<button class="btn small" data-notego="${n.news.go}">Show me</button>`
       : n.kind === 'remind' ? `<button class="btn small" data-notego="cal">Calendar</button>` : n.kind === 'ripple' ? `<button class="btn small" data-notego="pond">Pond</button>` : `<button class="btn small" data-notego="commons">See post</button>`;
-    const pic = n.kind === 'remind' ? `<span class="av note-ic">${icon('i-bell')}</span>` : n.kind === 'like' ? `<span class="av note-ic">${icon('i-heart')}</span>` : n.kind === 'comment' ? `<span class="av note-ic">${icon('i-comment')}</span>` : `<span class="av">${avatarSVG(n.animal, 'happy')}</span>`;
+    const pic = n.kind === 'update' ? newsPic(n.news) : n.kind === 'remind' ? `<span class="av note-ic">${icon('i-bell')}</span>` : n.kind === 'like' ? `<span class="av note-ic">${icon('i-heart')}</span>` : n.kind === 'comment' ? `<span class="av note-ic">${icon('i-comment')}</span>` : `<span class="av">${avatarSVG(n.animal, 'happy')}</span>`;
     return `<li class="${n.unread ? 'new' : ''}">${pic}<span class="note-t">${n.who ? `<b>${esc(n.who)}</b> ` : ''}${esc(n.text)}<small>${n.kind === 'like' ? 'just now' : ago(n.at)}</small></span>${act}</li>`;
   }).join('')}</ul>`;
   if ('Notification' in window && Notification.permission === 'default') body += `<div class="note-foot"><button class="btn small" data-notealerts>${icon('i-bell')}Also alert me on this device</button></div>`;
@@ -3688,7 +3771,14 @@ function bindNotes() {
   });
   document.addEventListener('click', () => { if (!$('#notePanel').hidden) openNotes(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#notePanel').hidden) openNotes(false); });
-  renderNotes();
+  $('#newsModal').addEventListener('click', e => {
+    const g = e.target.closest('[data-newsgo]');
+    if (g) { closeNews(); go(g.dataset.newsgo); return; }
+    if (e.target.id === 'newsModal' || e.target.closest('[data-newsclose]')) closeNews();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#newsModal').classList.contains('on')) closeNews(); });
+  renderNotes(); renderGuideNews();
+  setTimeout(maybeShowNews, 1800);
 }
 /* ---------- sanctuary ---------- */
 const previewState = {};
