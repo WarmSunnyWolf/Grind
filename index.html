@@ -2311,7 +2311,10 @@ const NET = { db: null, uid: null, canWrite: false, ready: false, pond: [], ripp
 const wq = {};
 function writeQ(path, fn) {
   wq[path] = (wq[path] || Promise.resolve()).then(fn).catch(e => {
-    if (e && (e.code === 'invalid_argument' || e.code === 'permission-denied')) { toast('That change was not allowed by the pond. Try signing in again.'); }
+    console.warn('Grind could not save', path, e && e.code);
+    // stats/ needs the newest database rules; the pond doc already carries the same stats, so stay quiet
+    if (path.startsWith('stats/')) return;
+    if (e && (e.code === 'invalid_argument' || e.code === 'permission-denied')) { if (Date.now() - (writeQ.warned || 0) > 60000) { writeQ.warned = Date.now(); toast('That change was not allowed by the pond. Try signing in again.'); } }
     else if (e && e.code === 'quota_exceeded') toast('The shared pond is full right now. Ask the owner to clear old posts.');
   });
   return wq[path];
