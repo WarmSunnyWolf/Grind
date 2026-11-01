@@ -2,6 +2,7 @@
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'wolfback', at: Date.UTC(2026, 10, 1, 16, 15), title: 'The wolf is back', text: 'The original grey wolf is back in the Sanctuary for 240 coins, with four fur coats.', go: 'sanctuary', animal: 'wolf' },
   { id: 'dragon', at: Date.UTC(2026, 10, 1, 10, 20), title: 'The dragon is cheaper', text: 'The dragon now costs 230 coins instead of 300.', go: 'sanctuary', animal: 'dragon' },
   { id: 'herd', at: Date.UTC(2026, 10, 1, 10, 0), title: 'A sheep, a camel and a giraffe', text: 'Three new friends are in the Sanctuary: the sheep (70 coins), the camel (150) and the giraffe (210).', go: 'sanctuary', animal: 'giraffe' },
   { id: 'cairn', at: Date.UTC(2026, 9, 30, 11, 0), title: 'Edit your rocks and build a cairn', text: 'Rename any rock or pebble, change its minutes, course or due date, and finish a rock in one tap. Every rock you cross now gets a celebration and adds a stone to your cairn.', go: 'pebbles' },
