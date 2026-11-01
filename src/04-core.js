@@ -212,26 +212,42 @@ function chime() {
 /* ---------- themes ---------- */
 const TOKENS = ['bg', 'bg-2', 'surface', 'surface-2', 'line', 'line-2', 'ink', 'ink-2', 'muted', 'accent', 'accent-ink', 'moss', 'rose', 'rose-soft', 'gold', 'sky', 'water', 'water-2', 'water-hi', 'pad', 'pad-2', 'bank', 'reed', 'bloom', 'glow', 'shadow'];
 const PRESETS = {
-  auto: { name: 'Enchanted Pond', note: 'Beige, moss and rosy brown. Follows light and dark.', sw: ['#efe6d5', '#2f5a3f', '#7f8f55', '#b07a6e', '#a2baa6'] },
-  midnight: { name: 'Midnight', dark: true, sw: ['#10141f', '#c9b6e4', '#8fa3c4', '#e0a3b0', '#1d2b45'],
-    v: ['#10141f', '#141a28', '#181f2f', '#1f2839', '#2b3549', '#3a4660', '#e8e4d8', '#bdbbb0', '#8a8d99', '#c9b6e4', '#151826', '#8fa3c4', '#e0a3b0', '#3d2a35', '#e0c070', '#121a2c', '#1d2b45', '#16223a', '#2d3f60', '#3e5a4a', '#2f4739', '#1c2436', '#2a3a3a', '#e7b7c8', '#f5e7a1', 'rgba(0,0,0,.4)'] },
-  sakura: { name: 'Sakura', sw: ['#f6e9e6', '#a8506a', '#8c9a6a', '#c97a8c', '#c9d6d4'],
-    v: ['#f6e9e6', '#efdcd8', '#fbf4f1', '#f2e3df', '#e2c8c2', '#d3afa8', '#3a2a2e', '#5e4a4e', '#8e7a7c', '#a8506a', '#fff6f3', '#8c9a6a', '#c97a8c', '#f3d4d9', '#c9a050', '#f7e3e3', '#c9d6d4', '#aec4c2', '#e2ebe8', '#86a06a', '#6b8752', '#e6cfc4', '#7f8f5a', '#f0aebe', '#fbeec0', 'rgba(90,40,50,.14)'] },
-  ocean: { name: 'Ocean', sw: ['#e8eef0', '#2b6a85', '#6c9a8a', '#c08a7a', '#8fb6c6'],
-    v: ['#e8eef0', '#dce6ea', '#f4f8f9', '#e6eef1', '#c8d6dc', '#aebfc7', '#1d3440', '#44606c', '#72878f', '#2b6a85', '#f4f8f9', '#6c9a8a', '#c08a7a', '#f1dcd4', '#c9a050', '#dfeaf0', '#8fb6c6', '#6f9db1', '#c3dbe4', '#5f9a7a', '#4a7f62', '#d6d0bd', '#4f7a6a', '#f2c4b8', '#f8eab0', 'rgba(20,50,60,.14)'] },
-  forest: { name: 'Forest', dark: true, sw: ['#1a2219', '#d9b36a', '#9db06a', '#d29b85', '#2f4a37'],
-    v: ['#1a2219', '#1f291e', '#243022', '#2c3a29', '#3a4b36', '#4b5f45', '#efe6cf', '#cfc5aa', '#98a08a', '#d9b36a', '#1a2219', '#9db06a', '#d29b85', '#45332a', '#d9b36a', '#1d2a1d', '#2f4a37', '#233d2c', '#43614a', '#5a7d3e', '#476431', '#2a3524', '#415234', '#e2a9a0', '#f2e08f', 'rgba(0,0,0,.35)'] }
+  auto: { name: 'Enchanted Pond', native: 'device',
+    light: ['#efe6d5', '#e6dac4', '#f8f2e7', '#eee4d2', '#d6c7ab', '#c4b291', '#22352a', '#4b5a4a', '#7a7d69', '#2f5a3f', '#f8f2e7', '#7f8f55', '#b07a6e', '#ecd5cc', '#c39a43', '#eadfc8', '#a2baa6', '#86a48f', '#cbdbc8', '#6f8f4e', '#57763d', '#cdb995', '#5d6d3c', '#e9bcb3', '#f4e3a3', 'rgba(52, 40, 24, .14)'],
+    dark: ['#131b16', '#18221c', '#1d2922', '#24332a', '#32443a', '#435a4c', '#ede4d1', '#c3bca8', '#8f9481', '#a9c48b', '#14201a', '#93a468', '#d29b8e', '#47312d', '#d9b65f', '#17241e', '#2a463b', '#20392f', '#3e5f51', '#4d6e3b', '#3b5631', '#29352a', '#3d4c31', '#d7a3a0', '#f3e49c', 'rgba(0, 0, 0, .35)'] },
+  midnight: { name: 'Midnight', native: 'dark',
+    light: ['#eeeaf4', '#e4dfee', '#f7f5fb', '#ebe6f3', '#d4cce3', '#bfb4d4', '#232338', '#4a4862', '#7a7890', '#5b4a8a', '#f7f5fb', '#6f86a8', '#b0708a', '#ecd6e0', '#b8963c', '#e6e2f0', '#b5bfd8', '#9aa6c6', '#d6dcec', '#6f8a6a', '#58714f', '#cfc6dd', '#5e6a52', '#e7b7c8', '#f5e7a1', 'rgba(40, 30, 70, .14)'],
+    dark: ['#10141f', '#141a28', '#181f2f', '#1f2839', '#2b3549', '#3a4660', '#e8e4d8', '#bdbbb0', '#8a8d99', '#c9b6e4', '#151826', '#8fa3c4', '#e0a3b0', '#3d2a35', '#e0c070', '#121a2c', '#1d2b45', '#16223a', '#2d3f60', '#3e5a4a', '#2f4739', '#1c2436', '#2a3a3a', '#e7b7c8', '#f5e7a1', 'rgba(0, 0, 0, .4)'] },
+  sakura: { name: 'Sakura', native: 'light',
+    light: ['#f6e9e6', '#efdcd8', '#fbf4f1', '#f2e3df', '#e2c8c2', '#d3afa8', '#3a2a2e', '#5e4a4e', '#8e7a7c', '#a8506a', '#fff6f3', '#8c9a6a', '#c97a8c', '#f3d4d9', '#c9a050', '#f7e3e3', '#c9d6d4', '#aec4c2', '#e2ebe8', '#86a06a', '#6b8752', '#e6cfc4', '#7f8f5a', '#f0aebe', '#fbeec0', 'rgba(90, 40, 50, .14)'],
+    dark: ['#1e1517', '#24191c', '#2a1e21', '#33252a', '#463238', '#5a414a', '#f3e4e6', '#d4bfc2', '#a08a8e', '#f0a6bc', '#2a1418', '#a3b07a', '#e59aae', '#4a2a33', '#d9b060', '#2a1d22', '#3e3a44', '#322e38', '#57505e', '#5d7a45', '#4a6236', '#3a2a2e', '#55603f', '#f0aebe', '#fbeec0', 'rgba(0, 0, 0, .4)'] },
+  ocean: { name: 'Ocean', native: 'light',
+    light: ['#e8eef0', '#dce6ea', '#f4f8f9', '#e6eef1', '#c8d6dc', '#aebfc7', '#1d3440', '#44606c', '#72878f', '#2b6a85', '#f4f8f9', '#6c9a8a', '#c08a7a', '#f1dcd4', '#c9a050', '#dfeaf0', '#8fb6c6', '#6f9db1', '#c3dbe4', '#5f9a7a', '#4a7f62', '#d6d0bd', '#4f7a6a', '#f2c4b8', '#f8eab0', 'rgba(20, 50, 60, .14)'],
+    dark: ['#0f1b22', '#13222a', '#172832', '#1e323e', '#2a4250', '#3a5666', '#e2eef2', '#b6cbd2', '#7f97a0', '#7cc0dc', '#0d1a20', '#7fb29c', '#e0a596', '#3e2e2c', '#d9b65f', '#12212a', '#1f4456', '#173746', '#2f5d72', '#3f6e57', '#305744', '#1d2f36', '#3a5a4e', '#f2c4b8', '#f8eab0', 'rgba(0, 0, 0, .4)'] },
+  forest: { name: 'Forest', native: 'dark',
+    light: ['#eef0e2', '#e3e7d2', '#f7f8ef', '#e9ecdb', '#cfd5b8', '#b8c19c', '#1f2a1c', '#43513d', '#77806a', '#3f5f2c', '#f7f8ef', '#7d9a4f', '#b57d6a', '#ecd8cc', '#b8902f', '#e4e9d4', '#9fbc9c', '#82a483', '#c6dbc0', '#5d8a3e', '#4a7231', '#c9c79f', '#4e6a35', '#e2a9a0', '#f2e08f', 'rgba(30, 40, 20, .14)'],
+    dark: ['#1a2219', '#1f291e', '#243022', '#2c3a29', '#3a4b36', '#4b5f45', '#efe6cf', '#cfc5aa', '#98a08a', '#d9b36a', '#1a2219', '#9db06a', '#d29b85', '#45332a', '#d9b36a', '#1d2a1d', '#2f4a37', '#233d2c', '#43614a', '#5a7d3e', '#476431', '#2a3524', '#415234', '#e2a9a0', '#f2e08f', 'rgba(0, 0, 0, .35)'] }
 };
+const deviceDark = () => { try { return matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) { return false; } };
+/* light or dark: the student's choice, else the theme's own (Enchanted Pond follows the device) */
+function themeMode(key) {
+  const m = S.settings.mode, p = PRESETS[key] || PRESETS.auto;
+  if (m === 'light' || m === 'dark') return m;
+  if (m === 'auto' || p.native === 'device') return deviceDark() ? 'dark' : 'light';
+  return p.native;
+}
+const swatch = v => [v[0], v[9], v[11], v[12], v[16]];
 function lum(hex) { const h = hex.replace('#', ''); if (h.length < 6) return .5; const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); return .2126 * r + .7152 * g + .0722 * b; }
 function applyTheme() {
   const st = document.documentElement.style;
   TOKENS.forEach(t => st.removeProperty('--' + t));
   st.removeProperty('color-scheme');
-  const p = PRESETS[S.settings.preset];
-  if (p && p.v) { TOKENS.forEach((t, i) => st.setProperty('--' + t, p.v[i])); st.setProperty('color-scheme', p.dark ? 'dark' : 'light'); }
+  const key = PRESETS[S.settings.preset] ? S.settings.preset : 'auto', mode = themeMode(key), v = PRESETS[key][mode], isDark = mode === 'dark';
+  TOKENS.forEach((t, i) => st.setProperty('--' + t, v[i])); st.setProperty('color-scheme', mode);
+  document.documentElement.dataset.theme = mode;
   const c = S.settings.custom || {};
   if (c.accent) { st.setProperty('--accent', c.accent); st.setProperty('--accent-ink', lum(c.accent) > .55 ? '#1b241e' : '#fbf6ec'); }
-  if (c.bg) { st.setProperty('--bg', c.bg); const dark = lum(c.bg) < .4; if (dark !== !!(p && p.dark)) { /* keep text readable on a custom paper */ st.setProperty('--ink', dark ? '#ede4d1' : '#22352a'); st.setProperty('--ink-2', dark ? '#c3bca8' : '#4b5a4a'); } }
+  if (c.bg) { st.setProperty('--bg', c.bg); const dark = lum(c.bg) < .4; if (dark !== isDark) { /* keep text readable on a custom paper */ st.setProperty('--ink', dark ? '#ede4d1' : '#22352a'); st.setProperty('--ink-2', dark ? '#c3bca8' : '#4b5a4a'); } }
   if (c.water) { st.setProperty('--water', c.water); }
   const cs = getComputedStyle(document.documentElement);
   $('#cAccent').value = toHex(cs.getPropertyValue('--accent'));

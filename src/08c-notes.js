@@ -2,6 +2,7 @@
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'darklight', at: Date.UTC(2026, 10, 1, 16, 50), title: 'Light and dark for every theme', text: 'Enchanted Pond, Midnight, Sakura, Ocean and Forest now each come in a light and a dark version. Open Customize and pick Light, Dark or Match my device.', go: 'customize' },
   { id: 'pondscroll', at: Date.UTC(2026, 10, 1, 16, 40), title: 'A tidier pond', text: 'Students who are focusing now sit in the middle of the pond and nobody overlaps anymore. Swipe or use the arrows to see everyone, and tap Find me to jump to your animal.', go: 'pond' },
   { id: 'wolfback', at: Date.UTC(2026, 10, 1, 16, 15), title: 'The wolf is back', text: 'The original grey wolf is back in the Sanctuary for 240 coins, with four fur coats.', go: 'sanctuary', animal: 'wolf' },
   { id: 'dragon', at: Date.UTC(2026, 10, 1, 10, 20), title: 'The dragon is cheaper', text: 'The dragon now costs 230 coins instead of 300.', go: 'sanctuary', animal: 'dragon' },
@@ -15,6 +16,7 @@ const UPDATES = [
   { id: 'cal', at: Date.UTC(2026, 9, 28, 14, 0), title: 'Calendar and reminders', text: 'Plan deadlines on a monthly calendar, get reminded before they are due, and import your Blackboard calendar.', go: 'cal', bell: false },
   { id: 'board', at: Date.UTC(2026, 9, 28, 10, 0), title: 'Leaderboard', text: 'See who studied the most today, this week and this month on The Pond.', go: 'pond', bell: false }
 ];
+function newsGo(v) { if (v === 'customize') openDrawer(true); else go(v); }
 // students who join after an update do not need to hear about it
 function newsFloor() {
   if (typeof S.newsFrom !== 'number') { S.newsFrom = S.onboarded ? 0 : Date.now(); save(); }
@@ -126,14 +128,14 @@ function bindNotes() {
     if (e.target.closest('[data-signin]')) { signIn(); return; }
     if (e.target.closest('[data-notealerts]')) { Notification.requestPermission().then(p => { if (p === 'granted') { S.calAlerts = true; save(); toast('Alerts are on for this device while Grind is open in a tab.'); } renderNotes(); renderCalAlerts(); }).catch(() => {}); return; }
     const a = e.target.closest('[data-noteadd]'); if (a) { if (!S.friends.includes(a.dataset.noteadd)) toggleFriend(a.dataset.noteadd); renderNotes(); return; }
-    const g = e.target.closest('[data-notego]'); if (g) { openNotes(false); go(g.dataset.notego); return; }
+    const g = e.target.closest('[data-notego]'); if (g) { openNotes(false); newsGo(g.dataset.notego); return; }
     if (e.target.closest('[data-noteclose]')) openNotes(false);
   });
   document.addEventListener('click', () => { if (!$('#notePanel').hidden) openNotes(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#notePanel').hidden) openNotes(false); });
   $('#newsModal').addEventListener('click', e => {
     const g = e.target.closest('[data-newsgo]');
-    if (g) { closeNews(); go(g.dataset.newsgo); return; }
+    if (g) { closeNews(); newsGo(g.dataset.newsgo); return; }
     if (e.target.id === 'newsModal' || e.target.closest('[data-newsclose]')) closeNews();
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#newsModal').classList.contains('on')) closeNews(); });

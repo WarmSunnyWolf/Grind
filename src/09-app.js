@@ -181,7 +181,9 @@ function bindProfile() {
 /* ---------- customize drawer ---------- */
 function openDrawer(on) { $('#drawer').classList.toggle('on', on); $('#scrim').classList.toggle('on', on); $('#drawer').setAttribute('aria-hidden', !on); if (on) renderDrawer(); }
 function renderDrawer() {
-  $('#presets').innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button class="preset" data-preset="${k}" aria-pressed="${S.settings.preset === k}"><span class="sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(p.name)}</button>`).join('');
+  $('#presets').innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button class="preset" data-preset="${k}" aria-pressed="${S.settings.preset === k}"><span class="sw">${swatch(p[themeMode(k)]).map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(p.name)}</button>`).join('');
+  const curMode = S.settings.mode || (PRESETS[S.settings.preset]?.native === 'device' ? 'auto' : themeMode(S.settings.preset));
+  $$('#modeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === curMode));
   $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
   $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
   [['#swSound', 'sound'], ['#swNoteSound', 'noteSound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
@@ -195,6 +197,8 @@ function bindDrawer() {
   $('#closeDrawer').onclick = $('#scrim').onclick = () => openDrawer(false);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { openDrawer(false); $('#pondPop')?.remove(); popFor = null; } });
   $('#presets').onclick = e => { const b = e.target.closest('[data-preset]'); if (!b) return; S.settings.preset = b.dataset.preset; S.settings.custom = {}; save(); applyTheme(); renderDrawer(); };
+  $('#modeSeg').onclick = e => { const b = e.target.closest('[data-mode]'); if (!b) return; S.settings.mode = b.dataset.mode; S.settings.custom = {}; save(); applyTheme(); renderDrawer(); };
+  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { applyTheme(); if ($('#drawer').classList.contains('on')) renderDrawer(); }); } catch (e) {}
   const setC = (k, v) => { S.settings.custom = { ...(S.settings.custom || {}), [k]: v }; applyTheme(); };
   $('#cAccent').oninput = e => setC('accent', e.target.value);
   $('#cBg').oninput = e => setC('bg', e.target.value);

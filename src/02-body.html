@@ -379,7 +379,7 @@
           </article>
           <article class="card g-sec" id="g-10">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 11</span><h2>Make it yours</h2></div></div>
-            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
+            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. Under <b>Light or dark</b>, choose Light, Dark or Match my device, and every theme follows. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
           <article class="card g-sec g-share" id="g-11">
@@ -450,7 +450,8 @@
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-label="Customize" aria-hidden="true">
   <div class="row" style="justify-content:space-between"><h2>Make it yours</h2><button class="icon-btn" id="closeDrawer" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
-  <section><span class="eyebrow">Theme</span><div class="presets" id="presets"></div></section>
+  <section><span class="eyebrow">Light or dark</span><div class="seg" role="group" id="modeSeg"><button data-mode="light">Light</button><button data-mode="dark">Dark</button><button data-mode="auto">Match my device</button></div></section>
+  <section><span class="eyebrow">Theme</span><div class="presets" id="presets"></div><span class="muted" style="font-size:.8rem">Every theme comes in light and dark.</span></section>
   <section><span class="eyebrow">Your own colors</span><div class="colors"><label>Accent<input type="color" id="cAccent"></label><label>Paper<input type="color" id="cBg"></label><label>Water<input type="color" id="cWater"></label></div><button class="btn small quiet" id="cReset" style="align-self:flex-start">Clear my colors</button></section>
   <section><span class="eyebrow">Pond weather</span><div class="seg" role="group" id="fxSeg"><button data-fx="fireflies">Fireflies</button><button data-fx="rain">Rain</button><button data-fx="petals">Petals</button><button data-fx="still">Still</button></div></section>
   <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
