@@ -21,19 +21,50 @@ function statusLine(r) {
   return r.mins ? `Studied ${fmtMin(r.mins)} today` : 'Floating around';
 }
 let lastPondSig = '';
+/* The pond is a strip that scrolls sideways. Students who are focusing sit in the middle,
+   resting ones next to them, and people who are away drift out to the edges. Slots sit on a
+   staggered grid so animals and names never cover each other, however many people join. */
+const POND_ORDER = { focus: 0, rest: 1, idle: 2, away: 3 };
+function pondLayout(n, stageW, stageH) {
+  const resW = Math.round(Math.max(64, Math.min(118, stageW * .11)));
+  const rows = stageH >= stageW * .95 ? [55, 70, 85] : stageH > 470 ? [42, 57, 72, 87] : stageH > 300 ? [45, 62, 79] : [52, 78];
+  const colW = Math.round(resW * 1.3);
+  const cols = Math.max(Math.floor((stageW - colW * .4) / colW), Math.ceil(n / rows.length));
+  const trackW = Math.max(stageW, cols * colW + colW);
+  const cx = trackW / 2, slots = [];
+  for (let c = 0; c < cols; c++) rows.forEach((y, ri) => {
+    const x = (trackW - cols * colW) / 2 + colW * (c + .5) + (ri % 2 ? colW * .25 : -colW * .25);
+    const j = (hashStr(c + ':' + ri) % 9) - 4;
+    slots.push({ x: x + j, y: y + ((hashStr(ri + '/' + c) % 5) - 2) * .5, ri, d: Math.abs(x - cx) + Math.abs(ri - (rows.length - 1) / 2) * colW * .35 });
+  });
+  slots.sort((p, q) => p.d - q.d);
+  return { resW, trackW, slots };
+}
+let pondTrackW = 0, pondCentered = false;
 function renderPond(force) {
   const { me, others, showEx } = residents();
-  const wide = $('#pondStage').clientWidth > 640 || window.innerWidth > 640;
-  const slots = wide ? SLOTS_WIDE : SLOTS_TALL;
-  const list = [me, ...others.sort((a, b) => hashStr(a.id) - hashStr(b.id))];
-  const placed = list.slice(0, slots.length);
-  const sig = JSON.stringify(placed.map(r => [r.id, r.animal, r.name, r.pet, resState(r), r.status, r.look])) + wide;
+  const stage = $('#pondStage'), over = $('#pondOver');
+  const sw = stage.clientWidth || 800, sh = stage.clientHeight || 450;
+  const list = [me, ...others.sort((a, b) => (POND_ORDER[a.status] ?? 2) - (POND_ORDER[b.status] ?? 2) || (S.friends.includes(b.id) - S.friends.includes(a.id)) || hashStr(a.id) - hashStr(b.id))];
+  // you sit beside the people focusing, not in front of them
+  const focusing = list.slice(1).filter(r => r.status === 'focus').length;
+  const ordered = [...list.slice(1, 1 + focusing), me, ...list.slice(1 + focusing)];
+  const L = pondLayout(ordered.length, sw, sh);
+  const sig = JSON.stringify(ordered.map(r => [r.id, r.animal, r.name, r.pet, resState(r), r.status, r.look])) + sw + 'x' + sh;
   if (force || sig !== lastPondSig) {
     lastPondSig = sig;
-    const over = $('#pondOver');
-    over.innerHTML = placed.map((r, i) => `<button class="resident ${r.me ? 'me' : ''}" style="left:${slots[i][0]}%; top:${slots[i][1]}%" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
-      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`).join('');
+    const keepPop = popFor, visible = stage.clientWidth > 0, firstTime = visible && !pondCentered, oldW = pondTrackW || L.trackW, oldCenter = over.scrollLeft + sw / 2;
+    over.innerHTML = `<div class="pond-track" id="pondTrack" style="width:${L.trackW}px">${ordered.map((r, i) => { const sl = L.slots[i]; return `<button class="resident ${r.me ? 'me' : ''} ${r.status === 'focus' ? 'is-focus' : ''}" style="left:${sl.x}px; top:${sl.y}%; width:${L.resW}px; z-index:${4 + sl.ri}" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
+    pondTrackW = L.trackW;
+    if (firstTime) { over.scrollLeft = (L.trackW - sw) / 2; pondCentered = true; }
+    else if (oldW !== L.trackW) over.scrollLeft = Math.max(0, oldCenter * L.trackW / oldW - sw / 2);
+    if (keepPop) popFor = keepPop;
   }
+  const nFocus = ordered.filter(r => r.status === 'focus').length;
+  const bar = $('#pondBar');
+  if (bar) bar.innerHTML = `<span class="muted">${showEx ? 'Example animals until classmates join' : `<b>${ordered.length}</b> in the pond${nFocus ? ` · <b>${nFocus}</b> focusing now, in the middle` : ''}`}</span><span class="row" style="gap:6px">${L.trackW > sw + 4 ? `<span class="muted pond-hint">Scroll sideways to see everyone</span>` : ''}<button class="btn small" data-findme>${icon('i-user')}Find me</button></span>`;
+  updatePondArrows();
   $('#pondList').innerHTML = list.map(r => `<li><span class="av">${avatarSVG(r.animal, resState(r), r.look)}</span><span class="nm"><b>${esc(r.me ? 'You' : r.name)} <span class="muted" style="font-weight:500">with ${esc(r.pet || ANIMALS[r.animal].label)}</span>${r.example ? ' <span class="pill example">Example</span>' : ''}</b><span>${esc(statusLine(r))}${r.streak ? ` · ${r.streak}-day streak` : ''}</span></span>${r.me ? '' : `<button class="btn small" data-ripple="${esc(r.id)}">${icon('i-ripple')}Ripple</button>`}</li>`).join('')
     + (others.length ? '' : pondFilter === 'friends' ? `<li class="muted" style="background:none">No friends yet. Tap someone in the pond and add them.</li>` : `<li class="muted" style="background:none">No one else is here yet. Share the link from How to use Grind and classmates will appear as they sign in.</li>`);
   renderBoard();
@@ -58,11 +89,11 @@ function renderBoard() {
 }
 function findRes(id) { const { me, others } = residents(); return [me, ...others].find(r => r.id === id) || EXAMPLES.find(e => e.id === id); }
 function openPop(id, refresh) {
-  const r = findRes(id); const over = $('#pondOver');
+  const r = findRes(id); const over = $('#pondOver'), track = $('#pondTrack') || over;
   let pop = $('#pondPop');
   if (!r) { pop && pop.remove(); popFor = null; return; }
   const btn = over.querySelector(`[data-res="${CSS.escape(id)}"]`);
-  if (!pop) { pop = document.createElement('div'); pop.className = 'pop'; pop.id = 'pondPop'; over.appendChild(pop); }
+  if (!pop || pop.parentNode !== track) { pop && pop.remove(); pop = document.createElement('div'); pop.className = 'pop'; pop.id = 'pondPop'; track.appendChild(pop); }
   popFor = id;
   const isFriend = S.friends.includes(r.id);
   pop.innerHTML = `<div class="ph"><span class="av">${avatarSVG(r.animal, r.me ? 'happy' : resState(r))}</span><div style="min-width:0; flex:1"><b style="font-family:var(--f-display); font-weight:400; font-size:1.15rem">${esc(r.me ? 'You' : r.name)}</b><div class="muted" style="font-size:.82rem">${esc(r.pet || '')} the ${ANIMALS[r.animal].label.toLowerCase()}${r.uni || r.major ? ' · ' + esc([r.uni, r.major].filter(Boolean).join(', ')) : ''}</div></div><button class="icon-btn" data-popclose aria-label="Close">${icon('i-x')}</button></div>
@@ -73,23 +104,24 @@ function openPop(id, refresh) {
     <div class="row" style="gap:8px"><button class="btn small ${isFriend ? '' : 'primary'}" data-friend>${icon(isFriend ? 'i-check' : 'i-friend')}${isFriend ? 'Friends' : 'Add friend'}</button>${peerBtn(r)}</div>`}
     ${r.me ? `<div class="row">${peerBtn(r)}</div>` : ''}`;
   if (btn) {
-    const ob = over.getBoundingClientRect(), bb = btn.getBoundingClientRect();
-    const pw = Math.min(300, ob.width - 20);
-    let x = bb.left - ob.left + bb.width / 2 - pw / 2; x = Math.max(10, Math.min(ob.width - pw - 10, x));
+    const ob = over.getBoundingClientRect(), tb = track.getBoundingClientRect(), bb = btn.getBoundingClientRect();
+    const pw = Math.min(300, ob.width - 20), sl = over.scrollLeft;
+    let x = bb.left - tb.left + bb.width / 2 - pw / 2; x = Math.max(sl + 10, Math.min(sl + ob.width - pw - 10, x));
     let y = bb.top - ob.top - 10; const ph = pop.offsetHeight || 220;
     y = y - ph < 10 ? Math.min(ob.height - ph - 10, bb.bottom - ob.top + 6) : y - ph;
     pop.style.left = x + 'px'; pop.style.top = Math.max(10, y) + 'px'; pop.style.width = pw + 'px';
   }
+  updatePondArrows();
 }
 function rippleAt(id) {
   const over = $('#pondOver'); if (!over) return;
   const btn = id ? over.querySelector(`[data-res="${CSS.escape(id)}"]`) : over.querySelector('.resident.me');
   if (!btn) return;
-  const ob = over.getBoundingClientRect(), bb = btn.getBoundingClientRect();
+  const track = $('#pondTrack') || over, ob = track.getBoundingClientRect(), bb = btn.getBoundingClientRect();
   for (let i = 0; i < 3; i++) {
     const r = document.createElement('span'); r.className = 'ripple-ring';
     r.style.left = (bb.left - ob.left + bb.width / 2) + 'px'; r.style.top = (bb.top - ob.top + bb.height * .78) + 'px'; r.style.animationDelay = (i * .35) + 's';
-    over.appendChild(r); setTimeout(() => r.remove(), 2600);
+    track.appendChild(r); setTimeout(() => r.remove(), 2600);
   }
 }
 function sendRipple(id, msg) {
@@ -159,10 +191,32 @@ function toggleFriend(id) {
   if (adding && NET.db && id !== NET.uid) sendRippleNet(id, '', 'friend');
   if (S.profile.visibility === 'friends') publishPond();
 }
+function updatePondArrows() {
+  const over = $('#pondOver'); if (!over) return;
+  const max = over.scrollWidth - over.clientWidth;
+  const l = $('#pondLeft'), r = $('#pondRight'); if (!l || !r) return;
+  const pop = !!$('#pondPop');
+  l.hidden = pop || !(max > 4 && over.scrollLeft > 4); r.hidden = pop || !(max > 4 && over.scrollLeft < max - 4);
+}
+function scrollPondTo(id) {
+  const over = $('#pondOver'), b = over.querySelector(id ? `[data-res="${CSS.escape(id)}"]` : '.resident.me'); if (!b) return;
+  over.scrollTo({ left: b.offsetLeft - over.clientWidth / 2, behavior: 'smooth' });
+}
 function bindPond() {
+  $('#pondOver').addEventListener('scroll', () => { updatePondArrows(); }, { passive: true });
+  $('#pondLeft').onclick = () => { const o = $('#pondOver'); o.scrollBy({ left: -o.clientWidth * .7, behavior: 'smooth' }); };
+  $('#pondRight').onclick = () => { const o = $('#pondOver'); o.scrollBy({ left: o.clientWidth * .7, behavior: 'smooth' }); };
+  $('#pondBar').addEventListener('click', e => { if (e.target.closest('[data-findme]')) { scrollPondTo(null); setTimeout(() => rippleAt(null), 450); } });
+  // drag the pond sideways with a mouse, like a phone swipe
+  let drag = null;
+  let justDragged = false;
+  $('#pondOver').addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.pop, input, form')) return; drag = { x: e.clientX, s: $('#pondOver').scrollLeft, moved: false }; });
+  addEventListener('pointermove', e => { if (!drag) return; const dx = e.clientX - drag.x; if (!drag.moved && Math.abs(dx) < 6) return; drag.moved = true; $('#pondOver').classList.add('dragging'); $('#pondOver').scrollLeft = drag.s - dx; });
+  addEventListener('pointerup', () => { if (!drag) return; justDragged = drag.moved; drag = null; $('#pondOver').classList.remove('dragging'); setTimeout(() => { justDragged = false; }, 0); });
+  $('#pondOver').addEventListener('click', e => { if (justDragged) { e.stopPropagation(); e.preventDefault(); } }, true);
   $('#pondOver').addEventListener('click', e => {
     const res = e.target.closest('[data-res]'); if (res) { openPop(res.dataset.res); return; }
-    if (e.target.closest('[data-popclose]')) { $('#pondPop')?.remove(); popFor = null; return; }
+    if (e.target.closest('[data-popclose]')) { $('#pondPop')?.remove(); popFor = null; updatePondArrows(); return; }
     const s = e.target.closest('[data-send]'); if (s) { sendRipple(popFor, s.dataset.send); return; }
     if (e.target.closest('[data-friend]')) { toggleFriend(popFor); openPop(popFor, true); return; }
     const pv = e.target.closest('[data-peer]'); if (pv) { openPeer(pv.dataset.peer); return; }
