@@ -247,7 +247,7 @@ const ANIMALS = {
     label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
     face: { custom: true, eyes: [[70, 64], [106, 62]], er: 6.4, mouth: null, blush: [], zz: [140, 20] },
     art: (st) => {
-      const g = '#76716f', d = '#4f4a48', c = '#eee2cc', s = '#a9a29c', p = '#e9a5a0', iris = '#6b3f22';
+      const g = '#8a8380', d = '#5d5754', c = '#f1e6d2', s = '#b5aea8', p = '#e9a5a0', iris = '#6b3f22';
       const eye = (x, y) => {
         if (st === 'sleeping') return `<path d="M${x - 9} ${y + 1} C${x - 4} ${y + 7} ${x + 4} ${y + 7} ${x + 9} ${y + 1}" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`;
         if (st === 'happy') return `<path d="M${x - 9} ${y + 3} C${x - 5} ${y - 6} ${x + 5} ${y - 6} ${x + 9} ${y + 3}" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
@@ -258,36 +258,33 @@ const ANIMALS = {
         : st === 'happy'
           ? `<path d="M72 93 C78 112 102 114 110 90 C98 98 84 98 72 93 Z" fill="#8a3a33" ${O2}/><path d="M80 103 C84 112 98 112 102 104 C96 100 86 100 80 103 Z" fill="#e8868a"/><path d="M76 95 l3 5 l2 -4.5 Z M104 93 l-2.5 5 l-2 -4.5 Z" fill="#fff"/>`
           : `<path d="M73 94 C80 106 99 106 108 91 C97 97 85 98 73 94 Z" fill="#8a3a33" ${O2}/><path d="M82 100 C86 105 96 105 99 100 C94 98 87 98 82 100 Z" fill="#e8868a"/><path d="M77 95.5 l2.6 4.4 l1.8 -4 Z" fill="#fff"/>`;
-      return `<path d="M154 116 C168 112 178 100 180 84 C181 74 186 64 192 58 C198 70 200 86 196 100 L200 104 L194 108 C190 120 176 132 156 132 Z" fill="${g}" ${O}/>
-      <path d="M180 84 C181 74 186 64 192 58 C196 66 198 74 198 82 L193 80 L189 86 L185 82 Z" fill="${c}"/>
-      <path d="M170 120 C180 112 188 102 190 90" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" opacity=".35"/>
-      <path d="M150 140 L148 172 C148 178 152 180 158 180 C166 180 168 176 166 170 L164 140 Z" fill="${g}" ${O2}/><path d="M150 140 L148 172 C148 178 152 180 158 180 C166 180 168 176 166 170 L164 140 Z" fill="#000" opacity=".2"/>
-      <path d="M94 140 L93 172 C93 178 97 180 103 180 C111 180 113 176 111 170 L108 140 Z" fill="${g}" ${O2}/><path d="M94 140 L93 172 C93 178 97 180 103 180 C111 180 113 176 111 170 L108 140 Z" fill="#000" opacity=".2"/>
-      <path d="M84 102 C98 94 134 92 156 98 C176 104 180 130 170 148 L166 154 L158 150 L154 158 L146 154 L140 160 L132 155 L122 160 L114 155 L106 160 L98 154 C86 144 80 124 84 102 Z" fill="${g}" ${O}/>
-      <path d="M104 156 C118 160 136 160 150 154 C144 150 132 150 120 150 C112 150 106 152 104 156 Z" fill="${c}" opacity=".9"/>
-      <path d="M118 104 C130 100 146 100 156 104 M124 112 C136 108 148 110 158 114" fill="none" stroke="${d}" stroke-width="2" stroke-linecap="round" opacity=".45"/>
-      <path d="M136 132 L134 172 C134 178 138 181 145 181 C154 181 156 177 153 170 L150 134 Z" fill="${g}" ${O2}/>
-      <path d="M135 160 L134 172 C134 178 138 181 145 181 C154 181 156 177 153 170 L152 160 C146 163 140 163 135 160 Z" fill="${c}"/>
-      <path d="M140 176 v4 M146 176 v4" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>
-      <path d="M134 172 C134 178 138 181 145 181 C154 181 156 177 153 170" fill="none" ${O2}/>
-      <path d="M66 98 L60 104 L66 108 L60 116 L68 120 L64 128 L72 130 L70 140 C78 144 92 144 100 138 L102 128 L108 132 L106 120 L112 122 L108 110 C98 104 82 100 66 98 Z" fill="${c}" ${O2}/>
-      <path d="M74 132 L73 172 C73 178 77 181 84 181 C93 181 95 177 92 170 L90 134 Z" fill="${g}" ${O2}/>
-      <path d="M73.5 156 L73 172 C73 178 77 181 84 181 C93 181 95 177 92 170 L91 156 C85 159 79 159 73.5 156 Z" fill="${c}"/>
-      <path d="M79 176 v4 M85 176 v4" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>
-      <path d="M73 172 C73 178 77 181 84 181 C93 181 95 177 92 170" fill="none" ${O2}/>
+      return `<path d="M120 172 C146 182 176 178 188 160 C194 150 192 138 185 134 C182 148 170 158 154 160 C142 162 130 162 120 162 Z" fill="${g}" ${O}/>
+      <path d="M185 134 C192 138 194 150 188 160 C185 164 181 167 177 169 C180 160 182 146 185 134 Z" fill="${c}"/>
+      <path d="M64 180 C56 150 64 116 88 104 L120 104 C142 116 152 148 146 180 Z" fill="${g}" ${O}/>
+      <path d="M114 138 C130 126 154 134 156 158 C157 172 150 180 138 180 L114 180 C106 168 106 148 114 138 Z" fill="${g}" ${O2}/>
+      <path d="M122 146 C132 140 144 144 148 154" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" opacity=".3"/>
+      <ellipse cx="140" cy="178" rx="14" ry="6" fill="${c}" ${O2}/><path d="M134 175 v4 M140 175 v5 M146 175 v4" stroke="${INK}" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <path d="M77 140 C76 154 76 164 77 172 C77 178 81 181 87 181 C94 181 96 177 94 171 C93 162 93 152 93 140 Z" fill="${g}" ${O2}/>
+      <path d="M76.6 160 C76.4 165 76.6 169 77 172 C77 178 81 181 87 181 C94 181 96 177 94 171 C93.6 167 93.4 163 93.3 160 C87 162 82 162 76.6 160 Z" fill="${c}"/>
+      <path d="M77 172 C77 178 81 181 87 181 C94 181 96 177 94 171" fill="none" ${O2}/><path d="M83 176 v4 M89 176 v4" stroke="${INK}" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <path d="M99 140 C98 154 98 164 99 172 C99 178 103 181 109 181 C116 181 118 177 116 171 C115 162 115 152 115 140 Z" fill="${g}" ${O2}/>
+      <path d="M98.6 160 C98.4 165 98.6 169 99 172 C99 178 103 181 109 181 C116 181 118 177 116 171 C115.6 167 115.4 163 115.3 160 C109 162 104 162 98.6 160 Z" fill="${c}"/>
+      <path d="M99 172 C99 178 103 181 109 181 C116 181 118 177 116 171" fill="none" ${O2}/><path d="M105 176 v4 M111 176 v4" stroke="${INK}" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <path d="M72 106 L66 114 L72 118 L67 128 L75 131 C78 138 82 144 86 147 L90 142 L95 151 L100 143 L105 149 C110 144 115 138 118 130 L124 126 L119 117 L124 108 C108 102 88 102 72 106 Z" fill="${c}" ${O2}/>
+      <path d="M86 122 l3 7 M100 124 v8 M110 120 l-2 7" stroke="${INK}" stroke-width="1.4" stroke-linecap="round" opacity=".3"/>
       <path d="M50 58 C42 42 38 24 40 6 C56 12 70 24 80 40 Z" fill="${g}" ${O}/><path d="M108 38 C118 22 132 12 148 8 C150 26 144 44 132 58 Z" fill="${g}" ${O}/>
       <path d="M52 50 C47 38 45 26 46 16 C56 22 66 30 72 40 Z" fill="${p}"/><path d="M114 38 C122 28 132 20 142 16 C143 28 138 40 130 50 Z" fill="${p}"/>
       <path d="M50 40 l8 0 M50 32 l6 2 M138 36 l-8 1 M140 28 l-6 3" stroke="${s}" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M86 30 L92 22 L96 30 L104 24 L106 32 C122 34 134 44 136 58 C138 68 136 74 142 82 L132 84 L138 94 L124 94 C114 106 100 112 86 112 C72 112 60 106 52 98 L38 100 L44 90 L32 86 L42 80 L34 70 L44 68 C42 50 60 32 86 30 Z" fill="${g}" ${O}/>
+      <path d="M84 30 C86 24 92 22 95 28 C98 23 104 24 105 31 C122 33 134 44 137 58 C139 68 138 74 141 80 C144 84 140 88 135 87 C137 92 133 96 127 95 C117 106 102 112 87 112 C73 112 61 106 53 99 C47 102 41 98 43 93 C36 92 34 85 40 82 C35 78 37 71 44 70 C42 52 60 32 84 30 Z" fill="${g}" ${O}/>
       <path d="M44 78 C46 66 54 54 68 52 C79 52 85 60 88 70 C91 60 97 49 106 49 C117 49 123 58 125 70 C129 75 134 75 137 72 C136 96 118 110 90 110 C64 110 44 98 44 78 Z" fill="${c}"/>
       <path d="M82 40 C86 48 88 56 88 66 C90 56 94 48 100 40" fill="none" stroke="${d}" stroke-width="2.2" stroke-linecap="round" opacity=".5"/>
-      <path d="M58 48 C64 41 74 40 81 45 M97 43 C104 38 114 39 120 46" fill="none" stroke="${INK}" stroke-width="3.6" stroke-linecap="round"/>
+      <path d="M61 46 Q70 40 79 45 M98 43 Q107 37 116 43" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
       ${eye(70, 64)}${eye(106, 62)}
       <path d="M58 82 C58 74 66 70 74 72 C82 74 88 78 90 82 C84 88 74 92 66 92 C61 90 58 86 58 82 Z" fill="${c}"/>
       <path d="M60 80 C60 74 68 72 74 74 C80 76 82 80 80 84 C78 88 70 90 65 88 C61 86 60 83 60 80 Z" fill="${INK}"/><ellipse cx="68" cy="77" rx="4" ry="2.2" fill="#fff" opacity=".55" transform="rotate(-15 68 77)"/>
       <path d="M72 88 L73 93" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>
       ${mouth}
-      <path d="M46 92 l-5 1 M48 98 l-4 3 M132 88 l5 1 M128 96 l4 2" stroke="${INK}" stroke-width="1.6" stroke-linecap="round" opacity=".35"/>`;
+      <ellipse cx="54" cy="86" rx="7" ry="4" fill="#e7938a" opacity="${st === 'happy' ? .75 : .5}"/><ellipse cx="124" cy="83" rx="7" ry="4" fill="#e7938a" opacity="${st === 'happy' ? .75 : .5}"/>`;
     }
   },
   dragon: {
