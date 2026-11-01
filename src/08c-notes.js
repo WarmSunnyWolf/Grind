@@ -2,6 +2,7 @@
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'herd', at: Date.UTC(2026, 10, 1, 10, 30), title: 'A sheep, a camel, a giraffe and a new wolf', text: 'Three new friends are in the Sanctuary: the sheep (70 coins), the camel (150) and the giraffe (210). The wolf has also been redrawn with amber eyes and a thick winter mane.', go: 'sanctuary', animal: 'wolf' },
   { id: 'cairn', at: Date.UTC(2026, 9, 30, 11, 0), title: 'Edit your rocks and build a cairn', text: 'Rename any rock or pebble, change its minutes, course or due date, and finish a rock in one tap. Every rock you cross now gets a celebration and adds a stone to your cairn.', go: 'pebbles' },
   { id: 'spider', at: Date.UTC(2026, 9, 30, 1, 0), title: 'A spider joined the Sanctuary', text: 'A fuzzy jumping spider with eight legs and eight eyes. Adopt it for 90 coins and try its four fur coats.', go: 'sanctuary', animal: 'spider' },
   { id: 'looks', at: Date.UTC(2026, 9, 29, 20, 0), title: 'Costumes, fur coats and emotes', text: 'Dress your animal as a chef, wizard, pirate, hero or royal, give it a real fur coat, and buy emotes for when it studies or naps. While you focus, your animal now reads a book.', go: 'sanctuary', animal: 'wolf' },

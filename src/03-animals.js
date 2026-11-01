@@ -245,26 +245,48 @@ const ANIMALS = {
   },
   wolf: {
     label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
-    face: { eyes: [[81, 88], [119, 88]], er: 5.6, mouth: { x: 100, y: 117, type: 'cat' }, blush: [[66, 107], [134, 107]], zz: [156, 36] },
-    art: () => {
-      const g = '#7f8d9c', d = '#4d5a68', l = '#f1f1ea', p = '#e3aca6', s = '#a7b3bf';
-      return `<path d="M126 170 C178 178 198 126 170 90 C168 106 164 120 154 128 C148 142 138 150 122 152 Z" fill="${g}" ${O}/>
-      <path d="M170 90 C186 104 192 124 186 142 C178 132 170 120 164 108 C166 102 168 96 170 90 Z" fill="${l}" ${O2}/>
-      <path d="M150 140 C160 132 166 124 170 114 M140 152 C152 148 160 142 166 134" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
-      <path d="M62 180 C54 146 70 116 100 116 C130 116 146 146 138 180 Z" fill="${g}" ${O}/>
-      <path d="M90 158 C89 166 89 172 90 178 M110 158 C111 166 111 172 110 178" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".5"/>
-      <ellipse cx="84" cy="179" rx="12" ry="5.5" fill="${l}" ${O2}/><ellipse cx="116" cy="179" rx="12" ry="5.5" fill="${l}" ${O2}/>
-      <path d="M66 124 C70 140 75 150 82 155 L88 146 L94 165 L100 152 L106 165 L112 146 L118 155 C125 150 130 140 134 124 Q100 140 66 124 Z" fill="${l}" ${O2}/>
-      <path d="M56 86 L57 20 L95 56 Z" fill="${g}" ${O}/><path d="M144 86 L143 20 L105 56 Z" fill="${g}" ${O}/>
-      <path d="M64 72 L64 36 L86 58 Z" fill="${p}"/><path d="M136 72 L136 36 L114 58 Z" fill="${p}"/>
-      <path d="M62 62 L68 56 M64 70 L72 64 M138 62 L132 56 M136 70 L128 64" stroke="${l}" stroke-width="2.4" stroke-linecap="round"/>
-      <path d="M86 54 L92 42 L98 52 L104 42 L112 54 Z" fill="${g}" ${O2}/>
-      <path d="M48 86 C48 60 72 50 100 50 C128 50 152 60 152 86 C152 94 160 100 154 108 C160 115 152 123 144 120 C132 132 116 137 100 137 C84 137 68 132 56 120 C48 123 40 115 46 108 C40 100 48 94 48 86 Z" fill="${g}" ${O}/>
-      <path d="M57 82 C62 62 80 54 100 54 C120 54 138 62 143 82 C131 75 117 77 108 87 L100 94 L92 87 C83 77 69 75 57 82 Z" fill="${d}" opacity=".5"/>
-      <ellipse cx="82" cy="76" rx="5.5" ry="3.6" fill="${l}"/><ellipse cx="118" cy="76" rx="5.5" ry="3.6" fill="${l}"/>
-      <path d="M62 98 C73 106 87 108 100 101 C113 108 127 106 138 98 C140 121 121 135 100 135 C79 135 60 121 62 98 Z" fill="${l}"/>
-      <path d="M52 112 L44 110 M54 118 L48 120 M148 112 L156 110 M146 118 L152 120" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".5"/>
-      <path d="M91 104 C91 99 109 99 109 104 C109 109 103 112 100 112 C97 112 91 109 91 104 Z" fill="${INK}"/><ellipse cx="96.5" cy="102.5" rx="2.4" ry="1.5" fill="#fff" opacity=".7"/>`;
+    face: { custom: true, eyes: [[86.6, 76], [113.4, 76]], er: 4.8, mouth: null, blush: [], zz: [152, 24] },
+    art: (st) => {
+      const g = '#7f8d9c', d = '#4d5a68', l = '#f1f1ea', p = '#e3aca6', s = '#a7b3bf', iris = '#d9a441';
+      const fur = 'stroke="' + INK + '" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".38"';
+      const eye = (x, flip) => {
+        const k = flip ? -1 : 1, ox = x - 9 * k, ix = x + 9 * k;
+        if (st === 'sleeping') return `<path d="M${ox} ${86} C${x - 3 * k} ${92} ${x + 4 * k} ${93} ${ix} ${91}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/><path d="M${x - 4 * k} 92 l-1.5 3.5 M${x + 1 * k} 93 l-.5 3.6" stroke="${INK}" stroke-width="1.4" stroke-linecap="round"/>`;
+        if (st === 'happy') return `<path d="M${ox} ${89} C${x - 4 * k} ${81} ${x + 4 * k} ${81} ${ix} ${90}" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`;
+        return `<path d="M${ox} 85 C${x - 5 * k} 80 ${x + 4 * k} 81 ${ix} 91 C${x + 3 * k} 93 ${x - 5 * k} 91 ${ox} 85 Z" fill="${iris}"/>
+          <circle cx="${x + 1 * k}" cy="87.6" r="2.5" fill="${INK}"/><circle cx="${x + 2.4 * k}" cy="86.2" r="1.1" fill="#fff"/>
+          <path d="M${ox} 85 C${x - 5 * k} 80 ${x + 4 * k} 81 ${ix} 91 C${x + 3 * k} 93 ${x - 5 * k} 91 ${ox} 85 Z" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M${ox - 2 * k} 84 C${x - 5 * k} 78 ${x + 4 * k} 79 ${ix + 1 * k} 89" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`;
+      };
+      const mouth = st === 'happy'
+        ? `<path d="M87 132 C93 135 107 135 113 132 C111 143 106 148 100 148 C94 148 89 143 87 132 Z" fill="#7a3b33" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/><path d="M93 140 C95 149 105 149 107 140 C104 138 96 138 93 140 Z" fill="#e58b86"/>`
+        : `<path d="M100 127 L100 132 M100 132 C96 136 90 136 86 133 M100 132 C104 136 110 136 114 133" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>`;
+      return `<path d="M132 176 C158 182 182 170 186 148 C188 134 180 122 170 120 C176 134 170 150 156 156 C148 160 140 162 130 162 Z" fill="${g}" ${O}/>
+      <path d="M186 148 C188 134 180 122 170 120 C174 128 176 136 174 144 C178 146 182 148 186 148 Z" fill="${l}" ${O2}/>
+      <path d="M150 162 C160 160 168 154 172 146 M142 168 C154 168 166 164 174 158" ${fur}/>
+      <path d="M64 180 C56 146 66 114 84 108 L116 108 C134 114 144 146 136 180 Z" fill="${g}" ${O}/>
+      <path d="M128 150 C144 148 150 164 146 180 L128 180 Z" fill="${d}" opacity=".35"/>
+      <path d="M77 140 C75 156 75 168 77 178 L92 178 C92 166 92 154 90 142 Z" fill="${g}" ${O2}/><path d="M123 140 C125 156 125 168 123 178 L108 178 C108 166 108 154 110 142 Z" fill="${g}" ${O2}/>
+      <path d="M80 150 L81 172 M120 150 L119 172" ${fur}/>
+      <ellipse cx="84.5" cy="179" rx="10.5" ry="5" fill="${l}" ${O2}/><ellipse cx="115.5" cy="179" rx="10.5" ry="5" fill="${l}" ${O2}/>
+      <path d="M81 177 v4 M88 177 v4 M112 177 v4 M119 177 v4" stroke="${INK}" stroke-width="1.4" stroke-linecap="round" opacity=".5"/>
+      <path d="M72 110 L63 118 L70 123 L62 132 L71 136 L66 146 L77 147 C81 156 86 162 91 166 L95 155 L100 174 L105 155 L109 166 C114 162 119 156 123 147 L134 146 L129 136 L138 132 L130 123 L137 118 L128 110 Z" fill="${l}" ${O2}/>
+      <path d="M80 128 l5 9 M88 136 l4 9 M100 138 v10 M112 136 l-4 9 M120 128 l-5 9 M93 152 l3 7 M107 152 l-3 7 M74 118 l4 7 M126 118 l-4 7" ${fur}/>
+      <g transform="translate(100 14) scale(.84) translate(-100 -14)">
+      <path d="M66 70 C61 50 59 30 61 10 C75 20 89 32 98 48 Z" fill="${g}" ${O}/><path d="M134 70 C139 50 141 30 139 10 C125 20 111 32 102 48 Z" fill="${g}" ${O}/>
+      <path d="M69 62 C66 46 65 32 66 20 C76 28 84 38 90 48 Z" fill="${s}"/><path d="M131 62 C134 46 135 32 134 20 C124 28 116 38 110 48 Z" fill="${s}"/>
+      <path d="M68 58 l8 -6 M68 50 l7 -3 M70 64 l9 -6 M132 58 l-8 -6 M132 50 l-7 -3 M130 64 l-9 -6" stroke="${l}" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M100 40 C121 40 138 48 146 63 C150 72 150 80 157 87 L148 90 L159 99 L146 102 L153 112 L138 112 C133 128 117 142 100 144 C83 142 67 128 62 112 L47 112 L54 102 L41 99 L52 90 L43 87 C50 80 50 72 54 63 C62 48 79 40 100 40 Z" fill="${g}" ${O}/>
+      <path d="M100 43 C87 43 75 50 69 61 C78 65 86 73 91 84 L100 98 L109 84 C114 73 122 65 131 61 C125 50 113 43 100 43 Z" fill="${d}" opacity=".55"/>
+      <path d="M58 98 C66 108 80 110 92 104 L96 120 C97 130 98 136 100 138 C102 136 103 130 104 120 L108 104 C120 110 134 108 142 98 C142 120 124 140 100 142 C76 140 58 120 58 98 Z" fill="${l}"/>
+      <path d="M91 96 C89 108 90 120 93 128 L107 128 C110 120 111 108 109 96 C105 99 95 99 91 96 Z" fill="${s}" opacity=".5"/>
+      <path d="M77 77 C80 73 86 72 90 74 C86 76 81 77 77 77 Z M123 77 C120 73 114 72 110 74 C114 76 119 77 123 77 Z" fill="${l}" stroke="${INK}" stroke-width="1" stroke-opacity=".4"/>
+      <path d="M93 92 C95 99 95 106 94 112 M107 92 C105 99 105 106 106 112" fill="none" stroke="${d}" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>
+      ${eye(84, false)}${eye(116, true)}
+      <path d="M89 120 C89 114 111 114 111 120 C111 125 105 128 100 128 C95 128 89 125 89 120 Z" fill="${INK}"/><path d="M94 117.5 C97 116 101 116 103 117" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>
+      ${mouth}
+      <path d="M56 70 l-4 6 M60 62 l-3 7 M144 70 l4 6 M140 62 l3 7 M50 95 l8 1 M150 95 l-8 1 M56 106 l7 -1 M144 106 l-7 -1 M88 52 l2 7 M100 48 v7 M112 52 l-2 7 M72 118 l6 5 M128 118 l-6 5 M84 132 l5 3 M116 132 l-5 3" ${fur}/>
+      </g>`;
     }
   },
   dragon: {
@@ -356,6 +378,68 @@ const ANIMALS = {
       <circle cx="66" cy="64" r="3" fill="${d}"/><circle cx="136" cy="62" r="3.5" fill="${d}"/><circle cx="144" cy="74" r="2.4" fill="${d}"/>`;
     }
   },
+  sheep: {
+    label: 'Sheep', lore: 'Soft, calm and very fluffy. Counts pebbles instead of sheep.', unlock: { type: 'coins', n: 70 }, defaultName: '',
+    face: { eyes: [[87, 96], [113, 96]], er: 5, mouth: { x: 100, y: 114, type: 'cat' }, blush: [[76, 108], [124, 108]], blushR: 7, zz: [150, 42] },
+    art: () => {
+      const w = '#f4efe4', ws = '#ddd3c0', f = '#f2d7c0', e = '#e8b9a6', k = '#5a4a42';
+      const cloud = (cx, cy, rx, ry, n, b) => { let d = ''; for (let i = 0; i <= n; i++) { const t = i / n * Math.PI * 2, x = cx + rx * Math.cos(t), y = cy + ry * Math.sin(t); if (!i) { d = `M${x.toFixed(1)} ${y.toFixed(1)}`; continue; } const tm = (i - .5) / n * Math.PI * 2; d += ` Q${(cx + (rx + b) * Math.cos(tm)).toFixed(1)} ${(cy + (ry + b) * Math.sin(tm)).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`; } return d + ' Z'; };
+      return `<rect x="74" y="162" width="12" height="18" rx="4" fill="${k}" ${O2}/><rect x="114" y="162" width="12" height="18" rx="4" fill="${k}" ${O2}/>
+      <path d="${cloud(100, 140, 60, 34, 14, 11)}" fill="${w}" ${O}/>
+      <path d="M58 150 q8 6 16 2 M126 152 q8 4 16 -2 M84 166 q8 4 16 0 M110 166 q6 3 12 0" fill="none" stroke="${ws}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M68 92 C54 88 44 94 42 102 C52 106 62 104 70 100 Z" fill="${e}" ${O2}/><path d="M132 92 C146 88 156 94 158 102 C148 106 138 104 130 100 Z" fill="${e}" ${O2}/>
+      <path d="M70 94 C70 72 84 62 100 62 C116 62 130 72 130 94 C130 114 118 126 100 126 C82 126 70 114 70 94 Z" fill="${f}" ${O}/>
+      <path d="${cloud(100, 68, 30, 13, 9, 7)}" fill="${w}" ${O2}/>
+      <path d="M96 110 L100 113 L104 110" fill="none" stroke="${k}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>`;
+    }
+  },
+  camel: {
+    label: 'Camel', lore: 'Crosses the longest deserts without a fuss. Patience for the long semester.', unlock: { type: 'coins', n: 150 }, defaultName: '',
+    face: { eyes: [[56, 58], [73, 58]], er: 4.4, mouth: { x: 64, y: 89, type: 'wide', w: 6 }, blush: [[48, 72], [80, 72]], blushR: 5, zz: [96, 26] },
+    art: () => {
+      const c = '#d9b07a', d = '#b98d58', l = '#efd6ad', bl = '#c96a5a', bt = '#e9c15a';
+      const neck = 'M88 146 C72 132 62 116 63 98 C63 88 64 80 64 74';
+      return `<path d="M176 148 C184 152 188 160 185 170" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/><path d="M185 168 l-3 8 l6 -3 Z" fill="${d}" ${O2}/>
+      <path d="M92 134 C94 106 110 90 126 92 C142 94 154 110 154 134 Z" fill="${c}" ${O}/>
+      <path d="M60 174 C52 150 68 128 98 128 L150 128 C172 130 184 150 177 171 C175 177 167 180 152 180 L74 180 C66 180 62 178 60 174 Z" fill="${c}" ${O}/>
+      <path d="M100 130 C100 110 112 99 125 99 C140 100 148 112 148 130 L141 138 L133 131 L125 139 L117 131 L109 139 L101 131 Z" fill="${bl}" ${O2}/>
+      <path d="M104 118 C114 112 136 112 146 118" fill="none" stroke="${bt}" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="109" cy="140" r="3" fill="${bt}" ${O2}/><circle cx="125" cy="140" r="3" fill="${bt}" ${O2}/><circle cx="141" cy="140" r="3" fill="${bt}" ${O2}/>
+      <ellipse cx="82" cy="178" rx="15" ry="5.5" fill="${d}" ${O2}/><ellipse cx="156" cy="178" rx="15" ry="5.5" fill="${d}" ${O2}/>
+      <path d="M118 160 C130 166 146 166 158 160" fill="none" stroke="${d}" stroke-width="2.4" stroke-linecap="round" opacity=".6"/>
+      <path d="${neck}" fill="none" stroke="${INK}" stroke-width="30" stroke-linecap="round"/><path d="${neck}" fill="none" stroke="${c}" stroke-width="24" stroke-linecap="round"/>
+      <path d="M58 118 C62 122 68 122 72 118" fill="none" stroke="${d}" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+      <ellipse cx="42" cy="50" rx="8" ry="5" fill="${d}" ${O2} transform="rotate(-25 42 50)"/><ellipse cx="86" cy="50" rx="8" ry="5" fill="${d}" ${O2} transform="rotate(25 86 50)"/>
+      <path d="M45 60 C45 44 53 36 64 36 C75 36 83 44 83 58 C83 65 81 71 79 75 C82 86 76 97 64 97 C52 97 46 87 49 76 C47 71 45 66 45 60 Z" fill="${c}" ${O}/>
+      <path d="M50 78 C50 72 78 72 78 78 C80 89 72 95 64 95 C56 95 48 89 50 78 Z" fill="${l}"/>
+      <path d="M56 81 l3 2 M72 81 l-3 2" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M53 41 C55 32 61 30 64 35 C67 30 73 32 75 41 C70 39 67 41 64 45 C61 41 58 39 53 41 Z" fill="${d}" ${O2}/>
+      <path d="M50 54 l-3 -3 M52 52 l-2 -4 M79 54 l3 -3 M77 52 l2 -4" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/>`;
+    }
+  },
+  giraffe: {
+    label: 'Giraffe', lore: 'Sees the whole term from up high. Spots the deadline before it arrives.', unlock: { type: 'coins', n: 210 }, defaultName: '',
+    face: { eyes: [[89, 50], [111, 50]], er: 4.6, mouth: { x: 100, y: 75, type: 'smile' }, blush: [[79, 62], [121, 62]], blushR: 6, zz: [140, 18] },
+    art: () => {
+      const y = '#f1c76b', sp = '#b8743a', l = '#f8e6bd', m = '#9a5a2a', k = '#5a3a2a';
+      const spot = (x, yy, r) => `<path d="M${x - r} ${yy} C${x - r} ${yy - r * .9} ${x - r * .2} ${yy - r} ${x + r * .3} ${yy - r * .9} C${x + r} ${yy - r * .7} ${x + r * 1.05} ${yy + r * .2} ${x + r * .6} ${yy + r * .8} C${x} ${yy + r * 1.1} ${x - r * .9} ${yy + r * .7} ${x - r} ${yy} Z" fill="${sp}"/>`;
+      return `<path d="M64 168 C58 140 74 124 100 124 C126 124 142 140 136 168 Z" fill="${y}" ${O}/>
+      ${spot(76, 146, 7)}${spot(124, 146, 7)}${spot(100, 160, 6)}${spot(88, 134, 5)}${spot(114, 134, 5)}
+      <rect x="76" y="150" width="14" height="30" rx="5" fill="${y}" ${O2}/><rect x="110" y="150" width="14" height="30" rx="5" fill="${y}" ${O2}/>
+      ${spot(83, 162, 4)}${spot(117, 164, 4)}
+      <rect x="75" y="174" width="16" height="7" rx="3" fill="${k}"/><rect x="109" y="174" width="16" height="7" rx="3" fill="${k}"/>
+      <path d="M88 132 C86 110 86 90 88 66 L112 66 C114 90 114 110 112 132 Z" fill="${y}" ${O}/>
+      ${spot(95, 82, 5)}${spot(106, 96, 5)}${spot(95, 110, 5)}${spot(106, 122, 4)}
+      <path d="M112 68 q7 4 0 9 q7 4 0 9 q7 4 0 9 q7 4 0 9 q7 4 0 9 q6 4 0 8 Z" fill="${m}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M86 26 L84 10 M114 26 L116 10" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><path d="M86 26 L84 10 M114 26 L116 10" stroke="${y}" stroke-width="3.6" stroke-linecap="round"/>
+      <circle cx="84" cy="9" r="5.4" fill="${m}" ${O2}/><circle cx="116" cy="9" r="5.4" fill="${m}" ${O2}/>
+      <ellipse cx="68" cy="40" rx="11" ry="5.5" fill="${y}" ${O2} transform="rotate(-18 68 40)"/><ellipse cx="132" cy="40" rx="11" ry="5.5" fill="${y}" ${O2} transform="rotate(18 132 40)"/>
+      <path d="M76 46 C76 30 86 22 100 22 C114 22 124 30 124 46 C124 54 122 60 120 64 C122 74 114 84 100 84 C86 84 78 74 80 64 C78 60 76 54 76 46 Z" fill="${y}" ${O}/>
+      ${spot(86, 32, 4)}${spot(114, 32, 4)}
+      <path d="M82 66 C82 60 118 60 118 66 C119 76 112 82 100 82 C88 82 81 76 82 66 Z" fill="${l}"/>
+      <ellipse cx="93" cy="68" rx="2.4" ry="1.8" fill="${k}"/><ellipse cx="107" cy="68" rx="2.4" ry="1.8" fill="${k}"/>`;
+    }
+  },
   turtle: {
     label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
@@ -433,6 +517,7 @@ const ANIMAL_KEYS = Object.keys(ANIMALS);
 
 function faceSVG(f, st) {
   let out = '';
+  if (f.custom) return out;
   const er = f.er;
   if (f.whites) {
     f.whites.forEach(([x, y, r]) => {
