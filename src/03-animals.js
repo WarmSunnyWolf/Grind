@@ -244,7 +244,7 @@ const ANIMALS = {
     }
   },
   wolf: {
-    label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
+    label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '', hidden: true,
     face: { custom: true, eyes: [[70, 64], [106, 62]], er: 6.4, mouth: null, blush: [], zz: [140, 20] },
     art: (st) => {
       const g = '#8a8380', d = '#5d5754', c = '#f1e6d2', s = '#b5aea8', p = '#e9a5a0', iris = '#6b3f22';
@@ -288,7 +288,7 @@ const ANIMALS = {
     }
   },
   dragon: {
-    label: 'Dragon', lore: 'A tiny dragon with a big heart. Breathes warm courage before exams.', unlock: { type: 'coins', n: 300 }, defaultName: '',
+    label: 'Dragon', lore: 'A tiny dragon with a big heart. Breathes warm courage before exams.', unlock: { type: 'coins', n: 230 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 6.5, mouth: { x: 100, y: 117, type: 'wide', w: 11 }, blush: [[64, 102], [136, 102]], zz: [156, 38] },
     art: () => {
       const b = '#83bca7', w = '#5f9a86', y = '#f3e3b3', h = '#f1cf7d';

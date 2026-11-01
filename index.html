@@ -844,7 +844,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
               <span class="eyebrow">How to spend</span>
-              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 300</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits and costumes</span><b>40 to 450</b></li><li><span>Fur coats and emotes</span><b>120 to 200</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits and costumes</span><b>40 to 450</b></li><li><span>Fur coats and emotes</span><b>120 to 200</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
@@ -1035,7 +1035,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 
       <!-- SANCTUARY -->
       <section class="view" id="v-sanctuary">
-        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-six animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-five animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
         <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Click <b>Preview looks</b> on any animal to try every costume, coat and emote on it. Nothing is bought or saved, and students see nothing different.</div>
         <div class="zoo" id="zoo"></div>
       </section>
@@ -1124,7 +1124,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), kitty (60), sheep (70) and spider (90) to the panda (140), the camel (150), the swan (180), the giraffe (210), the wolf (240), the dragon (300), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), kitty (60), sheep (70) and spider (90) to the panda (140), the camel (150), the swan (180), the giraffe (210), the dragon (230), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -1502,7 +1502,7 @@ const ANIMALS = {
     }
   },
   wolf: {
-    label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '',
+    label: 'Wolf', lore: 'Brave and loyal to the pack. Howls for every goal you reach.', unlock: { type: 'coins', n: 240 }, defaultName: '', hidden: true,
     face: { custom: true, eyes: [[70, 64], [106, 62]], er: 6.4, mouth: null, blush: [], zz: [140, 20] },
     art: (st) => {
       const g = '#8a8380', d = '#5d5754', c = '#f1e6d2', s = '#b5aea8', p = '#e9a5a0', iris = '#6b3f22';
@@ -1546,7 +1546,7 @@ const ANIMALS = {
     }
   },
   dragon: {
-    label: 'Dragon', lore: 'A tiny dragon with a big heart. Breathes warm courage before exams.', unlock: { type: 'coins', n: 300 }, defaultName: '',
+    label: 'Dragon', lore: 'A tiny dragon with a big heart. Breathes warm courage before exams.', unlock: { type: 'coins', n: 230 }, defaultName: '',
     face: { eyes: [[80, 86], [120, 86]], er: 6.5, mouth: { x: 100, y: 117, type: 'wide', w: 11 }, blush: [[64, 102], [136, 102]], zz: [156, 38] },
     art: () => {
       const b = '#83bca7', w = '#5f9a86', y = '#f3e3b3', h = '#f1cf7d';
@@ -4077,7 +4077,8 @@ function bindActivity() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
-  { id: 'herd', at: Date.UTC(2026, 10, 1, 10, 30), title: 'A sheep, a camel, a giraffe and a new wolf', text: 'Three new friends are in the Sanctuary: the sheep (70 coins), the camel (150) and the giraffe (210). The wolf has also been redrawn as a fluffy wolf pup with big brown eyes.', go: 'sanctuary', animal: 'wolf' },
+  { id: 'dragon', at: Date.UTC(2026, 10, 1, 10, 20), title: 'The dragon is cheaper', text: 'The dragon now costs 230 coins instead of 300.', go: 'sanctuary', animal: 'dragon' },
+  { id: 'herd', at: Date.UTC(2026, 10, 1, 10, 0), title: 'A sheep, a camel and a giraffe', text: 'Three new friends are in the Sanctuary: the sheep (70 coins), the camel (150) and the giraffe (210).', go: 'sanctuary', animal: 'giraffe' },
   { id: 'cairn', at: Date.UTC(2026, 9, 30, 11, 0), title: 'Edit your rocks and build a cairn', text: 'Rename any rock or pebble, change its minutes, course or due date, and finish a rock in one tap. Every rock you cross now gets a celebration and adds a stone to your cairn.', go: 'pebbles' },
   { id: 'spider', at: Date.UTC(2026, 9, 30, 1, 0), title: 'A spider joined the Sanctuary', text: 'A fuzzy jumping spider with eight legs and eight eyes. Adopt it for 90 coins and try its four fur coats.', go: 'sanctuary', animal: 'spider' },
   { id: 'looks', at: Date.UTC(2026, 9, 29, 20, 0), title: 'Costumes, fur coats and emotes', text: 'Dress your animal as a chef, wizard, pirate, hero or royal, give it a real fur coat, and buy emotes for when it studies or naps. While you focus, your animal now reads a book.', go: 'sanctuary', animal: 'wolf' },
@@ -4233,7 +4234,8 @@ function renderZoo() {
   const ob = $('#ownerPrevBtn'); if (ob) { ob.hidden = !NET.isOwner; ob.setAttribute('aria-pressed', String(ownerPreview && !!NET.isOwner)); ob.textContent = ownerPreview && NET.isOwner ? 'Hide owner preview' : 'Owner preview'; }
   const bn = $('#ownerPrevNote'); if (bn) bn.hidden = !(NET.isOwner && ownerPreview);
   const best = Math.max(bestStreak(), streakNow());
-  $('#zoo').innerHTML = ANIMAL_KEYS.map(k => {
+  // hidden animals stay with students who already adopted them, but are not offered to anyone new
+  $('#zoo').innerHTML = ANIMAL_KEYS.filter(k => !ANIMALS[k].hidden || S.unlocked.includes(k) || (NET.isOwner && ownerPreview)).map(k => {
     const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
     const st = previewState[k] || (owned ? 'awake' : 'sleeping');
     const lv = bondLevel(p.bond);

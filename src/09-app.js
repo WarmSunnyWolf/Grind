@@ -19,7 +19,8 @@ function renderZoo() {
   const ob = $('#ownerPrevBtn'); if (ob) { ob.hidden = !NET.isOwner; ob.setAttribute('aria-pressed', String(ownerPreview && !!NET.isOwner)); ob.textContent = ownerPreview && NET.isOwner ? 'Hide owner preview' : 'Owner preview'; }
   const bn = $('#ownerPrevNote'); if (bn) bn.hidden = !(NET.isOwner && ownerPreview);
   const best = Math.max(bestStreak(), streakNow());
-  $('#zoo').innerHTML = ANIMAL_KEYS.map(k => {
+  // hidden animals stay with students who already adopted them, but are not offered to anyone new
+  $('#zoo').innerHTML = ANIMAL_KEYS.filter(k => !ANIMALS[k].hidden || S.unlocked.includes(k) || (NET.isOwner && ownerPreview)).map(k => {
     const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
     const st = previewState[k] || (owned ? 'awake' : 'sleeping');
     const lv = bondLevel(p.bond);
