@@ -123,30 +123,31 @@ function lookLayers(kind, look, state, studying) {
 }
 
 /* the dress-up window in Sanctuary */
-let dressFor = null, tryOn = null, dressPose = 'happy';
-function openDress(k) { dressFor = k; tryOn = null; dressPose = 'happy'; renderDress(); $('#dressModal').classList.add('on'); }
-function closeDress() { $('#dressModal').classList.remove('on'); dressFor = null; tryOn = null; }
+let dressFor = null, tryOn = null, dressPose = 'happy', dressPreview = false, previewLook = {};
+// preview: the owner looks at any animal and any item without buying or saving anything
+function openDress(k, preview) { dressFor = k; tryOn = null; dressPose = 'happy'; dressPreview = !!preview; previewLook = {}; renderDress(); $('#dressModal').classList.add('on'); }
+function closeDress() { $('#dressModal').classList.remove('on'); dressFor = null; tryOn = null; dressPreview = false; previewLook = {}; }
 const coatsOwned = k => (S.pets[k] && Array.isArray(S.pets[k].coats) ? S.pets[k].coats : []);
 function itemPrice(slot, id) { return slot === 'coat' ? COAT_COST : WARDROBE[id].cost; }
 function itemLabel(slot, id) { return slot === 'coat' ? COATS[dressFor][id].label : WARDROBE[id].label; }
 function itemOwned(slot, id) { return slot === 'coat' ? coatsOwned(dressFor).includes(id) : ownsItem(id); }
 function renderDress() {
   const k = dressFor; if (!k) return;
-  const p = S.pets[k], cur = cleanLook(p.look) || {}, view = { ...cur, ...(tryOn || {}) };
+  const prev = dressPreview, p = S.pets[k] || { name: '' }, cur = prev ? previewLook : (cleanLook(p.look) || {}), view = prev ? cur : { ...cur, ...(tryOn || {}) };
   const poseOf = slot => slot === 'emoteF' ? 'study' : slot === 'emoteN' ? 'sleeping' : 'awake';
   const pic = (look, pose) => avatarSVG(k, pose === 'study' ? 'awake' : pose, look, pose === 'study');
   const tile = (slot, id) => {
     const isNone = id === 'none', on = isNone ? !view[slot] : view[slot] === id, has = isNone || itemOwned(slot, id);
     const lk = { ...view }; if (isNone) delete lk[slot]; else lk[slot] = id;
     if (slot === 'outfit' && !isNone) { delete lk.head; delete lk.face; delete lk.neck; }
-    return `<button type="button" class="dress-tile ${on ? 'on' : ''}" data-dsel="${slot}:${id}" aria-pressed="${on}"><span class="dress-av">${pic(lk, poseOf(slot))}</span><b>${isNone ? (slot === 'coat' ? 'Natural' : 'None') : esc(itemLabel(slot, id))}</b><small>${isNone || has ? (on ? 'Wearing' : 'Yours') : `${icon('i-coin')}${itemPrice(slot, id)}`}</small></button>`;
+    return `<button type="button" class="dress-tile ${on ? 'on' : ''}" data-dsel="${slot}:${id}" aria-pressed="${on}"><span class="dress-av">${pic(lk, poseOf(slot))}</span><b>${isNone ? (slot === 'coat' ? 'Natural' : 'None') : esc(itemLabel(slot, id))}</b><small>${prev ? (isNone ? (on ? 'Showing' : '') : itemPrice(slot, id) ? `${icon('i-coin')}${itemPrice(slot, id)}` : 'Free') : isNone || has ? (on ? 'Wearing' : 'Yours') : `${icon('i-coin')}${itemPrice(slot, id)}`}</small></button>`;
   };
-  const pending = tryOn && Object.entries(tryOn).find(([sl, id]) => !itemOwned(sl, id));
+  const pending = !prev && tryOn && Object.entries(tryOn).find(([sl, id]) => !itemOwned(sl, id));
   const name = p.name || ANIMALS[k].label;
   const section = (lab, slot, ids, none = true) => `<div><span class="eyebrow">${lab}</span><div class="dress-row">${none ? tile(slot, 'none') : ''}${ids.map(id => tile(slot, id)).join('')}</div></div>`;
   const ofSlot = sl => Object.keys(WARDROBE).filter(id => WARDROBE[id].slot === sl);
   const pose = dressPose;
-  $('#dressBox').innerHTML = `<div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="eyebrow">Wardrobe</span><h2>Dress up ${esc(name)}</h2></div><button class="icon-btn" data-dclose aria-label="Close">${icon('i-x')}</button></div>
+  $('#dressBox').innerHTML = `<div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="eyebrow">${prev ? 'Owner preview' : 'Wardrobe'}</span><h2>${prev ? `Preview the ${esc(ANIMALS[k].label.toLowerCase())}` : `Dress up ${esc(name)}`}</h2></div><button class="icon-btn" data-dclose aria-label="Close">${icon('i-x')}</button></div>
     <div class="dress">
       <div class="dress-side"><div class="dress-pic">${animalSVG(k, pose === 'study' ? 'awake' : pose, { look: view, label: name, studying: pose === 'study' })}</div>
         <div class="seg dress-pose" role="group" aria-label="Preview">${[['happy', 'Happy'], ['study', 'Studying'], ['sleeping', 'Napping']].map(([v, t]) => `<button type="button" data-dpose="${v}" aria-pressed="${pose === v}">${t}</button>`).join('')}</div></div>
@@ -158,7 +159,7 @@ function renderDress() {
         ${section('While napping', 'emoteN', ofSlot('emoteN'), false)}
       </div>
     </div>
-    <div class="row dress-foot">${pending ? `<span class="muted" style="font-size:.84rem">Trying on ${esc(itemLabel(pending[0], pending[1]))}. You have ${S.coins} coins.</span><button class="btn" data-dcancel>Take it off</button><button class="btn primary" data-dbuy ${S.coins < itemPrice(pending[0], pending[1]) ? 'disabled' : ''}>${icon('i-coin')}Buy for ${itemPrice(pending[0], pending[1])}</button>` : `<span class="muted" style="font-size:.84rem">Outfits and emotes work on every animal. Coats belong to one animal.</span><button class="btn primary" data-dclose>Done</button>`}</div>`;
+    <div class="row dress-foot">${prev ? `<span class="muted" style="font-size:.84rem">Preview only. Nothing is bought, saved or shown to anyone.</span><button class="btn" data-dreset>Clear</button><button class="btn primary" data-dclose>Done</button>` : pending ? `<span class="muted" style="font-size:.84rem">Trying on ${esc(itemLabel(pending[0], pending[1]))}. You have ${S.coins} coins.</span><button class="btn" data-dcancel>Take it off</button><button class="btn primary" data-dbuy ${S.coins < itemPrice(pending[0], pending[1]) ? 'disabled' : ''}>${icon('i-coin')}Buy for ${itemPrice(pending[0], pending[1])}</button>` : `<span class="muted" style="font-size:.84rem">Outfits and emotes work on every animal. Coats belong to one animal.</span><button class="btn primary" data-dclose>Done</button>`}</div>`;
 }
 function setLook(k, look) {
   S.pets[k].look = cleanLook(look); save();
@@ -168,8 +169,16 @@ function bindDress() {
   $('#dressModal').addEventListener('click', e => {
     if (e.target.id === 'dressModal' || e.target.closest('[data-dclose]')) { closeDress(); return; }
     const k = dressFor; if (!k) return;
-    const cur = cleanLook(S.pets[k].look) || {};
     const ps = e.target.closest('[data-dpose]'); if (ps) { dressPose = ps.dataset.dpose; renderDress(); return; }
+    if (dressPreview) {
+      if (e.target.closest('[data-dreset]')) { previewLook = {}; renderDress(); return; }
+      const ps2 = e.target.closest('[data-dsel]'); if (!ps2) return;
+      const [slot, id] = ps2.dataset.dsel.split(':');
+      if (slot === 'emoteF') dressPose = 'study'; else if (slot === 'emoteN') dressPose = 'sleeping'; else if (dressPose !== 'happy') dressPose = 'happy';
+      if (id === 'none' || previewLook[slot] === id) delete previewLook[slot]; else { previewLook[slot] = id; if (slot === 'outfit') { delete previewLook.head; delete previewLook.face; delete previewLook.neck; } }
+      renderDress(); return;
+    }
+    const cur = cleanLook(S.pets[k].look) || {};
     const sel = e.target.closest('[data-dsel]');
     if (sel) {
       const [slot, id] = sel.dataset.dsel.split(':');

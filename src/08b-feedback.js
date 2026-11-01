@@ -78,6 +78,7 @@ async function checkOwner() {
   NET.isOwner = false;
   if (NET.web && NET.db) { try { await NET.db.collection('feedback').limit(1).get(); NET.isOwner = true; } catch (e) {} }
   $$('[data-owneronly]').forEach(b => { b.hidden = !NET.isOwner; });
+  try { renderZoo(); } catch (e) {}
 }
 let actFilter = '';
 async function loadActivity() {

@@ -14,7 +14,10 @@ function checkUnlocks() {
 }
 function bondLevel(b) { return Math.min(5, Math.floor((b || 0) / 60)); }
 const BOND_NAMES = ['New friend', 'Getting close', 'Study buddy', 'Close friend', 'Best friend', 'Kindred spirit'];
+let ownerPreview = false;
 function renderZoo() {
+  const ob = $('#ownerPrevBtn'); if (ob) { ob.hidden = !NET.isOwner; ob.setAttribute('aria-pressed', String(ownerPreview && !!NET.isOwner)); ob.textContent = ownerPreview && NET.isOwner ? 'Hide owner preview' : 'Owner preview'; }
+  const bn = $('#ownerPrevNote'); if (bn) bn.hidden = !(NET.isOwner && ownerPreview);
   const best = Math.max(bestStreak(), streakNow());
   $('#zoo').innerHTML = ANIMAL_KEYS.map(k => {
     const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
@@ -31,13 +34,15 @@ function renderZoo() {
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
-      <div class="row">${action}${owned ? `<button class="btn small" data-dress="${k}">Dress up</button><button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
+      <div class="row">${action}${owned ? `<button class="btn small" data-dress="${k}">Dress up</button><button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}${NET.isOwner && ownerPreview ? `<button class="btn small owner-btn" data-preview="${k}">${icon('i-wand')}Preview looks</button>` : ''}</div>
     </article>`;
   }).join('');
 }
 function bindZoo() {
+  $('#ownerPrevBtn').onclick = () => { ownerPreview = !ownerPreview; renderZoo(); };
   $('#zoo').addEventListener('click', e => {
     const dr = e.target.closest('[data-dress]'); if (dr) { openDress(dr.dataset.dress); return; }
+    const pv = e.target.closest('[data-preview]'); if (pv && NET.isOwner) { openDress(pv.dataset.preview, true); return; }
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
