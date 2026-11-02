@@ -49,9 +49,40 @@ function defaultState() {
   };
 }
 // When someone signs in, combine what they did on this device before signing in with what is saved in their account.
+// Two saved copies of the same student's progress (this device and the account) are combined, never replaced,
+// so a device that was offline or out of date can never wipe sessions, coins or animals saved elsewhere.
+function unionState(newer, older) {
+  const m = JSON.parse(JSON.stringify(newer)), o = older || {};
+  const key = x => x && (x.id || '') + ':' + (x.at || x.start || '');
+  const byId = (a = [], b = []) => { const ids = new Set(a.map(x => x && x.id)); return [...a, ...b.filter(x => x && x.id && !ids.has(x.id) && !x.example)]; };
+  const byKey = (a = [], b = []) => { const ks = new Set(a.map(key)); return [...a, ...b.filter(x => x && !ks.has(key(x)))]; };
+  const set = (a = [], b = []) => [...new Set([...a, ...b])];
+  m.sessions = byId(m.sessions, o.sessions).sort((x, y) => x.start - y.start);
+  m.rocks = byId(m.rocks, o.rocks);
+  m.events = byId(m.events, o.events);
+  m.localPosts = byId(m.localPosts, o.localPosts);
+  m.pebLog = byKey(m.pebLog, o.pebLog);
+  m.crossLog = byKey(m.crossLog, o.crossLog);
+  m.unlocked = set(m.unlocked, o.unlocked);
+  m.wardrobe = set(m.wardrobe, o.wardrobe);
+  m.friends = set(m.friends, o.friends);
+  m.circles = set(m.circles, o.circles);
+  m.pets = m.pets || {};
+  Object.entries(o.pets || {}).forEach(([k, p]) => { const q = m.pets[k]; if (!q) m.pets[k] = p; else { q.bond = Math.max(q.bond || 0, p.bond || 0); if (!q.name && p.name) q.name = p.name; if (p.coats) q.coats = set(q.coats, p.coats); if (!q.look && p.look) q.look = p.look; } });
+  m.coins = Math.max(m.coins || 0, o.coins || 0);
+  m.coinsEarned = Math.max(m.coinsEarned || 0, o.coinsEarned || 0);
+  m.bestStreak = Math.max(m.bestStreak || 0, o.bestStreak || 0);
+  if (m.sounds && o.sounds) m.sounds.owned = set(m.sounds.owned, o.sounds.owned);
+  const ms = m.semesters || (m.semesters = []);
+  (o.semesters || []).forEach(sm => { const t = ms.find(x => x.id === sm.id); if (!t) ms.push(sm); else t.courses = byId(t.courses, sm.courses); });
+  Object.entries(o.challenge || {}).forEach(([id, c]) => { m.challenge = m.challenge || {}; const r = m.challenge[id] || { days: [] }; r.days = set(r.days, c.days); m.challenge[id] = r; });
+  ['name', 'uni', 'major', 'bio'].forEach(f => { if (m.profile && !m.profile[f] && o.profile && o.profile[f]) m.profile[f] = o.profile[f]; });
+  if (o.onboarded) m.onboarded = true;
+  return m;
+}
 function mergeAccount(remote, local, uid) {
   if (!remote) return local.ownerUid && local.ownerUid !== uid ? defaultState() : local;
-  if (local.ownerUid === uid) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? local : remote;
+  if (local.ownerUid === uid) return (local.updatedAt || 0) > (remote.updatedAt || 0) ? unionState(local, remote) : unionState(remote, local);
   if (local.ownerUid) return remote;
   const remIds = new Set([...(remote.sessions || []), ...(remote.rocks || []), ...(remote.events || [])].map(x => x.id));
   const mine = [...(local.sessions || []), ...(local.rocks || []).filter(r => !r.example), ...(local.events || [])];
