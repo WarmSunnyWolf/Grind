@@ -36,7 +36,7 @@ function renderZoo() {
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
-      <div class="row">${action}${owned ? `<button class="btn small" data-dress="${k}">Dress up</button><button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}${NET.isOwner && ownerPreview ? `<button class="btn small owner-btn" data-preview="${k}">${icon('i-wand')}Preview looks</button>` : ''}</div>
+      <div class="row">${action}${owned ? `${a.plain ? '' : `<button class="btn small" data-dress="${k}">Dress up</button>`}<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}${NET.isOwner && ownerPreview && !a.plain ? `<button class="btn small owner-btn" data-preview="${k}">${icon('i-wand')}Preview looks</button>` : ''}</div>
     </article>`;
   }).join('');
 }

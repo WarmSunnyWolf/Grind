@@ -86,7 +86,7 @@ function renderChallenge() {
       <div class="ch-info">
         <span class="hand" style="color:var(--rose)">${won ? 'It hatched' : CH_STAGE[chStage(n)]}</span>
         <h2>${won ? 'Meet your Emberwing' : 'Hatch a creature nobody has seen before'}</h2>
-        <p class="muted">${won ? 'Half fox, half moth, with maple leaves for wings. It now lives in your Sanctuary and can study with you. Keep finishing your daily tasks for coins until the month ends.' : `Finish all three tasks on any ${CHALLENGE.goal} days in ${CHALLENGE.month} and the egg hatches into the Emberwing, an animal that only exists for this challenge. Every finished day also gives ${CHALLENGE.dayCoins} coins.`}</p>
+        <p class="muted">${won ? 'A firebird with ember feathers and a burning crest. It now lives in your Sanctuary and can study with you. Keep finishing your daily tasks for coins until the month ends.' : `Finish all three tasks on any ${CHALLENGE.goal} days in ${CHALLENGE.month} and the egg hatches into the Emberwing, an animal that only exists for this challenge. Every finished day also gives ${CHALLENGE.dayCoins} coins.`}</p>
         <div class="ch-meter"><span class="prog-bar"><i style="width:${Math.min(100, n / CHALLENGE.goal * 100)}%"></i></span><b>${n} of ${CHALLENGE.goal} days</b></div>
         ${won ? `<div class="row"><button class="btn small primary" data-go="sanctuary">See it in the Sanctuary</button></div>` : `<p class="muted" style="font-size:.85rem; margin:0">${need > left ? `There are ${left} days left, so the egg cannot hatch this month, but every finished day still gives coins.` : `${need} more ${need === 1 ? 'day' : 'days'} to go, with ${left} ${left === 1 ? 'day' : 'days'} left in ${CHALLENGE.month}.`}</p>`}
       </div>
@@ -119,7 +119,7 @@ function queueCh(kind, tries = 0) { if ($('.modal.on') && tries < 40) { setTimeo
 function showChallengeModal(kind) {
   if ($('.modal.on') && kind === 'daily') return;
   const n = chDone(), tasks = chTasks();
-  const head = kind === 'hatch' ? ['It hatched', 'Meet your Emberwing', 'Half fox, half moth, with maple leaves for wings. Nobody else has one unless they finished the challenge too. It is in your Sanctuary now.']
+  const head = kind === 'hatch' ? ['It hatched', 'Meet your Emberwing', 'A firebird with ember feathers and a burning crest. Nobody else has one unless they finished the challenge too. It is in your Sanctuary now.']
     : kind === 'day' ? ['Today counts', `${n} of ${CHALLENGE.goal} days`, n >= CHALLENGE.goal ? 'Your egg already hatched. Every finished day still gives coins.' : `All three tasks are done. The egg ${chStage(n) > chStage(n - 1) ? 'just cracked a little more' : 'feels a little warmer'}. Come back tomorrow for new tasks.`]
     : [`${CHALLENGE.month} challenge`, 'Your tasks for today', `Finish all three to warm the egg. ${n} of ${CHALLENGE.goal} days so far.`];
   const petals = kind === 'daily' ? '' : Array.from({ length: 22 }, (_, i) => `<i style="left:${(i * 37) % 100}%; --d:${((i * 7) % 10) / 10}s; --t:${2.4 + (i % 5) * .35}s; --r:${(i * 53) % 360}deg; --x:${(i % 2 ? 1 : -1) * (20 + (i * 11) % 40)}px; background:${['#d2553f', '#f0b84a', '#e88a4a', '#ffe28a'][i % 4]}"></i>`).join('');
