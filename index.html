@@ -1287,7 +1287,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <section><span class="eyebrow">Your data</span>
     <p class="muted" style="font-size:.84rem" id="dataWhere"></p>
     <div id="acctRow" class="row"></div>
-    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button></div>
+    <div class="row"><button class="btn small" id="exportBtn"><svg><use href="#i-download"/></svg>Export</button><button class="btn small" id="importBtn"><svg><use href="#i-upload"/></svg>Restore from a file</button><input type="file" id="importFile" accept=".json,application/json" hidden></div>
     <div id="resetWrap"><button class="btn small quiet" id="resetBtn"><svg><use href="#i-trash"/></svg>Start over</button></div>
   </section>
 </aside>
@@ -4824,6 +4824,20 @@ function bindDrawer() {
     if (dl) { try { await dl.save({ filename: `grind-${dayKey()}.json`, data }); return; } catch (e) { if (e && e.code === 'declined') return; } }
     if (NET.web) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = `grind-${dayKey()}.json`; document.body.appendChild(a); a.click(); a.remove(); return; }
     try { await navigator.clipboard.writeText(data); toast('Your data was copied as text. Paste it into a file to keep it.'); } catch (e) { toast('Export is not available in this view.'); }
+  };
+  // restoring adds a saved copy back on top of what is here; nothing already saved is removed
+  $('#importBtn').onclick = () => $('#importFile').click();
+  $('#importFile').onchange = async e => {
+    const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    try {
+      const b = JSON.parse(await f.text());
+      if (!b || b.v !== 1 || !Array.isArray(b.sessions)) throw new Error('not a Grind file');
+      const keep = { ownerUid: S.ownerUid };
+      S = mergeState(unionState(mergeState(b), S));
+      if (keep.ownerUid) S.ownerUid = keep.ownerUid;
+      save(); remoteSave(); applyTheme(); renderAll(); renderDrawer();
+      toast(`Restored. ${S.sessions.length} sessions, ${S.unlocked.length} animals and ${S.coins} coins are back.`);
+    } catch (err) { toast('That file is not a Grind backup. Choose a file made with Export.'); }
   };
   $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; };
   function restoreReset() { $('#resetWrap').innerHTML = `<button class="btn small quiet" id="resetBtn">${icon('i-trash')}Start over</button>`; bindReset(); }

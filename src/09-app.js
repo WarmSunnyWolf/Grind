@@ -217,6 +217,20 @@ function bindDrawer() {
     if (NET.web) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = `grind-${dayKey()}.json`; document.body.appendChild(a); a.click(); a.remove(); return; }
     try { await navigator.clipboard.writeText(data); toast('Your data was copied as text. Paste it into a file to keep it.'); } catch (e) { toast('Export is not available in this view.'); }
   };
+  // restoring adds a saved copy back on top of what is here; nothing already saved is removed
+  $('#importBtn').onclick = () => $('#importFile').click();
+  $('#importFile').onchange = async e => {
+    const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    try {
+      const b = JSON.parse(await f.text());
+      if (!b || b.v !== 1 || !Array.isArray(b.sessions)) throw new Error('not a Grind file');
+      const keep = { ownerUid: S.ownerUid };
+      S = mergeState(unionState(mergeState(b), S));
+      if (keep.ownerUid) S.ownerUid = keep.ownerUid;
+      save(); remoteSave(); applyTheme(); renderAll(); renderDrawer();
+      toast(`Restored. ${S.sessions.length} sessions, ${S.unlocked.length} animals and ${S.coins} coins are back.`);
+    } catch (err) { toast('That file is not a Grind backup. Choose a file made with Export.'); }
+  };
   $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; };
   function restoreReset() { $('#resetWrap').innerHTML = `<button class="btn small quiet" id="resetBtn">${icon('i-trash')}Start over</button>`; bindReset(); }
   function bindReset() { $('#resetBtn').onclick = () => { $('#resetWrap').innerHTML = `<span class="confirm">Erase everything on this device and start fresh? <button class="btn small rose" id="resetYes">Erase</button><button class="btn small" id="resetNo">Keep my pond</button></span>`; $('#resetNo').onclick = restoreReset; $('#resetYes').onclick = () => { S = defaultState(); save(); restoreReset(); applyTheme(); renderAll(); openDrawer(false); showWelcome(); }; }; }
