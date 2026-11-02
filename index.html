@@ -326,6 +326,52 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .cross-cairn{display:flex; align-items:center; justify-content:center; gap:14px; text-align:left}
 .cross-cairn .cairn{width:90px; height:90px}
 .cross-cairn p{margin:0; font-size:.9rem}
+/* monthly challenge */
+.ch-egg{display:block; width:100%; height:100%}
+.ch-egg.wob .ch-egg-body{transform-origin:100px 160px; animation:chwob 3.6s ease-in-out infinite}
+@keyframes chwob{0%,78%,100%{transform:rotate(0)} 82%{transform:rotate(-4deg)} 86%{transform:rotate(4deg)} 90%{transform:rotate(-2deg)} 94%{transform:rotate(1deg)}}
+.ch-tasks{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+.ch-tasks li{display:flex; align-items:center; gap:12px; text-align:left; padding:10px 12px; border-radius:14px; background:var(--surface-2); transition:background .3s}
+.ch-tasks li.ok{background:color-mix(in srgb, var(--moss) 16%, var(--surface-2))}
+.ch-tick{width:24px; height:24px; border-radius:50%; border:2px solid var(--line-2); display:grid; place-items:center; flex:none; background:var(--surface)}
+.ch-tasks li.ok .ch-tick{background:var(--moss); border-color:var(--moss); color:var(--surface)}
+.ch-tick svg{width:14px; height:14px}
+.ch-t{flex:1; min-width:0; display:flex; flex-direction:column; gap:6px}
+.ch-t b{font-weight:600; font-size:.9rem}
+.ch-t .prog-bar{max-width:none}
+.ch-n{font-size:.78rem; color:var(--muted); font-weight:600; white-space:nowrap}
+.ch-tasks li.ok .ch-n{color:var(--moss)}
+.ch-tasks.compact li{padding:7px 10px; gap:10px}
+.ch-tasks.compact .ch-tick{width:20px; height:20px}
+.ch-tasks.compact .ch-t b{font-size:.84rem; font-weight:500}
+.ch-mini{display:flex; align-items:center; gap:14px; margin-bottom:12px}
+.ch-mini-egg{width:72px; height:72px; flex:none}
+.ch-mini div:last-child{display:flex; flex-direction:column}
+.ch-mini span{font-size:.82rem}
+.ch-hero{display:grid; grid-template-columns:220px 1fr; gap:26px; align-items:center; background:linear-gradient(135deg, color-mix(in srgb, #e88a4a 14%, var(--surface)), var(--surface) 60%)}
+.ch-egg-wrap{width:220px; height:220px}
+.ch-info{display:flex; flex-direction:column; gap:10px}
+.ch-info h2{font-size:1.7rem; margin:0}
+.ch-info p{margin:0; max-width:60ch}
+.ch-meter{display:flex; align-items:center; gap:12px}
+.ch-meter b{white-space:nowrap}
+.ch-meter .prog-bar{max-width:320px; height:10px}
+.ch-meter .prog-bar i{background:linear-gradient(90deg, #f0b84a, #e88a4a, #d2553f)}
+.g-ch{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.ch-cal{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px}
+.ch-cal li{aspect-ratio:1; border-radius:12px; background:var(--surface-2); display:grid; place-items:center; position:relative; font-size:.8rem; color:var(--muted); font-weight:600}
+.ch-cal li span{position:relative; z-index:1}
+.ch-cal li.done{background:color-mix(in srgb, #e88a4a 22%, var(--surface-2)); color:var(--ink)}
+.ch-cal li.done svg{position:absolute; inset:14%; width:72%; height:72%; color:#e88a4a; opacity:.35}
+.ch-cal li.today{outline:2px solid var(--accent); outline-offset:-2px; color:var(--ink)}
+.ch-cal li.miss{opacity:.5}
+.ch-peek{display:flex; align-items:center; gap:14px; margin-top:14px; padding-top:14px; border-top:1px dashed var(--line)}
+.ch-peek .pic{width:64px; height:64px; flex:none; filter:brightness(0); opacity:.18}
+.ch-peek p{margin:0; font-size:.86rem}
+.ch-pop-egg{width:190px; height:190px; margin:0 auto}
+@media (max-width:720px){#nav [data-go="challenge"]{display:none}}
+@media (max-width:760px){.ch-hero{grid-template-columns:1fr; text-align:center; justify-items:center} .ch-egg-wrap{width:170px; height:170px} .ch-meter{justify-content:center} .g-ch{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.ch-egg.wob .ch-egg-body{animation:none}}
 .petals{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2}
 .petals i{position:absolute; top:-20px; width:10px; height:14px; border-radius:80% 0 80% 0; border:1px solid rgba(59,47,39,.35); opacity:0; animation:petal var(--t) ease-in var(--d) forwards}
 @keyframes petal{0%{opacity:0; transform:translate(0,0) rotate(var(--r))} 10%{opacity:1} 100%{opacity:0; transform:translate(var(--x), 620px) rotate(calc(var(--r) + 420deg))}}
@@ -821,6 +867,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
     </a>
     <nav class="nav" id="nav">
       <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
+      <button data-go="challenge" data-chonly hidden><svg><use href="#i-spark"/></svg><span>Challenge</span></button>
       <button data-go="pebbles"><svg><use href="#i-pebble"/></svg><span>Pebbles</span></button>
       <button data-go="cal"><svg><use href="#i-cal"/></svg><span>Calendar</span><i class="dot" id="calDot" hidden></i></button>
       <button data-go="pond"><svg><use href="#i-pond"/></svg><span>The Pond</span><i class="dot" id="pondDot" hidden></i></button>
@@ -911,6 +958,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             </div>
           </div>
           <div class="stack">
+            <div class="card ch-card" id="chCard" hidden></div>
             <div class="card">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
               <div id="nextPebble"></div>
@@ -1047,6 +1095,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
       </section>
 
       <!-- SANCTUARY -->
+      <section class="view" id="v-challenge"><div id="chBody" class="stack"></div></section>
+
       <section class="view" id="v-sanctuary">
         <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-nine animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
         <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Click <b>Preview looks</b> on any animal to try every costume, coat and emote on it. Nothing is bought or saved, and students see nothing different.</div>
@@ -1074,6 +1124,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <p class="muted">Grind is a calm space to study. Time your focus, split big tasks into small pebbles, and study next to your classmates' animals. Read it top to bottom, or tap a step to jump straight to it.</p>
             <div class="g-toc" id="gToc">
               <a href="#g-new" data-gjump="new"><b><svg style="width:13px;height:13px"><use href="#i-spark"/></svg></b>What's new</a>
+              <a href="#g-ch" data-gjump="ch" data-chonly hidden><b><svg style="width:13px;height:13px"><use href="#i-spark"/></svg></b>November challenge</a>
               <a href="#g-1" data-gjump="1"><b>1</b>Get started</a>
               <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
               <a href="#g-3" data-gjump="3"><b>3</b>Time a study session</a>
@@ -1094,6 +1145,11 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <div class="g-head"><span class="g-ic"><svg><use href="#i-spark"/></svg></span><div><span class="eyebrow">Latest</span><h2>What's new</h2></div></div>
             <ul class="g-news" id="gNews"></ul>
             <p class="g-tip">New updates also pop up once when you open Grind and stay in the <b>bell</b> for two weeks.</p>
+          </article>
+          <article class="card g-sec" id="g-ch" data-chonly hidden>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-spark"/></svg></span><div><span class="eyebrow">This month</span><h2>The November challenge</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Challenge</b> in the menu, or the <b>November challenge</b> card on Focus. The first time you open Grind each day, your tasks for the day pop up too.</li><li>Every day you get three small tasks, like "Focus for 30 minutes" or "Tick off 2 pebbles". They tick themselves as you study, so there is nothing to tap.</li><li>Finish all three and the day counts: you get 15 coins and your egg grows warmer. Finish any 20 days in November and it hatches into the <b>Emberwing</b>, a creature that only exists for this challenge.</li><li>Missed a day? That is fine. Any 20 days count, and new tasks arrive every morning.</li></ol>
+            <div class="row"><button class="btn small" data-go="challenge">Show me the challenge</button></div>
           </article>
           <article class="card g-sec" id="g-1">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-user"/></svg></span><div><span class="eyebrow">Step 1</span><h2>Get started</h2></div></div>
@@ -1251,6 +1307,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="chModal" role="dialog" aria-modal="true" aria-label="November challenge"><div class="modal-box cross-box" id="chBox"></div></div>
 <div class="modal" id="crossModal" role="dialog" aria-modal="true" aria-label="Rock crossed"><div class="modal-box cross-box" id="crossBox"></div></div>
 <div class="modal" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="newsTitle"><div class="modal-box news-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="hand" style="color:var(--rose); font-size:1.3rem">Fresh in the pond</span><h2 id="newsTitle">What's new in Grind</h2></div><button class="icon-btn" data-newsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
@@ -1741,6 +1798,37 @@ const ANIMALS = {
       <path d="M89 76 C89 67 111 67 111 76 C111 88 106 96 100 102 C94 96 89 88 89 76 Z" fill="${bk}" ${O2}/><path d="M94 72 C98 70 102 70 106 72" fill="none" stroke="#cdbba0" stroke-width="1.6" stroke-linecap="round"/>`;
     }
   },
+  emberwing: {
+    label: 'Emberwing', lore: 'Nobody has seen one outside November. Half fox, half moth, with maple leaves for wings and a tail that glows a little brighter every day you keep your promise.', unlock: { type: 'challenge', id: 'nov2026' }, defaultName: '',
+    face: { eyes: [[84, 90], [116, 90]], er: 6.2, mouth: { x: 100, y: 108, type: 'cat' }, blush: [[71, 104], [129, 104]], blushR: 7, zz: [150, 36] },
+    art: () => {
+      const b = '#e88a4a', d = '#c4663a', c = '#fbe9cf', w = '#d2553f', g = '#f0b84a', v = '#9c3a2c', glow = '#ffe28a', an = '#7a4e38';
+      const leaf = 'M0 0 L-4 -10 L-22 -6 L-18 -14 L-34 -26 L-24 -28 L-28 -42 L-14 -36 L-12 -44 L-4 -38 L0 -56 L4 -38 L12 -44 L14 -36 L28 -42 L24 -28 L34 -26 L18 -14 L22 -6 L4 -10 Z';
+      const veins = 'M0 -2 L0 -46 M0 -6 L-24 -30 M0 -6 L24 -30 M0 -4 L-16 -9 M0 -4 L16 -9';
+      const wing = (x, y, r, s, f) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><path d="${leaf}" fill="${f}" stroke="${INK}" stroke-width="${(3 / s).toFixed(2)}" stroke-linejoin="round"/><path d="${leaf}" fill="${g}" transform="translate(0 -6) scale(.5)"/><path d="${veins}" fill="none" stroke="${v}" stroke-width="${(1.6 / s).toFixed(2)}" stroke-linecap="round" opacity=".75"/></g>`;
+      const feather = (x1, y1, cx, cy, x2, y2, rot) => `<path d="M${x1} ${y1} C${cx} ${cy} ${cx} ${cy} ${x2} ${y2}" fill="none" stroke="${an}" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="${x2}" cy="${y2}" rx="6" ry="13" fill="${an}" ${O2} transform="rotate(${rot} ${x2} ${y2})"/><path d="M${x2} ${y2 - 10} L${x2} ${y2 + 10}" stroke="${g}" stroke-width="1.4" stroke-linecap="round" transform="rotate(${rot} ${x2} ${y2})" opacity=".8"/>`;
+      const side = `<path d="M96 116 C74 92 44 64 22 54 C10 49 4 60 8 74 C14 98 40 124 92 134 Z" fill="${w}" ${O}/>
+        <path d="M22 54 C10 49 4 60 8 74 C10 82 14 90 20 98 C22 84 26 70 34 60 Z" fill="${d}" opacity=".55"/>
+        <g transform="translate(46 98) rotate(-48) scale(.42)"><path d="${leaf}" fill="${g}"/><path d="${veins}" fill="none" stroke="${v}" stroke-width="3.4" stroke-linecap="round" opacity=".6"/></g>
+        <path d="M94 136 C70 136 42 146 34 164 C30 176 44 180 58 172 C76 162 90 152 96 142 Z" fill="${w}" ${O}/>
+        <circle cx="52" cy="162" r="6" fill="${g}" stroke="${v}" stroke-width="1.6"/>`;
+      return `${side}<g transform="translate(200 0) scale(-1 1)">${side}</g>
+      <circle cx="170" cy="112" r="20" fill="${glow}" opacity=".35"/>
+      <path d="M128 172 C156 172 172 156 172 134 C172 124 168 116 162 112 C158 128 150 146 126 152 Z" fill="${b}" ${O}/>
+      <path d="M162 112 C172 106 182 112 180 124 C178 132 168 134 162 128 C158 122 158 116 162 112 Z" fill="${glow}" ${O2}/>
+      <circle cx="169" cy="120" r="3" fill="#fff8d8"/>
+      <ellipse cx="80" cy="178" rx="14" ry="6" fill="${d}" ${O2}/><ellipse cx="120" cy="178" rx="14" ry="6" fill="${d}" ${O2}/>
+      <path d="M60 178 C52 146 70 120 100 120 C130 120 148 146 140 178 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="158" rx="24" ry="18" fill="${c}"/>
+      <path d="M62 124 q5 12 13 4 q4 12 13 4 q4 12 12 2 q8 10 12 -2 q9 8 13 -4 q8 8 13 -4 C142 118 58 118 62 124 Z" fill="${c}" ${O2}/>
+      ${feather(88, 52, 86, 34, 72, 26, -38)}${feather(112, 52, 114, 34, 128, 26, 38)}
+      <path d="M50 88 C50 62 72 48 100 48 C128 48 150 62 150 88 C150 112 128 126 100 126 C72 126 50 112 50 88 Z" fill="${b}" ${O}/>
+      <path d="M52 96 L40 100 L52 106 M148 96 L160 100 L148 106" fill="${b}" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M64 100 C70 92 86 94 100 102 C114 94 130 92 136 100 C136 116 120 125 100 125 C80 125 64 116 64 100 Z" fill="${c}"/>
+      <path d="M100 58 L105 66 L100 74 L95 66 Z" fill="${glow}" stroke="${d}" stroke-width="1.6" stroke-linejoin="round"/>
+      <ellipse cx="100" cy="102" rx="4" ry="2.8" fill="${INK}"/>`;
+    }
+  },
   turtle: {
     label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
@@ -2175,6 +2263,7 @@ function mergeAccount(remote, local, uid) {
   m.sounds = m.sounds || local.sounds;
   if (m.sounds && local.sounds) m.sounds.owned = [...new Set([...(m.sounds.owned || []), ...(local.sounds.owned || [])])];
   m.bestStreak = Math.max(m.bestStreak || 0, local.bestStreak || 0);
+  Object.entries(local.challenge || {}).forEach(([id, c]) => { m.challenge = m.challenge || {}; const r = m.challenge[id] || { days: [] }; r.days = [...new Set([...(r.days || []), ...(c.days || [])])]; m.challenge[id] = r; });
   return m;
 }
 function mergeState(s) {
@@ -4193,6 +4282,7 @@ function bindActivity() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'nov', at: Date.UTC(2026, 10, 2, 5, 0), title: 'The November challenge', text: 'Every day this month you get three small tasks that tick themselves as you study. Finish them on any 20 days to hatch the Emberwing, a creature that only exists for this challenge. Each finished day also gives 15 coins.', go: 'challenge', animal: 'emberwing' },
   { id: 'trio', at: Date.UTC(2026, 10, 2, 3, 30), title: 'A hamster, a penguin and a parrot', text: 'Three new friends are in the Sanctuary: the hamster (55 coins), the penguin (110) and a scarlet macaw parrot (170). Each one has three fur coats.', go: 'sanctuary', animal: 'parrot' },
   { id: 'darklight', at: Date.UTC(2026, 10, 1, 16, 50), title: 'Light and dark for every theme', text: 'Enchanted Pond, Midnight, Sakura, Ocean and Forest now each come in a light and a dark version. Open Customize and pick Light, Dark or Match my device.', go: 'customize' },
   { id: 'pondscroll', at: Date.UTC(2026, 10, 1, 16, 40), title: 'A tidier pond', text: 'Students who are focusing now sit in the middle of the pond and nobody overlaps anymore. Swipe or use the arrows to see everyone, and tap Find me to jump to your animal.', go: 'pond' },
@@ -4226,7 +4316,7 @@ function maybeShowNews() {
   $('#newsBody').innerHTML = `<ul class="note-list news-list">${list.slice(0, 4).map(u => `<li>${newsPic(u)}<span class="note-t"><b>${esc(u.title)}</b><span class="muted">${esc(u.text)}</span></span><button class="btn small" data-newsgo="${u.go}">Show me</button></li>`).join('')}</ul>`;
   $('#newsModal').classList.add('on');
 }
-function closeNews() { $('#newsModal').classList.remove('on'); S.newsPop = Date.now(); save(); }
+function closeNews() { $('#newsModal').classList.remove('on'); S.newsPop = Date.now(); save(); setTimeout(() => { try { maybeShowChallenge(); } catch (e) {} }, 500); }
 function renderGuideNews() {
   const el = $('#gNews'); if (!el) return;
   el.innerHTML = UPDATES.slice(0, 6).map(u => `<li><span class="g-news-d">${new Date(u.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span><span><b>${esc(u.title)}.</b> ${esc(u.text)}</span></li>`).join('');
@@ -4334,9 +4424,159 @@ function bindNotes() {
   renderNotes(); renderGuideNews();
   setTimeout(maybeShowNews, 1800);
 }
+/* ---------- monthly challenge ----------
+   Every day of the month a student gets three small tasks that tick themselves as they study.
+   Finish all three on enough days and the challenge creature hatches from its egg. */
+const CHALLENGE = { id: 'nov2026', month: 'November', from: new Date(2026, 10, 1), to: new Date(2026, 11, 1), goal: 20, reward: 'emberwing', dayCoins: 15 };
+const chActive = (d = new Date()) => d >= CHALLENGE.from && d < CHALLENGE.to;
+function chState() {
+  if (!S.challenge || typeof S.challenge !== 'object') S.challenge = {};
+  const c = S.challenge[CHALLENGE.id] || (S.challenge[CHALLENGE.id] = { days: [] });
+  if (!Array.isArray(c.days)) c.days = [];
+  return c;
+}
+const chDone = () => chState().days.filter(k => k >= dayKey(CHALLENGE.from) && k < dayKey(CHALLENGE.to)).length;
+function chSeed(k) { let h = 7; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; }
+function chCourses() { return ((S.semesters || []).find(x => x.id === S.currentSem) || {}).courses || []; }
+// the three tasks for a given day: some focus time, some pebbles, and one that changes
+function chTasks(k = dayKey()) {
+  const h = chSeed(k), ses = S.sessions.filter(s => dayKey(s.start) === k), pebs = (S.pebLog || []).filter(p => dayKey(p.at) === k);
+  const mins = ses.reduce((a, s) => a + (s.mins || 0), 0);
+  const m = [25, 30, 40, 25, 50][h % 5], n = [1, 2, 3, 2][(h >> 3) % 4];
+  const extras = [
+    { id: 'two', label: 'Finish two focus sessions', have: ses.length, need: 2, go: 'focus' },
+    { id: 'full', label: 'Finish one session without stopping early', have: ses.filter(s => s.completed).length, need: 1, go: 'focus' },
+    { id: 'long', label: 'Do one session of 30 minutes or longer', have: Math.max(0, ...ses.map(s => s.mins || 0)), need: 30, unit: 'min', go: 'focus' },
+    { id: 'courses', label: 'Study two different courses', have: new Set(ses.map(s => s.courseId || 'general')).size, need: 2, go: 'focus' }
+  ].filter(t => t.id !== 'courses' || chCourses().length >= 2);
+  const x = extras[(h >> 6) % extras.length];
+  return [
+    { id: 'mins', label: `Focus for ${m} minutes`, have: mins, need: m, unit: 'min', go: 'focus' },
+    { id: 'pebs', label: n === 1 ? 'Tick off one pebble' : `Tick off ${n} pebbles`, have: pebs.length, need: n, go: 'pebbles' },
+    x
+  ].map(t => ({ ...t, ok: t.have >= t.need }));
+}
+function chStage(n) { return n >= CHALLENGE.goal ? 4 : Math.min(3, Math.floor(n / 5)); }
+const CH_STAGE = ['A warm egg in a nest of maple leaves', 'Something is moving inside', 'A crack, and a soft glow', 'Almost ready to hatch', 'Hatched'];
+// the egg grows cracks and glows brighter as days are finished
+function eggSVG(n) {
+  const st = chStage(n), f = Math.min(1, n / CHALLENGE.goal), INKc = INK;
+  if (st === 4) return animalSVG(CHALLENGE.reward, 'happy', { label: 'Emberwing' });
+  const cracks = [
+    '',
+    `<path d="M84 96 L92 104 L86 112 L95 120" fill="none" stroke="${INKc}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`,
+    `<path d="M84 96 L92 104 L86 112 L95 120 M112 78 L118 88 L111 94 L119 104" fill="none" stroke="${INKc}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`,
+    `<path d="M70 104 L80 98 L88 106 L98 98 L108 106 L118 98 L130 104" fill="none" stroke="${INKc}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M80 98 L88 106 L98 98 L108 106 L118 98" fill="none" stroke="#ffe28a" stroke-width="1.4" stroke-linecap="round" opacity=".9"/>`
+  ][st];
+  const wob = st >= 1 ? ' wob' : '';
+  return `<svg viewBox="0 0 200 200" class="ch-egg${wob}" overflow="visible" aria-hidden="true">
+    <circle cx="100" cy="104" r="${60 + 30 * f}" fill="#ffe28a" opacity="${.12 + .3 * f}"/>
+    <ellipse cx="100" cy="170" rx="66" ry="16" fill="#9a6a44" stroke="${INKc}" stroke-width="3"/>
+    <path d="M40 166 l14 -10 l6 12 M70 160 l10 -12 l8 12 M112 158 l10 -10 l8 12 M142 162 l14 -8 l2 12" fill="#d2553f" stroke="${INKc}" stroke-width="2" stroke-linejoin="round"/>
+    <g class="ch-egg-body"><path d="M100 40 C128 40 146 82 146 116 C146 146 126 166 100 166 C74 166 54 146 54 116 C54 82 72 40 100 40 Z" fill="#f6e7cf" stroke="${INKc}" stroke-width="3"/>
+    <path d="M100 40 C128 40 146 82 146 116 C146 146 126 166 100 166 C118 150 126 128 124 104 C122 74 112 52 100 40 Z" fill="#e8d2b0" opacity=".6"/>
+    <circle cx="80" cy="80" r="5" fill="#e88a4a" opacity=".7"/><circle cx="118" cy="128" r="7" fill="#e88a4a" opacity=".7"/><circle cx="74" cy="134" r="4" fill="#d2553f" opacity=".6"/><circle cx="122" cy="72" r="3.5" fill="#d2553f" opacity=".6"/>
+    <path d="M78 62 C82 54 88 50 92 48" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+    ${cracks}</g>
+    <path d="M38 170 C50 184 150 184 162 170" fill="#9a6a44" stroke="${INKc}" stroke-width="3"/>
+    <path d="M52 176 q10 -6 20 0 q10 -6 20 0 q10 -6 20 0 q10 -6 20 0 q10 -6 18 0" fill="none" stroke="#7a4e30" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+}
+function chTaskList(tasks, compact) {
+  return `<ul class="ch-tasks${compact ? ' compact' : ''}">${tasks.map(t => `<li class="${t.ok ? 'ok' : ''}"><span class="ch-tick">${t.ok ? icon('i-check') : ''}</span><span class="ch-t"><b>${esc(t.label)}</b>${compact ? '' : `<span class="prog-bar"><i style="width:${Math.min(100, Math.round(t.have / t.need * 100))}%"></i></span>`}</span><span class="ch-n">${t.ok ? 'Done' : t.unit === 'min' ? `${t.have} of ${t.need} min` : `${Math.min(t.have, t.need)} of ${t.need}`}</span>${compact || t.ok ? '' : `<button class="btn small quiet" data-go="${t.go}">Go</button>`}</li>`).join('')}</ul>`;
+}
+function chDaysLeft() { return Math.max(0, Math.round((CHALLENGE.to - new Date(dayKey() + 'T00:00')) / 864e5)); }
+function renderChallenge() {
+  const on = chActive(), n = chDone(), won = S.unlocked.includes(CHALLENGE.reward);
+  $$('[data-chonly]').forEach(e => { e.hidden = !on; });
+  const card = $('#chCard');
+  if (card) {
+    card.hidden = !on;
+    if (on) {
+      const tasks = chTasks(), all = tasks.every(t => t.ok);
+      card.innerHTML = `<div class="card-h"><h2>${CHALLENGE.month} challenge</h2><button class="btn small quiet" data-go="challenge">Open</button></div>
+        <div class="ch-mini"><div class="ch-mini-egg">${eggSVG(n)}</div><div><b>${won ? 'Your Emberwing hatched' : `${n} of ${CHALLENGE.goal} days`}</b><span class="muted">${all ? 'All done for today. See you tomorrow.' : `${tasks.filter(t => t.ok).length} of 3 tasks done today`}</span></div></div>
+        ${chTaskList(tasks, true)}`;
+    }
+  }
+  const box = $('#chBody'); if (!box || currentView !== 'challenge') return;
+  if (!on) { box.innerHTML = `<div class="card"><p class="muted">The ${CHALLENGE.month} challenge has ended. ${won ? 'Your Emberwing is waiting for you in the Sanctuary.' : 'A new one is coming soon.'}</p></div>`; return; }
+  const tasks = chTasks(), today = dayKey(), days = new Set(chState().days), first = new Date(CHALLENGE.from), cells = [];
+  for (let d = new Date(first); d < CHALLENGE.to; d.setDate(d.getDate() + 1)) {
+    const k = dayKey(d), cls = days.has(k) ? 'done' : k === today ? 'today' : k < today ? 'miss' : '';
+    cells.push(`<li class="${cls}" title="${d.getDate()} ${MO[d.getMonth()]}"><span>${d.getDate()}</span>${days.has(k) ? '<svg viewBox="0 0 20 20"><path d="M10 2 L11.4 6.6 L15.6 4.8 L14 9 L18 10.6 L13.6 12 L14.6 16.6 L10 14 L5.4 16.6 L6.4 12 L2 10.6 L6 9 L4.4 4.8 L8.6 6.6 Z" fill="currentColor"/></svg>' : ''}</li>`);
+  }
+  const left = chDaysLeft(), need = Math.max(0, CHALLENGE.goal - n);
+  box.innerHTML = `<div class="ch-hero card">
+      <div class="ch-egg-wrap">${eggSVG(n)}</div>
+      <div class="ch-info">
+        <span class="hand" style="color:var(--rose)">${won ? 'It hatched' : CH_STAGE[chStage(n)]}</span>
+        <h2>${won ? 'Meet your Emberwing' : 'Hatch a creature nobody has seen before'}</h2>
+        <p class="muted">${won ? 'Half fox, half moth, with maple leaves for wings. It now lives in your Sanctuary and can study with you. Keep finishing your daily tasks for coins until the month ends.' : `Finish all three tasks on any ${CHALLENGE.goal} days in ${CHALLENGE.month} and the egg hatches into the Emberwing, an animal that only exists for this challenge. Every finished day also gives ${CHALLENGE.dayCoins} coins.`}</p>
+        <div class="ch-meter"><span class="prog-bar"><i style="width:${Math.min(100, n / CHALLENGE.goal * 100)}%"></i></span><b>${n} of ${CHALLENGE.goal} days</b></div>
+        ${won ? `<div class="row"><button class="btn small primary" data-go="sanctuary">See it in the Sanctuary</button></div>` : `<p class="muted" style="font-size:.85rem; margin:0">${need > left ? `There are ${left} days left, so the egg cannot hatch this month, but every finished day still gives coins.` : `${need} more ${need === 1 ? 'day' : 'days'} to go, with ${left} ${left === 1 ? 'day' : 'days'} left in ${CHALLENGE.month}.`}</p>`}
+      </div>
+    </div>
+    <div class="grid g-ch">
+      <div class="card"><div class="card-h"><h2>Today's tasks</h2><span class="hand muted">${WD[new Date().getDay()]} ${new Date().getDate()} ${MO[new Date().getMonth()]}</span></div>
+        ${chTaskList(tasks)}
+        <p class="muted" style="font-size:.82rem; margin:12px 0 0">${tasks.every(t => t.ok) ? 'All three are done. Today counts toward your egg.' : 'They tick themselves as you study. New tasks arrive every morning.'}</p></div>
+      <div class="card"><div class="card-h"><h2>Your ${CHALLENGE.month}</h2><span class="muted" style="font-size:.8rem">Any ${CHALLENGE.goal} days count</span></div>
+        <ol class="ch-cal">${cells.join('')}</ol>
+        ${won ? '' : `<div class="ch-peek"><div class="pic">${animalSVG(CHALLENGE.reward, 'sleeping', { label: 'A shadow inside the egg' })}</div><p><b>Something is sleeping inside.</b><br><span class="muted">It wakes up at ${CHALLENGE.goal} days.</span></p></div>`}</div>
+    </div>`;
+}
+// called after anything that might finish a task
+function checkChallenge() {
+  if (!chActive() || !S.onboarded) return;
+  const c = chState(), k = dayKey();
+  if (c.days.includes(k) || !chTasks(k).every(t => t.ok)) return;
+  c.days.push(k); save();
+  const n = chDone();
+  addCoins(CHALLENGE.dayCoins, `for finishing today's ${CHALLENGE.month} tasks`);
+  if (n >= CHALLENGE.goal && !S.unlocked.includes(CHALLENGE.reward)) {
+    S.unlocked.push(CHALLENGE.reward); S.pets[CHALLENGE.reward] = S.pets[CHALLENGE.reward] || { name: '', bond: 0 }; save();
+    queueCh('hatch');
+  } else queueCh('day');
+  try { publishPond(); } catch (e) {}
+}
+// wait for any other celebration to close first
+function queueCh(kind, tries = 0) { if ($('.modal.on') && tries < 40) { setTimeout(() => queueCh(kind, tries + 1), 1500); return; } showChallengeModal(kind); }
+function showChallengeModal(kind) {
+  if ($('.modal.on') && kind === 'daily') return;
+  const n = chDone(), tasks = chTasks();
+  const head = kind === 'hatch' ? ['It hatched', 'Meet your Emberwing', 'Half fox, half moth, with maple leaves for wings. Nobody else has one unless they finished the challenge too. It is in your Sanctuary now.']
+    : kind === 'day' ? ['Today counts', `${n} of ${CHALLENGE.goal} days`, n >= CHALLENGE.goal ? 'Your egg already hatched. Every finished day still gives coins.' : `All three tasks are done. The egg ${chStage(n) > chStage(n - 1) ? 'just cracked a little more' : 'feels a little warmer'}. Come back tomorrow for new tasks.`]
+    : [`${CHALLENGE.month} challenge`, 'Your tasks for today', `Finish all three to warm the egg. ${n} of ${CHALLENGE.goal} days so far.`];
+  const petals = kind === 'daily' ? '' : Array.from({ length: 22 }, (_, i) => `<i style="left:${(i * 37) % 100}%; --d:${((i * 7) % 10) / 10}s; --t:${2.4 + (i % 5) * .35}s; --r:${(i * 53) % 360}deg; --x:${(i % 2 ? 1 : -1) * (20 + (i * 11) % 40)}px; background:${['#d2553f', '#f0b84a', '#e88a4a', '#ffe28a'][i % 4]}"></i>`).join('');
+  $('#chBox').innerHTML = `<div class="petals" aria-hidden="true">${petals}</div>
+    <div class="ch-pop-egg">${eggSVG(n)}</div>
+    <div class="cross-txt"><span class="hand">${head[0]}</span><h2>${head[1]}</h2><p class="muted">${head[2]}</p></div>
+    ${kind === 'daily' ? chTaskList(tasks, true) : ''}
+    <div class="row" style="justify-content:flex-end">${kind === 'hatch' ? '<button class="btn" data-chgo="sanctuary">See it</button>' : '<button class="btn" data-chgo="challenge">See the challenge</button>'}<button class="btn primary" data-chclose>${kind === 'daily' ? 'Let us start' : 'Keep going'}</button></div>`;
+  $('#chModal').classList.add('on');
+  if (kind !== 'daily') try { fanfare(); } catch (e) {}
+}
+// once a day, the first time Grind opens in the month, show the day's tasks
+function maybeShowChallenge() {
+  if (!chActive() || !S.onboarded || $('.modal.on')) return;
+  const c = chState(), k = dayKey();
+  if (c.pop === k) return;
+  c.pop = k; save();
+  showChallengeModal('daily');
+}
+function bindChallenge() {
+  $('#chModal').addEventListener('click', e => {
+    const g = e.target.closest('[data-chgo]');
+    if (g) { $('#chModal').classList.remove('on'); go(g.dataset.chgo); return; }
+    if (e.target.id === 'chModal' || e.target.closest('[data-chclose]')) $('#chModal').classList.remove('on');
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#chModal').classList.remove('on'); });
+  setTimeout(maybeShowChallenge, 2600);
+}
 /* ---------- sanctuary ---------- */
 const previewState = {};
-function unlockText(a) { const u = a.unlock; return u.type === 'coins' ? `${u.n} coins` : u.type === 'streak' ? `${u.n}-day streak` : 'Free'; }
+function unlockText(a) { const u = a.unlock; return u.type === 'coins' ? `${u.n} coins` : u.type === 'streak' ? `${u.n}-day streak` : u.type === 'challenge' ? `${CHALLENGE.month} challenge` : 'Free'; }
 function checkUnlocks() {
   const best = Math.max(bestStreak(), streakNow());
   S.bestStreak = best;
@@ -4356,12 +4596,13 @@ function renderZoo() {
   const bn = $('#ownerPrevNote'); if (bn) bn.hidden = !(NET.isOwner && ownerPreview);
   const best = Math.max(bestStreak(), streakNow());
   // hidden animals stay with students who already adopted them, but are not offered to anyone new
-  $('#zoo').innerHTML = ANIMAL_KEYS.filter(k => !ANIMALS[k].hidden || S.unlocked.includes(k) || (NET.isOwner && ownerPreview)).map(k => {
+  $('#zoo').innerHTML = ANIMAL_KEYS.filter(k => (!ANIMALS[k].hidden && (ANIMALS[k].unlock.type !== 'challenge' || chActive())) || S.unlocked.includes(k) || (NET.isOwner && ownerPreview)).map(k => {
     const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
     const st = previewState[k] || (owned ? 'awake' : 'sleeping');
     const lv = bondLevel(p.bond);
     let action;
     if (!owned && a.unlock.type === 'coins') action = `<button class="btn small primary" data-adopt="${k}" ${S.coins < a.unlock.n ? 'disabled' : ''}>${icon('i-coin')}Adopt for ${a.unlock.n}</button>${S.coins < a.unlock.n ? `<span class="muted" style="font-size:.78rem">${a.unlock.n - S.coins} more coins</span>` : ''}`;
+    else if (!owned && a.unlock.type === 'challenge') action = `<button class="btn small primary" data-go="challenge">Open the challenge</button><span class="muted" style="font-size:.82rem">Hatches after ${CHALLENGE.goal} finished days in ${CHALLENGE.month}. You have ${chDone()}.</span>`;
     else if (!owned) action = `<span class="muted" style="font-size:.82rem">Arrives at a ${a.unlock.n}-day streak. Your best so far is ${best}.</span>`;
     else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(pn)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
     return `<article class="beast ${owned ? '' : 'locked'} ${active ? 'active' : ''}">
@@ -4578,7 +4819,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
+const TITLES = { focus: 'Focus', challenge: 'November challenge', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -4599,6 +4840,7 @@ function go(v) {
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
   if (v === 'guide') renderGuide();
   if (v === 'activity') loadActivity();
+  if (v === 'challenge') renderChallenge();
   window.scrollTo({ top: 0 });
 }
 function renderChips() {
@@ -4643,7 +4885,7 @@ function renderGreeting() {
   $('#meMiniName').textContent = myName();
   $('#meMiniSub').textContent = `with ${petName()}`;
 }
-function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
+function renderAllLight() { try { checkChallenge(); renderChallenge(); } catch (e) { console.error(e); } renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
@@ -4656,7 +4898,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });

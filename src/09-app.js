@@ -1,6 +1,6 @@
 /* ---------- sanctuary ---------- */
 const previewState = {};
-function unlockText(a) { const u = a.unlock; return u.type === 'coins' ? `${u.n} coins` : u.type === 'streak' ? `${u.n}-day streak` : 'Free'; }
+function unlockText(a) { const u = a.unlock; return u.type === 'coins' ? `${u.n} coins` : u.type === 'streak' ? `${u.n}-day streak` : u.type === 'challenge' ? `${CHALLENGE.month} challenge` : 'Free'; }
 function checkUnlocks() {
   const best = Math.max(bestStreak(), streakNow());
   S.bestStreak = best;
@@ -20,12 +20,13 @@ function renderZoo() {
   const bn = $('#ownerPrevNote'); if (bn) bn.hidden = !(NET.isOwner && ownerPreview);
   const best = Math.max(bestStreak(), streakNow());
   // hidden animals stay with students who already adopted them, but are not offered to anyone new
-  $('#zoo').innerHTML = ANIMAL_KEYS.filter(k => !ANIMALS[k].hidden || S.unlocked.includes(k) || (NET.isOwner && ownerPreview)).map(k => {
+  $('#zoo').innerHTML = ANIMAL_KEYS.filter(k => (!ANIMALS[k].hidden && (ANIMALS[k].unlock.type !== 'challenge' || chActive())) || S.unlocked.includes(k) || (NET.isOwner && ownerPreview)).map(k => {
     const a = ANIMALS[k], owned = S.unlocked.includes(k), active = S.active === k, p = S.pets[k] || { name: '', bond: 0 }, pn = p.name || a.label;
     const st = previewState[k] || (owned ? 'awake' : 'sleeping');
     const lv = bondLevel(p.bond);
     let action;
     if (!owned && a.unlock.type === 'coins') action = `<button class="btn small primary" data-adopt="${k}" ${S.coins < a.unlock.n ? 'disabled' : ''}>${icon('i-coin')}Adopt for ${a.unlock.n}</button>${S.coins < a.unlock.n ? `<span class="muted" style="font-size:.78rem">${a.unlock.n - S.coins} more coins</span>` : ''}`;
+    else if (!owned && a.unlock.type === 'challenge') action = `<button class="btn small primary" data-go="challenge">Open the challenge</button><span class="muted" style="font-size:.82rem">Hatches after ${CHALLENGE.goal} finished days in ${CHALLENGE.month}. You have ${chDone()}.</span>`;
     else if (!owned) action = `<span class="muted" style="font-size:.82rem">Arrives at a ${a.unlock.n}-day streak. Your best so far is ${best}.</span>`;
     else action = `${active ? `<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Studying with you</span>` : `<button class="btn small primary" data-use="${k}">Study with ${esc(pn)}</button>`}<button class="btn small" data-treat="${k}" ${S.coins < 5 ? 'disabled' : ''}>${icon('i-coin')}Treat · 5</button>`;
     return `<article class="beast ${owned ? '' : 'locked'} ${active ? 'active' : ''}">
@@ -242,7 +243,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
+const TITLES = { focus: 'Focus', challenge: 'November challenge', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -263,6 +264,7 @@ function go(v) {
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
   if (v === 'guide') renderGuide();
   if (v === 'activity') loadActivity();
+  if (v === 'challenge') renderChallenge();
   window.scrollTo({ top: 0 });
 }
 function renderChips() {
@@ -307,7 +309,7 @@ function renderGreeting() {
   $('#meMiniName').textContent = myName();
   $('#meMiniSub').textContent = `with ${petName()}`;
 }
-function renderAllLight() { renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
+function renderAllLight() { try { checkChallenge(); renderChallenge(); } catch (e) { console.error(e); } renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
@@ -320,7 +322,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });

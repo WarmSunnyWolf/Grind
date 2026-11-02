@@ -73,6 +73,7 @@ function mergeAccount(remote, local, uid) {
   m.sounds = m.sounds || local.sounds;
   if (m.sounds && local.sounds) m.sounds.owned = [...new Set([...(m.sounds.owned || []), ...(local.sounds.owned || [])])];
   m.bestStreak = Math.max(m.bestStreak || 0, local.bestStreak || 0);
+  Object.entries(local.challenge || {}).forEach(([id, c]) => { m.challenge = m.challenge || {}; const r = m.challenge[id] || { days: [] }; r.days = [...new Set([...(r.days || []), ...(c.days || [])])]; m.challenge[id] = r; });
   return m;
 }
 function mergeState(s) {

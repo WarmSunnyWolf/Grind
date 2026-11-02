@@ -469,6 +469,37 @@ const ANIMALS = {
       <path d="M89 76 C89 67 111 67 111 76 C111 88 106 96 100 102 C94 96 89 88 89 76 Z" fill="${bk}" ${O2}/><path d="M94 72 C98 70 102 70 106 72" fill="none" stroke="#cdbba0" stroke-width="1.6" stroke-linecap="round"/>`;
     }
   },
+  emberwing: {
+    label: 'Emberwing', lore: 'Nobody has seen one outside November. Half fox, half moth, with maple leaves for wings and a tail that glows a little brighter every day you keep your promise.', unlock: { type: 'challenge', id: 'nov2026' }, defaultName: '',
+    face: { eyes: [[84, 90], [116, 90]], er: 6.2, mouth: { x: 100, y: 108, type: 'cat' }, blush: [[71, 104], [129, 104]], blushR: 7, zz: [150, 36] },
+    art: () => {
+      const b = '#e88a4a', d = '#c4663a', c = '#fbe9cf', w = '#d2553f', g = '#f0b84a', v = '#9c3a2c', glow = '#ffe28a', an = '#7a4e38';
+      const leaf = 'M0 0 L-4 -10 L-22 -6 L-18 -14 L-34 -26 L-24 -28 L-28 -42 L-14 -36 L-12 -44 L-4 -38 L0 -56 L4 -38 L12 -44 L14 -36 L28 -42 L24 -28 L34 -26 L18 -14 L22 -6 L4 -10 Z';
+      const veins = 'M0 -2 L0 -46 M0 -6 L-24 -30 M0 -6 L24 -30 M0 -4 L-16 -9 M0 -4 L16 -9';
+      const wing = (x, y, r, s, f) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><path d="${leaf}" fill="${f}" stroke="${INK}" stroke-width="${(3 / s).toFixed(2)}" stroke-linejoin="round"/><path d="${leaf}" fill="${g}" transform="translate(0 -6) scale(.5)"/><path d="${veins}" fill="none" stroke="${v}" stroke-width="${(1.6 / s).toFixed(2)}" stroke-linecap="round" opacity=".75"/></g>`;
+      const feather = (x1, y1, cx, cy, x2, y2, rot) => `<path d="M${x1} ${y1} C${cx} ${cy} ${cx} ${cy} ${x2} ${y2}" fill="none" stroke="${an}" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="${x2}" cy="${y2}" rx="6" ry="13" fill="${an}" ${O2} transform="rotate(${rot} ${x2} ${y2})"/><path d="M${x2} ${y2 - 10} L${x2} ${y2 + 10}" stroke="${g}" stroke-width="1.4" stroke-linecap="round" transform="rotate(${rot} ${x2} ${y2})" opacity=".8"/>`;
+      const side = `<path d="M96 116 C74 92 44 64 22 54 C10 49 4 60 8 74 C14 98 40 124 92 134 Z" fill="${w}" ${O}/>
+        <path d="M22 54 C10 49 4 60 8 74 C10 82 14 90 20 98 C22 84 26 70 34 60 Z" fill="${d}" opacity=".55"/>
+        <g transform="translate(46 98) rotate(-48) scale(.42)"><path d="${leaf}" fill="${g}"/><path d="${veins}" fill="none" stroke="${v}" stroke-width="3.4" stroke-linecap="round" opacity=".6"/></g>
+        <path d="M94 136 C70 136 42 146 34 164 C30 176 44 180 58 172 C76 162 90 152 96 142 Z" fill="${w}" ${O}/>
+        <circle cx="52" cy="162" r="6" fill="${g}" stroke="${v}" stroke-width="1.6"/>`;
+      return `${side}<g transform="translate(200 0) scale(-1 1)">${side}</g>
+      <circle cx="170" cy="112" r="20" fill="${glow}" opacity=".35"/>
+      <path d="M128 172 C156 172 172 156 172 134 C172 124 168 116 162 112 C158 128 150 146 126 152 Z" fill="${b}" ${O}/>
+      <path d="M162 112 C172 106 182 112 180 124 C178 132 168 134 162 128 C158 122 158 116 162 112 Z" fill="${glow}" ${O2}/>
+      <circle cx="169" cy="120" r="3" fill="#fff8d8"/>
+      <ellipse cx="80" cy="178" rx="14" ry="6" fill="${d}" ${O2}/><ellipse cx="120" cy="178" rx="14" ry="6" fill="${d}" ${O2}/>
+      <path d="M60 178 C52 146 70 120 100 120 C130 120 148 146 140 178 Z" fill="${b}" ${O}/>
+      <ellipse cx="100" cy="158" rx="24" ry="18" fill="${c}"/>
+      <path d="M62 124 q5 12 13 4 q4 12 13 4 q4 12 12 2 q8 10 12 -2 q9 8 13 -4 q8 8 13 -4 C142 118 58 118 62 124 Z" fill="${c}" ${O2}/>
+      ${feather(88, 52, 86, 34, 72, 26, -38)}${feather(112, 52, 114, 34, 128, 26, 38)}
+      <path d="M50 88 C50 62 72 48 100 48 C128 48 150 62 150 88 C150 112 128 126 100 126 C72 126 50 112 50 88 Z" fill="${b}" ${O}/>
+      <path d="M52 96 L40 100 L52 106 M148 96 L160 100 L148 106" fill="${b}" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M64 100 C70 92 86 94 100 102 C114 94 130 92 136 100 C136 116 120 125 100 125 C80 125 64 116 64 100 Z" fill="${c}"/>
+      <path d="M100 58 L105 66 L100 74 L95 66 Z" fill="${glow}" stroke="${d}" stroke-width="1.6" stroke-linejoin="round"/>
+      <ellipse cx="100" cy="102" rx="4" ry="2.8" fill="${INK}"/>`;
+    }
+  },
   turtle: {
     label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },

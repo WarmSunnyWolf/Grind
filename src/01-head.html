@@ -319,6 +319,52 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .cross-cairn{display:flex; align-items:center; justify-content:center; gap:14px; text-align:left}
 .cross-cairn .cairn{width:90px; height:90px}
 .cross-cairn p{margin:0; font-size:.9rem}
+/* monthly challenge */
+.ch-egg{display:block; width:100%; height:100%}
+.ch-egg.wob .ch-egg-body{transform-origin:100px 160px; animation:chwob 3.6s ease-in-out infinite}
+@keyframes chwob{0%,78%,100%{transform:rotate(0)} 82%{transform:rotate(-4deg)} 86%{transform:rotate(4deg)} 90%{transform:rotate(-2deg)} 94%{transform:rotate(1deg)}}
+.ch-tasks{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+.ch-tasks li{display:flex; align-items:center; gap:12px; text-align:left; padding:10px 12px; border-radius:14px; background:var(--surface-2); transition:background .3s}
+.ch-tasks li.ok{background:color-mix(in srgb, var(--moss) 16%, var(--surface-2))}
+.ch-tick{width:24px; height:24px; border-radius:50%; border:2px solid var(--line-2); display:grid; place-items:center; flex:none; background:var(--surface)}
+.ch-tasks li.ok .ch-tick{background:var(--moss); border-color:var(--moss); color:var(--surface)}
+.ch-tick svg{width:14px; height:14px}
+.ch-t{flex:1; min-width:0; display:flex; flex-direction:column; gap:6px}
+.ch-t b{font-weight:600; font-size:.9rem}
+.ch-t .prog-bar{max-width:none}
+.ch-n{font-size:.78rem; color:var(--muted); font-weight:600; white-space:nowrap}
+.ch-tasks li.ok .ch-n{color:var(--moss)}
+.ch-tasks.compact li{padding:7px 10px; gap:10px}
+.ch-tasks.compact .ch-tick{width:20px; height:20px}
+.ch-tasks.compact .ch-t b{font-size:.84rem; font-weight:500}
+.ch-mini{display:flex; align-items:center; gap:14px; margin-bottom:12px}
+.ch-mini-egg{width:72px; height:72px; flex:none}
+.ch-mini div:last-child{display:flex; flex-direction:column}
+.ch-mini span{font-size:.82rem}
+.ch-hero{display:grid; grid-template-columns:220px 1fr; gap:26px; align-items:center; background:linear-gradient(135deg, color-mix(in srgb, #e88a4a 14%, var(--surface)), var(--surface) 60%)}
+.ch-egg-wrap{width:220px; height:220px}
+.ch-info{display:flex; flex-direction:column; gap:10px}
+.ch-info h2{font-size:1.7rem; margin:0}
+.ch-info p{margin:0; max-width:60ch}
+.ch-meter{display:flex; align-items:center; gap:12px}
+.ch-meter b{white-space:nowrap}
+.ch-meter .prog-bar{max-width:320px; height:10px}
+.ch-meter .prog-bar i{background:linear-gradient(90deg, #f0b84a, #e88a4a, #d2553f)}
+.g-ch{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.ch-cal{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px}
+.ch-cal li{aspect-ratio:1; border-radius:12px; background:var(--surface-2); display:grid; place-items:center; position:relative; font-size:.8rem; color:var(--muted); font-weight:600}
+.ch-cal li span{position:relative; z-index:1}
+.ch-cal li.done{background:color-mix(in srgb, #e88a4a 22%, var(--surface-2)); color:var(--ink)}
+.ch-cal li.done svg{position:absolute; inset:14%; width:72%; height:72%; color:#e88a4a; opacity:.35}
+.ch-cal li.today{outline:2px solid var(--accent); outline-offset:-2px; color:var(--ink)}
+.ch-cal li.miss{opacity:.5}
+.ch-peek{display:flex; align-items:center; gap:14px; margin-top:14px; padding-top:14px; border-top:1px dashed var(--line)}
+.ch-peek .pic{width:64px; height:64px; flex:none; filter:brightness(0); opacity:.18}
+.ch-peek p{margin:0; font-size:.86rem}
+.ch-pop-egg{width:190px; height:190px; margin:0 auto}
+@media (max-width:720px){#nav [data-go="challenge"]{display:none}}
+@media (max-width:760px){.ch-hero{grid-template-columns:1fr; text-align:center; justify-items:center} .ch-egg-wrap{width:170px; height:170px} .ch-meter{justify-content:center} .g-ch{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.ch-egg.wob .ch-egg-body{animation:none}}
 .petals{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2}
 .petals i{position:absolute; top:-20px; width:10px; height:14px; border-radius:80% 0 80% 0; border:1px solid rgba(59,47,39,.35); opacity:0; animation:petal var(--t) ease-in var(--d) forwards}
 @keyframes petal{0%{opacity:0; transform:translate(0,0) rotate(var(--r))} 10%{opacity:1} 100%{opacity:0; transform:translate(var(--x), 620px) rotate(calc(var(--r) + 420deg))}}

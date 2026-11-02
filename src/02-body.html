@@ -53,6 +53,7 @@
     </a>
     <nav class="nav" id="nav">
       <button data-go="focus" aria-current="page"><svg><use href="#i-timer"/></svg><span>Focus</span></button>
+      <button data-go="challenge" data-chonly hidden><svg><use href="#i-spark"/></svg><span>Challenge</span></button>
       <button data-go="pebbles"><svg><use href="#i-pebble"/></svg><span>Pebbles</span></button>
       <button data-go="cal"><svg><use href="#i-cal"/></svg><span>Calendar</span><i class="dot" id="calDot" hidden></i></button>
       <button data-go="pond"><svg><use href="#i-pond"/></svg><span>The Pond</span><i class="dot" id="pondDot" hidden></i></button>
@@ -143,6 +144,7 @@
             </div>
           </div>
           <div class="stack">
+            <div class="card ch-card" id="chCard" hidden></div>
             <div class="card">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
               <div id="nextPebble"></div>
@@ -279,6 +281,8 @@
       </section>
 
       <!-- SANCTUARY -->
+      <section class="view" id="v-challenge"><div id="chBody" class="stack"></div></section>
+
       <section class="view" id="v-sanctuary">
         <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-nine animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
         <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Click <b>Preview looks</b> on any animal to try every costume, coat and emote on it. Nothing is bought or saved, and students see nothing different.</div>
@@ -306,6 +310,7 @@
             <p class="muted">Grind is a calm space to study. Time your focus, split big tasks into small pebbles, and study next to your classmates' animals. Read it top to bottom, or tap a step to jump straight to it.</p>
             <div class="g-toc" id="gToc">
               <a href="#g-new" data-gjump="new"><b><svg style="width:13px;height:13px"><use href="#i-spark"/></svg></b>What's new</a>
+              <a href="#g-ch" data-gjump="ch" data-chonly hidden><b><svg style="width:13px;height:13px"><use href="#i-spark"/></svg></b>November challenge</a>
               <a href="#g-1" data-gjump="1"><b>1</b>Get started</a>
               <a href="#g-2" data-gjump="2"><b>2</b>Add your courses</a>
               <a href="#g-3" data-gjump="3"><b>3</b>Time a study session</a>
@@ -326,6 +331,11 @@
             <div class="g-head"><span class="g-ic"><svg><use href="#i-spark"/></svg></span><div><span class="eyebrow">Latest</span><h2>What's new</h2></div></div>
             <ul class="g-news" id="gNews"></ul>
             <p class="g-tip">New updates also pop up once when you open Grind and stay in the <b>bell</b> for two weeks.</p>
+          </article>
+          <article class="card g-sec" id="g-ch" data-chonly hidden>
+            <div class="g-head"><span class="g-ic"><svg><use href="#i-spark"/></svg></span><div><span class="eyebrow">This month</span><h2>The November challenge</h2></div></div>
+            <ol class="g-steps"><li>Open <b>Challenge</b> in the menu, or the <b>November challenge</b> card on Focus. The first time you open Grind each day, your tasks for the day pop up too.</li><li>Every day you get three small tasks, like "Focus for 30 minutes" or "Tick off 2 pebbles". They tick themselves as you study, so there is nothing to tap.</li><li>Finish all three and the day counts: you get 15 coins and your egg grows warmer. Finish any 20 days in November and it hatches into the <b>Emberwing</b>, a creature that only exists for this challenge.</li><li>Missed a day? That is fine. Any 20 days count, and new tasks arrive every morning.</li></ol>
+            <div class="row"><button class="btn small" data-go="challenge">Show me the challenge</button></div>
           </article>
           <article class="card g-sec" id="g-1">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-user"/></svg></span><div><span class="eyebrow">Step 1</span><h2>Get started</h2></div></div>
@@ -483,6 +493,7 @@
 </div>
 
 <div class="modal" id="peerModal" role="dialog" aria-modal="true" aria-label="Classmate profile"><div class="modal-box peer-box" id="peerBox"></div></div>
+<div class="modal" id="chModal" role="dialog" aria-modal="true" aria-label="November challenge"><div class="modal-box cross-box" id="chBox"></div></div>
 <div class="modal" id="crossModal" role="dialog" aria-modal="true" aria-label="Rock crossed"><div class="modal-box cross-box" id="crossBox"></div></div>
 <div class="modal" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="newsTitle"><div class="modal-box news-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><div><span class="hand" style="color:var(--rose); font-size:1.3rem">Fresh in the pond</span><h2 id="newsTitle">What's new in Grind</h2></div><button class="icon-btn" data-newsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>

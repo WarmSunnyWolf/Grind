@@ -2,6 +2,7 @@
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'nov', at: Date.UTC(2026, 10, 2, 5, 0), title: 'The November challenge', text: 'Every day this month you get three small tasks that tick themselves as you study. Finish them on any 20 days to hatch the Emberwing, a creature that only exists for this challenge. Each finished day also gives 15 coins.', go: 'challenge', animal: 'emberwing' },
   { id: 'trio', at: Date.UTC(2026, 10, 2, 3, 30), title: 'A hamster, a penguin and a parrot', text: 'Three new friends are in the Sanctuary: the hamster (55 coins), the penguin (110) and a scarlet macaw parrot (170). Each one has three fur coats.', go: 'sanctuary', animal: 'parrot' },
   { id: 'darklight', at: Date.UTC(2026, 10, 1, 16, 50), title: 'Light and dark for every theme', text: 'Enchanted Pond, Midnight, Sakura, Ocean and Forest now each come in a light and a dark version. Open Customize and pick Light, Dark or Match my device.', go: 'customize' },
   { id: 'pondscroll', at: Date.UTC(2026, 10, 1, 16, 40), title: 'A tidier pond', text: 'Students who are focusing now sit in the middle of the pond and nobody overlaps anymore. Swipe or use the arrows to see everyone, and tap Find me to jump to your animal.', go: 'pond' },
@@ -35,7 +36,7 @@ function maybeShowNews() {
   $('#newsBody').innerHTML = `<ul class="note-list news-list">${list.slice(0, 4).map(u => `<li>${newsPic(u)}<span class="note-t"><b>${esc(u.title)}</b><span class="muted">${esc(u.text)}</span></span><button class="btn small" data-newsgo="${u.go}">Show me</button></li>`).join('')}</ul>`;
   $('#newsModal').classList.add('on');
 }
-function closeNews() { $('#newsModal').classList.remove('on'); S.newsPop = Date.now(); save(); }
+function closeNews() { $('#newsModal').classList.remove('on'); S.newsPop = Date.now(); save(); setTimeout(() => { try { maybeShowChallenge(); } catch (e) {} }, 500); }
 function renderGuideNews() {
   const el = $('#gNews'); if (!el) return;
   el.innerHTML = UPDATES.slice(0, 6).map(u => `<li><span class="g-news-d">${new Date(u.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span><span><b>${esc(u.title)}.</b> ${esc(u.text)}</span></li>`).join('');
