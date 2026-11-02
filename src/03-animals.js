@@ -412,6 +412,63 @@ const ANIMALS = {
       <ellipse cx="93" cy="68" rx="2.4" ry="1.8" fill="${k}"/><ellipse cx="107" cy="68" rx="2.4" ry="1.8" fill="${k}"/>`;
     }
   },
+  hamster: {
+    label: 'Hamster', lore: 'Stuffs its cheeks with seeds and its days with small wins. Never skips a run on the wheel.', unlock: { type: 'coins', n: 55 }, defaultName: '',
+    face: { eyes: [[83, 92], [117, 92]], er: 5.2, mouth: { x: 100, y: 113, type: 'cat' }, blush: [[68, 110], [132, 110]], blushR: 8, zz: [150, 50] },
+    art: () => {
+      const b = '#e3a25f', d = '#c7844a', c = '#f8ecd8', p = '#eeb2a8';
+      return `<ellipse cx="80" cy="178" rx="12" ry="5.5" fill="${p}" ${O2}/><ellipse cx="120" cy="178" rx="12" ry="5.5" fill="${p}" ${O2}/>
+      <circle cx="62" cy="62" r="14" fill="${b}" ${O}/><circle cx="138" cy="62" r="14" fill="${b}" ${O}/>
+      <circle cx="63" cy="63" r="7.5" fill="${p}"/><circle cx="137" cy="63" r="7.5" fill="${p}"/>
+      <path d="M42 126 C40 84 66 56 100 56 C134 56 160 84 158 126 C158 164 134 181 100 181 C66 181 42 164 42 126 Z" fill="${b}" ${O}/>
+      <path d="M92 58 C94 70 106 70 108 58" fill="${d}" opacity=".7"/>
+      <path d="M62 150 C62 128 80 118 100 118 C120 118 138 128 138 150 C138 168 122 178 100 178 C78 178 62 168 62 150 Z" fill="${c}"/>
+      <ellipse cx="70" cy="110" rx="18" ry="14" fill="${c}" ${O2}/><ellipse cx="130" cy="110" rx="18" ry="14" fill="${c}" ${O2}/>
+      <path d="M84 108 C84 98 92 94 100 94 C108 94 116 98 116 108 C116 116 110 120 100 120 C90 120 84 116 84 108 Z" fill="${c}"/>
+      <path d="M96 104 L104 104 L100 109 Z" fill="${p}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M100 122 C95 118 95 130 100 136 C105 130 105 118 100 122 Z" fill="#6b5a4a" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/><path d="M100 124 L100 133" stroke="#d8cbb4" stroke-width="1.4" stroke-linecap="round"/>
+      <ellipse cx="90" cy="130" rx="7" ry="5.5" fill="${p}" ${O2}/><ellipse cx="110" cy="130" rx="7" ry="5.5" fill="${p}" ${O2}/>
+      <path d="M52 92 l-12 -2 M52 98 l-12 2 M148 92 l12 -2 M148 98 l12 2" stroke="${INK}" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>`;
+    }
+  },
+  penguin: {
+    label: 'Penguin', lore: 'Waddles to the library in every weather. Keeps cool when the exam gets icy.', unlock: { type: 'coins', n: 110 }, defaultName: '',
+    face: { eyes: [[85, 90], [115, 90]], er: 5, mouth: null, blush: [[75, 106], [125, 106]], blushR: 7, zz: [146, 40] },
+    art: (st) => {
+      const k = '#3f4b5e', kd = '#2e3848', w = '#f6f3ec', o = '#f0a04b';
+      const beak = st === 'happy'
+        ? `<path d="M90 100 C94 96 106 96 110 100 L100 106 Z" fill="${o}" ${O2}/><path d="M92 103 Q100 116 108 103 L100 106 Z" fill="#7a3b33" ${O2}/>`
+        : `<path d="M90 100 C94 96 106 96 110 100 C106 106 102 110 100 111 C98 110 94 106 90 100 Z" fill="${o}" ${O2}/><path d="M91 101 Q100 104 109 101" fill="none" stroke="${INK}" stroke-width="1.4" stroke-linecap="round"/>`;
+      return `<path d="M64 112 C40 120 28 142 32 158 C46 156 58 144 64 128 Z" fill="${kd}" ${O}/><path d="M136 112 C160 120 172 142 168 158 C154 156 142 144 136 128 Z" fill="${kd}" ${O}/>
+      <path d="M50 128 C48 82 70 46 100 46 C130 46 152 82 150 128 C150 162 130 180 100 180 C70 180 50 162 50 128 Z" fill="${k}" ${O}/>
+      <path d="M100 74 C90 62 68 64 68 86 C68 100 74 108 80 112 C70 130 72 160 100 172 C128 160 130 130 120 112 C126 108 132 100 132 86 C132 64 110 62 100 74 Z" fill="${w}"/>
+      <path d="M76 58 C84 54 92 56 96 60 M104 60 C108 56 116 54 124 58" fill="none" stroke="${kd}" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      <path d="M86 156 C96 162 104 162 114 156" fill="none" stroke="#e3ddd2" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M76 178 C70 170 78 166 86 170 C92 166 98 172 94 178 Z" fill="${o}" ${O2}/><path d="M124 178 C130 170 122 166 114 170 C108 166 102 172 106 178 Z" fill="${o}" ${O2}/>
+      ${beak}`;
+    }
+  },
+  parrot: {
+    label: 'Parrot', lore: 'A bright scarlet macaw that repeats your notes back to you until they stick.', unlock: { type: 'coins', n: 170 }, defaultName: '',
+    face: { eyes: [[84, 62], [116, 62]], er: 4.4, mouth: null, blush: [[78, 80], [122, 80]], blushR: 5, zz: [142, 26] },
+    art: (st) => {
+      const r = '#d9473f', rd = '#b23630', y = '#f2c14e', bl = '#3f7fc4', bd = '#2d5f9c', wf = '#f7efe4', bk = '#efe3cf', br = '#9a7350';
+      const low = st === 'happy' ? `<path d="M92 86 C94 98 106 98 108 86 C106 92 94 92 92 86 Z" fill="#7a3b33" ${O2}/>` : `<path d="M93 87 C96 93 104 93 107 87" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`;
+      return `<path d="M92 158 L84 198 L96 194 L100 200 L104 194 L116 198 L108 158 Z" fill="${bl}" ${O2}/><path d="M97 160 L96 192 L100 196 L104 192 L103 160 Z" fill="${r}"/>
+      <rect x="36" y="166" width="128" height="12" rx="6" fill="${br}" ${O2}/><path d="M150 166 C154 158 160 156 164 158" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="160" cy="155" rx="6" ry="3.5" fill="#86a06a" ${O2} transform="rotate(-20 160 155)"/>
+      <path d="M64 118 C62 86 78 70 100 70 C122 70 138 86 136 118 C136 148 122 168 100 168 C78 168 64 148 64 118 Z" fill="${r}" ${O}/>
+      <path d="M68 96 C50 110 46 136 54 160 C68 158 76 142 76 120 C76 108 72 100 68 96 Z" fill="${bl}" ${O}/><path d="M132 96 C150 110 154 136 146 160 C132 158 124 142 124 120 C124 108 128 100 132 96 Z" fill="${bl}" ${O}/>
+      <path d="M68 97 C58 106 52 116 50 128 C58 130 66 128 75 124 C76 110 72 101 68 97 Z" fill="${y}"/><path d="M132 97 C142 106 148 116 150 128 C142 130 134 128 125 124 C124 110 128 101 132 97 Z" fill="${y}"/>
+      <path d="M58 142 L70 138 M56 152 L68 148 M142 142 L130 138 M144 152 L132 148" stroke="${bd}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M86 168 l-4 6 M90 168 l0 7 M94 168 l4 6 M106 168 l-4 6 M110 168 l0 7 M114 168 l4 6" stroke="#6b6460" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="100" cy="64" r="36" fill="${r}" ${O}/>
+      <path d="M84 30 C88 22 96 22 100 30 C104 22 112 22 116 30" fill="none" stroke="${rd}" stroke-width="2.4" stroke-linecap="round"/>
+      <ellipse cx="82" cy="66" rx="13" ry="14" fill="${wf}" ${O2}/><ellipse cx="118" cy="66" rx="13" ry="14" fill="${wf}" ${O2}/>
+      <path d="M74 70 q4 1 8 0 M76 75 q4 1 8 0 M126 70 q-4 1 -8 0 M124 75 q-4 1 -8 0" stroke="#d9b3ad" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      ${low}
+      <path d="M89 76 C89 67 111 67 111 76 C111 88 106 96 100 102 C94 96 89 88 89 76 Z" fill="${bk}" ${O2}/><path d="M94 72 C98 70 102 70 106 72" fill="none" stroke="#cdbba0" stroke-width="1.6" stroke-linecap="round"/>`;
+    }
+  },
   turtle: {
     label: 'Turtle', lore: 'Slow and steady. Trusts you after seven days in a row.', unlock: { type: 'streak', n: 7 }, defaultName: '',
     face: { eyes: [[158, 121], [178, 121]], er: 4.6, mouth: { x: 168, y: 135, type: 'smile' }, blush: [[152, 133], [185, 133]], blushR: 6, zz: [178, 80] },
