@@ -151,7 +151,7 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .stage[data-sky="night"] .timer-ov .phase{color:#f1c6b8}
 .stage[data-sky="night"] .prog{background:rgba(255,255,255,.18)}
 .stage[data-sky="dusk"] .sun{fill:#f0b27a}
-.focus-stage{aspect-ratio:16/10; max-width:100%}
+.focus-stage{aspect-ratio:16/9; max-width:100%}
 .focus-stage > svg.scene{position:absolute; inset:0; height:100%; width:100%}
 .hero-pet{position:absolute; left:50%; top:58%; width:34%; max-width:300px; transform:translate(-50%,-50%); z-index:2; transition:filter .6s}
 .hero-pet > svg{width:100%; height:auto; display:block; overflow:visible}
@@ -175,6 +175,23 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .dur{display:flex; flex-direction:column; gap:8px}
 .dur-top{display:flex; justify-content:space-between; align-items:baseline}
 .dur-top b{font-family:var(--f-display); font-weight:400; font-size:1.5rem}
+.dur-in{font:inherit; color:inherit; width:3.4ch; text-align:right; border:0; border-bottom:2px dashed var(--line-2); background:transparent; padding:0 2px; border-radius:0; -moz-appearance:textfield; appearance:textfield}
+.dur-in::-webkit-outer-spin-button, .dur-in::-webkit-inner-spin-button{-webkit-appearance:none; margin:0}
+.dur-in:hover{border-bottom-color:var(--accent)}
+.dur-in:focus{outline:none; border-bottom:2px solid var(--accent); background:color-mix(in srgb, var(--accent) 8%, transparent)}
+.dur-in:disabled{border-bottom-color:transparent}
+.today-strip{display:grid; grid-template-columns:1.4fr repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:16px}
+.today-strip .ts{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:8px 14px; display:flex; align-items:baseline; gap:8px; min-width:0}
+.today-strip .ts b{font-family:var(--f-display); font-weight:400; font-size:1.3rem; line-height:1.25; white-space:nowrap}
+.today-strip .ts span{font-size:.76rem; color:var(--muted); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.today-strip .ts.main{background:color-mix(in srgb, var(--accent) 14%, var(--surface)); border-color:color-mix(in srgb, var(--accent) 30%, var(--line))}
+.today-strip .ts.main b{font-size:1.6rem; color:var(--accent)}
+@media (max-width:720px){.today-strip{grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px} .today-strip .ts.main{grid-column:1/-1; align-items:baseline} .today-strip .ts:not(.main){padding:6px 8px; flex-direction:column; gap:0; align-items:flex-start; border-radius:12px} .today-strip .ts:not(.main) b{font-size:1rem} .today-strip .ts:not(.main) span{font-size:.66rem}}
+.note-pad{background:color-mix(in srgb, var(--glow) 22%, var(--surface)); border-color:color-mix(in srgb, var(--gold) 30%, var(--line))}
+.note-pad .card-h{margin-bottom:8px}
+.note-pad textarea{width:100%; min-height:92px; resize:vertical; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
+  background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px), color-mix(in srgb, var(--gold) 30%, transparent) calc(1.55em - 1px) 1.55em); background-attachment:local}
+.note-pad textarea::placeholder{color:var(--muted)}
 .dur-top b small{font-family:var(--f-body); font-size:.8rem; color:var(--muted); margin-left:3px}
 .stepper{display:flex; gap:6px; align-items:center}
 .stepper input[type=number]{width:64px; text-align:center}

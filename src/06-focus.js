@@ -68,7 +68,7 @@ function renderTimer() {
   $('#progDot').style.left = (frac * 100) + '%';
   if (t && !t.pausedLeft) document.title = `${txt} · ${t.phase === 'focus' ? 'Focusing' : 'Resting'} · Grind`; else document.title = 'Grind';
   $('#modeFocus').setAttribute('aria-pressed', mode === 'focus'); $('#modeRest').setAttribute('aria-pressed', mode === 'rest');
-  $('#focusRange').disabled = $('#restRange').disabled = !!t;
+  $('#focusRange').disabled = $('#restRange').disabled = $('#focusVal').disabled = $('#restVal').disabled = !!t;
 }
 
 function startPhase(phase) {
@@ -134,16 +134,19 @@ function renderCourseSelects() {
   ['#courseSel', '#rockCourse', '#postCourse'].forEach(s => { const el = $(s); const v = el.value; el.innerHTML = opts; el.value = v && [...el.options].some(o => o.value === v) ? v : (s === '#courseSel' ? (S.lastCourse || '') : ''); if (el.selectedIndex < 0) el.value = ''; });
 }
 function renderPresetsRow() {
-  const sets = [[25, 5, 'Classic 25 · 5'], [50, 10, 'Deep 50 · 10'], [15, 3, 'Gentle start 15 · 3'], [90, 20, 'Long haul 90 · 20']];
-  $('#presetRow').innerHTML = `<span class="eyebrow" style="margin-right:4px">Quick picks</span>` + sets.map(([f, r, l]) => `<button class="btn small ${S.settings.focus === f && S.settings.rest === r ? 'primary' : ''}" data-f="${f}" data-r="${r}">${l}</button>`).join('');
+  const sets = [[20, '20 min'], [30, '30 min'], [60, '1 hour'], [120, '2 hours']];
+  $('#presetRow').innerHTML = `<span class="eyebrow" style="margin-right:4px">Quick picks</span>` + sets.map(([f, l]) => `<button class="btn small ${S.settings.focus === f ? 'primary' : ''}" data-f="${f}">${l}</button>`).join('');
 }
 function renderToday() {
   const k = dayKey();
   const ses = S.sessions.filter(s => dayKey(s.start) === k);
   const pebs = S.pebLog.filter(p => dayKey(p.at) === k);
-  const mins = ses.reduce((a, s) => a + s.mins, 0);
+  const mins = ses.reduce((a, s) => a + s.mins, 0), ws = weekStart().getTime();
+  const week = S.sessions.filter(s => s.start >= ws).reduce((a, s) => a + s.mins, 0), st = streakNow();
+  if ($('#notePad') && document.activeElement !== $('#notePad')) $('#notePad').value = S.notepad || '';
   $('#todayDate').textContent = `${WD[new Date().getDay()]} ${new Date().getDate()} ${MO[new Date().getMonth()]}`;
-  $('#todayStats').innerHTML = `<div><b class="num">${fmtMin(mins)}</b><span>Focused</span></div><div><b class="num">${ses.length}</b><span>Sessions</span></div><div><b class="num">${pebs.length}</b><span>Pebbles</span></div>`;
+  const tile = (b, l, cls = '') => `<div class="ts ${cls}"><b class="num">${b}</b><span>${l}</span></div>`;
+  $('#todayStats').innerHTML = tile(mins ? fmtMin(mins) : '0 min', 'Studied today', 'main') + tile(ses.length, ses.length === 1 ? 'Session' : 'Sessions') + tile(pebs.length, pebs.length === 1 ? 'Pebble done' : 'Pebbles done') + tile(fmtMin(week), 'This week') + tile(`${st} ${st === 1 ? 'day' : 'days'}`, 'Streak');
   const items = [...ses.map(s => ({ at: s.start, t: `${fmtMin(s.mins)} on ${courseName(s.courseId)}${s.completed ? '' : ' (stopped early, still counts)'}`, i: 'i-timer' })), ...pebs.map(p => ({ at: p.at, t: p.text, i: 'i-check' }))].sort((a, b) => b.at - a.at).slice(0, 6);
   $('#todayList').innerHTML = items.length ? items.map(x => `<li>${icon(x.i)}<span class="t">${esc(x.t)}</span><span class="muted" style="font-size:.78rem">${new Date(x.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span></li>`).join('')
     : `<li class="muted" style="border:0">Nothing yet, and that is fine. Your first session or pebble will show up here.</li>`;
@@ -156,7 +159,7 @@ function renderNextPebble() {
   el.innerHTML = `<div class="next-peb">${pebbleArt(courseColor(np.rock.courseId), 44)}<div style="min-width:0; flex:1"><h3>${esc(np.peb.text)}</h3>
     <p class="muted" style="font-size:.85rem">${esc(np.rock.title)} · about ${np.peb.mins || 15} min${np.rock.due ? ' · ' + dueText(np.rock.due).toLowerCase() : ''}</p>
     <div class="row" style="margin-top:10px"><button class="btn small primary" id="npFocus">${icon('i-play')}Focus on this</button><button class="btn small" id="npDone">${icon('i-check')}Done</button><span class="muted" style="font-size:.8rem">${left - 1} more after this</span></div></div></div>`;
-  $('#npFocus').onclick = () => { if (np.peb.mins) { S.settings.focus = Math.min(120, Math.max(1, np.peb.mins)); syncRanges(); } $('#courseSel').value = np.rock.courseId || ''; if (!S.timer) startPhase('focus'); };
+  $('#npFocus').onclick = () => { if (np.peb.mins) { S.settings.focus = Math.min(180, Math.max(1, np.peb.mins)); syncRanges(); } $('#courseSel').value = np.rock.courseId || ''; if (!S.timer) startPhase('focus'); };
   $('#npDone').onclick = () => togglePebble(np.rock.id, np.peb.id);
 }
 function pebbleArt(color, w = 44, done = true) {
@@ -164,14 +167,25 @@ function pebbleArt(color, w = 44, done = true) {
 }
 function syncRanges() {
   $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
-  $('#focusVal').textContent = S.settings.focus; $('#restVal').textContent = S.settings.rest;
+  if (document.activeElement !== $('#focusVal')) $('#focusVal').value = S.settings.focus;
+  if (document.activeElement !== $('#restVal')) $('#restVal').value = S.settings.rest;
   renderPresetsRow(); renderTimer();
 }
 function bindFocus() {
-  $('#focusRange').oninput = e => { S.settings.focus = +e.target.value; $('#focusVal').textContent = S.settings.focus; renderTimer(); };
-  $('#restRange').oninput = e => { S.settings.rest = +e.target.value; $('#restVal').textContent = S.settings.rest; renderTimer(); };
+  $('#focusRange').oninput = e => { S.settings.focus = +e.target.value; $('#focusVal').value = S.settings.focus; renderPresetsRow(); renderTimer(); };
+  $('#restRange').oninput = e => { S.settings.rest = +e.target.value; $('#restVal').value = S.settings.rest; renderTimer(); };
   $('#focusRange').onchange = $('#restRange').onchange = () => { renderPresetsRow(); save(); };
-  $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; S.settings.rest = +b.dataset.r; syncRanges(); save(); };
+  // typing a length: the slider follows as you type, and the number is tidied when you leave the box
+  const typed = (inp, k, max) => {
+    inp.oninput = () => { const v = Math.round(+inp.value); if (v >= 1 && v <= max) { S.settings[k] = v; $(k === 'focus' ? '#focusRange' : '#restRange').value = v; renderPresetsRow(); renderTimer(); } };
+    inp.onchange = inp.onblur = () => { const v = Math.min(max, Math.max(1, Math.round(+inp.value) || S.settings[k])); S.settings[k] = v; inp.value = v; syncRanges(); save(); };
+    inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); };
+  };
+  typed($('#focusVal'), 'focus', 180); typed($('#restVal'), 'rest', 60);
+  $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; syncRanges(); save(); };
+  let padT;
+  $('#notePad').value = S.notepad || '';
+  $('#notePad').oninput = e => { $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
   $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
   $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };
   $('#courseSel').onchange = e => { S.lastCourse = e.target.value; save(); };

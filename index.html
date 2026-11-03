@@ -158,7 +158,7 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .stage[data-sky="night"] .timer-ov .phase{color:#f1c6b8}
 .stage[data-sky="night"] .prog{background:rgba(255,255,255,.18)}
 .stage[data-sky="dusk"] .sun{fill:#f0b27a}
-.focus-stage{aspect-ratio:16/10; max-width:100%}
+.focus-stage{aspect-ratio:16/9; max-width:100%}
 .focus-stage > svg.scene{position:absolute; inset:0; height:100%; width:100%}
 .hero-pet{position:absolute; left:50%; top:58%; width:34%; max-width:300px; transform:translate(-50%,-50%); z-index:2; transition:filter .6s}
 .hero-pet > svg{width:100%; height:auto; display:block; overflow:visible}
@@ -182,6 +182,23 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .dur{display:flex; flex-direction:column; gap:8px}
 .dur-top{display:flex; justify-content:space-between; align-items:baseline}
 .dur-top b{font-family:var(--f-display); font-weight:400; font-size:1.5rem}
+.dur-in{font:inherit; color:inherit; width:3.4ch; text-align:right; border:0; border-bottom:2px dashed var(--line-2); background:transparent; padding:0 2px; border-radius:0; -moz-appearance:textfield; appearance:textfield}
+.dur-in::-webkit-outer-spin-button, .dur-in::-webkit-inner-spin-button{-webkit-appearance:none; margin:0}
+.dur-in:hover{border-bottom-color:var(--accent)}
+.dur-in:focus{outline:none; border-bottom:2px solid var(--accent); background:color-mix(in srgb, var(--accent) 8%, transparent)}
+.dur-in:disabled{border-bottom-color:transparent}
+.today-strip{display:grid; grid-template-columns:1.4fr repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:16px}
+.today-strip .ts{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:8px 14px; display:flex; align-items:baseline; gap:8px; min-width:0}
+.today-strip .ts b{font-family:var(--f-display); font-weight:400; font-size:1.3rem; line-height:1.25; white-space:nowrap}
+.today-strip .ts span{font-size:.76rem; color:var(--muted); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.today-strip .ts.main{background:color-mix(in srgb, var(--accent) 14%, var(--surface)); border-color:color-mix(in srgb, var(--accent) 30%, var(--line))}
+.today-strip .ts.main b{font-size:1.6rem; color:var(--accent)}
+@media (max-width:720px){.today-strip{grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px} .today-strip .ts.main{grid-column:1/-1; align-items:baseline} .today-strip .ts:not(.main){padding:6px 8px; flex-direction:column; gap:0; align-items:flex-start; border-radius:12px} .today-strip .ts:not(.main) b{font-size:1rem} .today-strip .ts:not(.main) span{font-size:.66rem}}
+.note-pad{background:color-mix(in srgb, var(--glow) 22%, var(--surface)); border-color:color-mix(in srgb, var(--gold) 30%, var(--line))}
+.note-pad .card-h{margin-bottom:8px}
+.note-pad textarea{width:100%; min-height:92px; resize:vertical; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
+  background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px), color-mix(in srgb, var(--gold) 30%, transparent) calc(1.55em - 1px) 1.55em); background-attachment:local}
+.note-pad textarea::placeholder{color:var(--muted)}
 .dur-top b small{font-family:var(--f-body); font-size:.8rem; color:var(--muted); margin-left:3px}
 .stepper{display:flex; gap:6px; align-items:center}
 .stepper input[type=number]{width:64px; text-align:center}
@@ -914,6 +931,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 
       <!-- FOCUS -->
       <section class="view on" id="v-focus" aria-labelledby="viewTitle">
+        <div class="today-strip" id="todayStats" aria-label="What you studied today"></div>
         <div class="grid g-focus">
           <div class="stack">
             <div class="stage focus-stage" id="focusStage">
@@ -940,12 +958,12 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               </div>
               <div class="dur-row">
                 <div class="dur">
-                  <div class="dur-top"><span class="eyebrow">Focus length</span><b><span class="num" id="focusVal">25</span><small>min</small></b></div>
-                  <input type="range" id="focusRange" min="1" max="120" value="25" aria-label="Focus length in minutes">
+                  <div class="dur-top"><label class="eyebrow" for="focusVal">Focus length</label><b><input class="dur-in num" id="focusVal" type="number" inputmode="numeric" min="1" max="180" value="25" aria-label="Type your focus length in minutes"><small>min</small></b></div>
+                  <input type="range" id="focusRange" min="1" max="180" value="25" aria-label="Focus length in minutes">
                 </div>
                 <div class="dur">
-                  <div class="dur-top"><span class="eyebrow">Rest length</span><b><span class="num" id="restVal">5</span><small>min</small></b></div>
-                  <input type="range" id="restRange" min="1" max="30" value="5" aria-label="Rest length in minutes">
+                  <div class="dur-top"><label class="eyebrow" for="restVal">Rest length</label><b><input class="dur-in num" id="restVal" type="number" inputmode="numeric" min="1" max="60" value="5" aria-label="Type your rest length in minutes"><small>min</small></b></div>
+                  <input type="range" id="restRange" min="1" max="60" value="5" aria-label="Rest length in minutes">
                 </div>
               </div>
               <div class="row" id="presetRow"></div>
@@ -959,6 +977,10 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </div>
           <div class="stack">
             <div class="card ch-card" id="chCard" hidden></div>
+            <div class="card note-pad">
+              <div class="card-h"><h2>Notes to self</h2><span class="muted" id="padState" style="font-size:.78rem">Saved</span></div>
+              <textarea id="notePad" maxlength="2000" rows="4" placeholder="A quote, a reminder, a little push. Whatever you want to see while you study." aria-label="Notes to self"></textarea>
+            </div>
             <div class="card">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
               <div id="nextPebble"></div>
@@ -974,9 +996,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               </div>
             </div>
             <div class="card">
-              <div class="card-h"><h2>What you did today</h2><span class="hand muted" id="todayDate"></span></div>
-              <div class="mini-stats" id="todayStats"></div>
-              <ul class="done-list" id="todayList" style="margin-top:12px"></ul>
+              <div class="card-h"><h2>Today's log</h2><span class="hand muted" id="todayDate"></span></div>
+              <ul class="done-list" id="todayList"></ul>
             </div>
             <div class="card">
               <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
@@ -1163,7 +1184,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Slide <b>Focus length</b> (1 to 120 minutes) and <b>Rest length</b> (1 to 30), or tap a quick pick like 25 · 5.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. It saves as you type and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
@@ -2895,7 +2916,7 @@ function renderTimer() {
   $('#progDot').style.left = (frac * 100) + '%';
   if (t && !t.pausedLeft) document.title = `${txt} · ${t.phase === 'focus' ? 'Focusing' : 'Resting'} · Grind`; else document.title = 'Grind';
   $('#modeFocus').setAttribute('aria-pressed', mode === 'focus'); $('#modeRest').setAttribute('aria-pressed', mode === 'rest');
-  $('#focusRange').disabled = $('#restRange').disabled = !!t;
+  $('#focusRange').disabled = $('#restRange').disabled = $('#focusVal').disabled = $('#restVal').disabled = !!t;
 }
 
 function startPhase(phase) {
@@ -2961,16 +2982,19 @@ function renderCourseSelects() {
   ['#courseSel', '#rockCourse', '#postCourse'].forEach(s => { const el = $(s); const v = el.value; el.innerHTML = opts; el.value = v && [...el.options].some(o => o.value === v) ? v : (s === '#courseSel' ? (S.lastCourse || '') : ''); if (el.selectedIndex < 0) el.value = ''; });
 }
 function renderPresetsRow() {
-  const sets = [[25, 5, 'Classic 25 · 5'], [50, 10, 'Deep 50 · 10'], [15, 3, 'Gentle start 15 · 3'], [90, 20, 'Long haul 90 · 20']];
-  $('#presetRow').innerHTML = `<span class="eyebrow" style="margin-right:4px">Quick picks</span>` + sets.map(([f, r, l]) => `<button class="btn small ${S.settings.focus === f && S.settings.rest === r ? 'primary' : ''}" data-f="${f}" data-r="${r}">${l}</button>`).join('');
+  const sets = [[20, '20 min'], [30, '30 min'], [60, '1 hour'], [120, '2 hours']];
+  $('#presetRow').innerHTML = `<span class="eyebrow" style="margin-right:4px">Quick picks</span>` + sets.map(([f, l]) => `<button class="btn small ${S.settings.focus === f ? 'primary' : ''}" data-f="${f}">${l}</button>`).join('');
 }
 function renderToday() {
   const k = dayKey();
   const ses = S.sessions.filter(s => dayKey(s.start) === k);
   const pebs = S.pebLog.filter(p => dayKey(p.at) === k);
-  const mins = ses.reduce((a, s) => a + s.mins, 0);
+  const mins = ses.reduce((a, s) => a + s.mins, 0), ws = weekStart().getTime();
+  const week = S.sessions.filter(s => s.start >= ws).reduce((a, s) => a + s.mins, 0), st = streakNow();
+  if ($('#notePad') && document.activeElement !== $('#notePad')) $('#notePad').value = S.notepad || '';
   $('#todayDate').textContent = `${WD[new Date().getDay()]} ${new Date().getDate()} ${MO[new Date().getMonth()]}`;
-  $('#todayStats').innerHTML = `<div><b class="num">${fmtMin(mins)}</b><span>Focused</span></div><div><b class="num">${ses.length}</b><span>Sessions</span></div><div><b class="num">${pebs.length}</b><span>Pebbles</span></div>`;
+  const tile = (b, l, cls = '') => `<div class="ts ${cls}"><b class="num">${b}</b><span>${l}</span></div>`;
+  $('#todayStats').innerHTML = tile(mins ? fmtMin(mins) : '0 min', 'Studied today', 'main') + tile(ses.length, ses.length === 1 ? 'Session' : 'Sessions') + tile(pebs.length, pebs.length === 1 ? 'Pebble done' : 'Pebbles done') + tile(fmtMin(week), 'This week') + tile(`${st} ${st === 1 ? 'day' : 'days'}`, 'Streak');
   const items = [...ses.map(s => ({ at: s.start, t: `${fmtMin(s.mins)} on ${courseName(s.courseId)}${s.completed ? '' : ' (stopped early, still counts)'}`, i: 'i-timer' })), ...pebs.map(p => ({ at: p.at, t: p.text, i: 'i-check' }))].sort((a, b) => b.at - a.at).slice(0, 6);
   $('#todayList').innerHTML = items.length ? items.map(x => `<li>${icon(x.i)}<span class="t">${esc(x.t)}</span><span class="muted" style="font-size:.78rem">${new Date(x.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span></li>`).join('')
     : `<li class="muted" style="border:0">Nothing yet, and that is fine. Your first session or pebble will show up here.</li>`;
@@ -2983,7 +3007,7 @@ function renderNextPebble() {
   el.innerHTML = `<div class="next-peb">${pebbleArt(courseColor(np.rock.courseId), 44)}<div style="min-width:0; flex:1"><h3>${esc(np.peb.text)}</h3>
     <p class="muted" style="font-size:.85rem">${esc(np.rock.title)} · about ${np.peb.mins || 15} min${np.rock.due ? ' · ' + dueText(np.rock.due).toLowerCase() : ''}</p>
     <div class="row" style="margin-top:10px"><button class="btn small primary" id="npFocus">${icon('i-play')}Focus on this</button><button class="btn small" id="npDone">${icon('i-check')}Done</button><span class="muted" style="font-size:.8rem">${left - 1} more after this</span></div></div></div>`;
-  $('#npFocus').onclick = () => { if (np.peb.mins) { S.settings.focus = Math.min(120, Math.max(1, np.peb.mins)); syncRanges(); } $('#courseSel').value = np.rock.courseId || ''; if (!S.timer) startPhase('focus'); };
+  $('#npFocus').onclick = () => { if (np.peb.mins) { S.settings.focus = Math.min(180, Math.max(1, np.peb.mins)); syncRanges(); } $('#courseSel').value = np.rock.courseId || ''; if (!S.timer) startPhase('focus'); };
   $('#npDone').onclick = () => togglePebble(np.rock.id, np.peb.id);
 }
 function pebbleArt(color, w = 44, done = true) {
@@ -2991,14 +3015,25 @@ function pebbleArt(color, w = 44, done = true) {
 }
 function syncRanges() {
   $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
-  $('#focusVal').textContent = S.settings.focus; $('#restVal').textContent = S.settings.rest;
+  if (document.activeElement !== $('#focusVal')) $('#focusVal').value = S.settings.focus;
+  if (document.activeElement !== $('#restVal')) $('#restVal').value = S.settings.rest;
   renderPresetsRow(); renderTimer();
 }
 function bindFocus() {
-  $('#focusRange').oninput = e => { S.settings.focus = +e.target.value; $('#focusVal').textContent = S.settings.focus; renderTimer(); };
-  $('#restRange').oninput = e => { S.settings.rest = +e.target.value; $('#restVal').textContent = S.settings.rest; renderTimer(); };
+  $('#focusRange').oninput = e => { S.settings.focus = +e.target.value; $('#focusVal').value = S.settings.focus; renderPresetsRow(); renderTimer(); };
+  $('#restRange').oninput = e => { S.settings.rest = +e.target.value; $('#restVal').value = S.settings.rest; renderTimer(); };
   $('#focusRange').onchange = $('#restRange').onchange = () => { renderPresetsRow(); save(); };
-  $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; S.settings.rest = +b.dataset.r; syncRanges(); save(); };
+  // typing a length: the slider follows as you type, and the number is tidied when you leave the box
+  const typed = (inp, k, max) => {
+    inp.oninput = () => { const v = Math.round(+inp.value); if (v >= 1 && v <= max) { S.settings[k] = v; $(k === 'focus' ? '#focusRange' : '#restRange').value = v; renderPresetsRow(); renderTimer(); } };
+    inp.onchange = inp.onblur = () => { const v = Math.min(max, Math.max(1, Math.round(+inp.value) || S.settings[k])); S.settings[k] = v; inp.value = v; syncRanges(); save(); };
+    inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); };
+  };
+  typed($('#focusVal'), 'focus', 180); typed($('#restVal'), 'rest', 60);
+  $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; syncRanges(); save(); };
+  let padT;
+  $('#notePad').value = S.notepad || '';
+  $('#notePad').oninput = e => { $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
   $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
   $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };
   $('#courseSel').onchange = e => { S.lastCourse = e.target.value; save(); };
@@ -4314,6 +4349,7 @@ function bindActivity() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'focusday', at: Date.UTC(2026, 10, 3, 12, 0), title: 'A friendlier Focus page', text: 'See how much you studied today at the top of Focus, type your focus length or slide it, pick 20 min, 30 min, 1 hour or 2 hours in one tap, and keep a quote or reminder in the new Notes to self box.', go: 'focus' },
   { id: 'nov', at: Date.UTC(2026, 10, 2, 5, 0), title: 'The November challenge', text: 'Every day this month you get three small tasks that tick themselves as you study. Finish them on any 20 days to hatch the Emberwing, a creature that only exists for this challenge. Each finished day also gives 15 coins.', go: 'challenge', animal: 'emberwing' },
   { id: 'trio', at: Date.UTC(2026, 10, 2, 3, 30), title: 'A hamster, a penguin and a parrot', text: 'Three new friends are in the Sanctuary: the hamster (55 coins), the penguin (110) and a scarlet macaw parrot (170). Each one has three fur coats.', go: 'sanctuary', animal: 'parrot' },
   { id: 'darklight', at: Date.UTC(2026, 10, 1, 16, 50), title: 'Light and dark for every theme', text: 'Enchanted Pond, Midnight, Sakura, Ocean and Forest now each come in a light and a dark version. Open Customize and pick Light, Dark or Match my device.', go: 'customize' },

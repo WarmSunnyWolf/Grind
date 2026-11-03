@@ -2,6 +2,7 @@
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'focusday', at: Date.UTC(2026, 10, 3, 12, 0), title: 'A friendlier Focus page', text: 'See how much you studied today at the top of Focus, type your focus length or slide it, pick 20 min, 30 min, 1 hour or 2 hours in one tap, and keep a quote or reminder in the new Notes to self box.', go: 'focus' },
   { id: 'nov', at: Date.UTC(2026, 10, 2, 5, 0), title: 'The November challenge', text: 'Every day this month you get three small tasks that tick themselves as you study. Finish them on any 20 days to hatch the Emberwing, a creature that only exists for this challenge. Each finished day also gives 15 coins.', go: 'challenge', animal: 'emberwing' },
   { id: 'trio', at: Date.UTC(2026, 10, 2, 3, 30), title: 'A hamster, a penguin and a parrot', text: 'Three new friends are in the Sanctuary: the hamster (55 coins), the penguin (110) and a scarlet macaw parrot (170). Each one has three fur coats.', go: 'sanctuary', animal: 'parrot' },
   { id: 'darklight', at: Date.UTC(2026, 10, 1, 16, 50), title: 'Light and dark for every theme', text: 'Enchanted Pond, Midnight, Sakura, Ocean and Forest now each come in a light and a dark version. Open Customize and pick Light, Dark or Match my device.', go: 'customize' },

@@ -100,6 +100,7 @@
 
       <!-- FOCUS -->
       <section class="view on" id="v-focus" aria-labelledby="viewTitle">
+        <div class="today-strip" id="todayStats" aria-label="What you studied today"></div>
         <div class="grid g-focus">
           <div class="stack">
             <div class="stage focus-stage" id="focusStage">
@@ -126,12 +127,12 @@
               </div>
               <div class="dur-row">
                 <div class="dur">
-                  <div class="dur-top"><span class="eyebrow">Focus length</span><b><span class="num" id="focusVal">25</span><small>min</small></b></div>
-                  <input type="range" id="focusRange" min="1" max="120" value="25" aria-label="Focus length in minutes">
+                  <div class="dur-top"><label class="eyebrow" for="focusVal">Focus length</label><b><input class="dur-in num" id="focusVal" type="number" inputmode="numeric" min="1" max="180" value="25" aria-label="Type your focus length in minutes"><small>min</small></b></div>
+                  <input type="range" id="focusRange" min="1" max="180" value="25" aria-label="Focus length in minutes">
                 </div>
                 <div class="dur">
-                  <div class="dur-top"><span class="eyebrow">Rest length</span><b><span class="num" id="restVal">5</span><small>min</small></b></div>
-                  <input type="range" id="restRange" min="1" max="30" value="5" aria-label="Rest length in minutes">
+                  <div class="dur-top"><label class="eyebrow" for="restVal">Rest length</label><b><input class="dur-in num" id="restVal" type="number" inputmode="numeric" min="1" max="60" value="5" aria-label="Type your rest length in minutes"><small>min</small></b></div>
+                  <input type="range" id="restRange" min="1" max="60" value="5" aria-label="Rest length in minutes">
                 </div>
               </div>
               <div class="row" id="presetRow"></div>
@@ -145,6 +146,10 @@
           </div>
           <div class="stack">
             <div class="card ch-card" id="chCard" hidden></div>
+            <div class="card note-pad">
+              <div class="card-h"><h2>Notes to self</h2><span class="muted" id="padState" style="font-size:.78rem">Saved</span></div>
+              <textarea id="notePad" maxlength="2000" rows="4" placeholder="A quote, a reminder, a little push. Whatever you want to see while you study." aria-label="Notes to self"></textarea>
+            </div>
             <div class="card">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
               <div id="nextPebble"></div>
@@ -160,9 +165,8 @@
               </div>
             </div>
             <div class="card">
-              <div class="card-h"><h2>What you did today</h2><span class="hand muted" id="todayDate"></span></div>
-              <div class="mini-stats" id="todayStats"></div>
-              <ul class="done-list" id="todayList" style="margin-top:12px"></ul>
+              <div class="card-h"><h2>Today's log</h2><span class="hand muted" id="todayDate"></span></div>
+              <ul class="done-list" id="todayList"></ul>
             </div>
             <div class="card">
               <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
@@ -349,7 +353,7 @@
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Slide <b>Focus length</b> (1 to 120 minutes) and <b>Rest length</b> (1 to 30), or tap a quick pick like 25 · 5.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. It saves as you type and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
