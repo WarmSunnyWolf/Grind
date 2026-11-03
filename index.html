@@ -974,6 +974,14 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
                 <button class="btn big quiet" id="skipBtn" hidden><svg><use href="#i-skip"/></svg><span>Skip rest</span></button>
               </div>
             </div>
+            <div class="card">
+              <div class="card-h"><h2>Today's log</h2><span class="hand muted" id="todayDate"></span></div>
+              <ul class="done-list" id="todayList"></ul>
+            </div>
+            <div class="card">
+              <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
+              <ul class="ripple-feed" id="rippleMini"></ul>
+            </div>
           </div>
           <div class="stack">
             <div class="card ch-card" id="chCard" hidden></div>
@@ -994,14 +1002,6 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
                 <label class="snd-vol"><span class="eyebrow">Volume</span><input type="range" id="sndVol" min="0" max="100" value="50" aria-label="Sound volume"></label>
                 <div class="toggle"><span>Play with each focus session</span><button class="switch" role="switch" id="sndWith" aria-checked="true" aria-label="Play sounds with focus sessions"></button></div>
               </div>
-            </div>
-            <div class="card">
-              <div class="card-h"><h2>Today's log</h2><span class="hand muted" id="todayDate"></span></div>
-              <ul class="done-list" id="todayList"></ul>
-            </div>
-            <div class="card">
-              <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
-              <ul class="ripple-feed" id="rippleMini"></ul>
             </div>
           </div>
         </div>
