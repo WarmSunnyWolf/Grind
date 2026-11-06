@@ -152,7 +152,19 @@ function renderFriends() {
   $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake', r.look)}</span>${esc(r.name)}${r.vis === 'me' ? `<span class="muted" style="font-size:.75rem">Private</span>` : ''}</button>`).join('')
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
+function renderGhost() {
+  const g = !!S.ghost;
+  if ($('#swGhost')) $('#swGhost').setAttribute('aria-checked', String(g));
+  if ($('#ghostChip')) $('#ghostChip').hidden = !g;
+  document.body.classList.toggle('is-ghost', g);
+}
 function bindProfile() {
+  $('#swGhost').onclick = () => {
+    S.ghost = !S.ghost; save(); renderGhost();
+    if (S.ghost) { publishPond(); toast('Ghost mode is on. Nobody can see you in the pond, on the leaderboard or on your profile card.'); }
+    else { publishPond(); updateCircles(); toast('Ghost mode is off. Your animal is back in the pond.'); }
+    renderPond(true); if (currentView === 'pond') try { renderBoard(); } catch (e) {}
+  };
   $('#profForm').onsubmit = e => {
     e.preventDefault();
     S.profile.name = clampStr($('#pfName').value.trim(), 40); S.profile.uni = clampStr($('#pfUni').value.trim(), 60); S.profile.major = clampStr($('#pfMajor').value.trim(), 60); S.profile.bio = clampStr($('#pfBio').value.trim(), 140);
@@ -325,6 +337,7 @@ function renderGreeting() {
 }
 function renderAllLight() { try { checkChallenge(); renderChallenge(); } catch (e) { console.error(e); } renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
+  renderGhost();
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
 }

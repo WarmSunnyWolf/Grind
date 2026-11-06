@@ -196,9 +196,23 @@ input[type=range]{accent-color:var(--accent); width:100%}
 @media (max-width:720px){.today-strip{grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px} .today-strip .ts.main{grid-column:1/-1; align-items:baseline} .today-strip .ts:not(.main){padding:6px 8px; flex-direction:column; gap:0; align-items:flex-start; border-radius:12px} .today-strip .ts:not(.main) b{font-size:1rem} .today-strip .ts:not(.main) span{font-size:.66rem}}
 .note-pad{background:color-mix(in srgb, var(--glow) 22%, var(--surface)); border-color:color-mix(in srgb, var(--gold) 30%, var(--line))}
 .note-pad .card-h{margin-bottom:8px}
-.note-pad textarea{width:100%; min-height:92px; resize:vertical; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
+.note-pad textarea{width:100%; min-height:72px; resize:none; overflow:hidden; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
   background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px), color-mix(in srgb, var(--gold) 30%, transparent) calc(1.55em - 1px) 1.55em); background-attachment:local}
 .note-pad textarea::placeholder{color:var(--muted)}
+.pad-imgs{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px}
+.pad-img{position:relative; margin:0; border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--surface); aspect-ratio:1; cursor:zoom-in}
+.pad-img img{display:block; width:100%; height:100%; object-fit:cover}
+.pad-img.open{grid-column:1/-1; aspect-ratio:auto; cursor:zoom-out}
+.pad-img.open img{height:auto; object-fit:contain}
+.pad-img .icon-btn{position:absolute; top:6px; right:6px; width:28px; height:28px; background:color-mix(in srgb, var(--surface) 85%, transparent); opacity:0; transition:opacity .2s}
+.pad-img:hover .icon-btn, .pad-img:focus-within .icon-btn{opacity:1}
+@media (hover:none){.pad-img .icon-btn{opacity:1}}
+.ghost-box{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line)}
+.ghost-box .toggle span{display:flex; flex-direction:column; gap:4px}
+.ghost-box small{font-size:.8rem; color:var(--muted); line-height:1.45; max-width:60ch}
+.chip.ghost-chip{background:color-mix(in srgb, var(--ink) 10%, var(--surface)); color:var(--ink-2)}
+.chip.ghost-chip i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block; opacity:.6}
+.resident.ghost{opacity:.55}
 .dur-top b small{font-family:var(--f-body); font-size:.8rem; color:var(--muted); margin-left:3px}
 .stepper{display:flex; gap:6px; align-items:center}
 .stepper input[type=number]{width:64px; text-align:center}
@@ -924,6 +938,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
+          <button type="button" class="chip ghost-chip" id="ghostChip" data-go="profile" title="Ghost mode is on. Nobody can see you studying." hidden><i></i><span>Ghost</span></button>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
           <span class="mobile-top"><button class="icon-btn" data-go="guide" aria-label="How to use Grind"><svg><use href="#i-info"/></svg></button><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
@@ -986,8 +1001,10 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           <div class="stack">
             <div class="card ch-card" id="chCard" hidden></div>
             <div class="card note-pad">
-              <div class="card-h"><h2>Notes to self</h2><span class="muted" id="padState" style="font-size:.78rem">Saved</span></div>
-              <textarea id="notePad" maxlength="2000" rows="4" placeholder="A quote, a reminder, a little push. Whatever you want to see while you study." aria-label="Notes to self"></textarea>
+              <div class="card-h"><h2>Notes to self</h2><span class="row" style="gap:8px"><span class="muted" id="padState" style="font-size:.78rem">Saved</span><button class="btn small quiet" id="padPicBtn" type="button" title="Add a picture"><svg><use href="#i-upload"/></svg>Picture</button></span></div>
+              <textarea id="notePad" maxlength="2000" rows="3" placeholder="A quote, a reminder, a little push. Whatever you want to see while you study. You can also add a picture." aria-label="Notes to self"></textarea>
+              <div class="pad-imgs" id="padImgs"></div>
+              <input type="file" id="padPicFile" accept="image/*" hidden>
             </div>
             <div class="card">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
@@ -1184,7 +1201,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. It saves as you type and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
@@ -1284,6 +1301,9 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <button type="button" data-vis="everyone"><svg><use href="#i-pond"/></svg><b>Everyone</b><span>Anyone signed in to Grind</span></button>
           </div>
           <div class="row" style="margin-top:12px"><button class="btn small" type="button" data-peer="me-self">See what classmates see</button></div>
+          <div class="ghost-box" data-owneronly hidden>
+            <div class="toggle"><span><b>Ghost mode</b><small>Only you have this, as the owner. While it is on, your animal leaves the pond and the leaderboard, your profile card and study time are hidden from everyone, and your circles stop seeing your minutes. You will not see yourself studying in the pond either. Turn it off and you come back.</small></span><button class="switch" role="switch" id="swGhost" aria-checked="false" aria-label="Ghost mode"></button></div>
+          </div>
         </div>
         <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
         <div class="card"><div class="card-h"><h2>Friends</h2><button class="btn small quiet" data-go="pond">Find friends in the pond</button></div><div class="friends" id="friendList"></div></div>
@@ -2707,7 +2727,7 @@ function disconnect() {
   (NET.unsubs || []).forEach(u => { try { u(); } catch (e) {} });
   NET.unsubs = [];
   Object.values(NET.circleUnsub).forEach(u => { try { u(); } catch (e) {} });
-  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, isOwner: false, allPond: null });
+  Object.assign(NET, { ghosted: false, db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, isOwner: false, allPond: null });
   $$('[data-owneronly]').forEach(b => { b.hidden = true; });
   renderAll(); renderDrawer();
 }
@@ -2763,7 +2783,7 @@ async function connect(u) {
 function remoteSave() {
   if (!NET.db || !NET.uid || !NET.canWrite || NET.syncing) return;
   const json = JSON.stringify(S);
-  if (json.length > 240000) { S.sessions = S.sessions.slice(-1500); }
+  if (json.length > 800000) { S.sessions = S.sessions.slice(-1500); }
   const body = { json: JSON.stringify(S), updatedAt: S.updatedAt };
   writeQ(`data/users/${NET.uid}/state`, () => NET.db.doc(`data/users/${NET.uid}/state`).set(body));
 }
@@ -2774,6 +2794,12 @@ function myStatus() {
 }
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
+  // ghost mode (owner only): take the pond animal and profile card down, and publish nothing while it is on
+  if (S.ghost) {
+    if (!NET.ghosted) { NET.ghosted = true; writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).delete()); writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).delete()); }
+    return;
+  }
+  NET.ghosted = false;
   const st = myStatus();
   const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats(), stats: S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
   const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
@@ -2835,7 +2861,7 @@ function cleanCircle(d) {
 }
 function meAsMember() { return { name: myName(), animal: S.active, pet: petName(), day: dayKey(), mins: todayMins() }; }
 function updateCircles() {
-  if (!NET.db || !NET.canWrite) return;
+  if (!NET.db || !NET.canWrite || S.ghost) return;
   S.circles.forEach(code => {
     const ref = NET.db.doc('circles/' + code);
     writeQ('circles/' + code, async () => {
@@ -2991,7 +3017,7 @@ function renderToday() {
   const pebs = S.pebLog.filter(p => dayKey(p.at) === k);
   const mins = ses.reduce((a, s) => a + s.mins, 0), ws = weekStart().getTime();
   const week = S.sessions.filter(s => s.start >= ws).reduce((a, s) => a + s.mins, 0), st = streakNow();
-  if ($('#notePad') && document.activeElement !== $('#notePad')) $('#notePad').value = S.notepad || '';
+  if ($('#notePad') && document.activeElement !== $('#notePad')) { $('#notePad').value = S.notepad || ''; growPad(); renderPadImgs(); }
   $('#todayDate').textContent = `${WD[new Date().getDay()]} ${new Date().getDate()} ${MO[new Date().getMonth()]}`;
   const tile = (b, l, cls = '') => `<div class="ts ${cls}"><b class="num">${b}</b><span>${l}</span></div>`;
   $('#todayStats').innerHTML = tile(mins ? fmtMin(mins) : '0 min', 'Studied today', 'main') + tile(ses.length, ses.length === 1 ? 'Session' : 'Sessions') + tile(pebs.length, pebs.length === 1 ? 'Pebble done' : 'Pebbles done') + tile(fmtMin(week), 'This week') + tile(`${st} ${st === 1 ? 'day' : 'days'}`, 'Streak');
@@ -3013,6 +3039,13 @@ function renderNextPebble() {
 function pebbleArt(color, w = 44, done = true) {
   return `<svg class="peb-shape" viewBox="0 0 44 34" width="${w}" aria-hidden="true"><path d="M4 22 C2 12 10 5 22 4 C34 3 42 10 41 19 C40 28 30 31 20 31 C11 31 5 28 4 22 Z" fill="${done ? color : 'none'}" stroke="${INK}" stroke-width="2.2" ${done ? '' : 'stroke-dasharray="4 4"'} /><path d="M11 15 C14 11 18 10 23 10" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>`;
 }
+function growPad() { const t = $('#notePad'); if (!t) return; t.style.height = 'auto'; t.style.height = Math.max(72, t.scrollHeight + 2) + 'px'; }
+function renderPadImgs() {
+  const box = $('#padImgs'); if (!box) return;
+  const list = (Array.isArray(S.padImgs) ? S.padImgs : []).filter(p => p && typeof p.data === 'string' && p.data.startsWith('data:image/'));
+  box.innerHTML = list.map(p => `<figure class="pad-img"><img src="${p.data}" alt="A picture in your notes"><button class="icon-btn" data-padrm="${esc(p.id)}" aria-label="Remove this picture" title="Remove"><svg><use href="#i-x"/></svg></button></figure>`).join('');
+  box.hidden = !list.length;
+}
 function syncRanges() {
   $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
   if (document.activeElement !== $('#focusVal')) $('#focusVal').value = S.settings.focus;
@@ -3032,8 +3065,25 @@ function bindFocus() {
   typed($('#focusVal'), 'focus', 180); typed($('#restVal'), 'rest', 60);
   $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; syncRanges(); save(); };
   let padT;
-  $('#notePad').value = S.notepad || '';
-  $('#notePad').oninput = e => { $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
+  $('#notePad').value = S.notepad || ''; growPad();
+  $('#notePad').oninput = e => { growPad(); $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
+  // pictures in the notes: up to three, shrunk so they save quickly with the rest of your progress
+  const addPadPic = async file => {
+    if (!file || !/^image\//.test(file.type)) return;
+    S.padImgs = Array.isArray(S.padImgs) ? S.padImgs : [];
+    if (S.padImgs.length >= 3) { toast('Notes can hold three pictures. Remove one to add another.'); return; }
+    $('#padState').textContent = 'Saving';
+    try { const data = await imgToJpeg(file, 900, .72); S.padImgs.push({ id: uid(), data }); save(); renderPadImgs(); $('#padState').textContent = 'Saved'; }
+    catch (e) { $('#padState').textContent = 'Saved'; toast('That picture could not be opened. Try a JPG or PNG.'); }
+  };
+  $('#padPicBtn').onclick = () => $('#padPicFile').click();
+  $('#padPicFile').onchange = e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; addPadPic(f); };
+  $('#notePad').addEventListener('paste', e => { const it = [...((e.clipboardData && e.clipboardData.items) || [])].find(i => i.type.startsWith('image/')); if (it) { e.preventDefault(); addPadPic(it.getAsFile()); } });
+  $('#padImgs').onclick = e => {
+    const x = e.target.closest('[data-padrm]'); if (x) { S.padImgs = (S.padImgs || []).filter(p => p.id !== x.dataset.padrm); save(); renderPadImgs(); return; }
+    const im = e.target.closest('.pad-img'); if (im) im.classList.toggle('open');
+  };
+  renderPadImgs();
   $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
   $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };
   $('#courseSel').onchange = e => { S.lastCourse = e.target.value; save(); };
@@ -3771,6 +3821,7 @@ const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], 
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
   const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats(), look: myLook() };
+  if (S.ghost) Object.assign(me, { status: 'idle', endsAt: 0, ghost: true });
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -3818,8 +3869,8 @@ function renderPond(force) {
   if (force || sig !== lastPondSig) {
     lastPondSig = sig;
     const keepPop = popFor, visible = stage.clientWidth > 0, firstTime = visible && !pondCentered, oldW = pondTrackW || L.trackW, oldCenter = over.scrollLeft + sw / 2;
-    over.innerHTML = `<div class="pond-track" id="pondTrack" style="width:${L.trackW}px">${ordered.map((r, i) => { const sl = L.slots[i]; return `<button class="resident ${r.me ? 'me' : ''} ${r.status === 'focus' ? 'is-focus' : ''}" style="left:${sl.x}px; top:${sl.y}%; width:${L.resW}px; z-index:${4 + sl.ri}" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
-      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
+    over.innerHTML = `<div class="pond-track" id="pondTrack" style="width:${L.trackW}px">${ordered.map((r, i) => { const sl = L.slots[i]; return `<button class="resident ${r.me ? 'me' : ''} ${r.ghost ? 'ghost' : ''} ${r.status === 'focus' ? 'is-focus' : ''}" style="left:${sl.x}px; top:${sl.y}%; width:${L.resW}px; z-index:${4 + sl.ri}" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? (r.ghost ? 'You · ghost' : 'You') : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
     pondTrackW = L.trackW;
     if (firstTime) { over.scrollLeft = (L.trackW - sw) / 2; pondCentered = true; }
     else if (oldW !== L.trackW) over.scrollLeft = Math.max(0, oldCenter * L.trackW / oldW - sw / 2);
@@ -3840,7 +3891,7 @@ function renderBoard() {
   const mine = boardStats(), key = mine[boardPeriod], f = boardPeriod + 'm';
   const rows = NET.pond.filter(r => r.id !== NET.uid && r.vis !== 'me' && r.board && r.board[boardPeriod] === key && r.board[f] > 0)
     .map(r => ({ id: r.id, name: r.name, animal: r.animal, look: r.look, mins: r.board[f] }));
-  if (S.profile.visibility !== 'me') rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, look: myLook(), mins: mine[f] });
+  if (S.profile.visibility !== 'me' && !S.ghost) rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, look: myLook(), mins: mine[f] });
   rows.sort((a, b) => b.mins - a.mins);
   const top = rows.filter(r => r.mins > 0).slice(0, 10);
   const meRow = rows.find(r => r.me), myRank = meRow && meRow.mins ? rows.indexOf(meRow) + 1 : 0;
@@ -4349,6 +4400,7 @@ function bindActivity() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'padpics', at: Date.UTC(2026, 10, 6, 3, 30), title: 'Pictures in your notes', text: 'Notes to self on Focus now grows as you write, and you can add up to three pictures, like a quote you saved or a mood board. Click Picture, or paste one straight in.', go: 'focus' },
   { id: 'focusday', at: Date.UTC(2026, 10, 3, 12, 0), title: 'A friendlier Focus page', text: 'See how much you studied today at the top of Focus, type your focus length or slide it, pick 20 min, 30 min, 1 hour or 2 hours in one tap, and keep a quote or reminder in the new Notes to self box.', go: 'focus' },
   { id: 'nov', at: Date.UTC(2026, 10, 2, 5, 0), title: 'The November challenge', text: 'Every day this month you get three small tasks that tick themselves as you study. Finish them on any 20 days to hatch the Emberwing, a creature that only exists for this challenge. Each finished day also gives 15 coins.', go: 'challenge', animal: 'emberwing' },
   { id: 'trio', at: Date.UTC(2026, 10, 2, 3, 30), title: 'A hamster, a penguin and a parrot', text: 'Three new friends are in the Sanctuary: the hamster (55 coins), the penguin (110) and a scarlet macaw parrot (170). Each one has three fur coats.', go: 'sanctuary', animal: 'parrot' },
@@ -4796,7 +4848,19 @@ function renderFriends() {
   $('#friendList').innerHTML = fr.length ? fr.map(r => `<button type="button" class="friend" data-peer="${esc(r.id)}"><span class="av">${avatarSVG(r.animal, 'awake', r.look)}</span>${esc(r.name)}${r.vis === 'me' ? `<span class="muted" style="font-size:.75rem">Private</span>` : ''}</button>`).join('')
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
+function renderGhost() {
+  const g = !!S.ghost;
+  if ($('#swGhost')) $('#swGhost').setAttribute('aria-checked', String(g));
+  if ($('#ghostChip')) $('#ghostChip').hidden = !g;
+  document.body.classList.toggle('is-ghost', g);
+}
 function bindProfile() {
+  $('#swGhost').onclick = () => {
+    S.ghost = !S.ghost; save(); renderGhost();
+    if (S.ghost) { publishPond(); toast('Ghost mode is on. Nobody can see you in the pond, on the leaderboard or on your profile card.'); }
+    else { publishPond(); updateCircles(); toast('Ghost mode is off. Your animal is back in the pond.'); }
+    renderPond(true); if (currentView === 'pond') try { renderBoard(); } catch (e) {}
+  };
   $('#profForm').onsubmit = e => {
     e.preventDefault();
     S.profile.name = clampStr($('#pfName').value.trim(), 40); S.profile.uni = clampStr($('#pfUni').value.trim(), 60); S.profile.major = clampStr($('#pfMajor').value.trim(), 60); S.profile.bio = clampStr($('#pfBio').value.trim(), 140);
@@ -4969,6 +5033,7 @@ function renderGreeting() {
 }
 function renderAllLight() { try { checkChallenge(); renderChallenge(); } catch (e) { console.error(e); } renderChips(); renderToday(); renderNextPebble(); renderGreeting(); if (currentView === 'pebbles') renderRocks(); try { if (currentView === 'cal') renderCal(); renderCalDot(); } catch (e) { console.error(e); } if (currentView === 'stats') renderStats(); if (currentView === 'sanctuary') renderZoo(); if (currentView === 'commons') renderMilestones(); if (currentView === 'together') renderCircle(); if (currentView === 'pond') renderPond(); }
 function renderAll() {
+  renderGhost();
   renderCourseSelects(); syncRanges(); renderHero(true); renderTimer(); renderAllLight(); renderRipples(); renderFeed(); renderMilestones(); renderProfile(); renderFriends(); renderSync(); renderNotices();
   if (currentView === 'pond') renderPond(true);
 }

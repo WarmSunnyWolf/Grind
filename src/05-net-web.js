@@ -100,7 +100,7 @@ function disconnect() {
   (NET.unsubs || []).forEach(u => { try { u(); } catch (e) {} });
   NET.unsubs = [];
   Object.values(NET.circleUnsub).forEach(u => { try { u(); } catch (e) {} });
-  Object.assign(NET, { db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, isOwner: false, allPond: null });
+  Object.assign(NET, { ghosted: false, db: null, uid: null, canWrite: false, userName: '', pond: [], ripples: [], posts: null, circleDocs: {}, circleUnsub: {}, isOwner: false, allPond: null });
   $$('[data-owneronly]').forEach(b => { b.hidden = true; });
   renderAll(); renderDrawer();
 }
@@ -156,7 +156,7 @@ async function connect(u) {
 function remoteSave() {
   if (!NET.db || !NET.uid || !NET.canWrite || NET.syncing) return;
   const json = JSON.stringify(S);
-  if (json.length > 240000) { S.sessions = S.sessions.slice(-1500); }
+  if (json.length > 800000) { S.sessions = S.sessions.slice(-1500); }
   const body = { json: JSON.stringify(S), updatedAt: S.updatedAt };
   writeQ(`data/users/${NET.uid}/state`, () => NET.db.doc(`data/users/${NET.uid}/state`).set(body));
 }
@@ -167,6 +167,12 @@ function myStatus() {
 }
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
+  // ghost mode (owner only): take the pond animal and profile card down, and publish nothing while it is on
+  if (S.ghost) {
+    if (!NET.ghosted) { NET.ghosted = true; writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).delete()); writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).delete()); }
+    return;
+  }
+  NET.ghosted = false;
   const st = myStatus();
   const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats(), stats: S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
   const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
@@ -228,7 +234,7 @@ function cleanCircle(d) {
 }
 function meAsMember() { return { name: myName(), animal: S.active, pet: petName(), day: dayKey(), mins: todayMins() }; }
 function updateCircles() {
-  if (!NET.db || !NET.canWrite) return;
+  if (!NET.db || !NET.canWrite || S.ghost) return;
   S.circles.forEach(code => {
     const ref = NET.db.doc('circles/' + code);
     writeQ('circles/' + code, async () => {

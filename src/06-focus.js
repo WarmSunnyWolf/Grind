@@ -143,7 +143,7 @@ function renderToday() {
   const pebs = S.pebLog.filter(p => dayKey(p.at) === k);
   const mins = ses.reduce((a, s) => a + s.mins, 0), ws = weekStart().getTime();
   const week = S.sessions.filter(s => s.start >= ws).reduce((a, s) => a + s.mins, 0), st = streakNow();
-  if ($('#notePad') && document.activeElement !== $('#notePad')) $('#notePad').value = S.notepad || '';
+  if ($('#notePad') && document.activeElement !== $('#notePad')) { $('#notePad').value = S.notepad || ''; growPad(); renderPadImgs(); }
   $('#todayDate').textContent = `${WD[new Date().getDay()]} ${new Date().getDate()} ${MO[new Date().getMonth()]}`;
   const tile = (b, l, cls = '') => `<div class="ts ${cls}"><b class="num">${b}</b><span>${l}</span></div>`;
   $('#todayStats').innerHTML = tile(mins ? fmtMin(mins) : '0 min', 'Studied today', 'main') + tile(ses.length, ses.length === 1 ? 'Session' : 'Sessions') + tile(pebs.length, pebs.length === 1 ? 'Pebble done' : 'Pebbles done') + tile(fmtMin(week), 'This week') + tile(`${st} ${st === 1 ? 'day' : 'days'}`, 'Streak');
@@ -165,6 +165,13 @@ function renderNextPebble() {
 function pebbleArt(color, w = 44, done = true) {
   return `<svg class="peb-shape" viewBox="0 0 44 34" width="${w}" aria-hidden="true"><path d="M4 22 C2 12 10 5 22 4 C34 3 42 10 41 19 C40 28 30 31 20 31 C11 31 5 28 4 22 Z" fill="${done ? color : 'none'}" stroke="${INK}" stroke-width="2.2" ${done ? '' : 'stroke-dasharray="4 4"'} /><path d="M11 15 C14 11 18 10 23 10" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>`;
 }
+function growPad() { const t = $('#notePad'); if (!t) return; t.style.height = 'auto'; t.style.height = Math.max(72, t.scrollHeight + 2) + 'px'; }
+function renderPadImgs() {
+  const box = $('#padImgs'); if (!box) return;
+  const list = (Array.isArray(S.padImgs) ? S.padImgs : []).filter(p => p && typeof p.data === 'string' && p.data.startsWith('data:image/'));
+  box.innerHTML = list.map(p => `<figure class="pad-img"><img src="${p.data}" alt="A picture in your notes"><button class="icon-btn" data-padrm="${esc(p.id)}" aria-label="Remove this picture" title="Remove"><svg><use href="#i-x"/></svg></button></figure>`).join('');
+  box.hidden = !list.length;
+}
 function syncRanges() {
   $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
   if (document.activeElement !== $('#focusVal')) $('#focusVal').value = S.settings.focus;
@@ -184,8 +191,25 @@ function bindFocus() {
   typed($('#focusVal'), 'focus', 180); typed($('#restVal'), 'rest', 60);
   $('#presetRow').onclick = e => { const b = e.target.closest('button[data-f]'); if (!b || S.timer) return; S.settings.focus = +b.dataset.f; syncRanges(); save(); };
   let padT;
-  $('#notePad').value = S.notepad || '';
-  $('#notePad').oninput = e => { $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
+  $('#notePad').value = S.notepad || ''; growPad();
+  $('#notePad').oninput = e => { growPad(); $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
+  // pictures in the notes: up to three, shrunk so they save quickly with the rest of your progress
+  const addPadPic = async file => {
+    if (!file || !/^image\//.test(file.type)) return;
+    S.padImgs = Array.isArray(S.padImgs) ? S.padImgs : [];
+    if (S.padImgs.length >= 3) { toast('Notes can hold three pictures. Remove one to add another.'); return; }
+    $('#padState').textContent = 'Saving';
+    try { const data = await imgToJpeg(file, 900, .72); S.padImgs.push({ id: uid(), data }); save(); renderPadImgs(); $('#padState').textContent = 'Saved'; }
+    catch (e) { $('#padState').textContent = 'Saved'; toast('That picture could not be opened. Try a JPG or PNG.'); }
+  };
+  $('#padPicBtn').onclick = () => $('#padPicFile').click();
+  $('#padPicFile').onchange = e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; addPadPic(f); };
+  $('#notePad').addEventListener('paste', e => { const it = [...((e.clipboardData && e.clipboardData.items) || [])].find(i => i.type.startsWith('image/')); if (it) { e.preventDefault(); addPadPic(it.getAsFile()); } });
+  $('#padImgs').onclick = e => {
+    const x = e.target.closest('[data-padrm]'); if (x) { S.padImgs = (S.padImgs || []).filter(p => p.id !== x.dataset.padrm); save(); renderPadImgs(); return; }
+    const im = e.target.closest('.pad-img'); if (im) im.classList.toggle('open');
+  };
+  renderPadImgs();
   $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
   $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };
   $('#courseSel').onchange = e => { S.lastCourse = e.target.value; save(); };

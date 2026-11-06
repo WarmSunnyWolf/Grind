@@ -7,6 +7,7 @@ const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], 
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
   const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats(), look: myLook() };
+  if (S.ghost) Object.assign(me, { status: 'idle', endsAt: 0, ghost: true });
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -54,8 +55,8 @@ function renderPond(force) {
   if (force || sig !== lastPondSig) {
     lastPondSig = sig;
     const keepPop = popFor, visible = stage.clientWidth > 0, firstTime = visible && !pondCentered, oldW = pondTrackW || L.trackW, oldCenter = over.scrollLeft + sw / 2;
-    over.innerHTML = `<div class="pond-track" id="pondTrack" style="width:${L.trackW}px">${ordered.map((r, i) => { const sl = L.slots[i]; return `<button class="resident ${r.me ? 'me' : ''} ${r.status === 'focus' ? 'is-focus' : ''}" style="left:${sl.x}px; top:${sl.y}%; width:${L.resW}px; z-index:${4 + sl.ri}" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
-      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? 'You' : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
+    over.innerHTML = `<div class="pond-track" id="pondTrack" style="width:${L.trackW}px">${ordered.map((r, i) => { const sl = L.slots[i]; return `<button class="resident ${r.me ? 'me' : ''} ${r.ghost ? 'ghost' : ''} ${r.status === 'focus' ? 'is-focus' : ''}" style="left:${sl.x}px; top:${sl.y}%; width:${L.resW}px; z-index:${4 + sl.ri}" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? (r.ghost ? 'You · ghost' : 'You') : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
     pondTrackW = L.trackW;
     if (firstTime) { over.scrollLeft = (L.trackW - sw) / 2; pondCentered = true; }
     else if (oldW !== L.trackW) over.scrollLeft = Math.max(0, oldCenter * L.trackW / oldW - sw / 2);
@@ -76,7 +77,7 @@ function renderBoard() {
   const mine = boardStats(), key = mine[boardPeriod], f = boardPeriod + 'm';
   const rows = NET.pond.filter(r => r.id !== NET.uid && r.vis !== 'me' && r.board && r.board[boardPeriod] === key && r.board[f] > 0)
     .map(r => ({ id: r.id, name: r.name, animal: r.animal, look: r.look, mins: r.board[f] }));
-  if (S.profile.visibility !== 'me') rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, look: myLook(), mins: mine[f] });
+  if (S.profile.visibility !== 'me' && !S.ghost) rows.push({ id: NET.uid || 'me', me: true, name: myName(), animal: S.active, look: myLook(), mins: mine[f] });
   rows.sort((a, b) => b.mins - a.mins);
   const top = rows.filter(r => r.mins > 0).slice(0, 10);
   const meRow = rows.find(r => r.me), myRank = meRow && meRow.mins ? rows.indexOf(meRow) + 1 : 0;

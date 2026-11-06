@@ -98,6 +98,7 @@ function myStatus() {
   return { status: 'idle', endsAt: 0 };
 }
 function publishPond() {
+  if (S.ghost) return;
   if (!NET.db || !NET.uid || !NET.canWrite) return;
   const st = myStatus();
   const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats(), stats: S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
@@ -160,6 +161,7 @@ function cleanCircle(d) {
 }
 function meAsMember() { return { name: myName(), animal: S.active, pet: petName(), day: dayKey(), mins: todayMins() }; }
 function updateCircles() {
+  if (S.ghost) return;
   if (!NET.db || !NET.canWrite) return;
   S.circles.forEach(code => {
     const ref = NET.db.doc('circles/' + code);

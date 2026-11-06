@@ -189,9 +189,23 @@ input[type=range]{accent-color:var(--accent); width:100%}
 @media (max-width:720px){.today-strip{grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px} .today-strip .ts.main{grid-column:1/-1; align-items:baseline} .today-strip .ts:not(.main){padding:6px 8px; flex-direction:column; gap:0; align-items:flex-start; border-radius:12px} .today-strip .ts:not(.main) b{font-size:1rem} .today-strip .ts:not(.main) span{font-size:.66rem}}
 .note-pad{background:color-mix(in srgb, var(--glow) 22%, var(--surface)); border-color:color-mix(in srgb, var(--gold) 30%, var(--line))}
 .note-pad .card-h{margin-bottom:8px}
-.note-pad textarea{width:100%; min-height:92px; resize:vertical; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
+.note-pad textarea{width:100%; min-height:72px; resize:none; overflow:hidden; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
   background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px), color-mix(in srgb, var(--gold) 30%, transparent) calc(1.55em - 1px) 1.55em); background-attachment:local}
 .note-pad textarea::placeholder{color:var(--muted)}
+.pad-imgs{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px}
+.pad-img{position:relative; margin:0; border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--surface); aspect-ratio:1; cursor:zoom-in}
+.pad-img img{display:block; width:100%; height:100%; object-fit:cover}
+.pad-img.open{grid-column:1/-1; aspect-ratio:auto; cursor:zoom-out}
+.pad-img.open img{height:auto; object-fit:contain}
+.pad-img .icon-btn{position:absolute; top:6px; right:6px; width:28px; height:28px; background:color-mix(in srgb, var(--surface) 85%, transparent); opacity:0; transition:opacity .2s}
+.pad-img:hover .icon-btn, .pad-img:focus-within .icon-btn{opacity:1}
+@media (hover:none){.pad-img .icon-btn{opacity:1}}
+.ghost-box{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line)}
+.ghost-box .toggle span{display:flex; flex-direction:column; gap:4px}
+.ghost-box small{font-size:.8rem; color:var(--muted); line-height:1.45; max-width:60ch}
+.chip.ghost-chip{background:color-mix(in srgb, var(--ink) 10%, var(--surface)); color:var(--ink-2)}
+.chip.ghost-chip i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block; opacity:.6}
+.resident.ghost{opacity:.55}
 .dur-top b small{font-family:var(--f-body); font-size:.8rem; color:var(--muted); margin-left:3px}
 .stepper{display:flex; gap:6px; align-items:center}
 .stepper input[type=number]{width:64px; text-align:center}
