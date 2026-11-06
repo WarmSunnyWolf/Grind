@@ -199,16 +199,34 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .note-pad textarea{width:100%; min-height:72px; resize:none; overflow:hidden; border:0; background:transparent; font:inherit; font-size:.95rem; line-height:1.55; color:var(--ink); padding:0; outline:none;
   background-image:repeating-linear-gradient(transparent 0 calc(1.55em - 1px), color-mix(in srgb, var(--gold) 30%, transparent) calc(1.55em - 1px) 1.55em); background-attachment:local}
 .note-pad textarea::placeholder{color:var(--muted)}
-.pad-imgs{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px}
-.pad-img{position:relative; margin:0; border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--surface); aspect-ratio:1; cursor:zoom-in}
-.pad-img img{display:block; width:100%; height:100%; object-fit:cover}
-.pad-img.open{grid-column:1/-1; aspect-ratio:auto; cursor:zoom-out}
-.pad-img.open img{height:auto; object-fit:contain}
-.pad-img .icon-btn{position:absolute; top:6px; right:6px; width:28px; height:28px; background:color-mix(in srgb, var(--surface) 85%, transparent); opacity:0; transition:opacity .2s}
-.pad-img:hover .icon-btn, .pad-img:focus-within .icon-btn{opacity:1}
-@media (hover:none){.pad-img .icon-btn{opacity:1}}
+.pad-imgs{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; align-items:flex-start}
+.pad-img{position:relative; margin:0; display:flex; flex-direction:column; gap:6px; min-width:0}
+.pad-img.sz-s{width:calc(33.333% - 7px)} .pad-img.sz-m{width:calc(50% - 5px)} .pad-img.sz-l, .pad-img.sz-w{width:100%}
+.pad-jump{width:100%; justify-content:center} .pad-wide{margin-top:18px; scroll-margin-top:16px} .pad-wide .pad-imgs{margin-top:0} .pad-wide .pad-opts{max-width:560px}
+.pad-img.editing{width:100%}
+.pad-view{display:block; width:100%; padding:0; border:0; background:var(--surface); cursor:zoom-in; overflow:hidden; line-height:0}
+.pad-img.round .pad-view{border-radius:14px} .pad-img.square .pad-view{border-radius:2px}
+.pad-img.framed .pad-view{border:1px solid var(--line); box-shadow:0 2px 10px var(--shadow)}
+.pad-view img{display:block; width:100%; height:auto; max-height:none}
+.pad-img.fit-fill .pad-view{aspect-ratio:4/3} .pad-img.fit-fill .pad-view img{height:100%; object-fit:cover}
+.pad-img figcaption{font-size:.82rem; color:var(--ink-2); line-height:1.4; padding:0 2px}
+.pad-tools{position:absolute; top:6px; right:6px; display:flex; gap:4px; opacity:0; transition:opacity .2s}
+.pad-tools .icon-btn{width:30px; height:30px; background:color-mix(in srgb, var(--surface) 88%, transparent); box-shadow:0 1px 4px var(--shadow)}
+.pad-img:hover .pad-tools, .pad-img:focus-within .pad-tools, .pad-img.editing .pad-tools{opacity:1}
+@media (hover:none){.pad-tools{opacity:1}}
+.pad-opts{display:flex; flex-direction:column; gap:10px; padding:12px; border:1px dashed var(--line); border-radius:14px; background:var(--surface)}
+.pad-opts label{display:flex; flex-direction:column; gap:5px; font-size:.78rem; font-weight:600; color:var(--muted)}
+.pad-seg button{padding:5px 11px; font-size:.8rem}
+.pad-hint{font-weight:500; font-size:.74rem}
+.zoom-wrap{overflow:auto; max-height:calc(100vh - 140px); border-radius:16px; background:var(--bg)}
+.img-box .zoom-wrap img{max-height:calc(100vh - 140px); border-radius:0; cursor:zoom-in}
+.img-box .zoom-wrap img.zoomed{width:auto; max-width:none; max-height:none; cursor:zoom-out}
 .ghost-box{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line)}
-.ghost-box .toggle span{display:flex; flex-direction:column; gap:4px}
+.ghost-h{display:flex; flex-direction:column; gap:4px; margin-bottom:10px}
+.ghost-opts{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:8px}
+.ghost-opts button{display:flex; flex-direction:column; gap:4px; text-align:left; padding:12px; border-radius:14px; border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer}
+.ghost-opts button span{font-size:.78rem; color:var(--muted); line-height:1.4}
+.ghost-opts button[aria-checked="true"]{border-color:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent)}
 .ghost-box small{font-size:.8rem; color:var(--muted); line-height:1.45; max-width:60ch}
 .chip.ghost-chip{background:color-mix(in srgb, var(--ink) 10%, var(--surface)); color:var(--ink-2)}
 .chip.ghost-chip i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block; opacity:.6}
@@ -539,6 +557,12 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .lock svg{width:13px; height:13px}
 
 /* ---------- stats ---------- */
+.per-sum{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:12px}
+.per-sum .ps{display:flex; flex-direction:column; gap:2px; padding:10px 12px; border-radius:14px; background:var(--surface-2)}
+.per-sum .ps b{font-family:var(--f-display); font-weight:400; font-size:1.5rem; line-height:1.1}
+.per-sum .ps span{font-size:.78rem; font-weight:600; color:var(--ink-2)}
+.per-sum .ps small{font-size:.74rem; color:var(--muted)}
+.per-sum .per-note{grid-column:1/-1; font-size:.8rem; margin:0}
 .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px}
 .kpi{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:14px 16px}
 .kpi b{font-family:var(--f-display); font-weight:400; font-size:1.9rem; line-height:1.1; display:block; font-variant-numeric:tabular-nums}
@@ -591,6 +615,14 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .cchip button{border:0; background:none; width:22px; height:22px; border-radius:50%; display:grid; place-items:center; color:var(--muted); padding:0}
 .cchip button:hover{background:var(--surface-2)}
 .cchip button svg{width:13px; height:13px}
+.cchip.on{border-color:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent)}
+.course-edit{display:flex; flex-direction:column; gap:12px; padding:12px; border:1px dashed var(--line); border-radius:14px; background:var(--surface)}
+.course-edit .f > span{font-size:.8rem; font-weight:600; color:var(--muted)}
+.ce-cols{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:4px}
+.ce-cols .rc{width:28px; height:28px; border-radius:50%; border:2px solid var(--surface); box-shadow:0 0 0 1px var(--line); padding:0; cursor:pointer}
+.ce-cols .rc.on{box-shadow:0 0 0 2px var(--ink)}
+.ce-own{display:inline-flex; align-items:center; gap:6px; font-size:.8rem; font-weight:600; color:var(--ink-2); cursor:pointer}
+.ce-own input{width:30px; height:30px; padding:0; border:1px solid var(--line); border-radius:50%; background:none; cursor:pointer}
 .friends{display:flex; gap:12px; flex-wrap:wrap}
 .friend{display:flex; flex-direction:column; align-items:center; gap:4px; width:84px; text-align:center; font-size:.8rem; font-weight:600}
 .friend .av{width:62px; height:62px; border-radius:50%; background:var(--water-hi); overflow:hidden}
@@ -938,7 +970,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
-          <button type="button" class="chip ghost-chip" id="ghostChip" data-go="profile" title="Ghost mode is on. Nobody can see you studying." hidden><i></i><span>Ghost</span></button>
+          <button type="button" class="chip ghost-chip" id="ghostChip" data-go="profile" title="Ghost mode is on. Nobody can see you studying." hidden><i></i><span id="ghostChipT">Ghost</span></button>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
           <span class="mobile-top"><button class="icon-btn" data-go="guide" aria-label="How to use Grind"><svg><use href="#i-info"/></svg></button><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
@@ -1022,6 +1054,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             </div>
           </div>
         </div>
+        <div class="card note-pad pad-wide" id="padWide" hidden><div class="card-h"><h2>From your notes</h2><span class="muted" style="font-size:.8rem">Wide pictures show here so you can read them. Click the gear to change the size.</span></div><div class="pad-imgs" id="padWideImgs"></div></div>
       </section>
 
       <!-- PEBBLES -->
@@ -1146,6 +1179,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
         <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:60ch">Everything you have already done, in one place.</p><label class="f" style="flex-direction:row; align-items:center; gap:8px; font-weight:500">Semester<select class="inp" id="statSem" style="width:auto"></select></label></div>
         <div class="kpis" id="kpis"></div>
         <div class="card"><div class="card-h"><h2>Focus minutes, last 14 days</h2><button class="btn small quiet table-toggle" id="dailyTableBtn">Show as table</button></div><div class="chart" id="dailyChart"></div><div id="dailyTable" hidden></div></div>
+        <div class="card" id="periodCard"><div class="card-h"><h2 id="periodTitle">Week by week</h2><span class="row" style="gap:8px"><span class="seg" role="group" aria-label="Show weeks or months"><button type="button" data-per="week" aria-pressed="true">Weeks</button><button type="button" data-per="month" aria-pressed="false">Months</button></span><button class="btn small quiet table-toggle" id="periodTableBtn">Show as table</button></span></div>
+          <div class="per-sum" id="periodSum"></div><div class="chart" id="periodChart"></div><div id="periodTable" hidden></div></div>
         <div class="grid g-2">
           <div class="card"><div class="card-h"><h2>By course</h2></div><div id="courseBars"></div></div>
           <div class="card"><div class="card-h"><h2>Moss calendar</h2><span class="muted" style="font-size:.8rem">Last 16 weeks</span></div><div class="heat-wrap"><div class="heat" id="heat"></div></div><div class="legend" style="margin-top:10px" id="heatLegend"></div></div>
@@ -1196,12 +1231,12 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-2">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-file"/></svg></span><div><span class="eyebrow">Step 2</span><h2>Add your courses</h2></div></div>
-            <ol class="g-steps"><li>Click your name card at the bottom of the menu (on a phone, the person icon at the top).</li><li>Under <b>Semesters and courses</b>, type a course like AIRE410 and click <b>Add</b>. Each course gets its own colour.</li><li>Starting a new term? Click <b>Add semester</b>, rename it, and click <b>Make current</b>. Old semesters stay in your journal.</li></ol>
+            <ol class="g-steps"><li>Click your name card at the bottom of the menu (on a phone, the person icon at the top).</li><li>Under <b>Semesters and courses</b>, type a course like AIRE410 and click <b>Add</b>. Each course gets its own colour.</li><li>To fix a name or change a colour, click the <b>pencil</b> on the course, type the new name, pick a colour (or <b>Any colour</b> for your own), and click <b>Save course</b>. Everything you did for that course keeps it.</li><li>Starting a new term? Click <b>Add semester</b>, rename it, and click <b>Make current</b>. Old semesters stay in your journal.</li></ol>
             <div class="row"><button class="btn small" data-go="profile">Show me courses</button></div>
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Pictures show whole and big, and text in screenshots stays sharp.</li><li>Click the <b>gear</b> on a picture to make it Small, Medium, Large, or <b>Wide</b> so it stretches across the page under the timer (wide screenshots start this way), show the whole picture or fill the frame, pick round or square corners, turn the frame on or off, add a caption, or move it earlier or later. Click the picture itself to open it full screen, and click again to zoom in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
@@ -1236,7 +1271,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-9">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 10</span><h2>See your progress</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
+            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Week by week</b> shows your hours for each of the last 12 weeks. A new week starts every Monday. Switch to <b>Months</b> to see each month, and compare this week or month with the last one, your average and your best. <b>Show as table</b> lists the exact numbers.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
             <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
           </article>
           <article class="card g-sec" id="g-10">
@@ -1302,7 +1337,12 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </div>
           <div class="row" style="margin-top:12px"><button class="btn small" type="button" data-peer="me-self">See what classmates see</button></div>
           <div class="ghost-box" data-owneronly hidden>
-            <div class="toggle"><span><b>Ghost mode</b><small>Only you have this, as the owner. While it is on, your animal leaves the pond and the leaderboard, your profile card and study time are hidden from everyone, and your circles stop seeing your minutes. You will not see yourself studying in the pond either. Turn it off and you come back.</small></span><button class="switch" role="switch" id="swGhost" aria-checked="false" aria-label="Ghost mode"></button></div>
+            <div class="ghost-h"><b>Ghost mode</b><small>Only you have this, as the owner. Pick how classmates see you.</small></div>
+            <div class="ghost-opts" id="ghostSeg" role="radiogroup" aria-label="Ghost mode">
+              <button type="button" role="radio" data-ghost="off"><b>Off</b><span>Everyone sees you as normal, studying or resting.</span></button>
+              <button type="button" role="radio" data-ghost="away"><b>Asleep in the pond</b><span>Your animal stays in the pond but always naps, marked away. Nobody sees when you study, your minutes, the leaderboard or your stats.</span></button>
+              <button type="button" role="radio" data-ghost="hide"><b>Hidden</b><span>Your animal leaves the pond, the leaderboard and your profile card until you turn this off.</span></button>
+            </div>
           </div>
         </div>
         <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>
@@ -2642,7 +2682,7 @@ const ANIMAL_OK = k => ANIMAL_KEYS.includes(k) ? k : 'frog';
 function cleanResident(id, d) {
   return {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
-    status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
+    status: ['focus', 'rest', 'idle', 'away'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
     vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === false ? 'me' : 'everyone',
     stats: cleanStats(d.stats), look: cleanLook(d.look),
@@ -2650,6 +2690,7 @@ function cleanResident(id, d) {
   };
 }
 function liveStatus(r) {
+  if (r.status === 'away') return 'away';
   if ((r.status === 'focus' || r.status === 'rest') && r.endsAt > Date.now() - 30000) return r.status;
   return Date.now() - r.updatedAt > 30 * 60000 ? 'away' : 'idle';
 }
@@ -2794,15 +2835,16 @@ function myStatus() {
 }
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
-  // ghost mode (owner only): take the pond animal and profile card down, and publish nothing while it is on
-  if (S.ghost) {
+  // ghost mode (owner only). Hidden: take the pond animal and profile card down and publish nothing.
+  // Asleep: stay in the pond, always shown napping and away, with no minutes, leaderboard or study stats.
+  if (S.ghost && S.ghost !== 'away') {
     if (!NET.ghosted) { NET.ghosted = true; writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).delete()); writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).delete()); }
     return;
   }
   NET.ghosted = false;
-  const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats(), stats: S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
-  const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
+  const asleep = S.ghost === 'away', st = asleep ? { status: 'away', endsAt: 0 } : myStatus();
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: asleep ? 0 : todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: asleep || S.profile.visibility === 'me' ? null : boardStats(), stats: !asleep && S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
+  const vis = S.profile.visibility, card = { vis: asleep ? 'me' : vis, allow: !asleep && vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: asleep || vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
   writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
@@ -3040,11 +3082,67 @@ function pebbleArt(color, w = 44, done = true) {
   return `<svg class="peb-shape" viewBox="0 0 44 34" width="${w}" aria-hidden="true"><path d="M4 22 C2 12 10 5 22 4 C34 3 42 10 41 19 C40 28 30 31 20 31 C11 31 5 28 4 22 Z" fill="${done ? color : 'none'}" stroke="${INK}" stroke-width="2.2" ${done ? '' : 'stroke-dasharray="4 4"'} /><path d="M11 15 C14 11 18 10 23 10" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>`;
 }
 function growPad() { const t = $('#notePad'); if (!t) return; t.style.height = 'auto'; t.style.height = Math.max(72, t.scrollHeight + 2) + 'px'; }
+/* pictures in Notes to self: each one keeps its own size, shape, corners and frame */
+const PAD_SIZES = { s: 'Small', m: 'Medium', l: 'Large', w: 'Wide' };
+let padOpen = null;
+const padList = () => (Array.isArray(S.padImgs) ? S.padImgs : []).filter(p => p && typeof p.data === 'string' && p.data.startsWith('data:image/'));
+function padOpt(p) { return { size: PAD_SIZES[p.size] ? p.size : 'l', fit: p.fit === 'fill' ? 'fill' : 'whole', round: p.round !== false, frame: p.frame !== false }; }
 function renderPadImgs() {
-  const box = $('#padImgs'); if (!box) return;
-  const list = (Array.isArray(S.padImgs) ? S.padImgs : []).filter(p => p && typeof p.data === 'string' && p.data.startsWith('data:image/'));
-  box.innerHTML = list.map(p => `<figure class="pad-img"><img src="${p.data}" alt="A picture in your notes"><button class="icon-btn" data-padrm="${esc(p.id)}" aria-label="Remove this picture" title="Remove"><svg><use href="#i-x"/></svg></button></figure>`).join('');
+  const box = $('#padImgs'), wide = $('#padWide'); if (!box) return;
+  const list = padList();
+  const seg = (key, val, opts, id) => `<span class="seg pad-seg" role="group">${opts.map(([v, l]) => `<button type="button" data-padset="${key}" data-v="${v}" data-id="${esc(id)}" aria-pressed="${val === v}">${l}</button>`).join('')}</span>`;
+  const fig = (p, i) => {
+    const o = padOpt(p), open = padOpen === p.id;
+    return `<figure class="pad-img sz-${o.size} fit-${o.fit} ${o.round ? 'round' : 'square'} ${o.frame ? 'framed' : 'bare'} ${open ? 'editing' : ''}">
+      <button type="button" class="pad-view" data-padview="${esc(p.id)}" aria-label="Open this picture big"><img src="${p.data}" alt="${esc(p.cap || 'A picture in your notes')}"></button>
+      <span class="pad-tools"><button type="button" class="icon-btn" data-padedit="${esc(p.id)}" aria-label="Picture options" aria-expanded="${open}" title="Picture options"><svg><use href="#i-gear"/></svg></button><button type="button" class="icon-btn" data-padrm="${esc(p.id)}" aria-label="Remove this picture" title="Remove"><svg><use href="#i-x"/></svg></button></span>
+      ${p.cap ? `<figcaption>${esc(p.cap)}</figcaption>` : ''}
+      ${open ? `<div class="pad-opts">
+        <label><span>Size</span>${seg('size', o.size, Object.entries(PAD_SIZES), p.id)}<small class="pad-hint">Wide stretches the picture across the page under the timer, best for screenshots.</small></label>
+        <label><span>Show</span>${seg('fit', o.fit, [['whole', 'Whole picture'], ['fill', 'Fill the frame']], p.id)}</label>
+        <label><span>Corners</span>${seg('round', o.round ? 'y' : 'n', [['y', 'Round'], ['n', 'Square']], p.id)}</label>
+        <label><span>Frame</span>${seg('frame', o.frame ? 'y' : 'n', [['y', 'On'], ['n', 'Off']], p.id)}</label>
+        <label><span>Caption</span><input class="inp" data-padcap="${esc(p.id)}" maxlength="80" value="${esc(p.cap || '')}" placeholder="Optional, shows under the picture"></label>
+        <div class="row" style="gap:6px"><button type="button" class="btn small" data-padmove="-1" data-id="${esc(p.id)}" ${i ? '' : 'disabled'}>Move earlier</button><button type="button" class="btn small" data-padmove="1" data-id="${esc(p.id)}" ${i < list.length - 1 ? '' : 'disabled'}>Move later</button><span style="flex:1"></span><button type="button" class="btn small primary" data-padedit="${esc(p.id)}">Done</button></div>
+      </div>` : ''}
+    </figure>`;
+  };
+  const isWide = p => padOpt(p).size === 'w';
+  box.innerHTML = list.map((p, i) => isWide(p) ? '' : fig(p, i)).join('');
+  const nw = list.filter(isWide).length;
+  box.innerHTML += nw ? `<button type="button" class="btn small quiet pad-jump" data-padjump>${nw === 1 ? 'Your wide picture is' : `Your ${nw} wide pictures are`} below the timer, across the page</button>` : '';
   box.hidden = !list.length;
+  if (wide) { $('#padWideImgs').innerHTML = list.map((p, i) => isWide(p) ? fig(p, i) : '').join(''); wide.hidden = !list.some(isWide); }
+}
+/* Shrink a picture so it saves with your progress but stays sharp enough to read.
+   Screenshots of text are usually smaller as PNG (and stay crisp), photos as JPEG, so both are tried. */
+function padEncode(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      URL.revokeObjectURL(url);
+      const big = Math.max(im.naturalWidth, im.naturalHeight), steps = [[1800, .9], [1600, .86], [1400, .82], [1200, .8], [1000, .76], [850, .72]];
+      let best = '', bw = 0, bh = 0;
+      for (const [max, q] of steps) {
+        const s = Math.min(1, max / big), c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(im.naturalWidth * s)); c.height = Math.max(1, Math.round(im.naturalHeight * s));
+        const x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high';
+        x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+        const png = c.toDataURL('image/png'), jpg = c.toDataURL('image/jpeg', q);
+        bw = c.width; bh = c.height;
+        best = png.length <= jpg.length * 1.15 && png.length <= PAD_MAX ? png : jpg;
+        if (best.length <= PAD_MAX) break;
+      }
+      res({ data: best, w: bw, h: bh });
+    };
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('image')); };
+    im.src = url;
+  });
+}
+const PAD_MAX = 210000, PAD_TOTAL = 540000;
+function openPadPic(p) {
+  $('#imgBox').innerHTML = `<div class="zoom-wrap"><img src="${p.data}" alt="${esc(p.cap || 'A picture from your notes')}" class="zoomable" title="Click to zoom in or out"></div><div class="row" style="justify-content:space-between"><span class="muted" style="font-size:.85rem">${p.cap ? esc(p.cap) + ' · ' : ''}Click the picture to zoom in</span><div class="row"><a class="btn small" href="${p.data}" download="note-picture.${p.data.startsWith('data:image/png') ? 'png' : 'jpg'}">${icon('i-download')}Download</a><button class="btn small" data-imgclose>Close</button></div></div>`;
+  $('#imgModal').classList.add('on');
 }
 function syncRanges() {
   $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
@@ -3067,22 +3165,44 @@ function bindFocus() {
   let padT;
   $('#notePad').value = S.notepad || ''; growPad();
   $('#notePad').oninput = e => { growPad(); $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
-  // pictures in the notes: up to three, shrunk so they save quickly with the rest of your progress
+  // pictures in the notes: up to three, kept sharp enough to read and saved with the rest of your progress
   const addPadPic = async file => {
     if (!file || !/^image\//.test(file.type)) return;
-    S.padImgs = Array.isArray(S.padImgs) ? S.padImgs : [];
+    S.padImgs = padList();
     if (S.padImgs.length >= 3) { toast('Notes can hold three pictures. Remove one to add another.'); return; }
     $('#padState').textContent = 'Saving';
-    try { const data = await imgToJpeg(file, 900, .72); S.padImgs.push({ id: uid(), data }); save(); renderPadImgs(); $('#padState').textContent = 'Saved'; }
-    catch (e) { $('#padState').textContent = 'Saved'; toast('That picture could not be opened. Try a JPG or PNG.'); }
+    try {
+      const enc = await padEncode(file), data = enc.data, used = S.padImgs.reduce((a, p) => a + p.data.length, 0);
+      if (used + data.length > PAD_TOTAL) { $('#padState').textContent = 'Saved'; toast('Your notes are full of pictures. Remove one, or make it smaller before adding it.'); return; }
+      S.padImgs.push({ id: uid(), data, size: enc.w > enc.h * 1.2 && enc.w >= 700 ? 'w' : 'l', fit: 'whole', round: true, frame: true }); save(); renderPadImgs(); $('#padState').textContent = 'Saved';
+    } catch (e) { $('#padState').textContent = 'Saved'; toast('That picture could not be opened. Try a JPG or PNG.'); }
   };
   $('#padPicBtn').onclick = () => $('#padPicFile').click();
   $('#padPicFile').onchange = e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; addPadPic(f); };
   $('#notePad').addEventListener('paste', e => { const it = [...((e.clipboardData && e.clipboardData.items) || [])].find(i => i.type.startsWith('image/')); if (it) { e.preventDefault(); addPadPic(it.getAsFile()); } });
-  $('#padImgs').onclick = e => {
-    const x = e.target.closest('[data-padrm]'); if (x) { S.padImgs = (S.padImgs || []).filter(p => p.id !== x.dataset.padrm); save(); renderPadImgs(); return; }
-    const im = e.target.closest('.pad-img'); if (im) im.classList.toggle('open');
+  const padFind = id => padList().find(p => p.id === id);
+  const padClick = e => {
+    const x = e.target.closest('[data-padrm]'); if (x) { S.padImgs = padList().filter(p => p.id !== x.dataset.padrm); save(); renderPadImgs(); return; }
+    const ed = e.target.closest('[data-padedit]'); if (ed) { padOpen = padOpen === ed.dataset.padedit ? null : ed.dataset.padedit; renderPadImgs(); return; }
+    const st = e.target.closest('[data-padset]'); if (st) {
+      const p = padFind(st.dataset.id); if (!p) return; const k = st.dataset.padset, v = st.dataset.v;
+      if (k === 'size') p.size = v; else if (k === 'fit') p.fit = v; else p[k] = v === 'y';
+      save(); renderPadImgs(); return;
+    }
+    const mv = e.target.closest('[data-padmove]'); if (mv) {
+      const l = padList(), i = l.findIndex(p => p.id === mv.dataset.id), j = i + +mv.dataset.padmove; if (i < 0 || j < 0 || j >= l.length) return;
+      [l[i], l[j]] = [l[j], l[i]]; S.padImgs = l; save(); renderPadImgs(); return;
+    }
+    if (e.target.closest('[data-padjump]')) { $('#padWide').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const v = e.target.closest('[data-padview]'); if (v) { const p = padFind(v.dataset.padview); if (p) openPadPic(p); }
   };
+  $('#padImgs').onclick = $('#padWideImgs').onclick = padClick;
+  ['#padImgs', '#padWideImgs'].forEach(sel => {
+    $(sel).addEventListener('change', e => { const c = e.target.closest('[data-padcap]'); if (!c) return; const p = padFind(c.dataset.padcap); if (p) { p.cap = clampStr(c.value.trim(), 80); save(); renderPadImgs(); } });
+    $(sel).addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[data-padcap]')) e.target.blur(); });
+  });
+  $('#imgModal').addEventListener('click', e => { const z = e.target.closest('.zoomable'); if (z) z.classList.toggle('zoomed'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#imgModal').classList.remove('on'); });
   renderPadImgs();
   $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
   $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };
@@ -3821,7 +3941,8 @@ const SLOTS_TALL = [[50, 76], [24, 60], [76, 62], [26, 90], [74, 91], [50, 50], 
 function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function residents() {
   const me = { id: NET.uid || 'me', me: true, name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: myStatus().status, endsAt: myStatus().endsAt, mins: todayMins(), streak: streakNow(), updatedAt: Date.now() , vis: S.profile.visibility, stats: publicStats(), look: myLook() };
-  if (S.ghost) Object.assign(me, { status: 'idle', endsAt: 0, ghost: true });
+  if (S.ghost === 'away') Object.assign(me, { status: 'away', endsAt: 0, mins: 0, asleep: true });
+  else if (S.ghost) Object.assign(me, { status: 'idle', endsAt: 0, ghost: true });
   let others = NET.pond.filter(r => r.id !== NET.uid).map(r => ({ ...r, mins: r.todayKey === dayKey() ? r.todayMins : 0, status: liveStatus(r) }));
   const showEx = !others.length;
   if (showEx) others = EXAMPLES.map(e => ({ ...e }));
@@ -3870,7 +3991,7 @@ function renderPond(force) {
     lastPondSig = sig;
     const keepPop = popFor, visible = stage.clientWidth > 0, firstTime = visible && !pondCentered, oldW = pondTrackW || L.trackW, oldCenter = over.scrollLeft + sw / 2;
     over.innerHTML = `<div class="pond-track" id="pondTrack" style="width:${L.trackW}px">${ordered.map((r, i) => { const sl = L.slots[i]; return `<button class="resident ${r.me ? 'me' : ''} ${r.ghost ? 'ghost' : ''} ${r.status === 'focus' ? 'is-focus' : ''}" style="left:${sl.x}px; top:${sl.y}%; width:${L.resW}px; z-index:${4 + sl.ri}" data-res="${esc(r.id)}" aria-label="${esc(r.name)} and ${esc(r.pet || ANIMALS[r.animal].label)}. ${esc(statusLine(r))}">
-      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? (r.ghost ? 'You · ghost' : 'You') : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
+      ${onPadSVG(r.animal, resState(r), { bloom: false, hidden: true, look: r.look, studying: r.status === 'focus' })}<span class="plate ${r.status === 'focus' ? 'focus' : ''}">${esc(r.me ? (r.ghost ? 'You · ghost' : r.asleep ? 'You · asleep' : 'You') : r.name)}${r.example ? ' · example' : ''}</span></button>`; }).join('')}</div>`;
     pondTrackW = L.trackW;
     if (firstTime) { over.scrollLeft = (L.trackW - sw) / 2; pondCentered = true; }
     else if (oldW !== L.trackW) over.scrollLeft = Math.max(0, oldCenter * L.trackW / oldW - sw / 2);
@@ -4400,6 +4521,9 @@ function bindActivity() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'weekhours', at: Date.UTC(2026, 10, 6, 17, 20), title: 'Your hours, week by week', text: 'The journal now shows how many hours you studied each week and each month. A new week starts every Monday, and you can compare this week with last week, your average and your best.', go: 'stats' },
+  { id: 'courseedit', at: Date.UTC(2026, 10, 6, 17, 10), title: 'Rename and recolour your courses', text: 'Made a typo or want a new colour? Open your profile and click the pencil on any course. Your sessions, rocks and calendar follow the change.', go: 'profile' },
+  { id: 'padpics2', at: Date.UTC(2026, 10, 6, 17, 0), title: 'Bigger, sharper pictures in your notes', text: 'Pictures in Notes to self now show whole and big, and wide screenshots stretch across the page so you can read them. Click the gear on a picture to change its size, crop, corners, frame or caption, and click the picture to open it full screen and zoom in.', go: 'focus' },
   { id: 'padpics', at: Date.UTC(2026, 10, 6, 3, 30), title: 'Pictures in your notes', text: 'Notes to self on Focus now grows as you write, and you can add up to three pictures, like a quote you saved or a mood board. Click Picture, or paste one straight in.', go: 'focus' },
   { id: 'focusday', at: Date.UTC(2026, 10, 3, 12, 0), title: 'A friendlier Focus page', text: 'See how much you studied today at the top of Focus, type your focus length or slide it, pick 20 min, 30 min, 1 hour or 2 hours in one tap, and keep a quote or reminder in the new Notes to self box.', go: 'focus' },
   { id: 'nov', at: Date.UTC(2026, 10, 2, 5, 0), title: 'The November challenge', text: 'Every day this month you get three small tasks that tick themselves as you study. Finish them on any 20 days to hatch the Emberwing, a creature that only exists for this challenge. Each finished day also gives 15 coins.', go: 'challenge', animal: 'emberwing' },
@@ -4757,7 +4881,7 @@ function bindZoo() {
 }
 
 /* ---------- journal (stats) ---------- */
-let statSem = 'all', showDailyTable = false;
+let statSem = 'all', showDailyTable = false, statPer = 'week', showPerTable = false;
 function semFilter() {
   if (statSem === 'all') return () => true;
   const sem = S.semesters.find(s => s.id === statSem); const ids = new Set((sem ? sem.courses : []).map(c => c.id));
@@ -4770,11 +4894,12 @@ function renderStats() {
   const flt = semFilter();
   const ses = S.sessions.filter(flt);
   const total = ses.reduce((a, s) => a + s.mins, 0);
-  const wk = addDays(new Date(), -6); wk.setHours(0, 0, 0, 0);
-  const week = ses.filter(s => s.start >= +wk).reduce((a, s) => a + s.mins, 0);
+  const week = ses.filter(s => s.start >= +weekStart()).reduce((a, s) => a + s.mins, 0);
+  const m0 = new Date(); m0.setHours(0, 0, 0, 0); m0.setDate(1);
+  const month = ses.filter(s => s.start >= +m0).reduce((a, s) => a + s.mins, 0);
   const pebs = S.pebLog.filter(p => statSem === 'all' || flt({ courseId: p.courseId })).length;
   $('#kpis').innerHTML = [
-    [fmtMin(total), 'Total focus'], [fmtMin(week), 'Last 7 days'], [ses.length, 'Sessions'], [pebs, 'Stepping stones laid'],
+    [fmtMin(total), 'Total focus'], [fmtMin(week), 'This week, from Monday'], [fmtMin(month), `This month, ${MO[new Date().getMonth()]}`], [ses.length, 'Sessions'], [pebs, 'Stepping stones laid'],
     [`${streakNow()}<small>days</small>`, 'Current streak'], [`${Math.max(bestStreak(), streakNow())}<small>days</small>`, 'Best streak']
   ].map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
   // daily bars
@@ -4797,6 +4922,7 @@ function renderStats() {
   $('#dailyChart').hidden = showDailyTable; $('#dailyTable').hidden = !showDailyTable;
   $('#dailyTable').innerHTML = `<table class="data"><thead><tr><th>Day</th><th style="text-align:right">Focus</th></tr></thead><tbody>${days.slice().reverse().map(d => `<tr><td>${WD[d.d.getDay()]} ${d.d.getDate()} ${MO[d.d.getMonth()]}</td><td class="n">${fmtMin(d.v)}</td></tr>`).join('')}</tbody></table>`;
   $('#dailyTableBtn').textContent = showDailyTable ? 'Show as chart' : 'Show as table';
+  renderPeriods(ses);
   // by course
   const byC = {}; ses.forEach(s => { byC[s.courseId || ''] = (byC[s.courseId || ''] || 0) + s.mins; });
   const rows = Object.entries(byC).sort((a, b) => b[1] - a[1]); const cmax = Math.max(1, ...rows.map(r => r[1]));
@@ -4816,7 +4942,47 @@ function renderStats() {
   $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}</td></tr>`).join('')}</tbody>`
     : `<tbody><tr><td class="muted" style="border:0">No sessions yet. Your first focus session will appear here.</td></tr></tbody>`;
 }
+/* hours for each week (Monday to Sunday) and each month. A new week starts every Monday. */
+const fmtHrs = m => m >= 60 ? `${+(m / 60).toFixed(1)} h` : `${Math.round(m)} min`;
+function renderPeriods(ses) {
+  const now = new Date(), N = 12, rows = [];
+  if (statPer === 'week') {
+    const w0 = weekStart();
+    for (let i = N - 1; i >= 0; i--) { const a = addDays(w0, -7 * i), b = addDays(a, 7), e = addDays(a, 6); rows.push({ a: +a, b: +b, short: `${a.getDate()} ${MO[a.getMonth()]}`, long: i === 0 ? `This week (${a.getDate()} ${MO[a.getMonth()]} to ${e.getDate()} ${MO[e.getMonth()]})` : i === 1 ? `Last week (${a.getDate()} ${MO[a.getMonth()]} to ${e.getDate()} ${MO[e.getMonth()]})` : `${a.getDate()} ${MO[a.getMonth()]} to ${e.getDate()} ${MO[e.getMonth()]}`, cur: i === 0 }); }
+  } else {
+    for (let i = N - 1; i >= 0; i--) { const a = new Date(now.getFullYear(), now.getMonth() - i, 1), b = new Date(a.getFullYear(), a.getMonth() + 1, 1); rows.push({ a: +a, b: +b, short: MO[a.getMonth()] + (a.getMonth() === 0 || i === N - 1 ? ` ${String(a.getFullYear()).slice(2)}` : ''), long: `${MO[a.getMonth()]} ${a.getFullYear()}${i === 0 ? ' (this month)' : ''}`, cur: i === 0 }); }
+  }
+  rows.forEach(r => { const x = ses.filter(s => s.start >= r.a && s.start < r.b); r.v = x.reduce((t, s) => t + s.mins, 0); r.n = x.length; r.days = new Set(x.map(s => dayKey(s.start))).size; });
+  const cur = rows[N - 1], prev = rows[N - 2], past = rows.slice(0, N - 1).filter(r => r.v), avg = past.length ? Math.round(past.reduce((t, r) => t + r.v, 0) / past.length) : 0;
+  const unit = statPer === 'week' ? 'week' : 'month', best = rows.reduce((m, r) => r.v > m.v ? r : m, rows[0]);
+  const diff = cur.v - prev.v;
+  $('#periodTitle').textContent = statPer === 'week' ? 'Week by week' : 'Month by month';
+  $$('#periodCard [data-per]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.per === statPer)));
+  $('#periodSum').innerHTML = [
+    [fmtHrs(cur.v), statPer === 'week' ? 'This week so far' : 'This month so far', `${cur.days} ${cur.days === 1 ? 'day' : 'days'} studied`],
+    [fmtHrs(prev.v), `Last ${unit}`, prev.v || cur.v ? (diff === 0 ? 'Same as this one' : `This ${unit} is ${fmtHrs(Math.abs(diff))} ${diff > 0 ? 'ahead' : 'behind, for now'}`) : 'Nothing yet'],
+    [fmtHrs(avg), `Average ${unit}`, past.length ? `Over ${past.length} ${unit}${past.length === 1 ? '' : 's'} you studied` : 'Fills in as you go'],
+    [fmtHrs(best.v), `Best ${unit}`, best.v ? best.long.replace(/ \(.*\)$/, '') : 'Still to come']
+  ].map(([v, l, h]) => `<div class="ps"><b class="num">${v}</b><span>${l}</span><small>${esc(h)}</small></div>`).join('') + `<p class="muted per-note">${statPer === 'week' ? 'A new week starts every Monday, so this week fills up from zero each Monday and last week moves into the chart.' : 'A new month starts on the 1st.'}</p>`;
+  const max = niceMax(Math.max(...rows.map(r => r.v), 1));
+  const W = 700, H = 220, L = 40, B = 28, T = 16, bw = (W - L) / N, y = v => T + (H - T - B) * (1 - v / max);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Focus hours per ${unit} for the last ${N} ${unit}s">`;
+  [0, max / 2, max].forEach(t => { svg += `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1" ${t ? 'stroke-dasharray="3 4"' : ''}/><text x="${L - 8}" y="${y(t) + 4}" text-anchor="end">${t >= 60 ? +(t / 60).toFixed(1) + 'h' : Math.round(t) + 'm'}</text>`; });
+  rows.forEach((r, i) => {
+    const x = L + i * bw + bw * .18, w = bw * .64, h = Math.max(0, y(0) - y(r.v)), rr = Math.min(4, h, w / 2);
+    if (r.v > 0) svg += `<path d="M${x} ${y(0)} V${y(r.v) + rr} Q${x} ${y(r.v)} ${x + rr} ${y(r.v)} H${x + w - rr} Q${x + w} ${y(r.v)} ${x + w} ${y(r.v) + rr} V${y(0)} Z" fill="${r.cur ? 'var(--accent)' : 'var(--moss)'}"/>`;
+    if (r.v > 0 && innerWidth >= 640) svg += `<text x="${x + w / 2}" y="${y(r.v) - 4}" text-anchor="middle" style="font-size:10px">${r.v >= 60 ? +(r.v / 60).toFixed(1) + 'h' : r.v + 'm'}</text>`;
+    if (i % (innerWidth < 640 ? 2 : 1) === (N - 1) % (innerWidth < 640 ? 2 : 1) || r.cur) svg += `<text x="${x + w / 2}" y="${H - 8}" text-anchor="middle" style="${r.cur ? 'fill:var(--ink); font-weight:700' : ''}">${r.cur ? (statPer === 'week' ? 'This wk' : 'Now') : r.short}</text>`;
+    svg += `<rect x="${L + i * bw}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent" data-tip="${esc(r.long)} · ${fmtMin(r.v)} · ${r.n} session${r.n === 1 ? '' : 's'}"/>`;
+  });
+  $('#periodChart').innerHTML = svg + '</svg>';
+  $('#periodChart').hidden = showPerTable; $('#periodTable').hidden = !showPerTable;
+  $('#periodTable').innerHTML = `<table class="data"><thead><tr><th>${statPer === 'week' ? 'Week' : 'Month'}</th><th style="text-align:right">Focus</th><th style="text-align:right">Sessions</th><th style="text-align:right">Days studied</th></tr></thead><tbody>${rows.slice().reverse().map(r => `<tr><td>${esc(r.long)}</td><td class="n">${fmtMin(r.v)}</td><td class="n">${r.n}</td><td class="n">${r.days}</td></tr>`).join('')}</tbody></table>`;
+  $('#periodTableBtn').textContent = showPerTable ? 'Show as chart' : 'Show as table';
+}
 function bindStats() {
+  $('#periodCard').addEventListener('click', e => { const b = e.target.closest('[data-per]'); if (b) { statPer = b.dataset.per; renderStats(); } });
+  $('#periodTableBtn').onclick = () => { showPerTable = !showPerTable; renderStats(); };
   $('#statSem').onchange = e => { statSem = e.target.value; renderStats(); };
   $('#dailyTableBtn').onclick = () => { showDailyTable = !showDailyTable; renderStats(); };
   const tip = $('#tip');
@@ -4828,6 +4994,7 @@ function bindStats() {
 }
 
 /* ---------- profile ---------- */
+let editCourse = null;
 function renderProfile() {
   $('#profAv').innerHTML = avatarSVG(S.active, 'happy', myLook());
   $('#profName').textContent = myName();
@@ -4838,7 +5005,12 @@ function renderProfile() {
   $('#semList').innerHTML = S.semesters.map(s => `<div class="sem" data-sem="${esc(s.id)}">
     <div class="sem-h"><input class="inp" data-semname value="${esc(s.name)}" maxlength="40" style="max-width:220px; font-family:var(--f-display)" aria-label="Semester name">
       <div class="row">${s.id === S.currentSem ? '<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Current</span>' : '<button class="btn small" data-semcur>Make current</button>'}${S.semesters.length > 1 ? '<span data-semdelwrap><button class="btn small quiet" data-semdel>Remove</button></span>' : ''}</div></div>
-    <div class="course-chips">${s.courses.map(c => `<span class="cchip"><i style="background:${c.color}"></i>${esc(c.name)}<button data-cdel="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">${icon('i-x')}</button></span>`).join('') || '<span class="muted" style="font-size:.85rem">No courses yet.</span>'}</div>
+    <div class="course-chips">${s.courses.map(c => `<span class="cchip ${editCourse === c.id ? 'on' : ''}"><i style="background:${c.color}"></i>${esc(c.name)}<button data-cedit="${esc(c.id)}" aria-label="Edit ${esc(c.name)}" title="Change name or colour">${icon('i-edit')}</button><button data-cdel="${esc(c.id)}" aria-label="Remove ${esc(c.name)}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="muted" style="font-size:.85rem">No courses yet.</span>'}</div>
+    ${(() => { const c = s.courses.find(x => x.id === editCourse); if (!c) return ''; const cols = [...new Set([...COURSE_COLORS, ...EV_COLORS])];
+      return `<form class="course-edit" data-cedform="${esc(c.id)}"><label class="f"><span>Course name</span><input class="inp" name="n" maxlength="40" value="${esc(c.name)}" required></label>
+        <div class="f"><span>Colour</span><div class="ce-cols" role="radiogroup" aria-label="Course colour">${cols.map(col => `<button type="button" role="radio" class="rc ${c.color.toLowerCase() === col.toLowerCase() ? 'on' : ''}" data-ccol="${col}" aria-checked="${c.color.toLowerCase() === col.toLowerCase()}" aria-label="Colour ${col}" style="background:${col}"></button>`).join('')}<label class="ce-own" title="Pick any colour"><input type="color" name="own" value="${/^#[0-9a-f]{6}$/i.test(c.color) ? c.color : '#5f8a5a'}" aria-label="Pick any colour"><span>Any colour</span></label></div></div>
+        <input type="hidden" name="col" value="${esc(c.color)}">
+        <div class="row" style="gap:8px"><button class="btn small primary" type="submit">${icon('i-check')}Save course</button><button class="btn small" type="button" data-cedcancel>Cancel</button><span class="muted" style="font-size:.8rem">Your sessions, rocks and calendar keep this course and show the new name and colour.</span></div></form>`; })()}
     <form class="add-peb" data-cadd><input class="inp" name="n" maxlength="40" placeholder="Add a course, like AIRE410" aria-label="New course"><button class="btn small" type="submit">${icon('i-plus')}Add</button></form>
   </div>`).join('');
 }
@@ -4849,16 +5021,19 @@ function renderFriends() {
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
 function renderGhost() {
-  const g = !!S.ghost;
-  if ($('#swGhost')) $('#swGhost').setAttribute('aria-checked', String(g));
-  if ($('#ghostChip')) $('#ghostChip').hidden = !g;
-  document.body.classList.toggle('is-ghost', g);
+  const g = S.ghost === 'away' ? 'away' : S.ghost ? 'hide' : 'off';
+  $$('#ghostSeg [data-ghost]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.ghost === g)));
+  if ($('#ghostChip')) { $('#ghostChip').hidden = g === 'off'; $('#ghostChipT').textContent = g === 'away' ? 'Asleep' : 'Ghost'; $('#ghostChip').title = g === 'away' ? 'You look asleep in the pond. Nobody sees you studying.' : 'Ghost mode is on. Nobody can see you in the pond.'; }
+  document.body.classList.toggle('is-ghost', g !== 'off');
 }
 function bindProfile() {
-  $('#swGhost').onclick = () => {
-    S.ghost = !S.ghost; save(); renderGhost();
-    if (S.ghost) { publishPond(); toast('Ghost mode is on. Nobody can see you in the pond, on the leaderboard or on your profile card.'); }
-    else { publishPond(); updateCircles(); toast('Ghost mode is off. Your animal is back in the pond.'); }
+  $('#ghostSeg').onclick = e => {
+    const b = e.target.closest('[data-ghost]'); if (!b) return; const v = b.dataset.ghost, was = S.ghost;
+    S.ghost = v === 'away' ? 'away' : v === 'hide'; if (S.ghost === was) return;
+    save(); renderGhost(); publishPond();
+    if (v === 'away') toast('You are asleep in the pond. Classmates see your animal napping, and none of your study time.');
+    else if (v === 'hide') toast('Ghost mode is on. Nobody can see you in the pond, on the leaderboard or on your profile card.');
+    else { updateCircles(); toast('Ghost mode is off. Everyone sees you as normal again.'); }
     renderPond(true); if (currentView === 'pond') try { renderBoard(); } catch (e) {}
   };
   $('#profForm').onsubmit = e => {
@@ -4872,13 +5047,23 @@ function bindProfile() {
   $('#semList').addEventListener('click', e => {
     const box = e.target.closest('[data-sem]'); if (!box) return; const s = S.semesters.find(x => x.id === box.dataset.sem);
     if (e.target.closest('[data-semcur]')) { S.currentSem = s.id; save(); renderAll(); return; }
+    const ce = e.target.closest('[data-cedit]'); if (ce) { editCourse = editCourse === ce.dataset.cedit ? null : ce.dataset.cedit; renderProfile(); box.querySelector('[data-cedform] input[name=n]')?.focus(); return; }
+    if (e.target.closest('[data-cedcancel]')) { editCourse = null; renderProfile(); return; }
+    const cc = e.target.closest('[data-ccol]'); if (cc) { const f = cc.closest('form'); f.col.value = cc.dataset.ccol; f.querySelectorAll('[data-ccol]').forEach(b => { b.classList.toggle('on', b === cc); b.setAttribute('aria-checked', b === cc); }); f.own.value = cc.dataset.ccol; return; }
     const cd = e.target.closest('[data-cdel]'); if (cd) { s.courses = s.courses.filter(c => c.id !== cd.dataset.cdel); save(); renderAll(); return; }
     if (e.target.closest('[data-semdel]')) { box.querySelector('[data-semdelwrap]').innerHTML = `<span class="confirm">Remove ${esc(s.name)}? Sessions stay in your journal. <button class="btn small rose" data-semyes>Remove</button><button class="btn small" data-semno>Keep</button></span>`; return; }
     if (e.target.closest('[data-semno]')) { renderProfile(); return; }
     if (e.target.closest('[data-semyes]')) { S.semesters = S.semesters.filter(x => x.id !== s.id); if (S.currentSem === s.id) S.currentSem = S.semesters[0].id; save(); renderAll(); }
   });
+  $('#semList').addEventListener('input', e => { if (e.target.name !== 'own') return; const f = e.target.closest('form'); f.col.value = e.target.value; f.querySelectorAll('[data-ccol]').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-checked', 'false'); }); });
   $('#semList').addEventListener('change', e => { const i = e.target.closest('[data-semname]'); if (!i) return; const s = S.semesters.find(x => x.id === i.closest('[data-sem]').dataset.sem); s.name = clampStr(i.value.trim(), 40) || s.name; save(); renderStats(); });
   $('#semList').addEventListener('submit', e => {
+    const ef = e.target.closest('[data-cedform]');
+    if (ef) {
+      e.preventDefault(); const c = S.semesters.flatMap(x => x.courses).find(x => x.id === ef.dataset.cedform); if (!c) return;
+      const n = ef.n.value.trim(), col = ef.col.value; if (n) c.name = clampStr(n, 40); if (/^#[0-9a-f]{6}$/i.test(col)) c.color = col;
+      editCourse = null; save(); renderAll(); toast(`${esc(c.name)} is updated everywhere.`); return;
+    }
     const f = e.target.closest('[data-cadd]'); if (!f) return; e.preventDefault();
     const n = f.n.value.trim(); if (!n) return; const s = S.semesters.find(x => x.id === f.closest('[data-sem]').dataset.sem);
     const used = allCourses().length;

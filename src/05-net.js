@@ -14,7 +14,7 @@ const ANIMAL_OK = k => ANIMAL_KEYS.includes(k) ? k : 'frog';
 function cleanResident(id, d) {
   return {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
-    status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
+    status: ['focus', 'rest', 'idle', 'away'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
     vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === false ? 'me' : 'everyone',
     stats: cleanStats(d.stats), look: cleanLook(d.look),
@@ -22,6 +22,7 @@ function cleanResident(id, d) {
   };
 }
 function liveStatus(r) {
+  if (r.status === 'away') return 'away';
   if ((r.status === 'focus' || r.status === 'rest') && r.endsAt > Date.now() - 30000) return r.status;
   return Date.now() - r.updatedAt > 30 * 60000 ? 'away' : 'idle';
 }

@@ -166,11 +166,67 @@ function pebbleArt(color, w = 44, done = true) {
   return `<svg class="peb-shape" viewBox="0 0 44 34" width="${w}" aria-hidden="true"><path d="M4 22 C2 12 10 5 22 4 C34 3 42 10 41 19 C40 28 30 31 20 31 C11 31 5 28 4 22 Z" fill="${done ? color : 'none'}" stroke="${INK}" stroke-width="2.2" ${done ? '' : 'stroke-dasharray="4 4"'} /><path d="M11 15 C14 11 18 10 23 10" stroke="#fff" stroke-opacity=".5" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>`;
 }
 function growPad() { const t = $('#notePad'); if (!t) return; t.style.height = 'auto'; t.style.height = Math.max(72, t.scrollHeight + 2) + 'px'; }
+/* pictures in Notes to self: each one keeps its own size, shape, corners and frame */
+const PAD_SIZES = { s: 'Small', m: 'Medium', l: 'Large', w: 'Wide' };
+let padOpen = null;
+const padList = () => (Array.isArray(S.padImgs) ? S.padImgs : []).filter(p => p && typeof p.data === 'string' && p.data.startsWith('data:image/'));
+function padOpt(p) { return { size: PAD_SIZES[p.size] ? p.size : 'l', fit: p.fit === 'fill' ? 'fill' : 'whole', round: p.round !== false, frame: p.frame !== false }; }
 function renderPadImgs() {
-  const box = $('#padImgs'); if (!box) return;
-  const list = (Array.isArray(S.padImgs) ? S.padImgs : []).filter(p => p && typeof p.data === 'string' && p.data.startsWith('data:image/'));
-  box.innerHTML = list.map(p => `<figure class="pad-img"><img src="${p.data}" alt="A picture in your notes"><button class="icon-btn" data-padrm="${esc(p.id)}" aria-label="Remove this picture" title="Remove"><svg><use href="#i-x"/></svg></button></figure>`).join('');
+  const box = $('#padImgs'), wide = $('#padWide'); if (!box) return;
+  const list = padList();
+  const seg = (key, val, opts, id) => `<span class="seg pad-seg" role="group">${opts.map(([v, l]) => `<button type="button" data-padset="${key}" data-v="${v}" data-id="${esc(id)}" aria-pressed="${val === v}">${l}</button>`).join('')}</span>`;
+  const fig = (p, i) => {
+    const o = padOpt(p), open = padOpen === p.id;
+    return `<figure class="pad-img sz-${o.size} fit-${o.fit} ${o.round ? 'round' : 'square'} ${o.frame ? 'framed' : 'bare'} ${open ? 'editing' : ''}">
+      <button type="button" class="pad-view" data-padview="${esc(p.id)}" aria-label="Open this picture big"><img src="${p.data}" alt="${esc(p.cap || 'A picture in your notes')}"></button>
+      <span class="pad-tools"><button type="button" class="icon-btn" data-padedit="${esc(p.id)}" aria-label="Picture options" aria-expanded="${open}" title="Picture options"><svg><use href="#i-gear"/></svg></button><button type="button" class="icon-btn" data-padrm="${esc(p.id)}" aria-label="Remove this picture" title="Remove"><svg><use href="#i-x"/></svg></button></span>
+      ${p.cap ? `<figcaption>${esc(p.cap)}</figcaption>` : ''}
+      ${open ? `<div class="pad-opts">
+        <label><span>Size</span>${seg('size', o.size, Object.entries(PAD_SIZES), p.id)}<small class="pad-hint">Wide stretches the picture across the page under the timer, best for screenshots.</small></label>
+        <label><span>Show</span>${seg('fit', o.fit, [['whole', 'Whole picture'], ['fill', 'Fill the frame']], p.id)}</label>
+        <label><span>Corners</span>${seg('round', o.round ? 'y' : 'n', [['y', 'Round'], ['n', 'Square']], p.id)}</label>
+        <label><span>Frame</span>${seg('frame', o.frame ? 'y' : 'n', [['y', 'On'], ['n', 'Off']], p.id)}</label>
+        <label><span>Caption</span><input class="inp" data-padcap="${esc(p.id)}" maxlength="80" value="${esc(p.cap || '')}" placeholder="Optional, shows under the picture"></label>
+        <div class="row" style="gap:6px"><button type="button" class="btn small" data-padmove="-1" data-id="${esc(p.id)}" ${i ? '' : 'disabled'}>Move earlier</button><button type="button" class="btn small" data-padmove="1" data-id="${esc(p.id)}" ${i < list.length - 1 ? '' : 'disabled'}>Move later</button><span style="flex:1"></span><button type="button" class="btn small primary" data-padedit="${esc(p.id)}">Done</button></div>
+      </div>` : ''}
+    </figure>`;
+  };
+  const isWide = p => padOpt(p).size === 'w';
+  box.innerHTML = list.map((p, i) => isWide(p) ? '' : fig(p, i)).join('');
+  const nw = list.filter(isWide).length;
+  box.innerHTML += nw ? `<button type="button" class="btn small quiet pad-jump" data-padjump>${nw === 1 ? 'Your wide picture is' : `Your ${nw} wide pictures are`} below the timer, across the page</button>` : '';
   box.hidden = !list.length;
+  if (wide) { $('#padWideImgs').innerHTML = list.map((p, i) => isWide(p) ? fig(p, i) : '').join(''); wide.hidden = !list.some(isWide); }
+}
+/* Shrink a picture so it saves with your progress but stays sharp enough to read.
+   Screenshots of text are usually smaller as PNG (and stay crisp), photos as JPEG, so both are tried. */
+function padEncode(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      URL.revokeObjectURL(url);
+      const big = Math.max(im.naturalWidth, im.naturalHeight), steps = [[1800, .9], [1600, .86], [1400, .82], [1200, .8], [1000, .76], [850, .72]];
+      let best = '', bw = 0, bh = 0;
+      for (const [max, q] of steps) {
+        const s = Math.min(1, max / big), c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(im.naturalWidth * s)); c.height = Math.max(1, Math.round(im.naturalHeight * s));
+        const x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high';
+        x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+        const png = c.toDataURL('image/png'), jpg = c.toDataURL('image/jpeg', q);
+        bw = c.width; bh = c.height;
+        best = png.length <= jpg.length * 1.15 && png.length <= PAD_MAX ? png : jpg;
+        if (best.length <= PAD_MAX) break;
+      }
+      res({ data: best, w: bw, h: bh });
+    };
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('image')); };
+    im.src = url;
+  });
+}
+const PAD_MAX = 210000, PAD_TOTAL = 540000;
+function openPadPic(p) {
+  $('#imgBox').innerHTML = `<div class="zoom-wrap"><img src="${p.data}" alt="${esc(p.cap || 'A picture from your notes')}" class="zoomable" title="Click to zoom in or out"></div><div class="row" style="justify-content:space-between"><span class="muted" style="font-size:.85rem">${p.cap ? esc(p.cap) + ' · ' : ''}Click the picture to zoom in</span><div class="row"><a class="btn small" href="${p.data}" download="note-picture.${p.data.startsWith('data:image/png') ? 'png' : 'jpg'}">${icon('i-download')}Download</a><button class="btn small" data-imgclose>Close</button></div></div>`;
+  $('#imgModal').classList.add('on');
 }
 function syncRanges() {
   $('#focusRange').value = S.settings.focus; $('#restRange').value = S.settings.rest;
@@ -193,22 +249,44 @@ function bindFocus() {
   let padT;
   $('#notePad').value = S.notepad || ''; growPad();
   $('#notePad').oninput = e => { growPad(); $('#padState').textContent = 'Saving'; clearTimeout(padT); padT = setTimeout(() => { S.notepad = e.target.value.slice(0, 2000); save(); $('#padState').textContent = 'Saved'; }, 600); };
-  // pictures in the notes: up to three, shrunk so they save quickly with the rest of your progress
+  // pictures in the notes: up to three, kept sharp enough to read and saved with the rest of your progress
   const addPadPic = async file => {
     if (!file || !/^image\//.test(file.type)) return;
-    S.padImgs = Array.isArray(S.padImgs) ? S.padImgs : [];
+    S.padImgs = padList();
     if (S.padImgs.length >= 3) { toast('Notes can hold three pictures. Remove one to add another.'); return; }
     $('#padState').textContent = 'Saving';
-    try { const data = await imgToJpeg(file, 900, .72); S.padImgs.push({ id: uid(), data }); save(); renderPadImgs(); $('#padState').textContent = 'Saved'; }
-    catch (e) { $('#padState').textContent = 'Saved'; toast('That picture could not be opened. Try a JPG or PNG.'); }
+    try {
+      const enc = await padEncode(file), data = enc.data, used = S.padImgs.reduce((a, p) => a + p.data.length, 0);
+      if (used + data.length > PAD_TOTAL) { $('#padState').textContent = 'Saved'; toast('Your notes are full of pictures. Remove one, or make it smaller before adding it.'); return; }
+      S.padImgs.push({ id: uid(), data, size: enc.w > enc.h * 1.2 && enc.w >= 700 ? 'w' : 'l', fit: 'whole', round: true, frame: true }); save(); renderPadImgs(); $('#padState').textContent = 'Saved';
+    } catch (e) { $('#padState').textContent = 'Saved'; toast('That picture could not be opened. Try a JPG or PNG.'); }
   };
   $('#padPicBtn').onclick = () => $('#padPicFile').click();
   $('#padPicFile').onchange = e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; addPadPic(f); };
   $('#notePad').addEventListener('paste', e => { const it = [...((e.clipboardData && e.clipboardData.items) || [])].find(i => i.type.startsWith('image/')); if (it) { e.preventDefault(); addPadPic(it.getAsFile()); } });
-  $('#padImgs').onclick = e => {
-    const x = e.target.closest('[data-padrm]'); if (x) { S.padImgs = (S.padImgs || []).filter(p => p.id !== x.dataset.padrm); save(); renderPadImgs(); return; }
-    const im = e.target.closest('.pad-img'); if (im) im.classList.toggle('open');
+  const padFind = id => padList().find(p => p.id === id);
+  const padClick = e => {
+    const x = e.target.closest('[data-padrm]'); if (x) { S.padImgs = padList().filter(p => p.id !== x.dataset.padrm); save(); renderPadImgs(); return; }
+    const ed = e.target.closest('[data-padedit]'); if (ed) { padOpen = padOpen === ed.dataset.padedit ? null : ed.dataset.padedit; renderPadImgs(); return; }
+    const st = e.target.closest('[data-padset]'); if (st) {
+      const p = padFind(st.dataset.id); if (!p) return; const k = st.dataset.padset, v = st.dataset.v;
+      if (k === 'size') p.size = v; else if (k === 'fit') p.fit = v; else p[k] = v === 'y';
+      save(); renderPadImgs(); return;
+    }
+    const mv = e.target.closest('[data-padmove]'); if (mv) {
+      const l = padList(), i = l.findIndex(p => p.id === mv.dataset.id), j = i + +mv.dataset.padmove; if (i < 0 || j < 0 || j >= l.length) return;
+      [l[i], l[j]] = [l[j], l[i]]; S.padImgs = l; save(); renderPadImgs(); return;
+    }
+    if (e.target.closest('[data-padjump]')) { $('#padWide').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const v = e.target.closest('[data-padview]'); if (v) { const p = padFind(v.dataset.padview); if (p) openPadPic(p); }
   };
+  $('#padImgs').onclick = $('#padWideImgs').onclick = padClick;
+  ['#padImgs', '#padWideImgs'].forEach(sel => {
+    $(sel).addEventListener('change', e => { const c = e.target.closest('[data-padcap]'); if (!c) return; const p = padFind(c.dataset.padcap); if (p) { p.cap = clampStr(c.value.trim(), 80); save(); renderPadImgs(); } });
+    $(sel).addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[data-padcap]')) e.target.blur(); });
+  });
+  $('#imgModal').addEventListener('click', e => { const z = e.target.closest('.zoomable'); if (z) z.classList.toggle('zoomed'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#imgModal').classList.remove('on'); });
   renderPadImgs();
   $('#modeFocus').onclick = () => { if (!S.timer) { mode = 'focus'; renderTimer(); } };
   $('#modeRest').onclick = () => { if (!S.timer) { mode = 'rest'; renderTimer(); } };

@@ -61,7 +61,7 @@ function bindZoo() {
 }
 
 /* ---------- journal (stats) ---------- */
-let statSem = 'all', showDailyTable = false;
+let statSem = 'all', showDailyTable = false, statPer = 'week', showPerTable = false;
 function semFilter() {
   if (statSem === 'all') return () => true;
   const sem = S.semesters.find(s => s.id === statSem); const ids = new Set((sem ? sem.courses : []).map(c => c.id));
@@ -74,11 +74,12 @@ function renderStats() {
   const flt = semFilter();
   const ses = S.sessions.filter(flt);
   const total = ses.reduce((a, s) => a + s.mins, 0);
-  const wk = addDays(new Date(), -6); wk.setHours(0, 0, 0, 0);
-  const week = ses.filter(s => s.start >= +wk).reduce((a, s) => a + s.mins, 0);
+  const week = ses.filter(s => s.start >= +weekStart()).reduce((a, s) => a + s.mins, 0);
+  const m0 = new Date(); m0.setHours(0, 0, 0, 0); m0.setDate(1);
+  const month = ses.filter(s => s.start >= +m0).reduce((a, s) => a + s.mins, 0);
   const pebs = S.pebLog.filter(p => statSem === 'all' || flt({ courseId: p.courseId })).length;
   $('#kpis').innerHTML = [
-    [fmtMin(total), 'Total focus'], [fmtMin(week), 'Last 7 days'], [ses.length, 'Sessions'], [pebs, 'Stepping stones laid'],
+    [fmtMin(total), 'Total focus'], [fmtMin(week), 'This week, from Monday'], [fmtMin(month), `This month, ${MO[new Date().getMonth()]}`], [ses.length, 'Sessions'], [pebs, 'Stepping stones laid'],
     [`${streakNow()}<small>days</small>`, 'Current streak'], [`${Math.max(bestStreak(), streakNow())}<small>days</small>`, 'Best streak']
   ].map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
   // daily bars
@@ -101,6 +102,7 @@ function renderStats() {
   $('#dailyChart').hidden = showDailyTable; $('#dailyTable').hidden = !showDailyTable;
   $('#dailyTable').innerHTML = `<table class="data"><thead><tr><th>Day</th><th style="text-align:right">Focus</th></tr></thead><tbody>${days.slice().reverse().map(d => `<tr><td>${WD[d.d.getDay()]} ${d.d.getDate()} ${MO[d.d.getMonth()]}</td><td class="n">${fmtMin(d.v)}</td></tr>`).join('')}</tbody></table>`;
   $('#dailyTableBtn').textContent = showDailyTable ? 'Show as chart' : 'Show as table';
+  renderPeriods(ses);
   // by course
   const byC = {}; ses.forEach(s => { byC[s.courseId || ''] = (byC[s.courseId || ''] || 0) + s.mins; });
   const rows = Object.entries(byC).sort((a, b) => b[1] - a[1]); const cmax = Math.max(1, ...rows.map(r => r[1]));
@@ -120,7 +122,47 @@ function renderStats() {
   $('#sessTable').innerHTML = recent.length ? `<thead><tr><th>When</th><th>Course</th><th>Companion</th><th style="text-align:right">Length</th><th>How it went</th></tr></thead><tbody>${recent.map(s => `<tr><td>${WD[new Date(s.start).getDay()]} ${new Date(s.start).getDate()} ${MO[new Date(s.start).getMonth()]}, ${new Date(s.start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</td><td><span class="pill"><i style="background:${courseColor(s.courseId)}"></i>${esc(courseName(s.courseId))}</span></td><td>${esc((S.pets[s.animal] || {}).name || ANIMALS[ANIMAL_OK(s.animal)].label)}</td><td class="n">${fmtMin(s.mins)}</td><td>${s.completed ? 'Full session' : 'Stopped early, still counted'}</td></tr>`).join('')}</tbody>`
     : `<tbody><tr><td class="muted" style="border:0">No sessions yet. Your first focus session will appear here.</td></tr></tbody>`;
 }
+/* hours for each week (Monday to Sunday) and each month. A new week starts every Monday. */
+const fmtHrs = m => m >= 60 ? `${+(m / 60).toFixed(1)} h` : `${Math.round(m)} min`;
+function renderPeriods(ses) {
+  const now = new Date(), N = 12, rows = [];
+  if (statPer === 'week') {
+    const w0 = weekStart();
+    for (let i = N - 1; i >= 0; i--) { const a = addDays(w0, -7 * i), b = addDays(a, 7), e = addDays(a, 6); rows.push({ a: +a, b: +b, short: `${a.getDate()} ${MO[a.getMonth()]}`, long: i === 0 ? `This week (${a.getDate()} ${MO[a.getMonth()]} to ${e.getDate()} ${MO[e.getMonth()]})` : i === 1 ? `Last week (${a.getDate()} ${MO[a.getMonth()]} to ${e.getDate()} ${MO[e.getMonth()]})` : `${a.getDate()} ${MO[a.getMonth()]} to ${e.getDate()} ${MO[e.getMonth()]}`, cur: i === 0 }); }
+  } else {
+    for (let i = N - 1; i >= 0; i--) { const a = new Date(now.getFullYear(), now.getMonth() - i, 1), b = new Date(a.getFullYear(), a.getMonth() + 1, 1); rows.push({ a: +a, b: +b, short: MO[a.getMonth()] + (a.getMonth() === 0 || i === N - 1 ? ` ${String(a.getFullYear()).slice(2)}` : ''), long: `${MO[a.getMonth()]} ${a.getFullYear()}${i === 0 ? ' (this month)' : ''}`, cur: i === 0 }); }
+  }
+  rows.forEach(r => { const x = ses.filter(s => s.start >= r.a && s.start < r.b); r.v = x.reduce((t, s) => t + s.mins, 0); r.n = x.length; r.days = new Set(x.map(s => dayKey(s.start))).size; });
+  const cur = rows[N - 1], prev = rows[N - 2], past = rows.slice(0, N - 1).filter(r => r.v), avg = past.length ? Math.round(past.reduce((t, r) => t + r.v, 0) / past.length) : 0;
+  const unit = statPer === 'week' ? 'week' : 'month', best = rows.reduce((m, r) => r.v > m.v ? r : m, rows[0]);
+  const diff = cur.v - prev.v;
+  $('#periodTitle').textContent = statPer === 'week' ? 'Week by week' : 'Month by month';
+  $$('#periodCard [data-per]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.per === statPer)));
+  $('#periodSum').innerHTML = [
+    [fmtHrs(cur.v), statPer === 'week' ? 'This week so far' : 'This month so far', `${cur.days} ${cur.days === 1 ? 'day' : 'days'} studied`],
+    [fmtHrs(prev.v), `Last ${unit}`, prev.v || cur.v ? (diff === 0 ? 'Same as this one' : `This ${unit} is ${fmtHrs(Math.abs(diff))} ${diff > 0 ? 'ahead' : 'behind, for now'}`) : 'Nothing yet'],
+    [fmtHrs(avg), `Average ${unit}`, past.length ? `Over ${past.length} ${unit}${past.length === 1 ? '' : 's'} you studied` : 'Fills in as you go'],
+    [fmtHrs(best.v), `Best ${unit}`, best.v ? best.long.replace(/ \(.*\)$/, '') : 'Still to come']
+  ].map(([v, l, h]) => `<div class="ps"><b class="num">${v}</b><span>${l}</span><small>${esc(h)}</small></div>`).join('') + `<p class="muted per-note">${statPer === 'week' ? 'A new week starts every Monday, so this week fills up from zero each Monday and last week moves into the chart.' : 'A new month starts on the 1st.'}</p>`;
+  const max = niceMax(Math.max(...rows.map(r => r.v), 1));
+  const W = 700, H = 220, L = 40, B = 28, T = 16, bw = (W - L) / N, y = v => T + (H - T - B) * (1 - v / max);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Focus hours per ${unit} for the last ${N} ${unit}s">`;
+  [0, max / 2, max].forEach(t => { svg += `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1" ${t ? 'stroke-dasharray="3 4"' : ''}/><text x="${L - 8}" y="${y(t) + 4}" text-anchor="end">${t >= 60 ? +(t / 60).toFixed(1) + 'h' : Math.round(t) + 'm'}</text>`; });
+  rows.forEach((r, i) => {
+    const x = L + i * bw + bw * .18, w = bw * .64, h = Math.max(0, y(0) - y(r.v)), rr = Math.min(4, h, w / 2);
+    if (r.v > 0) svg += `<path d="M${x} ${y(0)} V${y(r.v) + rr} Q${x} ${y(r.v)} ${x + rr} ${y(r.v)} H${x + w - rr} Q${x + w} ${y(r.v)} ${x + w} ${y(r.v) + rr} V${y(0)} Z" fill="${r.cur ? 'var(--accent)' : 'var(--moss)'}"/>`;
+    if (r.v > 0 && innerWidth >= 640) svg += `<text x="${x + w / 2}" y="${y(r.v) - 4}" text-anchor="middle" style="font-size:10px">${r.v >= 60 ? +(r.v / 60).toFixed(1) + 'h' : r.v + 'm'}</text>`;
+    if (i % (innerWidth < 640 ? 2 : 1) === (N - 1) % (innerWidth < 640 ? 2 : 1) || r.cur) svg += `<text x="${x + w / 2}" y="${H - 8}" text-anchor="middle" style="${r.cur ? 'fill:var(--ink); font-weight:700' : ''}">${r.cur ? (statPer === 'week' ? 'This wk' : 'Now') : r.short}</text>`;
+    svg += `<rect x="${L + i * bw}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent" data-tip="${esc(r.long)} · ${fmtMin(r.v)} · ${r.n} session${r.n === 1 ? '' : 's'}"/>`;
+  });
+  $('#periodChart').innerHTML = svg + '</svg>';
+  $('#periodChart').hidden = showPerTable; $('#periodTable').hidden = !showPerTable;
+  $('#periodTable').innerHTML = `<table class="data"><thead><tr><th>${statPer === 'week' ? 'Week' : 'Month'}</th><th style="text-align:right">Focus</th><th style="text-align:right">Sessions</th><th style="text-align:right">Days studied</th></tr></thead><tbody>${rows.slice().reverse().map(r => `<tr><td>${esc(r.long)}</td><td class="n">${fmtMin(r.v)}</td><td class="n">${r.n}</td><td class="n">${r.days}</td></tr>`).join('')}</tbody></table>`;
+  $('#periodTableBtn').textContent = showPerTable ? 'Show as chart' : 'Show as table';
+}
 function bindStats() {
+  $('#periodCard').addEventListener('click', e => { const b = e.target.closest('[data-per]'); if (b) { statPer = b.dataset.per; renderStats(); } });
+  $('#periodTableBtn').onclick = () => { showPerTable = !showPerTable; renderStats(); };
   $('#statSem').onchange = e => { statSem = e.target.value; renderStats(); };
   $('#dailyTableBtn').onclick = () => { showDailyTable = !showDailyTable; renderStats(); };
   const tip = $('#tip');
@@ -132,6 +174,7 @@ function bindStats() {
 }
 
 /* ---------- profile ---------- */
+let editCourse = null;
 function renderProfile() {
   $('#profAv').innerHTML = avatarSVG(S.active, 'happy', myLook());
   $('#profName').textContent = myName();
@@ -142,7 +185,12 @@ function renderProfile() {
   $('#semList').innerHTML = S.semesters.map(s => `<div class="sem" data-sem="${esc(s.id)}">
     <div class="sem-h"><input class="inp" data-semname value="${esc(s.name)}" maxlength="40" style="max-width:220px; font-family:var(--f-display)" aria-label="Semester name">
       <div class="row">${s.id === S.currentSem ? '<span class="pill" style="background:var(--accent); color:var(--accent-ink)">Current</span>' : '<button class="btn small" data-semcur>Make current</button>'}${S.semesters.length > 1 ? '<span data-semdelwrap><button class="btn small quiet" data-semdel>Remove</button></span>' : ''}</div></div>
-    <div class="course-chips">${s.courses.map(c => `<span class="cchip"><i style="background:${c.color}"></i>${esc(c.name)}<button data-cdel="${esc(c.id)}" aria-label="Remove ${esc(c.name)}">${icon('i-x')}</button></span>`).join('') || '<span class="muted" style="font-size:.85rem">No courses yet.</span>'}</div>
+    <div class="course-chips">${s.courses.map(c => `<span class="cchip ${editCourse === c.id ? 'on' : ''}"><i style="background:${c.color}"></i>${esc(c.name)}<button data-cedit="${esc(c.id)}" aria-label="Edit ${esc(c.name)}" title="Change name or colour">${icon('i-edit')}</button><button data-cdel="${esc(c.id)}" aria-label="Remove ${esc(c.name)}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="muted" style="font-size:.85rem">No courses yet.</span>'}</div>
+    ${(() => { const c = s.courses.find(x => x.id === editCourse); if (!c) return ''; const cols = [...new Set([...COURSE_COLORS, ...EV_COLORS])];
+      return `<form class="course-edit" data-cedform="${esc(c.id)}"><label class="f"><span>Course name</span><input class="inp" name="n" maxlength="40" value="${esc(c.name)}" required></label>
+        <div class="f"><span>Colour</span><div class="ce-cols" role="radiogroup" aria-label="Course colour">${cols.map(col => `<button type="button" role="radio" class="rc ${c.color.toLowerCase() === col.toLowerCase() ? 'on' : ''}" data-ccol="${col}" aria-checked="${c.color.toLowerCase() === col.toLowerCase()}" aria-label="Colour ${col}" style="background:${col}"></button>`).join('')}<label class="ce-own" title="Pick any colour"><input type="color" name="own" value="${/^#[0-9a-f]{6}$/i.test(c.color) ? c.color : '#5f8a5a'}" aria-label="Pick any colour"><span>Any colour</span></label></div></div>
+        <input type="hidden" name="col" value="${esc(c.color)}">
+        <div class="row" style="gap:8px"><button class="btn small primary" type="submit">${icon('i-check')}Save course</button><button class="btn small" type="button" data-cedcancel>Cancel</button><span class="muted" style="font-size:.8rem">Your sessions, rocks and calendar keep this course and show the new name and colour.</span></div></form>`; })()}
     <form class="add-peb" data-cadd><input class="inp" name="n" maxlength="40" placeholder="Add a course, like AIRE410" aria-label="New course"><button class="btn small" type="submit">${icon('i-plus')}Add</button></form>
   </div>`).join('');
 }
@@ -153,16 +201,19 @@ function renderFriends() {
     : `<p class="muted" style="font-size:.88rem">Tap an animal in the pond and choose Add friend. Friends show up here and in the pond's friends view.</p>`;
 }
 function renderGhost() {
-  const g = !!S.ghost;
-  if ($('#swGhost')) $('#swGhost').setAttribute('aria-checked', String(g));
-  if ($('#ghostChip')) $('#ghostChip').hidden = !g;
-  document.body.classList.toggle('is-ghost', g);
+  const g = S.ghost === 'away' ? 'away' : S.ghost ? 'hide' : 'off';
+  $$('#ghostSeg [data-ghost]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.ghost === g)));
+  if ($('#ghostChip')) { $('#ghostChip').hidden = g === 'off'; $('#ghostChipT').textContent = g === 'away' ? 'Asleep' : 'Ghost'; $('#ghostChip').title = g === 'away' ? 'You look asleep in the pond. Nobody sees you studying.' : 'Ghost mode is on. Nobody can see you in the pond.'; }
+  document.body.classList.toggle('is-ghost', g !== 'off');
 }
 function bindProfile() {
-  $('#swGhost').onclick = () => {
-    S.ghost = !S.ghost; save(); renderGhost();
-    if (S.ghost) { publishPond(); toast('Ghost mode is on. Nobody can see you in the pond, on the leaderboard or on your profile card.'); }
-    else { publishPond(); updateCircles(); toast('Ghost mode is off. Your animal is back in the pond.'); }
+  $('#ghostSeg').onclick = e => {
+    const b = e.target.closest('[data-ghost]'); if (!b) return; const v = b.dataset.ghost, was = S.ghost;
+    S.ghost = v === 'away' ? 'away' : v === 'hide'; if (S.ghost === was) return;
+    save(); renderGhost(); publishPond();
+    if (v === 'away') toast('You are asleep in the pond. Classmates see your animal napping, and none of your study time.');
+    else if (v === 'hide') toast('Ghost mode is on. Nobody can see you in the pond, on the leaderboard or on your profile card.');
+    else { updateCircles(); toast('Ghost mode is off. Everyone sees you as normal again.'); }
     renderPond(true); if (currentView === 'pond') try { renderBoard(); } catch (e) {}
   };
   $('#profForm').onsubmit = e => {
@@ -176,13 +227,23 @@ function bindProfile() {
   $('#semList').addEventListener('click', e => {
     const box = e.target.closest('[data-sem]'); if (!box) return; const s = S.semesters.find(x => x.id === box.dataset.sem);
     if (e.target.closest('[data-semcur]')) { S.currentSem = s.id; save(); renderAll(); return; }
+    const ce = e.target.closest('[data-cedit]'); if (ce) { editCourse = editCourse === ce.dataset.cedit ? null : ce.dataset.cedit; renderProfile(); box.querySelector('[data-cedform] input[name=n]')?.focus(); return; }
+    if (e.target.closest('[data-cedcancel]')) { editCourse = null; renderProfile(); return; }
+    const cc = e.target.closest('[data-ccol]'); if (cc) { const f = cc.closest('form'); f.col.value = cc.dataset.ccol; f.querySelectorAll('[data-ccol]').forEach(b => { b.classList.toggle('on', b === cc); b.setAttribute('aria-checked', b === cc); }); f.own.value = cc.dataset.ccol; return; }
     const cd = e.target.closest('[data-cdel]'); if (cd) { s.courses = s.courses.filter(c => c.id !== cd.dataset.cdel); save(); renderAll(); return; }
     if (e.target.closest('[data-semdel]')) { box.querySelector('[data-semdelwrap]').innerHTML = `<span class="confirm">Remove ${esc(s.name)}? Sessions stay in your journal. <button class="btn small rose" data-semyes>Remove</button><button class="btn small" data-semno>Keep</button></span>`; return; }
     if (e.target.closest('[data-semno]')) { renderProfile(); return; }
     if (e.target.closest('[data-semyes]')) { S.semesters = S.semesters.filter(x => x.id !== s.id); if (S.currentSem === s.id) S.currentSem = S.semesters[0].id; save(); renderAll(); }
   });
+  $('#semList').addEventListener('input', e => { if (e.target.name !== 'own') return; const f = e.target.closest('form'); f.col.value = e.target.value; f.querySelectorAll('[data-ccol]').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-checked', 'false'); }); });
   $('#semList').addEventListener('change', e => { const i = e.target.closest('[data-semname]'); if (!i) return; const s = S.semesters.find(x => x.id === i.closest('[data-sem]').dataset.sem); s.name = clampStr(i.value.trim(), 40) || s.name; save(); renderStats(); });
   $('#semList').addEventListener('submit', e => {
+    const ef = e.target.closest('[data-cedform]');
+    if (ef) {
+      e.preventDefault(); const c = S.semesters.flatMap(x => x.courses).find(x => x.id === ef.dataset.cedform); if (!c) return;
+      const n = ef.n.value.trim(), col = ef.col.value; if (n) c.name = clampStr(n, 40); if (/^#[0-9a-f]{6}$/i.test(col)) c.color = col;
+      editCourse = null; save(); renderAll(); toast(`${esc(c.name)} is updated everywhere.`); return;
+    }
     const f = e.target.closest('[data-cadd]'); if (!f) return; e.preventDefault();
     const n = f.n.value.trim(); if (!n) return; const s = S.semesters.find(x => x.id === f.closest('[data-sem]').dataset.sem);
     const used = allCourses().length;

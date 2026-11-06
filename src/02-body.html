@@ -93,7 +93,7 @@
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
-          <button type="button" class="chip ghost-chip" id="ghostChip" data-go="profile" title="Ghost mode is on. Nobody can see you studying." hidden><i></i><span>Ghost</span></button>
+          <button type="button" class="chip ghost-chip" id="ghostChip" data-go="profile" title="Ghost mode is on. Nobody can see you studying." hidden><i></i><span id="ghostChipT">Ghost</span></button>
           <button type="button" class="chip sync" id="syncChip" title="Connection to the shared pond"><i></i><span>Just you</span></button>
           <span class="mobile-top"><button class="icon-btn" data-go="guide" aria-label="How to use Grind"><svg><use href="#i-info"/></svg></button><button class="icon-btn" data-go="feedback" aria-label="Send feedback"><svg><use href="#i-comment"/></svg></button><button class="icon-btn" data-go="profile" aria-label="Profile"><svg><use href="#i-user"/></svg></button><button class="icon-btn" id="openCustomize2" aria-label="Customize"><svg><use href="#i-gear"/></svg></button></span>
         </div>
@@ -177,6 +177,7 @@
             </div>
           </div>
         </div>
+        <div class="card note-pad pad-wide" id="padWide" hidden><div class="card-h"><h2>From your notes</h2><span class="muted" style="font-size:.8rem">Wide pictures show here so you can read them. Click the gear to change the size.</span></div><div class="pad-imgs" id="padWideImgs"></div></div>
       </section>
 
       <!-- PEBBLES -->
@@ -301,6 +302,8 @@
         <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:60ch">Everything you have already done, in one place.</p><label class="f" style="flex-direction:row; align-items:center; gap:8px; font-weight:500">Semester<select class="inp" id="statSem" style="width:auto"></select></label></div>
         <div class="kpis" id="kpis"></div>
         <div class="card"><div class="card-h"><h2>Focus minutes, last 14 days</h2><button class="btn small quiet table-toggle" id="dailyTableBtn">Show as table</button></div><div class="chart" id="dailyChart"></div><div id="dailyTable" hidden></div></div>
+        <div class="card" id="periodCard"><div class="card-h"><h2 id="periodTitle">Week by week</h2><span class="row" style="gap:8px"><span class="seg" role="group" aria-label="Show weeks or months"><button type="button" data-per="week" aria-pressed="true">Weeks</button><button type="button" data-per="month" aria-pressed="false">Months</button></span><button class="btn small quiet table-toggle" id="periodTableBtn">Show as table</button></span></div>
+          <div class="per-sum" id="periodSum"></div><div class="chart" id="periodChart"></div><div id="periodTable" hidden></div></div>
         <div class="grid g-2">
           <div class="card"><div class="card-h"><h2>By course</h2></div><div id="courseBars"></div></div>
           <div class="card"><div class="card-h"><h2>Moss calendar</h2><span class="muted" style="font-size:.8rem">Last 16 weeks</span></div><div class="heat-wrap"><div class="heat" id="heat"></div></div><div class="legend" style="margin-top:10px" id="heatLegend"></div></div>
@@ -351,12 +354,12 @@
           </article>
           <article class="card g-sec" id="g-2">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-file"/></svg></span><div><span class="eyebrow">Step 2</span><h2>Add your courses</h2></div></div>
-            <ol class="g-steps"><li>Click your name card at the bottom of the menu (on a phone, the person icon at the top).</li><li>Under <b>Semesters and courses</b>, type a course like AIRE410 and click <b>Add</b>. Each course gets its own colour.</li><li>Starting a new term? Click <b>Add semester</b>, rename it, and click <b>Make current</b>. Old semesters stay in your journal.</li></ol>
+            <ol class="g-steps"><li>Click your name card at the bottom of the menu (on a phone, the person icon at the top).</li><li>Under <b>Semesters and courses</b>, type a course like AIRE410 and click <b>Add</b>. Each course gets its own colour.</li><li>To fix a name or change a colour, click the <b>pencil</b> on the course, type the new name, pick a colour (or <b>Any colour</b> for your own), and click <b>Save course</b>. Everything you did for that course keeps it.</li><li>Starting a new term? Click <b>Add semester</b>, rename it, and click <b>Make current</b>. Old semesters stay in your journal.</li></ol>
             <div class="row"><button class="btn small" data-go="profile">Show me courses</button></div>
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Pictures show whole and big, and text in screenshots stays sharp.</li><li>Click the <b>gear</b> on a picture to make it Small, Medium, Large, or <b>Wide</b> so it stretches across the page under the timer (wide screenshots start this way), show the whole picture or fill the frame, pick round or square corners, turn the frame on or off, add a caption, or move it earlier or later. Click the picture itself to open it full screen, and click again to zoom in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
@@ -391,7 +394,7 @@
           </article>
           <article class="card g-sec" id="g-9">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-chart"/></svg></span><div><span class="eyebrow">Step 10</span><h2>See your progress</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
+            <ol class="g-steps"><li>Open <b>Journal</b> for your minutes per day, time by course, and the moss calendar of the last 16 weeks.</li><li><b>Week by week</b> shows your hours for each of the last 12 weeks. A new week starts every Monday. Switch to <b>Months</b> to see each month, and compare this week or month with the last one, your average and your best. <b>Show as table</b> lists the exact numbers.</li><li><b>Recent sessions</b> lists every session with its date, course and length.</li><li>Pick a semester at the top to look back at one term.</li></ol>
             <div class="row"><button class="btn small" data-go="stats">Show me the journal</button></div>
           </article>
           <article class="card g-sec" id="g-10">
@@ -457,7 +460,12 @@
           </div>
           <div class="row" style="margin-top:12px"><button class="btn small" type="button" data-peer="me-self">See what classmates see</button></div>
           <div class="ghost-box" data-owneronly hidden>
-            <div class="toggle"><span><b>Ghost mode</b><small>Only you have this, as the owner. While it is on, your animal leaves the pond and the leaderboard, your profile card and study time are hidden from everyone, and your circles stop seeing your minutes. You will not see yourself studying in the pond either. Turn it off and you come back.</small></span><button class="switch" role="switch" id="swGhost" aria-checked="false" aria-label="Ghost mode"></button></div>
+            <div class="ghost-h"><b>Ghost mode</b><small>Only you have this, as the owner. Pick how classmates see you.</small></div>
+            <div class="ghost-opts" id="ghostSeg" role="radiogroup" aria-label="Ghost mode">
+              <button type="button" role="radio" data-ghost="off"><b>Off</b><span>Everyone sees you as normal, studying or resting.</span></button>
+              <button type="button" role="radio" data-ghost="away"><b>Asleep in the pond</b><span>Your animal stays in the pond but always naps, marked away. Nobody sees when you study, your minutes, the leaderboard or your stats.</span></button>
+              <button type="button" role="radio" data-ghost="hide"><b>Hidden</b><span>Your animal leaves the pond, the leaderboard and your profile card until you turn this off.</span></button>
+            </div>
           </div>
         </div>
         <div class="card"><div class="card-h"><h2>Semesters and courses</h2><button class="btn small" id="addSem"><svg><use href="#i-plus"/></svg>Add semester</button></div><div class="stack" id="semList" style="gap:12px"></div></div>

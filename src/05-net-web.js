@@ -15,7 +15,7 @@ const ANIMAL_OK = k => ANIMAL_KEYS.includes(k) ? k : 'frog';
 function cleanResident(id, d) {
   return {
     id, name: clampStr(d.name, 40) || 'Someone', pet: clampStr(d.pet, 30), animal: ANIMAL_OK(d.animal), uni: clampStr(d.uni, 60), major: clampStr(d.major, 60), bio: clampStr(d.bio, 140),
-    status: ['focus', 'rest', 'idle'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
+    status: ['focus', 'rest', 'idle', 'away'].includes(d.status) ? d.status : 'idle', endsAt: +d.endsAt || 0, todayKey: clampStr(d.todayKey, 10), todayMins: Math.max(0, +d.todayMins || 0),
     streak: Math.max(0, Math.min(9999, +d.streak || 0)), updatedAt: +d.updatedAt || 0,
     vis: ['me', 'friends', 'everyone'].includes(d.vis) ? d.vis : d.public === false ? 'me' : 'everyone',
     stats: cleanStats(d.stats), look: cleanLook(d.look),
@@ -23,6 +23,7 @@ function cleanResident(id, d) {
   };
 }
 function liveStatus(r) {
+  if (r.status === 'away') return 'away';
   if ((r.status === 'focus' || r.status === 'rest') && r.endsAt > Date.now() - 30000) return r.status;
   return Date.now() - r.updatedAt > 30 * 60000 ? 'away' : 'idle';
 }
@@ -167,15 +168,16 @@ function myStatus() {
 }
 function publishPond() {
   if (!NET.db || !NET.uid || !NET.canWrite) return;
-  // ghost mode (owner only): take the pond animal and profile card down, and publish nothing while it is on
-  if (S.ghost) {
+  // ghost mode (owner only). Hidden: take the pond animal and profile card down and publish nothing.
+  // Asleep: stay in the pond, always shown napping and away, with no minutes, leaderboard or study stats.
+  if (S.ghost && S.ghost !== 'away') {
     if (!NET.ghosted) { NET.ghosted = true; writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).delete()); writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).delete()); }
     return;
   }
   NET.ghosted = false;
-  const st = myStatus();
-  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: S.profile.visibility === 'me' ? null : boardStats(), stats: S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
-  const vis = S.profile.visibility, card = { vis, allow: vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
+  const asleep = S.ghost === 'away', st = asleep ? { status: 'away', endsAt: 0 } : myStatus();
+  const doc = { name: myName(), pet: petName(), animal: S.active, uni: S.profile.uni, major: S.profile.major, bio: S.profile.bio, status: st.status, endsAt: st.endsAt, todayKey: dayKey(), todayMins: asleep ? 0 : todayMins(), streak: streakNow(), updatedAt: Date.now(), vis: S.profile.visibility, board: asleep || S.profile.visibility === 'me' ? null : boardStats(), stats: !asleep && S.profile.visibility === 'everyone' ? publicStats() : null, look: myLook() };
+  const vis = S.profile.visibility, card = { vis: asleep ? 'me' : vis, allow: !asleep && vis === 'friends' ? S.friends.filter(x => typeof x === 'string' && !x.startsWith('ex-')).slice(0, 300) : [], stats: asleep || vis === 'me' ? null : publicStats(), updatedAt: Date.now() };
   writeQ('stats/' + NET.uid, () => NET.db.doc('stats/' + NET.uid).set(card));
   writeQ('pond/' + NET.uid, () => NET.db.doc('pond/' + NET.uid).set(doc));
 }
