@@ -1283,7 +1283,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <div class="g-head"><span class="g-ic"><svg><use href="#i-ripple"/></svg></span><div><span class="eyebrow">Last step</span><h2>Invite classmates and tell us what you think</h2></div></div>
             <p class="muted">Send this link to anyone. It works on phones and laptops, with nothing to install.</p>
             <div class="g-link"><code id="gLink">warmsunnywolf.github.io/Grind</code><button class="btn small primary" id="gCopy">Copy link</button></div>
-            <div class="row"><button class="btn small" data-go="feedback">Send feedback</button></div>
+            <p class="muted" style="margin-top:8px">Got a minute? The <b>quick survey</b> asks five questions about how you study and what Grind should offer next. Anyone can answer it, even without signing in, at warmsunnywolf.github.io/Grind/#survey.</p>
+            <div class="row"><button class="btn small" data-go="feedback">Send feedback</button><button class="btn small" data-go="survey">Take the quick survey</button></div>
           </article>
         </div>
       </section>
@@ -1310,8 +1311,28 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Your answers go straight to the student team behind Grind. Nobody else can read them. Leave the name and contact empty to stay anonymous.</p></div>
           </div>
         </div>
+        <div class="card sv-invite" style="margin-top:16px"><div class="card-h"><div><h2>Have one more minute?</h2><p class="muted" style="font-size:.88rem; margin-top:4px">Answer five quick questions about what you use to study and what Grind should offer next.</p></div><button class="btn primary" data-go="survey">Take the quick survey</button></div></div>
         <div class="row" data-owneronly hidden style="margin-top:16px"><button class="btn" data-go="activity"><svg><use href="#i-chart"/></svg>See who is using Grind</button></div>
         <div id="fbInbox"></div>
+      </section>
+
+      <!-- SURVEY -->
+      <section class="view" id="v-survey">
+        <p class="muted" style="max-width:62ch">We are the student team behind Grind, and this is for our FWS310 course project. Five quick taps, about one minute. You do not need to sign in or to have used Grind before.</p>
+        <div class="grid g-focus">
+          <form class="card" id="svForm">
+            <div class="stack" style="gap:22px" id="svQs"></div>
+            <div class="stack" style="gap:16px; margin-top:22px">
+              <label class="f">One thing that would make you open Grind every day (optional)<textarea class="inp" id="svIdea" maxlength="1000" placeholder="A widget on my phone, more animals, study rooms with friends..."></textarea></label>
+              <label class="f">Your name (optional)<input class="inp" id="svName" maxlength="40" placeholder="Leave empty to stay anonymous"></label>
+              <div class="row"><button class="btn primary big" type="submit">Send my answers</button><span class="muted" id="svNote" style="font-size:.84rem"></span></div>
+            </div>
+          </form>
+          <div class="stack">
+            <div class="card fb-thanks" id="svSide"></div>
+            <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Only the Grind team can read your answers. We count them for our class presentation and use them to decide what to build next. Grind itself stays free.</p></div>
+          </div>
+        </div>
       </section>
 
       <!-- PROFILE -->
@@ -4423,6 +4444,7 @@ function bindFeedback() {
     btn.disabled = false;
   };
   $('#fbInbox').addEventListener('click', async e => {
+    if (e.target.closest('[data-svcopy]')) { try { await navigator.clipboard.writeText(surveyText()); toast('Survey results copied.'); } catch (err) { toast('Copy is not available here.'); } return; }
     const c = e.target.closest('[data-fbcopy]');
     if (c) { const txt = (NET.inbox || []).map(f => `${new Date(f.at).toLocaleString()} | ${f.rating || '-'}/5 | ${f.area || ''}\nLikes: ${f.like}\nChange: ${f.improve}\nFrom: ${f.name || 'anonymous'} ${f.contact || ''}`).join('\n\n'); try { await navigator.clipboard.writeText(txt); toast('All feedback copied.'); } catch (err) { toast('Copy is not available here.'); } return; }
     const d = e.target.closest('[data-fbdel]');
@@ -4443,12 +4465,12 @@ async function loadInbox() {
 function renderInbox() {
   const fs = NET.inbox || [], rated = fs.filter(f => f.rating);
   const avg = rated.length ? (rated.reduce((a, f) => a + f.rating, 0) / rated.length) : 0;
-  const areas = {}; fs.forEach(f => { if (f.area) areas[f.area] = (areas[f.area] || 0) + 1; });
+  const areas = {}; fs.forEach(f => { if (f.area && f.area !== SURVEY_AREA) areas[f.area] = (areas[f.area] || 0) + 1; });
   const top = Object.entries(areas).sort((a, b) => b[1] - a[1]);
-  $('#fbInbox').innerHTML = `<div class="card"><div class="card-h"><div><h2>Your feedback inbox</h2><p class="muted" style="font-size:.84rem">Only you can see this.</p></div><div class="row"><button class="btn small" data-fbreload>Refresh</button><button class="btn small" data-fbcopy ${fs.length ? '' : 'disabled'}>Copy all</button></div></div>
+  $('#fbInbox').innerHTML = surveyCardHTML() + `<div class="card"><div class="card-h"><div><h2>Your feedback inbox</h2><p class="muted" style="font-size:.84rem">Only you can see this.</p></div><div class="row"><button class="btn small" data-fbreload>Refresh</button><button class="btn small" data-fbcopy ${fs.length ? '' : 'disabled'}>Copy all</button></div></div>
     <div class="kpis" style="margin-bottom:14px"><div class="kpi"><b>${fs.length}</b><span>Notes received</span></div><div class="kpi"><b>${avg ? avg.toFixed(1) : '–'}<small>/ 5</small></b><span>Average rating</span></div><div class="kpi"><b style="font-size:1.2rem">${top.length ? esc(top[0][0]) : '–'}</b><span>Most mentioned part</span></div></div>
     ${fs.length ? fs.map(f => `<div class="fb-item"><div class="row" style="justify-content:space-between"><span class="row" style="gap:6px">${f.rating ? `<span class="pill" style="background:var(--pad); color:#fff">${f.rating} / 5 · ${FB_WORDS[f.rating - 1]}</span>` : ''}${f.area ? `<span class="pill">${esc(f.area)}</span>` : ''}<span class="muted" style="font-size:.8rem">${f.at ? new Date(f.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : ''}</span></span><button class="btn small quiet" data-fbdel="${esc(f.id)}">Remove</button></div>
-      ${f.like ? `<span class="lbl">Likes</span><p>${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">Change or add</span><p>${esc(f.improve)}</p>` : ''}
+      ${f.like ? `<span class="lbl">${f.area === SURVEY_AREA ? 'Answers' : 'Likes'}</span><p style="white-space:pre-line">${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">${f.area === SURVEY_AREA ? 'Idea' : 'Change or add'}</span><p>${esc(f.improve)}</p>` : ''}
       <span class="muted" style="font-size:.82rem">From ${esc(f.name || 'someone anonymous')}${f.contact ? ' · ' + esc(f.contact) : ''}</span></div>`).join('') : '<p class="muted">No feedback yet. Share the link and notes will appear here.</p>'}</div>`;
 }
 
@@ -4517,10 +4539,94 @@ function bindActivity() {
     renderActivity(); const i = $('#actSearch'); i.focus(); try { i.setSelectionRange(pos, pos); } catch (err) {}
   });
 }
+
+/* ---------- quick survey (FWS310 Presentation 2) ----------
+   Answers go into the same feedback collection (area "Pricing survey"), so no new database rules are needed.
+   Each answer is one "key: value" line in `like`, and the idea goes in `improve`. */
+const SURVEY_AREA = 'Pricing survey';
+const SURVEY_QS = [
+  { k: 'used', q: 'How often did you study with Grind in the last week?', a: ['I have not tried it yet', 'Not at all', '1 to 2 days', '3 to 5 days', 'Every day'] },
+  { k: 'before', q: 'What do you use to plan or focus? Pick all that apply.', multi: true, a: ['Memory', 'Phone notes', 'Blackboard calendar', 'Forest', 'Microsoft To Do', 'Paper planner', 'Something else'] },
+  { k: 'pay', q: 'If Grind stays free, would you pay for optional extras like new animals, outfits or sounds?', a: ['Yes', 'Maybe', 'No'] },
+  { k: 'price', q: 'What is the most you would pay per month for those extras?', a: ['AED 0', 'AED 5', 'AED 10', 'AED 20', 'More than AED 20'] },
+  { k: 'uni', q: 'Would you like your university to offer Grind to every student, with campus study challenges?', a: ['Yes', 'Maybe', 'No'] },
+];
+let svAns = {}, svSent = false;
+function renderSurvey() {
+  $('#svQs').innerHTML = SURVEY_QS.map((q, i) => `<div><span class="eyebrow">Question ${i + 1} of ${SURVEY_QS.length}</span><h3 style="margin-top:4px">${esc(q.q)}</h3><div class="course-chips" style="margin-top:10px" role="group" aria-label="${esc(q.q)}">${q.a.map(a => {
+    const on = q.multi ? (svAns[q.k] || []).includes(a) : svAns[q.k] === a;
+    return `<button type="button" class="cchip" data-svq="${q.k}" data-sva="${esc(a)}" aria-pressed="${on}">${esc(a)}</button>`;
+  }).join('')}</div></div>`).join('');
+  if (!$('#svName').value && S.profile.name) $('#svName').value = S.profile.name;
+  $('#svSide').innerHTML = svSent
+    ? `<div class="pic">${animalSVG(S.active, 'happy', { look: myLook() })}</div><h3 style="text-align:center">Thank you</h3><p class="muted" style="text-align:center; font-size:.88rem; margin-top:6px">Your answers reached the Grind team.</p>${S.onboarded ? '' : '<div class="row" style="justify-content:center; margin-top:12px"><button class="btn primary" type="button" data-svstart>Try Grind now</button></div>'}`
+    : `<div class="pic">${animalSVG(S.active, 'awake', { look: myLook() })}</div><p class="hand" style="text-align:center; font-size:1.45rem; margin-top:4px">Five taps, one minute.</p>`;
+  $('#svNote').textContent = feedbackTarget() ? '' : (NET.web ? 'Connecting to Grind. Try again in a few seconds.' : 'Saved on this device for now.');
+}
+function bindSurvey() {
+  $('#svQs').onclick = e => {
+    const b = e.target.closest('[data-svq]'); if (!b) return;
+    const q = SURVEY_QS.find(x => x.k === b.dataset.svq), a = b.dataset.sva;
+    if (q.multi) { const cur = svAns[q.k] || []; svAns[q.k] = cur.includes(a) ? cur.filter(x => x !== a) : [...cur, a]; }
+    else svAns[q.k] = svAns[q.k] === a ? undefined : a;
+    renderSurvey();
+  };
+  $('#svSide').onclick = e => { if (e.target.closest('[data-svstart]')) { go('focus'); if (!S.onboarded) showWelcome(); } };
+  $('#svForm').onsubmit = async e => {
+    e.preventDefault();
+    const missing = SURVEY_QS.filter(q => q.multi ? !(svAns[q.k] || []).length : !svAns[q.k]);
+    if (missing.length) { toast(`Please answer question ${SURVEY_QS.indexOf(missing[0]) + 1} first.`); return; }
+    let last = 0; try { last = +localStorage.getItem('grind.svAt') || 0; } catch (err) {}
+    if (Date.now() - last < 60000) { toast('Thanks! Your answers are already in.'); return; }
+    const like = SURVEY_QS.map(q => `${q.k}: ${q.multi ? svAns[q.k].join(', ') : svAns[q.k]}`).join('\n');
+    const doc = { area: SURVEY_AREA, like: clampStr(like, 2000), improve: clampStr($('#svIdea').value.trim(), 2000), name: clampStr($('#svName').value.trim(), 40), contact: '', at: Date.now(), page: 'survey', by: NET.uid || '' };
+    const db = feedbackTarget();
+    const btn = $('#svForm button[type=submit]'); btn.disabled = true;
+    try {
+      if (db) await db.collection('feedback').doc().set(doc);
+      else { S.localFeedback = [...(S.localFeedback || []), doc]; save(); }
+      try { localStorage.setItem('grind.svAt', String(Date.now())); } catch (err) {}
+      svSent = true; svAns = {}; $('#svIdea').value = '';
+      renderSurvey(); window.scrollTo({ top: 0, behavior: 'smooth' });
+      toast(db ? 'Answers sent. Thank you!' : 'Saved on this device.', `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`);
+    } catch (err) {
+      toast('Your answers could not be sent. Check your connection and try again.');
+    }
+    btn.disabled = false;
+  };
+}
+/* Owner only: count the survey answers for the slides. */
+function surveyRows() {
+  return (NET.inbox || []).filter(f => f.area === SURVEY_AREA).map(f => {
+    const r = {}; String(f.like || '').split('\n').forEach(l => { const i = l.indexOf(': '); if (i > 0) r[l.slice(0, i)] = l.slice(i + 2); });
+    r.idea = f.improve; return r;
+  });
+}
+function surveySummary() {
+  const rows = surveyRows();
+  return { n: rows.length, rows, qs: SURVEY_QS.map(q => {
+    const c = {}; q.a.forEach(a => { c[a] = 0; });
+    rows.forEach(r => { (q.multi ? String(r[q.k] || '').split(', ') : [r[q.k]]).forEach(a => { if (a && a in c) c[a]++; }); });
+    return { q, c };
+  }) };
+}
+function surveyText() {
+  const s = surveySummary();
+  return `Grind quick survey: ${s.n} answers\n\n` + s.qs.map(({ q, c }, i) => `Q${i + 1}. ${q.q}\n` + q.a.map(a => `  ${a}: ${c[a]}`).join('\n')).join('\n\n')
+    + '\n\nIdeas:\n' + s.rows.filter(r => r.idea).map(r => '- ' + r.idea).join('\n');
+}
+function surveyCardHTML() {
+  const s = surveySummary();
+  if (!s.n) return `<div class="card"><div class="card-h"><div><h2>Quick survey results</h2><p class="muted" style="font-size:.84rem">No answers yet. Share warmsunnywolf.github.io/Grind/#survey</p></div></div></div>`;
+  return `<div class="card"><div class="card-h"><div><h2>Quick survey results</h2><p class="muted" style="font-size:.84rem">${s.n} answer${s.n === 1 ? '' : 's'}. Only you can see this.</p></div><button class="btn small" data-svcopy>Copy results</button></div>
+    ${s.qs.map(({ q, c }, i) => { const max = Math.max(1, ...Object.values(c)); return `<div style="margin:14px 0"><b style="font-size:.92rem">${i + 1}. ${esc(q.q)}</b>${q.a.map(a => `<div class="row" style="gap:10px; margin-top:6px; flex-wrap:nowrap"><span style="width:150px; flex:none; font-size:.86rem">${esc(a)}</span><span style="flex:1; height:12px; border-radius:6px; background:var(--line)"><span style="display:block; height:100%; width:${Math.round(c[a] / max * 100)}%; border-radius:6px; background:var(--pad)"></span></span><b style="width:28px; text-align:right; font-size:.86rem">${c[a]}</b></div>`).join('')}</div>`; }).join('')}
+  </div>`;
+}
 /* ---------- what's new ----------
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'survey', at: Date.UTC(2026, 10, 22, 14, 30), title: 'A one-minute survey', text: 'Help us decide what Grind offers next. Five quick taps about how you study and which extras you would like. Grind itself stays free, and you can answer without signing in.', go: 'survey' },
   { id: 'weekhours', at: Date.UTC(2026, 10, 6, 17, 20), title: 'Your hours, week by week', text: 'The journal now shows how many hours you studied each week and each month. A new week starts every Monday, and you can compare this week with last week, your average and your best.', go: 'stats' },
   { id: 'courseedit', at: Date.UTC(2026, 10, 6, 17, 10), title: 'Rename and recolour your courses', text: 'Made a typo or want a new colour? Open your profile and click the pencil on any course. Your sessions, rocks and calendar follow the change.', go: 'profile' },
   { id: 'padpics2', at: Date.UTC(2026, 10, 6, 17, 0), title: 'Bigger, sharper pictures in your notes', text: 'Pictures in Notes to self now show whole and big, and wide screenshots stretch across the page so you can read them. Click the gear on a picture to change its size, crop, corners, frame or caption, and click the picture to open it full screen and zoom in.', go: 'focus' },
@@ -5150,7 +5256,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', challenge: 'November challenge', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
+const TITLES = { focus: 'Focus', challenge: 'November challenge', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', survey: 'Quick survey', guide: 'How to use Grind', activity: 'Who is using Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -5169,6 +5275,7 @@ function go(v) {
   if (v === 'pebbles') renderRocks();
   if (v === 'cal') renderCal();
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
+  if (v === 'survey') renderSurvey();
   if (v === 'guide') renderGuide();
   if (v === 'activity') loadActivity();
   if (v === 'challenge') renderChallenge();
@@ -5230,7 +5337,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
@@ -5238,8 +5345,10 @@ function boot() {
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();
-  go((location.hash || '').replace('#', '') || 'focus');
-  if (!S.onboarded) showWelcome();
+  const startView = (location.hash || '').replace('#', '') || 'focus';
+  go(startView);
+  // a classmate opening the survey link answers first; the welcome waits for their next visit
+  if (!S.onboarded && startView !== 'survey') showWelcome();
   setInterval(tick, 250);
   setInterval(() => { applySky(); if (currentView === 'pond') renderPond(); }, 30000);
   let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (currentView === 'pond') renderPond(true); if (currentView === 'stats') renderStats(); }, 200); });
