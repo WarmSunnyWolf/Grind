@@ -406,7 +406,8 @@
             <div class="g-head"><span class="g-ic"><svg><use href="#i-ripple"/></svg></span><div><span class="eyebrow">Last step</span><h2>Invite classmates and tell us what you think</h2></div></div>
             <p class="muted">Send this link to anyone. It works on phones and laptops, with nothing to install.</p>
             <div class="g-link"><code id="gLink">warmsunnywolf.github.io/Grind</code><button class="btn small primary" id="gCopy">Copy link</button></div>
-            <div class="row"><button class="btn small" data-go="feedback">Send feedback</button></div>
+            <p class="muted" style="margin-top:8px">Got a minute? The <b>quick survey</b> asks five questions about how you study and what Grind should offer next. Anyone can answer it, even without signing in, at warmsunnywolf.github.io/Grind/#survey.</p>
+            <div class="row"><button class="btn small" data-go="feedback">Send feedback</button><button class="btn small" data-go="survey">Take the quick survey</button></div>
           </article>
         </div>
       </section>
@@ -433,8 +434,28 @@
             <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Your answers go straight to the student team behind Grind. Nobody else can read them. Leave the name and contact empty to stay anonymous.</p></div>
           </div>
         </div>
+        <div class="card sv-invite" style="margin-top:16px"><div class="card-h"><div><h2>Have one more minute?</h2><p class="muted" style="font-size:.88rem; margin-top:4px">Answer five quick questions about what you use to study and what Grind should offer next.</p></div><button class="btn primary" data-go="survey">Take the quick survey</button></div></div>
         <div class="row" data-owneronly hidden style="margin-top:16px"><button class="btn" data-go="activity"><svg><use href="#i-chart"/></svg>See who is using Grind</button></div>
         <div id="fbInbox"></div>
+      </section>
+
+      <!-- SURVEY -->
+      <section class="view" id="v-survey">
+        <p class="muted" style="max-width:62ch">We are the student team behind Grind, and this is for our FWS310 course project. Five quick taps, about one minute. You do not need to sign in or to have used Grind before.</p>
+        <div class="grid g-focus">
+          <form class="card" id="svForm">
+            <div class="stack" style="gap:22px" id="svQs"></div>
+            <div class="stack" style="gap:16px; margin-top:22px">
+              <label class="f">One thing that would make you open Grind every day (optional)<textarea class="inp" id="svIdea" maxlength="1000" placeholder="A widget on my phone, more animals, study rooms with friends..."></textarea></label>
+              <label class="f">Your name (optional)<input class="inp" id="svName" maxlength="40" placeholder="Leave empty to stay anonymous"></label>
+              <div class="row"><button class="btn primary big" type="submit">Send my answers</button><span class="muted" id="svNote" style="font-size:.84rem"></span></div>
+            </div>
+          </form>
+          <div class="stack">
+            <div class="card fb-thanks" id="svSide"></div>
+            <div class="card"><h3>Where it goes</h3><p class="muted" style="font-size:.88rem; margin-top:6px">Only the Grind team can read your answers. We count them for our class presentation and use them to decide what to build next. Grind itself stays free.</p></div>
+          </div>
+        </div>
       </section>
 
       <!-- PROFILE -->

@@ -330,7 +330,7 @@ function bindWelcome() {
 }
 
 /* ---------- shell ---------- */
-const TITLES = { focus: 'Focus', challenge: 'November challenge', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', guide: 'How to use Grind', activity: 'Who is using Grind' };
+const TITLES = { focus: 'Focus', challenge: 'November challenge', pebbles: 'Rocks and pebbles', cal: 'Calendar', pond: 'The Pond', together: 'Grind Together', commons: 'Commons', sanctuary: 'Sanctuary', stats: 'Study journal', profile: 'Your profile', feedback: 'Feedback', survey: 'Quick survey', guide: 'How to use Grind', activity: 'Who is using Grind' };
 let currentView = 'focus';
 function go(v) {
   if (!TITLES[v]) v = 'focus';
@@ -349,6 +349,7 @@ function go(v) {
   if (v === 'pebbles') renderRocks();
   if (v === 'cal') renderCal();
   if (v === 'feedback') { renderFeedback(); loadInbox(); }
+  if (v === 'survey') renderSurvey();
   if (v === 'guide') renderGuide();
   if (v === 'activity') loadActivity();
   if (v === 'challenge') renderChallenge();
@@ -410,7 +411,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
@@ -418,8 +419,10 @@ function boot() {
   if (S.timer) mode = S.timer.phase;
   checkUnlocks();
   renderAll();
-  go((location.hash || '').replace('#', '') || 'focus');
-  if (!S.onboarded) showWelcome();
+  const startView = (location.hash || '').replace('#', '') || 'focus';
+  go(startView);
+  // a classmate opening the survey link answers first; the welcome waits for their next visit
+  if (!S.onboarded && startView !== 'survey') showWelcome();
   setInterval(tick, 250);
   setInterval(() => { applySky(); if (currentView === 'pond') renderPond(); }, 30000);
   let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (currentView === 'pond') renderPond(true); if (currentView === 'stats') renderStats(); }, 200); });

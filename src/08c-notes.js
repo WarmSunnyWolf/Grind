@@ -2,6 +2,7 @@
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'survey', at: Date.UTC(2026, 10, 22, 14, 30), title: 'A one-minute survey', text: 'Help us decide what Grind offers next. Five quick taps about how you study and which extras you would like. Grind itself stays free, and you can answer without signing in.', go: 'survey' },
   { id: 'weekhours', at: Date.UTC(2026, 10, 6, 17, 20), title: 'Your hours, week by week', text: 'The journal now shows how many hours you studied each week and each month. A new week starts every Monday, and you can compare this week with last week, your average and your best.', go: 'stats' },
   { id: 'courseedit', at: Date.UTC(2026, 10, 6, 17, 10), title: 'Rename and recolour your courses', text: 'Made a typo or want a new colour? Open your profile and click the pencil on any course. Your sessions, rocks and calendar follow the change.', go: 'profile' },
   { id: 'padpics2', at: Date.UTC(2026, 10, 6, 17, 0), title: 'Bigger, sharper pictures in your notes', text: 'Pictures in Notes to self now show whole and big, and wide screenshots stretch across the page so you can read them. Click the gear on a picture to change its size, crop, corners, frame or caption, and click the picture to open it full screen and zoom in.', go: 'focus' },

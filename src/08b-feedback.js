@@ -42,6 +42,7 @@ function bindFeedback() {
     btn.disabled = false;
   };
   $('#fbInbox').addEventListener('click', async e => {
+    if (e.target.closest('[data-svcopy]')) { try { await navigator.clipboard.writeText(surveyText()); toast('Survey results copied.'); } catch (err) { toast('Copy is not available here.'); } return; }
     const c = e.target.closest('[data-fbcopy]');
     if (c) { const txt = (NET.inbox || []).map(f => `${new Date(f.at).toLocaleString()} | ${f.rating || '-'}/5 | ${f.area || ''}\nLikes: ${f.like}\nChange: ${f.improve}\nFrom: ${f.name || 'anonymous'} ${f.contact || ''}`).join('\n\n'); try { await navigator.clipboard.writeText(txt); toast('All feedback copied.'); } catch (err) { toast('Copy is not available here.'); } return; }
     const d = e.target.closest('[data-fbdel]');
@@ -62,12 +63,12 @@ async function loadInbox() {
 function renderInbox() {
   const fs = NET.inbox || [], rated = fs.filter(f => f.rating);
   const avg = rated.length ? (rated.reduce((a, f) => a + f.rating, 0) / rated.length) : 0;
-  const areas = {}; fs.forEach(f => { if (f.area) areas[f.area] = (areas[f.area] || 0) + 1; });
+  const areas = {}; fs.forEach(f => { if (f.area && f.area !== SURVEY_AREA) areas[f.area] = (areas[f.area] || 0) + 1; });
   const top = Object.entries(areas).sort((a, b) => b[1] - a[1]);
-  $('#fbInbox').innerHTML = `<div class="card"><div class="card-h"><div><h2>Your feedback inbox</h2><p class="muted" style="font-size:.84rem">Only you can see this.</p></div><div class="row"><button class="btn small" data-fbreload>Refresh</button><button class="btn small" data-fbcopy ${fs.length ? '' : 'disabled'}>Copy all</button></div></div>
+  $('#fbInbox').innerHTML = surveyCardHTML() + `<div class="card"><div class="card-h"><div><h2>Your feedback inbox</h2><p class="muted" style="font-size:.84rem">Only you can see this.</p></div><div class="row"><button class="btn small" data-fbreload>Refresh</button><button class="btn small" data-fbcopy ${fs.length ? '' : 'disabled'}>Copy all</button></div></div>
     <div class="kpis" style="margin-bottom:14px"><div class="kpi"><b>${fs.length}</b><span>Notes received</span></div><div class="kpi"><b>${avg ? avg.toFixed(1) : '–'}<small>/ 5</small></b><span>Average rating</span></div><div class="kpi"><b style="font-size:1.2rem">${top.length ? esc(top[0][0]) : '–'}</b><span>Most mentioned part</span></div></div>
     ${fs.length ? fs.map(f => `<div class="fb-item"><div class="row" style="justify-content:space-between"><span class="row" style="gap:6px">${f.rating ? `<span class="pill" style="background:var(--pad); color:#fff">${f.rating} / 5 · ${FB_WORDS[f.rating - 1]}</span>` : ''}${f.area ? `<span class="pill">${esc(f.area)}</span>` : ''}<span class="muted" style="font-size:.8rem">${f.at ? new Date(f.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : ''}</span></span><button class="btn small quiet" data-fbdel="${esc(f.id)}">Remove</button></div>
-      ${f.like ? `<span class="lbl">Likes</span><p>${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">Change or add</span><p>${esc(f.improve)}</p>` : ''}
+      ${f.like ? `<span class="lbl">${f.area === SURVEY_AREA ? 'Answers' : 'Likes'}</span><p style="white-space:pre-line">${esc(f.like)}</p>` : ''}${f.improve ? `<span class="lbl">${f.area === SURVEY_AREA ? 'Idea' : 'Change or add'}</span><p>${esc(f.improve)}</p>` : ''}
       <span class="muted" style="font-size:.82rem">From ${esc(f.name || 'someone anonymous')}${f.contact ? ' · ' + esc(f.contact) : ''}</span></div>`).join('') : '<p class="muted">No feedback yet. Share the link and notes will appear here.</p>'}</div>`;
 }
 
@@ -135,4 +136,87 @@ function bindActivity() {
     actFilter = e.target.value; const pos = e.target.selectionStart;
     renderActivity(); const i = $('#actSearch'); i.focus(); try { i.setSelectionRange(pos, pos); } catch (err) {}
   });
+}
+
+/* ---------- quick survey (FWS310 Presentation 2) ----------
+   Answers go into the same feedback collection (area "Pricing survey"), so no new database rules are needed.
+   Each answer is one "key: value" line in `like`, and the idea goes in `improve`. */
+const SURVEY_AREA = 'Pricing survey';
+const SURVEY_QS = [
+  { k: 'used', q: 'How often did you study with Grind in the last week?', a: ['I have not tried it yet', 'Not at all', '1 to 2 days', '3 to 5 days', 'Every day'] },
+  { k: 'before', q: 'What do you use to plan or focus? Pick all that apply.', multi: true, a: ['Memory', 'Phone notes', 'Blackboard calendar', 'Forest', 'Microsoft To Do', 'Paper planner', 'Something else'] },
+  { k: 'pay', q: 'If Grind stays free, would you pay for optional extras like new animals, outfits or sounds?', a: ['Yes', 'Maybe', 'No'] },
+  { k: 'price', q: 'What is the most you would pay per month for those extras?', a: ['AED 0', 'AED 5', 'AED 10', 'AED 20', 'More than AED 20'] },
+  { k: 'uni', q: 'Would you like your university to offer Grind to every student, with campus study challenges?', a: ['Yes', 'Maybe', 'No'] },
+];
+let svAns = {}, svSent = false;
+function renderSurvey() {
+  $('#svQs').innerHTML = SURVEY_QS.map((q, i) => `<div><span class="eyebrow">Question ${i + 1} of ${SURVEY_QS.length}</span><h3 style="margin-top:4px">${esc(q.q)}</h3><div class="course-chips" style="margin-top:10px" role="group" aria-label="${esc(q.q)}">${q.a.map(a => {
+    const on = q.multi ? (svAns[q.k] || []).includes(a) : svAns[q.k] === a;
+    return `<button type="button" class="cchip" data-svq="${q.k}" data-sva="${esc(a)}" aria-pressed="${on}">${esc(a)}</button>`;
+  }).join('')}</div></div>`).join('');
+  if (!$('#svName').value && S.profile.name) $('#svName').value = S.profile.name;
+  $('#svSide').innerHTML = svSent
+    ? `<div class="pic">${animalSVG(S.active, 'happy', { look: myLook() })}</div><h3 style="text-align:center">Thank you</h3><p class="muted" style="text-align:center; font-size:.88rem; margin-top:6px">Your answers reached the Grind team.</p>${S.onboarded ? '' : '<div class="row" style="justify-content:center; margin-top:12px"><button class="btn primary" type="button" data-svstart>Try Grind now</button></div>'}`
+    : `<div class="pic">${animalSVG(S.active, 'awake', { look: myLook() })}</div><p class="hand" style="text-align:center; font-size:1.45rem; margin-top:4px">Five taps, one minute.</p>`;
+  $('#svNote').textContent = feedbackTarget() ? '' : (NET.web ? 'Connecting to Grind. Try again in a few seconds.' : 'Saved on this device for now.');
+}
+function bindSurvey() {
+  $('#svQs').onclick = e => {
+    const b = e.target.closest('[data-svq]'); if (!b) return;
+    const q = SURVEY_QS.find(x => x.k === b.dataset.svq), a = b.dataset.sva;
+    if (q.multi) { const cur = svAns[q.k] || []; svAns[q.k] = cur.includes(a) ? cur.filter(x => x !== a) : [...cur, a]; }
+    else svAns[q.k] = svAns[q.k] === a ? undefined : a;
+    renderSurvey();
+  };
+  $('#svSide').onclick = e => { if (e.target.closest('[data-svstart]')) { go('focus'); if (!S.onboarded) showWelcome(); } };
+  $('#svForm').onsubmit = async e => {
+    e.preventDefault();
+    const missing = SURVEY_QS.filter(q => q.multi ? !(svAns[q.k] || []).length : !svAns[q.k]);
+    if (missing.length) { toast(`Please answer question ${SURVEY_QS.indexOf(missing[0]) + 1} first.`); return; }
+    let last = 0; try { last = +localStorage.getItem('grind.svAt') || 0; } catch (err) {}
+    if (Date.now() - last < 60000) { toast('Thanks! Your answers are already in.'); return; }
+    const like = SURVEY_QS.map(q => `${q.k}: ${q.multi ? svAns[q.k].join(', ') : svAns[q.k]}`).join('\n');
+    const doc = { area: SURVEY_AREA, like: clampStr(like, 2000), improve: clampStr($('#svIdea').value.trim(), 2000), name: clampStr($('#svName').value.trim(), 40), contact: '', at: Date.now(), page: 'survey', by: NET.uid || '' };
+    const db = feedbackTarget();
+    const btn = $('#svForm button[type=submit]'); btn.disabled = true;
+    try {
+      if (db) await db.collection('feedback').doc().set(doc);
+      else { S.localFeedback = [...(S.localFeedback || []), doc]; save(); }
+      try { localStorage.setItem('grind.svAt', String(Date.now())); } catch (err) {}
+      svSent = true; svAns = {}; $('#svIdea').value = '';
+      renderSurvey(); window.scrollTo({ top: 0, behavior: 'smooth' });
+      toast(db ? 'Answers sent. Thank you!' : 'Saved on this device.', `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`);
+    } catch (err) {
+      toast('Your answers could not be sent. Check your connection and try again.');
+    }
+    btn.disabled = false;
+  };
+}
+/* Owner only: count the survey answers for the slides. */
+function surveyRows() {
+  return (NET.inbox || []).filter(f => f.area === SURVEY_AREA).map(f => {
+    const r = {}; String(f.like || '').split('\n').forEach(l => { const i = l.indexOf(': '); if (i > 0) r[l.slice(0, i)] = l.slice(i + 2); });
+    r.idea = f.improve; return r;
+  });
+}
+function surveySummary() {
+  const rows = surveyRows();
+  return { n: rows.length, rows, qs: SURVEY_QS.map(q => {
+    const c = {}; q.a.forEach(a => { c[a] = 0; });
+    rows.forEach(r => { (q.multi ? String(r[q.k] || '').split(', ') : [r[q.k]]).forEach(a => { if (a && a in c) c[a]++; }); });
+    return { q, c };
+  }) };
+}
+function surveyText() {
+  const s = surveySummary();
+  return `Grind quick survey: ${s.n} answers\n\n` + s.qs.map(({ q, c }, i) => `Q${i + 1}. ${q.q}\n` + q.a.map(a => `  ${a}: ${c[a]}`).join('\n')).join('\n\n')
+    + '\n\nIdeas:\n' + s.rows.filter(r => r.idea).map(r => '- ' + r.idea).join('\n');
+}
+function surveyCardHTML() {
+  const s = surveySummary();
+  if (!s.n) return `<div class="card"><div class="card-h"><div><h2>Quick survey results</h2><p class="muted" style="font-size:.84rem">No answers yet. Share warmsunnywolf.github.io/Grind/#survey</p></div></div></div>`;
+  return `<div class="card"><div class="card-h"><div><h2>Quick survey results</h2><p class="muted" style="font-size:.84rem">${s.n} answer${s.n === 1 ? '' : 's'}. Only you can see this.</p></div><button class="btn small" data-svcopy>Copy results</button></div>
+    ${s.qs.map(({ q, c }, i) => { const max = Math.max(1, ...Object.values(c)); return `<div style="margin:14px 0"><b style="font-size:.92rem">${i + 1}. ${esc(q.q)}</b>${q.a.map(a => `<div class="row" style="gap:10px; margin-top:6px; flex-wrap:nowrap"><span style="width:150px; flex:none; font-size:.86rem">${esc(a)}</span><span style="flex:1; height:12px; border-radius:6px; background:var(--line)"><span style="display:block; height:100%; width:${Math.round(c[a] / max * 100)}%; border-radius:6px; background:var(--pad)"></span></span><b style="width:28px; text-align:right; font-size:.86rem">${c[a]}</b></div>`).join('')}</div>`; }).join('')}
+  </div>`;
 }
