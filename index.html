@@ -107,7 +107,37 @@ p{margin:0}
 .card.flat{background:transparent; border-style:dashed}
 .card-h{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap}
 .grid{display:grid; gap:18px}
-.g-focus{grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr)}
+.g-focus{grid-template-columns:var(--fs-cols, minmax(0,62fr) 14px minmax(260px,38fr)); column-gap:6px}
+.g-focus.one{grid-template-columns:minmax(0,1fr)}
+.fs-zone{display:flex; flex-direction:column; gap:18px}
+.fs-top{margin-bottom:16px}
+.fs-bottom{margin-top:18px}
+.fs-top .today-strip{margin-bottom:0}
+.fs-col > .today-strip{grid-template-columns:repeat(2,minmax(0,1fr)); margin-bottom:0}
+.fs-col > .today-strip .ts.main{grid-column:1/-1}
+.fs-split{position:relative; cursor:col-resize; display:grid; place-items:center; border-radius:8px; touch-action:none; outline:none}
+.fs-split i{width:4px; height:56px; border-radius:4px; background:var(--line-2); transition:background .15s, height .15s; position:sticky; top:45vh}
+.fs-split:hover i, .fs-split:focus-visible i, .fs-split.drag i{background:var(--accent); height:96px}
+.fs-split.drag{background:color-mix(in srgb, var(--accent) 8%, transparent)}
+.stage-widen{position:absolute; right:12px; bottom:22px; z-index:6; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.4); background:rgba(0,0,0,.18); color:#fff; display:grid; place-items:center; cursor:pointer; opacity:0; transition:opacity .2s; backdrop-filter:blur(4px)}
+.stage-widen svg{width:18px; height:18px}
+.focus-stage:hover .stage-widen, .stage-widen:focus-visible{opacity:1}
+@media (hover:none){.stage-widen{opacity:.8}}
+.fs-wide .focus-stage{aspect-ratio:21/9}
+.fs-widen.icon-btn svg{width:16px; height:16px}
+.fs-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+.fs-list li{display:grid; grid-template-columns:minmax(0,1fr) 150px 30px 30px; align-items:center; gap:6px; padding:6px 6px 6px 12px; border:1px solid var(--line); border-radius:12px; background:var(--surface-2)}
+.fs-list li.off .fs-nm{color:var(--muted); text-decoration:line-through}
+.fs-nm{font-size:.86rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.fs-place{padding:5px 8px; font-size:.8rem}
+.fs-width{display:flex; align-items:center; gap:10px; font-size:.84rem}
+.fs-width input{flex:1}
+.fs-width b{min-width:3ch; font-variant-numeric:tabular-nums}
+.def-lens{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.def-len{display:flex; flex-direction:column; gap:4px; font-size:.8rem; font-weight:600; color:var(--ink-2)}
+.def-in{display:flex; align-items:baseline; gap:6px}
+.def-in input{width:100%; padding:6px 10px; font-size:1rem}
+.def-in small{color:var(--muted); font-weight:500}
 .g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .stack{display:flex; flex-direction:column; gap:18px; min-width:0}
@@ -269,6 +299,21 @@ input[type=range]{accent-color:var(--accent); width:100%}
 .cal-ev small{color:var(--muted); font-size:.68rem}
 .cal-ev.rock{border-left-style:dashed}
 .cal-ev.t-exam{font-weight:600}
+.cal-ev.pr-important, .cal-ev.pr-urgent{background:var(--c); color:#fff; font-weight:700; border-left-color:color-mix(in srgb, var(--c) 70%, #000)}
+.cal-ev.pr-important small, .cal-ev.pr-urgent small{color:rgba(255,255,255,.85)}
+.cal-ev.pr-urgent{box-shadow:0 0 0 2px color-mix(in srgb, var(--c) 35%, transparent)}
+.pr-mark{font-style:normal; font-weight:800; display:inline-grid; place-items:center; width:1.15em; height:1.15em; margin-right:4px; border-radius:50%; background:rgba(255,255,255,.28); font-size:.92em; line-height:1}
+.cal-list .pr-mark{background:var(--c); color:#fff}
+.cal-day.has-urgent{box-shadow:inset 0 3px 0 #d8434f}
+.cal-day.has-important{box-shadow:inset 0 3px 0 #e39b2d}
+.cal-day.sel.has-urgent, .cal-day.sel.has-important{box-shadow:inset 0 0 0 2px var(--rose)}
+.cal-list li.pr-row{background:color-mix(in srgb, var(--c) 12%, var(--surface)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--c) 55%, transparent)}
+.pill.pr-pill{background:var(--c); color:#fff; border-color:transparent; font-weight:700}
+.ev-prio button{display:inline-flex; align-items:center; gap:6px}
+.ev-prio button i{width:10px; height:10px; border-radius:50%}
+.ev-prio .pr-important[aria-pressed="true"]{background:#e39b2d; color:#fff}
+.ev-prio .pr-urgent[aria-pressed="true"]{background:#d8434f; color:#fff}
+.ev-colors.dim{opacity:.45}
 .cal-day .more{font-size:.7rem; color:var(--muted); padding-left:4px}
 .cal-day .dots{display:none; gap:3px; justify-content:center; margin-top:auto}
 .cal-day .dots i{width:6px; height:6px; border-radius:50%}
@@ -686,7 +731,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 
 /* ---------- responsive ---------- */
 @media (max-width:1020px){
-  .g-focus{grid-template-columns:minmax(0,1fr)}
+  .g-focus{grid-template-columns:minmax(0,1fr)} .fs-split{display:none} .fs-widen{display:none!important} .fs-wide .focus-stage{aspect-ratio:16/9}
   .g-3{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:860px){
@@ -766,8 +811,27 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 .snd-embed:empty{display:none}
 .snd-embed{margin-top:10px}
 .snd-embed iframe{width:100%; border:0; border-radius:14px; display:block; background:var(--bg)}
-.snd-foot{display:flex; flex-direction:column; gap:10px; margin-top:14px}
-.snd-vol{display:flex; align-items:center; gap:12px}
+.snd-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:6px}
+.snd-tile{display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px 6px; border:1px solid var(--line); border-radius:14px; background:var(--surface-2); color:var(--ink); font:inherit; cursor:pointer; min-width:0; transition:border-color .15s, transform .15s}
+.snd-tile:hover{border-color:color-mix(in srgb, var(--accent) 50%, var(--line))}
+.snd-tile:active{transform:scale(.97)}
+.snd-tile .snd-ic{width:32px; height:32px; border-radius:10px}
+.snd-tile .snd-ic svg{width:18px; height:18px}
+.snd-tile b{font-size:.78rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%}
+.snd-tile small{font-size:.68rem; color:var(--muted); display:inline-flex; align-items:center; gap:3px}
+.snd-tile small svg{width:11px; height:11px}
+.snd-tile.sel{border-color:var(--accent); background:color-mix(in srgb, var(--accent) 8%, var(--surface-2))}
+.snd-tile.on small{color:var(--accent); font-weight:700}
+.snd-tile.locked .snd-ic, .snd-tile.locked b{opacity:.65}
+.snd-buy, .snd-now{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; font-size:.82rem}
+.snd-now{justify-content:flex-start; color:var(--muted); margin-bottom:0}
+.snd-now svg{width:12px; height:12px; flex:none; color:var(--accent)}
+.snd-now span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.snd-foot{display:flex; align-items:center; gap:14px; margin-top:12px}
+.snd-vol{display:flex; align-items:center; gap:8px; flex:1; min-width:0}
+.snd-vol svg{width:18px; height:18px; flex:none; color:var(--muted)}
+.snd-vol input{flex:1; min-width:0}
+.snd-with{display:flex; align-items:center; gap:8px; font-size:.8rem; color:var(--ink-2); white-space:nowrap}
 
 /* notifications */
 .note-wrap{position:relative; display:inline-flex}
@@ -918,6 +982,10 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L15 9M13.5 7.5l3 3"/><path d="M18 3v3M16.5 4.5h3M20.5 9.5v2M19.5 10.5h2M10 3.5v2M9 4.5h2"/></g></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
   <symbol id="i-friend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19c1-3.2 3.3-4.8 6.2-4.8s5.2 1.6 6.2 4.8M17.5 8v6M14.5 11h6"/></g></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></g></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M7.5 8.5L4 12l3.5 3.5M16.5 8.5L20 12l-3.5 3.5"/></g></symbol>
+  <symbol id="i-shrink" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h6M21 12h-6M6 8.5L9.5 12 6 15.5M18 8.5L14.5 12l3.5 3.5M12 5v14"/></g></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M13 4v16M13 12h7.5"/></g></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></g></symbol>
   <symbol id="i-leafpip" viewBox="0 0 24 24"><path d="M4 20C3 11 9 4.5 20 4c.6 10-5.6 16.4-16 16z" fill="currentColor"/></symbol>
 </svg>
@@ -966,7 +1034,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
               <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
               <span class="eyebrow">How to spend</span>
-              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits and costumes</span><b>40 to 450</b></li><li><span>Fur coats and emotes</span><b>120 to 200</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
@@ -978,10 +1046,12 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
 
       <!-- FOCUS -->
       <section class="view on" id="v-focus" aria-labelledby="viewTitle">
-        <div class="today-strip" id="todayStats" aria-label="What you studied today"></div>
-        <div class="grid g-focus">
-          <div class="stack">
+        <div class="fs-zone fs-top" id="fsTop"><div class="today-strip" id="todayStats" data-fs="stats" aria-label="What you studied today"></div></div>
+        <div class="grid g-focus" id="fsGrid">
+          <div class="stack fs-col" id="fsLeft">
+           <div class="fs-block stack" data-fs="timer">
             <div class="stage focus-stage" id="focusStage">
+              <button type="button" class="fs-widen stage-widen" data-fswiden="timer" title="Make the timer wider" aria-label="Make the timer wider"><svg><use href="#i-expand"/></svg></button>
               <div class="timer-ov">
                 <span class="phase" id="phaseLabel">Ready when you are</span>
                 <span class="clock" id="clock" aria-live="off">25:00</span>
@@ -1021,39 +1091,43 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
                 <button class="btn big quiet" id="skipBtn" hidden><svg><use href="#i-skip"/></svg><span>Skip rest</span></button>
               </div>
             </div>
-            <div class="card">
+           </div>
+            <div class="card" data-fs="log">
               <div class="card-h"><h2>Today's log</h2><span class="hand muted" id="todayDate"></span></div>
               <ul class="done-list" id="todayList"></ul>
             </div>
-            <div class="card">
+            <div class="card" data-fs="ripples">
               <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
               <ul class="ripple-feed" id="rippleMini"></ul>
             </div>
           </div>
-          <div class="stack">
-            <div class="card ch-card" id="chCard" hidden></div>
-            <div class="card note-pad">
-              <div class="card-h"><h2>Notes to self</h2><span class="row" style="gap:8px"><span class="muted" id="padState" style="font-size:.78rem">Saved</span><button class="btn small quiet" id="padPicBtn" type="button" title="Add a picture"><svg><use href="#i-upload"/></svg>Picture</button></span></div>
+          <div class="fs-split" id="fsSplit" role="separator" aria-orientation="vertical" aria-label="Drag to make either side wider" tabindex="0" title="Drag to make either side wider. Double click to reset."><i></i></div>
+          <div class="stack fs-col" id="fsRight">
+            <div class="card ch-card" id="chCard" data-fs="challenge" hidden></div>
+            <div class="card note-pad" data-fs="notes">
+              <div class="card-h"><h2>Notes to self</h2><span class="row" style="gap:8px"><span class="muted" id="padState" style="font-size:.78rem">Saved</span><button class="btn small quiet" id="padPicBtn" type="button" title="Add a picture"><svg><use href="#i-upload"/></svg>Picture</button><button class="icon-btn sm fs-widen" type="button" data-fswiden="notes" title="Make notes wider" aria-label="Make notes wider"><svg><use href="#i-expand"/></svg></button></span></div>
               <textarea id="notePad" maxlength="2000" rows="3" placeholder="A quote, a reminder, a little push. Whatever you want to see while you study. You can also add a picture." aria-label="Notes to self"></textarea>
               <div class="pad-imgs" id="padImgs"></div>
               <input type="file" id="padPicFile" accept="image/*" hidden>
             </div>
-            <div class="card">
+            <div class="card" data-fs="pebble">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
               <div id="nextPebble"></div>
             </div>
-            <div class="card" id="soundCard">
-              <div class="card-h"><h2>Sounds</h2><span class="muted" style="font-size:.8rem">Quran and your own link are free</span></div>
-              <div class="snd-list" id="sndList"></div>
+            <div class="card" id="soundCard" data-fs="sounds">
+              <div class="card-h"><h2>Sounds</h2><span class="muted" style="font-size:.78rem">Quran and your own link are free</span></div>
+              <div class="snd-grid" id="sndList"></div>
               <div id="sndExtra"></div>
               <div class="snd-embed" id="sndEmbed"></div>
               <div class="snd-foot">
-                <label class="snd-vol"><span class="eyebrow">Volume</span><input type="range" id="sndVol" min="0" max="100" value="50" aria-label="Sound volume"></label>
-                <div class="toggle"><span>Play with each focus session</span><button class="switch" role="switch" id="sndWith" aria-checked="true" aria-label="Play sounds with focus sessions"></button></div>
+                <label class="snd-vol"><svg aria-hidden="true"><use href="#i-sound"/></svg><input type="range" id="sndVol" min="0" max="100" value="50" aria-label="Sound volume"></label>
+                <label class="snd-with"><span>With focus</span><button class="switch" role="switch" id="sndWith" aria-checked="true" aria-label="Play sounds with each focus session" title="Play sounds with each focus session"></button></label>
               </div>
             </div>
           </div>
         </div>
+        <div class="fs-zone fs-bottom" id="fsBottom"></div>
+        <div id="fsHidden" hidden></div>
         <div class="card note-pad pad-wide" id="padWide" hidden><div class="card-h"><h2>From your notes</h2><span class="muted" style="font-size:.8rem">Wide pictures show here so you can read them. Click the gear to change the size.</span></div><div class="pad-imgs" id="padWideImgs"></div></div>
       </section>
 
@@ -1100,7 +1174,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
             <label class="f">Course<select class="inp" id="evCourse"></select></label>
             <label class="f ev-only">Type<select class="inp" id="evType"></select></label>
             <label class="f ev-only">Remind me<select class="inp" id="evRemind"></select></label>
-            <div class="f" style="grid-column:1/-1">Colour<div class="ev-colors" id="evColors"></div></div>
+            <div class="f" style="grid-column:1/-1">How important is it?<div class="seg ev-prio" role="group" id="evPrio" aria-label="How important is it"></div></div>
+            <div class="f" style="grid-column:1/-1">Colour<span class="muted" style="display:block; font-size:.78rem; font-weight:400">Important and urgent things always show in amber and red so you never miss them.</span><div class="ev-colors" id="evColors"></div></div>
           </div>
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit"><svg><use href="#i-check"/></svg>Save</button><button class="btn" type="button" id="evOpenRock" hidden><svg><use href="#i-pebble"/></svg>Open in Pebbles</button><button class="btn quiet" type="button" id="evDel" hidden><svg><use href="#i-trash"/></svg>Delete</button></div>
         </form>
@@ -1169,8 +1244,8 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
       <section class="view" id="v-challenge"><div id="chBody" class="stack"></div></section>
 
       <section class="view" id="v-sanctuary">
-        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-nine animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
-        <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Click <b>Preview looks</b> on any animal to try every costume, coat and emote on it. Nothing is bought or saved, and students see nothing different.</div>
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Thirty-four animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
+        <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Every animal shows here, including hidden and challenge ones. Students see nothing different.</div>
         <div class="zoo" id="zoo"></div>
       </section>
 
@@ -1236,7 +1311,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Pictures show whole and big, and text in screenshots stays sharp.</li><li>Click the <b>gear</b> on a picture to make it Small, Medium, Large, or <b>Wide</b> so it stretches across the page under the timer (wide screenshots start this way), show the whole picture or fill the frame, pick round or square corners, turn the frame on or off, add a caption, or move it earlier or later. Click the picture itself to open it full screen, and click again to zoom in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap. Focus opens at 30 minutes; change your own starting lengths for focus, rest and new pebbles in <b>Customize</b> under <b>Default lengths</b>.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Pictures show whole and big, and text in screenshots stays sharp.</li><li>Click the <b>gear</b> on a picture to make it Small, Medium, Large, or <b>Wide</b> so it stretches across the page under the timer (wide screenshots start this way), show the whole picture or fill the frame, pick round or square corners, turn the frame on or off, add a caption, or move it earlier or later. Click the picture itself to open it full screen, and click again to zoom in. Everything saves as you go and follows you to every device you sign in on.</li><li>Want more room? Click the <b>arrows</b> on Notes to self, or on the timer, to make it full width, and click again to put it back. You can also drag the thin line between the two sides to make either side wider.</li><li>Arrange the whole page in <b>Customize</b> under <b>Focus page layout</b>: put each part at the top, left, right or bottom, hide what you do not use, and change the order with the arrows.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins: tap one to see its price.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
@@ -1246,7 +1321,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-4b">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-cal"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Plan deadlines in the calendar</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Calendar</b> to see the whole month. Click <b>Add</b>, or double click a day, and type what it is, like "DSP midterm".</li><li>Pick the date, a time if it has one, the course, and when to be reminded: from 1 hour to 1 week before.</li><li>When it is close, a reminder pops up and stays in the <b>bell</b>. Click <b>Also alert me on this device</b> to get alerts even when Grind is in another tab. Rocks with a due date show up on the calendar by themselves.</li></ol>
+            <ol class="g-steps"><li>Open <b>Calendar</b> to see the whole month. Click <b>Add</b>, or double click a day, and type what it is, like "DSP midterm".</li><li>Pick the date, a time if it has one, the course, and when to be reminded: from 1 hour to 1 week before.</li><li>When it is close, a reminder pops up and stays in the <b>bell</b>. Click <b>Also alert me on this device</b> to get alerts even when Grind is in another tab. Rocks with a due date show up on the calendar by themselves.</li><li>Under <b>How important is it?</b> mark anything <b>Important</b> (amber with a star) or <b>Urgent</b> (red with an exclamation mark). They stand out in the month, in Coming up, and the day gets a coloured line on top.</li></ol>
             <div class="row"><button class="btn small" data-go="cal">Show me the calendar</button></div>
           </article>
           <article class="card g-sec" id="g-5">
@@ -1266,7 +1341,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), hamster (55), kitty (60), sheep (70) and spider (90) to the penguin (110), the panda (140), the camel (150), the parrot (170), the swan (180), the giraffe (210), the dragon (230), the wolf (240), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), hamster (55), kitty (60), hedgehog (65), sheep (70), cow (85) and spider (90) to the penguin (110), the barn owl (130), the panda (140), the koala (145), the camel (150), the parrot (170), the swan (180), the red panda (190), the giraffe (210), the dragon (230), the wolf (240), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -1276,7 +1351,7 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
           </article>
           <article class="card g-sec" id="g-10">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 11</span><h2>Make it yours</h2></div></div>
-            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. Under <b>Light or dark</b>, choose Light, Dark or Match my device, and every theme follows. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
+            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. Under <b>Light or dark</b>, choose Light, Dark or Match my device, and every theme follows. You can also choose your own colours, the weather and the sky.</li><li>Set your <b>Default lengths</b> for focus, rest and new pebbles, and arrange the Focus page under <b>Focus page layout</b>.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
           <article class="card g-sec g-share" id="g-11">
@@ -1381,6 +1456,20 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <section><span class="eyebrow">Your own colors</span><div class="colors"><label>Accent<input type="color" id="cAccent"></label><label>Paper<input type="color" id="cBg"></label><label>Water<input type="color" id="cWater"></label></div><button class="btn small quiet" id="cReset" style="align-self:flex-start">Clear my colors</button></section>
   <section><span class="eyebrow">Pond weather</span><div class="seg" role="group" id="fxSeg"><button data-fx="fireflies">Fireflies</button><button data-fx="rain">Rain</button><button data-fx="petals">Petals</button><button data-fx="still">Still</button></div></section>
   <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
+  <section id="fsSettings"><span class="eyebrow">Focus page layout</span>
+    <span class="muted" style="font-size:.8rem">Choose where each part sits, or hide it. Use the arrows to change the order. On the Focus page you can also drag the line between the two sides.</span>
+    <ul class="fs-list" id="fsList"></ul>
+    <label class="fs-width"><span>Left side width</span><input type="range" id="fsSplitRange" min="30" max="75" step="1" aria-label="Width of the left side"><b id="fsSplitVal"></b></label>
+    <button class="btn small quiet" id="fsReset" style="align-self:flex-start" type="button">Reset the layout</button>
+  </section>
+  <section><span class="eyebrow">Default lengths</span>
+    <div class="def-lens">
+      <label class="def-len"><span>Focus</span><span class="def-in"><input class="inp num" id="defFocus" type="number" inputmode="numeric" min="1" max="180" aria-label="Default focus length in minutes"><small>min</small></span></label>
+      <label class="def-len"><span>Rest</span><span class="def-in"><input class="inp num" id="defRest" type="number" inputmode="numeric" min="1" max="60" aria-label="Default rest length in minutes"><small>min</small></span></label>
+      <label class="def-len"><span>New pebble</span><span class="def-in"><input class="inp num" id="defPeb" type="number" inputmode="numeric" min="1" max="120" aria-label="Default length of a new pebble in minutes"><small>min</small></span></label>
+    </div>
+    <span class="muted" style="font-size:.8rem">Focus opens at these lengths every time. Quick picks and the slider still change one session.</span>
+  </section>
   <section><span class="eyebrow">Session</span>
     <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
     <div class="toggle"><span>Sound when a notification arrives</span><button class="switch" role="switch" id="swNoteSound" aria-checked="true" aria-label="Notification sound"></button></div>
@@ -1416,7 +1505,6 @@ button.friend{font:inherit; color:inherit; cursor:pointer; border:0; background:
   <div id="newsBody"></div>
   <div class="row" style="justify-content:space-between"><a href="#guide" class="muted" data-go="guide" data-newsclose style="font-size:.85rem">See every update in the guide</a><button class="btn primary" data-newsclose>Got it</button></div>
 </div></div>
-<div class="modal" id="dressModal" role="dialog" aria-modal="true" aria-label="Dress up"><div class="modal-box dress-box" id="dressBox"></div></div>
 <div class="modal" id="icsModal" role="dialog" aria-modal="true" aria-labelledby="icsTitle"><div class="modal-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><h2 id="icsTitle">Import from Blackboard</h2><button class="icon-btn" data-icsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
   <ol class="g-steps"><li>In Blackboard, open <b>Calendar</b>, click the gear, and choose <b>Share Calendar</b>. Click <b>Copy</b>.</li><li>Paste the link below and click <b>Import</b>.</li></ol>
@@ -1453,16 +1541,18 @@ const ANIMALS = {
     label: 'Duckling', lore: 'Follows you from one pebble to the next, never in a hurry.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[76, 86], [106, 86]], er: 5.5, mouth: null, blush: [[64, 100], [118, 100]], zz: [128, 50] },
     art: (st) => {
-      const y = '#f4d06f', s = '#e3b552', bk = '#e8894a';
+      const y = '#ffe49a', s = '#ffcf6b', c = '#fff6d8', bk = '#ff9f73', ft = '#f6a26e';
       const beak = st === 'happy'
         ? `<path d="M76 102 C84 92 102 92 110 102 Z" fill="${bk}" ${O}/><path d="M78 103 Q93 117 108 103 Z" fill="#7a3b33" ${O2}/><ellipse cx="93" cy="109" rx="6" ry="3" fill="#e58b86"/>`
         : `<path d="M76 104 C84 96 102 96 110 104 C102 112 84 112 76 104 Z" fill="${bk}" ${O}/><path d="M79 104 H107" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`;
-      return `<ellipse cx="84" cy="178" rx="13" ry="5" fill="${bk}" ${O2}/><ellipse cx="116" cy="178" rx="13" ry="5" fill="${bk}" ${O2}/>
-      <path d="M148 132 L174 116 L162 148 Z" fill="${y}" ${O}/>
+      return `<ellipse cx="84" cy="178" rx="13" ry="5" fill="${ft}" ${O2}/><ellipse cx="116" cy="178" rx="13" ry="5" fill="${ft}" ${O2}/>
+      <path d="M148 132 C160 124 168 118 176 112 C174 126 168 140 160 148 Z" fill="${y}" ${O}/>
       <ellipse cx="106" cy="146" rx="54" ry="34" fill="${y}" ${O}/>
-      <path d="M112 136 C128 130 148 136 150 150 C138 160 120 160 110 152 Z" fill="${s}" ${O2}/>
+      <path d="M66 150 C72 168 96 178 120 176 C100 172 80 164 66 150 Z" fill="${c}"/>
+      <path d="M110 136 C124 126 146 130 152 144 C146 158 124 162 110 152 C106 146 106 140 110 136 Z" fill="${s}" ${O2}/><path d="M122 142 C130 140 138 142 144 146" fill="none" stroke="${y}" stroke-width="3" stroke-linecap="round"/>
       <circle cx="90" cy="90" r="36" fill="${y}" ${O}/>
-      <path d="M86 56 C83 44 92 40 96 49 C98 38 110 41 104 54" fill="none" ${O}/>
+      <path d="M70 70 C76 62 86 60 92 62" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M86 56 C82 44 92 40 96 49 C98 38 110 41 104 54" fill="${y}" ${O}/>
       ${beak}`;
     }
   },
@@ -1470,16 +1560,19 @@ const ANIMALS = {
     label: 'Capybara', lore: 'Calm in every storm. Wears a yuzu on its head for luck.', unlock: { type: 'free' }, defaultName: '',
     face: { eyes: [[62, 82], [108, 82]], er: 4.8, mouth: { x: 85, y: 121, type: 'cat' }, blush: [[52, 100], [120, 100]], zz: [140, 58] },
     art: () => {
-      const b = '#b98b63', d = '#94694a', l = '#d2ab85';
+      const b = '#e2b98a', d = '#c99a6b', l = '#f6e2c6', p = '#f2b8ae';
       return `<rect x="56" y="158" width="20" height="22" rx="9" fill="${d}" ${O}/><rect x="132" y="158" width="20" height="22" rx="9" fill="${d}" ${O}/>
       <path d="M40 142 C38 110 64 98 106 98 C148 98 170 114 168 146 C167 170 148 180 106 180 C64 180 41 170 40 142 Z" fill="${b}" ${O}/>
-      <path d="M136 120 C146 124 152 132 154 142" fill="none" stroke="${d}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M70 108 C92 102 128 102 150 112" fill="none" stroke="#f0d2ad" stroke-width="6" stroke-linecap="round"/>
+      <path d="M136 124 C146 128 152 136 154 146" fill="none" stroke="${d}" stroke-width="2.5" stroke-linecap="round"/>
       <ellipse cx="54" cy="52" rx="9" ry="8" fill="${d}" ${O}/><ellipse cx="116" cy="52" rx="9" ry="8" fill="${d}" ${O}/>
+      <ellipse cx="54" cy="53" rx="4.5" ry="4" fill="${p}"/><ellipse cx="116" cy="53" rx="4.5" ry="4" fill="${p}"/>
       <path d="M42 78 C42 56 60 46 86 46 C114 46 128 58 128 80 L128 108 C128 128 112 138 86 138 C58 138 42 128 42 108 Z" fill="${b}" ${O}/>
+      <path d="M56 62 C64 54 76 52 86 52" fill="none" stroke="#f0d2ad" stroke-width="5" stroke-linecap="round"/>
       <ellipse cx="85" cy="113" rx="32" ry="20" fill="${l}" ${O2}/>
       <ellipse cx="76" cy="107" rx="3.6" ry="2.6" fill="${INK}"/><ellipse cx="94" cy="107" rx="3.6" ry="2.6" fill="${INK}"/>
-      <circle cx="86" cy="40" r="12" fill="#efb24a" ${O}/><circle cx="82" cy="36" r="2.2" fill="#f8d68a"/>
-      <path d="M87 28 C91 20 100 19 103 23 C99 28 92 29 87 28 Z" fill="#7d9a52" ${O2}/>`;
+      <circle cx="86" cy="40" r="12" fill="#ffb84d" ${O}/><circle cx="82" cy="36" r="2.2" fill="#ffe0a0"/>
+      <path d="M87 28 C91 20 100 19 103 23 C99 28 92 29 87 28 Z" fill="#8cbf6a" ${O2}/>`;
     }
   },
   rabbit: {
@@ -1900,6 +1993,100 @@ const ANIMALS = {
       <path d="M89 76 C89 67 111 67 111 76 C111 88 106 96 100 102 C94 96 89 88 89 76 Z" fill="${bk}" ${O2}/><path d="M94 72 C98 70 102 70 106 72" fill="none" stroke="#cdbba0" stroke-width="1.6" stroke-linecap="round"/>`;
     }
   },
+  hedgehog: {
+    label: 'Hedgehog', lore: 'Small, round and brave. Curls up for a nap after every good session.', unlock: { type: 'coins', n: 65 }, defaultName: '',
+    face: { eyes: [[84, 112], [116, 112]], er: 5, mouth: { x: 100, y: 132, type: 'smile' }, blush: [[72, 126], [128, 126]], blushR: 7, zz: [156, 50] },
+    art: () => {
+      const q = '#b98c6a', qd = '#8f684d', tip = '#f1dcc4', f = '#fbe9d2', p = '#f4b6b0';
+      const pts = []; for (let i = 0; i <= 22; i++) { const a = Math.PI * (1.08 - 1.16 * i / 22), r = i % 2 ? 62 : 74; pts.push(`${(100 + Math.cos(a) * r).toFixed(1)} ${(122 - Math.sin(a) * r * .92).toFixed(1)}`); }
+      const tips = []; for (let i = 1; i < 22; i += 2) { const a = Math.PI * (1.08 - 1.16 * i / 22); tips.push(`M${(100 + Math.cos(a) * 52).toFixed(1)} ${(122 - Math.sin(a) * 48).toFixed(1)} L${(100 + Math.cos(a) * 62).toFixed(1)} ${(122 - Math.sin(a) * 57).toFixed(1)}`); }
+      return `<path d="M${pts.join(' L')} C170 150 158 180 100 180 C42 180 30 150 30 132 Z" fill="${q}" ${O}/>
+      <path d="${tips.join(' ')}" stroke="${tip}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M60 74 L66 88 M80 62 L82 78 M100 58 V74 M120 62 L118 78 M140 74 L134 88" stroke="${qd}" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="78" cy="178" rx="12" ry="6" fill="${f}" ${O2}/><ellipse cx="122" cy="178" rx="12" ry="6" fill="${f}" ${O2}/>
+      <circle cx="66" cy="94" r="9" fill="${f}" ${O2}/><circle cx="134" cy="94" r="9" fill="${f}" ${O2}/><circle cx="66" cy="94" r="4.5" fill="${p}"/><circle cx="134" cy="94" r="4.5" fill="${p}"/>
+      <path d="M58 120 C58 98 78 90 100 90 C122 90 142 98 142 120 C142 146 124 162 100 162 C76 162 58 146 58 120 Z" fill="${f}" ${O}/>
+      <ellipse cx="100" cy="125" rx="6" ry="4.6" fill="${INK}"/><circle cx="98" cy="123.5" r="1.6" fill="#fff" opacity=".8"/>
+      <ellipse cx="100" cy="164" rx="22" ry="7" fill="${f}"/>`;
+    }
+  },
+  cow: {
+    label: 'Cow', lore: 'Gentle and unhurried. Chews on every idea until it really makes sense.', unlock: { type: 'coins', n: 85 }, defaultName: '',
+    face: { eyes: [[80, 84], [120, 84]], er: 5.5, mouth: { x: 100, y: 123, type: 'smile' }, blush: [[62, 100], [138, 100]], blushR: 8, zz: [156, 40] },
+    art: () => {
+      const w = '#fffaf2', sp = '#8a6a5c', m = '#ffc8d2', md = '#f2a3b4', h = '#f6e2b0', bell = '#ffc94d';
+      return `<path d="M60 180 C52 146 70 120 100 120 C130 120 148 146 140 180 Z" fill="${w}" ${O}/>
+      <path d="M62 150 C70 146 80 150 82 160 C80 170 70 172 63 168 Z" fill="${sp}"/><path d="M128 134 C120 138 118 148 126 154 C134 156 140 150 140 144 Z" fill="${sp}"/>
+      <ellipse cx="84" cy="178" rx="11" ry="6" fill="${sp}" ${O2}/><ellipse cx="116" cy="178" rx="11" ry="6" fill="${sp}" ${O2}/>
+      <path d="M80 52 C74 46 72 36 78 30 C82 38 86 42 92 46 Z" fill="${h}" ${O2}/><path d="M120 52 C126 46 128 36 122 30 C118 38 114 42 108 46 Z" fill="${h}" ${O2}/>
+      <ellipse cx="46" cy="78" rx="20" ry="10" fill="${w}" ${O} transform="rotate(-18 46 78)"/><ellipse cx="154" cy="78" rx="20" ry="10" fill="${w}" ${O} transform="rotate(18 154 78)"/>
+      <ellipse cx="48" cy="79" rx="11" ry="5" fill="${m}" transform="rotate(-18 48 79)"/><ellipse cx="152" cy="79" rx="11" ry="5" fill="${m}" transform="rotate(18 152 79)"/>
+      <path d="M56 88 C56 62 76 48 100 48 C124 48 144 62 144 88 C144 112 126 128 100 128 C74 128 56 112 56 88 Z" fill="${w}" ${O}/>
+      <path d="M112 50 C128 52 142 64 144 84 C134 86 122 80 118 70 C114 62 110 56 112 50 Z" fill="${sp}"/>
+      <path d="M94 50 C96 42 102 40 104 48 C106 42 112 44 108 52" fill="${w}" ${O2}/>
+      <path d="M56 88 C56 62 76 48 100 48 C124 48 144 62 144 88 C144 112 126 128 100 128 C74 128 56 112 56 88 Z" fill="none" ${O}/>
+      <ellipse cx="100" cy="112" rx="30" ry="17" fill="${m}" ${O2}/>
+      <ellipse cx="88" cy="108" rx="4" ry="3" fill="${md}" ${O2}/><ellipse cx="112" cy="108" rx="4" ry="3" fill="${md}" ${O2}/>
+      <circle cx="100" cy="140" r="8" fill="${bell}" ${O2}/><path d="M96 142 H104" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`;
+    }
+  },
+  owl: {
+    label: 'Barn owl', lore: 'Wide awake for late reading. Quietly keeps watch while you work.', unlock: { type: 'coins', n: 130 }, defaultName: '',
+    face: { eyes: [[82, 92], [118, 92]], er: 6.4, mouth: null, blush: [[70, 108], [130, 108]], blushR: 7, zz: [156, 40] },
+    art: (st) => {
+      const b = '#f0c98f', d = '#d9a764', w = '#fffaf1', r = '#f3d9b8', dot = '#a9998c', bk = '#f2b27a';
+      const beak = st === 'happy' ? `<path d="M94 104 L106 104 L100 114 Z" fill="${bk}" ${O2}/><path d="M96 108 Q100 114 104 108" fill="#7a3b33"/>` : `<path d="M95 102 L105 102 L100 113 Z" fill="${bk}" ${O2}/>`;
+      return `<ellipse cx="86" cy="178" rx="9" ry="5" fill="${bk}" ${O2}/><ellipse cx="114" cy="178" rx="9" ry="5" fill="${bk}" ${O2}/>
+      <path d="M52 108 C48 70 70 46 100 46 C130 46 152 70 148 108 C146 150 128 178 100 178 C72 178 54 150 52 108 Z" fill="${b}" ${O}/>
+      <path d="M72 128 C70 112 84 104 100 104 C116 104 130 112 128 128 C128 156 116 172 100 172 C84 172 72 156 72 128 Z" fill="${w}"/>
+      <path d="M88 128 l2 3 M110 126 l2 3 M98 140 l2 3 M86 152 l2 3 M112 150 l2 3 M100 162 l2 3" stroke="${dot}" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M54 104 C40 120 42 150 62 166 C66 146 66 124 54 104 Z" fill="${d}" ${O2}/><path d="M146 104 C160 120 158 150 138 166 C134 146 134 124 146 104 Z" fill="${d}" ${O2}/>
+      <circle cx="62" cy="130" r="2" fill="${w}"/><circle cx="58" cy="144" r="2" fill="${w}"/><circle cx="138" cy="130" r="2" fill="${w}"/><circle cx="142" cy="144" r="2" fill="${w}"/>
+      <path d="M100 62 C92 54 70 54 64 66 C56 82 62 110 84 118 C92 120 98 118 100 114 C102 118 108 120 116 118 C138 110 144 82 136 66 C130 54 108 54 100 62 Z" fill="${w}" stroke="${r}" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M100 62 C92 54 70 54 64 66 C56 82 62 110 84 118 C92 120 98 118 100 114 C102 118 108 120 116 118 C138 110 144 82 136 66 C130 54 108 54 100 62 Z" fill="none" ${O2}/>
+      ${beak}`;
+    }
+  },
+  koala: {
+    label: 'Koala', lore: 'Hugs a eucalyptus branch and naps like a champion between chapters.', unlock: { type: 'coins', n: 145 }, defaultName: '',
+    face: { eyes: [[78, 92], [122, 92]], er: 5, mouth: { x: 100, y: 124, type: 'smile' }, blush: [[64, 108], [136, 108]], blushR: 8, zz: [160, 40] },
+    art: () => {
+      const g = '#b4bcc6', d = '#959eaa', w = '#f5f3f1', n = '#4b4650', lf = '#8fc4a2', lfd = '#6aa383';
+      return `<path d="M132 182 C138 150 146 110 150 84" stroke="#a98a6c" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M150 96 C164 88 176 92 178 100 C166 104 156 104 150 96 Z" fill="${lf}" ${O2}/><path d="M146 120 C160 116 170 122 170 130 C158 132 150 128 146 120 Z" fill="${lfd}" ${O2}/>
+      <path d="M62 180 C54 146 72 120 100 120 C128 120 146 146 138 180 Z" fill="${g}" ${O}/>
+      <path d="M82 134 Q100 170 118 134 Q100 140 82 134 Z" fill="${w}"/>
+      <ellipse cx="128" cy="140" rx="14" ry="9" fill="${g}" ${O2} transform="rotate(-30 128 140)"/>
+      <ellipse cx="84" cy="178" rx="11" ry="6" fill="${d}" ${O2}/><ellipse cx="116" cy="178" rx="11" ry="6" fill="${d}" ${O2}/>
+      <circle cx="54" cy="68" r="24" fill="${g}" ${O}/><circle cx="146" cy="68" r="24" fill="${g}" ${O}/>
+      <circle cx="56" cy="70" r="14" fill="${w}"/><circle cx="144" cy="70" r="14" fill="${w}"/>
+      <path d="M44 62 l6 4 M42 72 l7 1 M156 62 l-6 4 M158 72 l-7 1" stroke="${g}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M56 94 C56 68 76 56 100 56 C124 56 144 68 144 94 C144 118 124 132 100 132 C76 132 56 118 56 94 Z" fill="${g}" ${O}/>
+      <path d="M90 96 C90 88 110 88 110 96 L112 110 C112 118 88 118 88 110 Z" fill="${n}" ${O2}/><path d="M94 96 C96 94 100 94 102 95" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round" fill="none"/>`;
+    }
+  },
+  redpanda: {
+    label: 'Red panda', lore: 'A fluffy tree climber with a ringed tail. Very good at cozy study corners.', unlock: { type: 'coins', n: 190 }, defaultName: '',
+    face: { eyes: [[80, 90], [120, 90]], er: 5.5, mouth: { x: 100, y: 114, type: 'cat' }, blush: [[66, 104], [134, 104]], zz: [152, 40] },
+    art: () => {
+      const r = '#e5824f', rd = '#c4643a', w = '#fff6ea', k = '#5b3a33', t = '#f4b98a';
+      const head = 'M50 88 C50 62 72 50 100 50 C128 50 150 62 150 88 C150 112 128 130 100 130 C72 130 50 112 50 88 Z';
+      return `<path d="M128 172 C170 176 192 140 178 104 C176 98 168 98 166 104 C176 132 160 156 126 154 Z" fill="${r}" ${O}/>
+      <path d="M172 112 C176 116 176 122 174 126 M168 136 C172 140 170 146 166 150 M150 154 C154 158 152 164 148 166" stroke="${t}" stroke-width="7" stroke-linecap="round"/>
+      <path d="M64 180 C56 146 72 120 100 120 C128 120 144 146 136 180 Z" fill="${r}" ${O}/>
+      <path d="M76 180 C74 166 78 154 88 154 C96 154 98 166 97 180 Z M124 180 C126 166 122 154 112 154 C104 154 102 166 103 180 Z" fill="${k}"/>
+      <path d="M64 180 C56 146 72 120 100 120 C128 120 144 146 136 180 Z" fill="none" ${O}/>
+      <ellipse cx="86" cy="178" rx="11" ry="5.5" fill="${k}" ${O2}/><ellipse cx="114" cy="178" rx="11" ry="5.5" fill="${k}" ${O2}/>
+      <path d="M54 72 C48 52 58 40 76 46 C74 56 66 64 54 72 Z" fill="${r}" ${O}/><path d="M146 72 C152 52 142 40 124 46 C126 56 134 64 146 72 Z" fill="${r}" ${O}/>
+      <path d="M58 64 C56 54 62 48 70 50 C68 56 64 60 58 64 Z" fill="${w}"/><path d="M142 64 C144 54 138 48 130 50 C132 56 136 60 142 64 Z" fill="${w}"/>
+      <path d="${head}" fill="${r}"/>
+      <path d="M52 96 C62 92 70 98 74 108 C78 118 86 124 100 124 C114 124 122 118 126 108 C130 98 138 92 148 96 C144 118 124 130 100 130 C76 130 56 118 52 96 Z" fill="${w}"/>
+      <ellipse cx="76" cy="74" rx="9" ry="6" fill="${w}"/><ellipse cx="124" cy="74" rx="9" ry="6" fill="${w}"/>
+      <path d="M80 98 C82 108 86 114 90 118 M120 98 C118 108 114 114 110 118" stroke="${rd}" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="${head}" fill="none" ${O}/>
+      <ellipse cx="100" cy="106" rx="6" ry="4.4" fill="${INK}"/>`;
+    }
+  },
   emberwing: {
     label: 'Emberwing', lore: 'Nobody has seen one outside November. Half fox, half moth, with maple leaves for wings and a tail that glows a little brighter every day you keep your promise.', unlock: { type: 'challenge', id: 'nov2026' }, defaultName: '', plain: true,
     face: { eyes: [[84, 90], [116, 90]], er: 6.2, mouth: { x: 100, y: 108, type: 'cat' }, blush: [[71, 104], [129, 104]], blushR: 7, zz: [150, 36] },
@@ -1949,16 +2136,22 @@ const ANIMALS = {
   },
   axolotl: {
     label: 'Axolotl', lore: 'Smiles through everything. Arrives after a 14-day streak.', unlock: { type: 'streak', n: 14 }, defaultName: '',
-    face: { eyes: [[78, 102], [122, 102]], er: 6.5, mouth: { x: 100, y: 121, type: 'wide', w: 15 }, blush: [[64, 116], [136, 116]], zz: [152, 56] },
+    face: { eyes: [[76, 104], [124, 104]], er: 6.2, mouth: { x: 100, y: 122, type: 'wide', w: 13 }, blush: [[62, 118], [138, 118]], blushR: 8, zz: [160, 50] },
     art: () => {
-      const p = '#f3bcc1', d = '#e49aa3', g = '#dd7488';
-      const gl = `<path d="M56 86 C38 70 28 74 31 83 C40 86 48 90 56 95 Z" fill="${g}" ${O2}/><path d="M52 101 C32 97 25 104 29 111 C38 109 46 109 54 109 Z" fill="${g}" ${O2}/><path d="M57 116 C42 123 37 132 43 136 C49 130 55 125 61 121 Z" fill="${g}" ${O2}/>`;
-      return `<path d="M140 150 C168 146 186 132 192 112 C178 142 160 162 134 168 Z" fill="${p}" ${O}/>
-      ${gl}<g transform="translate(200 0) scale(-1 1)">${gl}</g>
-      <ellipse cx="112" cy="155" rx="42" ry="22" fill="${p}" ${O}/>
-      <ellipse cx="86" cy="175" rx="10" ry="6" fill="${p}" ${O2}/><ellipse cx="134" cy="175" rx="10" ry="6" fill="${p}" ${O2}/>
-      <ellipse cx="100" cy="106" rx="50" ry="38" fill="${p}" ${O}/>
-      <circle cx="86" cy="78" r="3" fill="${d}"/><circle cx="112" cy="76" r="2.4" fill="${d}"/><circle cx="126" cy="84" r="2" fill="${d}"/><circle cx="120" cy="160" r="3" fill="${d}"/><circle cx="138" cy="150" r="2.4" fill="${d}"/>`;
+      const p = '#ffd3df', bl = '#fff0f4', g = '#ff8fb0', gd = '#ec6f95', sp = '#f8b3c7', fin = '#ffe3ea';
+      // three feathery gill fronds on each side of the head
+      const frond = (x, y, a, len) => `<g transform="translate(${x} ${y}) rotate(${a})"><path d="M2 -6 C-${len * .4} -12 -${len * .9} -12 -${len} -2 C-${len * .9} 8 -${len * .4} 10 2 6 Z" fill="${g}" ${O2}/><path d="M-4 0 C-${len * .4} -2 -${len * .7} -2 -${len * .86} -1" fill="none" stroke="${gd}" stroke-width="2.4" stroke-linecap="round"/><circle cx="-${len * .45}" cy="-7" r="1.8" fill="${fin}"/><circle cx="-${len * .7}" cy="-6" r="1.5" fill="${fin}"/><circle cx="-${len * .55}" cy="5" r="1.6" fill="${fin}"/></g>`;
+      const gills = frond(50, 84, 28, 34) + frond(46, 100, 2, 36) + frond(50, 116, -26, 32);
+      return `<path d="M136 152 C160 156 182 146 192 124 C194 116 186 114 182 120 C172 136 156 142 136 140 Z" fill="${fin}" ${O}/>
+      <path d="M138 148 C158 148 174 140 182 126" fill="none" stroke="${sp}" stroke-width="3" stroke-linecap="round"/>
+      ${gills}<g transform="translate(200 0) scale(-1 1)">${gills}</g>
+      <ellipse cx="106" cy="154" rx="40" ry="24" fill="${p}" ${O}/>
+      <path d="M84 166 C96 174 118 174 128 166" fill="none" stroke="${bl}" stroke-width="7" stroke-linecap="round"/>
+      <path d="M74 166 c-4 8 -2 12 6 12 c4 0 8 -2 8 -6 Z" fill="${p}" ${O2}/><path d="M138 166 c4 8 2 12 -6 12 c-4 0 -8 -2 -8 -6 Z" fill="${p}" ${O2}/>
+      <path d="M46 106 C46 76 70 64 100 64 C130 64 154 76 154 106 C154 132 130 144 100 144 C70 144 46 132 46 106 Z" fill="${p}" ${O}/>
+      <path d="M66 82 C76 74 88 71 100 71" fill="none" stroke="${bl}" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="118" cy="78" r="3" fill="${sp}"/><circle cx="130" cy="86" r="2.2" fill="${sp}"/><circle cx="108" cy="74" r="1.8" fill="${sp}"/>
+      <circle cx="122" cy="150" r="3" fill="${sp}"/><circle cx="134" cy="158" r="2.2" fill="${sp}"/><circle cx="92" cy="148" r="2" fill="${sp}"/>`;
     }
   },
   swan: {
@@ -2097,7 +2290,8 @@ const ANCHORS = {
   wolf: { hat: [100, 58, .95], neck: [100, 130, .85] }, dragon: { hat: [100, 60, .9], neck: [100, 134, .85] }, triceratops: { hat: [100, 60, .85], neck: [100, 134, .85] },
   stegosaurus: { hat: [100, 56, .85], neck: [100, 126, .85] }, longneck: { hat: [72, 30, .6], neck: [76, 82, .6] }, trex: { hat: [100, 48, 1], neck: [100, 130, .85] },
   turtle: { hat: [168, 106, .55], neck: [160, 146, .5] }, axolotl: { hat: [100, 68, 1], neck: [100, 138, .8] }, swan: { hat: [80, 38, .55], neck: [74, 92, .5] }, sheep: { hat: [100, 62, .85], neck: [100, 126, .8] }, camel: { hat: [64, 40, .6], neck: [66, 104, .55] }, giraffe: { hat: [100, 26, .65], neck: [100, 92, .55] },
-  hamster: { hat: [100, 58, .9], neck: [100, 122, .8] }, penguin: { hat: [100, 50, .9], neck: [100, 118, .8] }, parrot: { hat: [100, 32, .8], neck: [100, 100, .7] }, heron: { hat: [92, 37, .6], neck: [86, 86, .5] }
+  hamster: { hat: [100, 58, .9], neck: [100, 122, .8] }, penguin: { hat: [100, 50, .9], neck: [100, 118, .8] }, parrot: { hat: [100, 32, .8], neck: [100, 100, .7] }, heron: { hat: [92, 37, .6], neck: [86, 86, .5] },
+  hedgehog: { hat: [100, 70, .9], neck: [100, 140, .8] }, cow: { hat: [100, 50, .9], neck: [100, 136, .85] }, owl: { hat: [100, 52, .9], neck: [100, 130, .85] }, koala: { hat: [100, 56, .9], neck: [100, 134, .85] }, redpanda: { hat: [100, 52, .9], neck: [100, 130, .85] }
 };
 // real fur coats: each one swaps the animal's own colours for new ones
 const COATS = {"frog":{"golden":{"label":"Golden","map":{"#8fb069":"#e8c15a","#6d8c4c":"#c99b34","#d9e3a8":"#f6e7a6"}},"blue":{"label":"Poison dart blue","map":{"#8fb069":"#5b8fd0","#6d8c4c":"#3f6aa8","#d9e3a8":"#a9c9ef"}},"berry":{"label":"Strawberry","map":{"#8fb069":"#e0746a","#6d8c4c":"#b9514a","#d9e3a8":"#f4c0a8"}}},"duckling":{"snow":{"label":"Snow white","map":{"#f4d06f":"#f7f4ea","#e3b552":"#e2ddd0"}},"pink":{"label":"Bubblegum","map":{"#f4d06f":"#f6b3c4","#e3b552":"#e591a7"}},"mint":{"label":"Mint","map":{"#f4d06f":"#bfe3c4","#e3b552":"#9ccaa3"}}},"capybara":{"cocoa":{"label":"Cocoa","map":{"#b98b63":"#7a5640","#94694a":"#5c3f2e","#d2ab85":"#a57c5f"}},"honey":{"label":"Honey","map":{"#b98b63":"#d9a85f","#94694a":"#b5843f","#d2ab85":"#efcb8f"}},"snow":{"label":"Snow","map":{"#b98b63":"#e8ddd0","#94694a":"#c9b9a6","#d2ab85":"#f6efe6"}}},"rabbit":{"choc":{"label":"Chocolate","map":{"#efe6d8":"#8c6549"}},"grey":{"label":"Silver grey","map":{"#efe6d8":"#b9b6b3"}},"cinnamon":{"label":"Cinnamon","map":{"#efe6d8":"#d8a271","#eab4ad":"#f0c2b0"}}},"butterfly":{"monarch":{"label":"Monarch","map":{"#c9b3ea":"#f0a04b","#f3b9c8":"#e07a3a","#fbe7a6":"#fff3d6","#a78fcf":"#9a5a22"}},"morpho":{"label":"Blue morpho","map":{"#c9b3ea":"#5aa7e0","#f3b9c8":"#3f86c9","#fbe7a6":"#dff1ff","#a78fcf":"#2d5f93"}},"lime":{"label":"Lime","map":{"#c9b3ea":"#b9dd7a","#f3b9c8":"#f4e07a","#fbe7a6":"#fffbe0","#a78fcf":"#7fa64a"}}},"kitty":{"tabby":{"label":"Grey tabby","map":{"#f1c58c":"#b3b6bb","#d99a58":"#868b93","#fbf1e2":"#f2f2f2"}},"black":{"label":"Black cat","map":{"#f1c58c":"#4a4442","#d99a58":"#2f2b2a","#fbf1e2":"#d9d2cc"}},"cream":{"label":"Cream","map":{"#f1c58c":"#f6e6c8","#d99a58":"#e3c89a"}}},"otter":{"sea":{"label":"Sea otter","map":{"#8c6549":"#b08a68","#6c4b34":"#8c6a4e","#dcc19d":"#efdcc0"}},"dark":{"label":"Dark river","map":{"#8c6549":"#5a4234","#6c4b34":"#3f2e24","#dcc19d":"#c7a989"}},"silver":{"label":"Silver","map":{"#8c6549":"#9ea3a6","#6c4b34":"#767c80","#dcc19d":"#e3e5e6"}}},"dog":{"lab":{"label":"Black lab","map":{"#dcaa70":"#4a4442","#8f6340":"#2f2b2a","#f7e6c9":"#d9cfc4","#c48a52":"#3a3533"}},"dalmatian":{"label":"Dalmatian","map":{"#dcaa70":"#f6f3ec","#8f6340":"#3f3a37","#f7e6c9":"#ffffff","#c48a52":"#3f3a37"}},"golden":{"label":"Golden retriever","map":{"#dcaa70":"#e8bd6a","#8f6340":"#c48a3c","#f7e6c9":"#f8e7c0","#c48a52":"#d9a14f"}}},"panda":{"brown":{"label":"Brown panda","map":{"#3f3a37":"#6b4a36","#f6f3ec":"#f0e2cc"}},"blue":{"label":"Midnight blue","map":{"#3f3a37":"#33475e"}},"lilac":{"label":"Lilac","map":{"#3f3a37":"#8a7fb0","#f6f3ec":"#f7f3fb"}}},"fox":{"arctic":{"label":"Arctic fox","map":{"#dc844b":"#e9edf0","#f7ecdb":"#ffffff"}},"silver":{"label":"Silver fox","map":{"#dc844b":"#7f8794","#f7ecdb":"#eef0f2"}},"fennec":{"label":"Fennec sand","map":{"#dc844b":"#e8c48f","#f7ecdb":"#fbf1de"}}},"horse":{"black":{"label":"Black stallion","map":{"#b77a4e":"#3f3a37","#8c5a38":"#2b2725","#5a3a2a":"#1f1c1b","#ecd2b2":"#8a817a","#4a372c":"#1f1c1b"}},"white":{"label":"White mare","map":{"#b77a4e":"#f2eee8","#8c5a38":"#d6cfc5","#5a3a2a":"#c9c2b8","#ecd2b2":"#ffffff","#4a372c":"#b9b0a5"}},"palomino":{"label":"Palomino","map":{"#b77a4e":"#e6be78","#8c5a38":"#c79a52","#5a3a2a":"#f7ecd6","#ecd2b2":"#f8e8cc","#4a372c":"#efe3c8"}}},"deer":{"reindeer":{"label":"Reindeer","map":{"#c98d5a":"#8c6a52","#9e6a42":"#6b4f3c","#f3e4cb":"#e8dccb","#7c5638":"#c9b08a"}},"snow":{"label":"Snow deer","map":{"#c98d5a":"#efe6da","#9e6a42":"#cfc2b2","#f3e4cb":"#ffffff","#7c5638":"#b9a58a"}},"red":{"label":"Red fawn","map":{"#c98d5a":"#b5703e","#9e6a42":"#8c5230","#f3e4cb":"#f6e3c5"}}},"wolf":{"arctic":{"label":"Arctic wolf","map":{"#919ca6":"#e9edf0","#5f6b76":"#b4bec7","#eef0f2":"#ffffff"}},"black":{"label":"Black wolf","map":{"#919ca6":"#3e434a","#5f6b76":"#202429","#eef0f2":"#c9ccd0"}},"timber":{"label":"Timber wolf","map":{"#919ca6":"#9a7a5c","#5f6b76":"#5e4a38","#eef0f2":"#f1e6d6"}},"red":{"label":"Red wolf","map":{"#919ca6":"#c27a4e","#5f6b76":"#7a4a2e","#eef0f2":"#f5e6d3"}}},"dragon":{"ruby":{"label":"Ruby","map":{"#83bca7":"#d9675a","#5f9a86":"#a8483e","#f3e3b3":"#f6dcb4"}},"sapphire":{"label":"Sapphire","map":{"#83bca7":"#6f9fd8","#5f9a86":"#4d78b0","#f3e3b3":"#e6eefb"}},"gold":{"label":"Gold","map":{"#83bca7":"#e8c15a","#5f9a86":"#c99b34","#f3e3b3":"#fbf0c8","#f1cf7d":"#f7ecd6"}},"shadow":{"label":"Shadow","map":{"#83bca7":"#5b5470","#5f9a86":"#3d3850","#f3e3b3":"#c9c2dc","#f1cf7d":"#b9a6e0"}}},"triceratops":{"green":{"label":"Forest","map":{"#86a9c9":"#8fb069","#6a8db0":"#6d8c4c","#c9dcea":"#d9e3a8"}},"violet":{"label":"Violet","map":{"#86a9c9":"#a78fcf","#6a8db0":"#8670b3","#c9dcea":"#e3d9f4","#f0b97a":"#f3b9c8"}},"sunset":{"label":"Sunset","map":{"#86a9c9":"#e9905a","#6a8db0":"#c36d3a","#c9dcea":"#f6d6b8","#f0b97a":"#e8b84a"}}},"stegosaurus":{"ocean":{"label":"Ocean","map":{"#9bbd6a":"#6fa6c9","#7c9c50":"#4f86ab","#d7e6b0":"#cfe4f1","#e6a86a":"#f3b9c8"}},"lava":{"label":"Lava","map":{"#9bbd6a":"#b9514a","#7c9c50":"#8f3a34","#d7e6b0":"#f0c0a8","#e6a86a":"#f4d06f"}},"lilac":{"label":"Lilac","map":{"#9bbd6a":"#b9a6d6","#7c9c50":"#9682bd","#d7e6b0":"#ece4f6","#e6a86a":"#8fcfaa"}}},"longneck":{"leaf":{"label":"Leaf green","map":{"#a9c7d8":"#9bbd6a","#87a9bd":"#7c9c50","#dbe9f0":"#d7e6b0"}},"peach":{"label":"Peach","map":{"#a9c7d8":"#f2b28f","#87a9bd":"#d98e6a","#dbe9f0":"#fbe1d2"}},"lavender":{"label":"Lavender","map":{"#a9c7d8":"#b9a6d6","#87a9bd":"#9682bd","#dbe9f0":"#ece4f6"}}},"trex":{"jungle":{"label":"Jungle","map":{"#d9874f":"#7fa65a","#b96c3a":"#5e8540","#f2d3a2":"#dfe8b8"}},"midnight":{"label":"Midnight","map":{"#d9874f":"#4f5f86","#b96c3a":"#36446a","#f2d3a2":"#c9d2ea"}},"bubblegum":{"label":"Bubblegum","map":{"#d9874f":"#ef9db5","#b96c3a":"#d5768f","#f2d3a2":"#fbe0e8"}}},"turtle":{"sea":{"label":"Sea turtle","map":{"#7e9a5d":"#6f9a8f","#64804b":"#4f7a70","#a6bb7b":"#9cc4b8","#bcc78d":"#b8d8c8"}},"golden":{"label":"Golden","map":{"#7e9a5d":"#c9a14f","#64804b":"#a07e36","#a6bb7b":"#e3c47a"}},"rose":{"label":"Rose shell","map":{"#7e9a5d":"#c98a95","#64804b":"#a8697a","#a6bb7b":"#e6b4bd"}}},"axolotl":{"wild":{"label":"Wild","map":{"#f3bcc1":"#8a8178","#e49aa3":"#6c645c","#dd7488":"#c96a7a"}},"golden":{"label":"Golden","map":{"#f3bcc1":"#f4d98a","#e49aa3":"#e6bf62","#dd7488":"#e98a6a"}},"blue":{"label":"Blue","map":{"#f3bcc1":"#a9c7e8","#e49aa3":"#83a6cf","#dd7488":"#5b7fbf"}}},"swan":{"black":{"label":"Black swan","map":{"#fbf8f1":"#46404a","#e6e1d6":"#2e2a31","#e98a45":"#d9534f"}},"blush":{"label":"Blush pink","map":{"#fbf8f1":"#f8d3da","#e6e1d6":"#eeb0be"}}},"heron":{"egret":{"label":"White egret","map":{"#a2b3bd":"#f4f2ed","#e5ebed":"#ffffff","#5f717c":"#c9cdd1","#7f919b":"#e3e6e8","#e2b04f":"#f0c64e"}},"purple":{"label":"Purple heron","map":{"#a2b3bd":"#a5869a","#e5ebed":"#efe1e6","#5f717c":"#5e4a58","#7f919b":"#7a6070"}}},"spider":{"peacock":{"label":"Peacock","map":{"#4f4a63":"#3f6aa8","#353144":"#24406e","#8b7fb3":"#e8904a"}},"redback":{"label":"Red back","map":{"#4f4a63":"#3a3535","#353144":"#211e1e","#8b7fb3":"#d9534f"}},"golden":{"label":"Golden orb","map":{"#4f4a63":"#d9a85f","#353144":"#a07436","#8b7fb3":"#f6e3b0"}},"mint":{"label":"Mint","map":{"#4f4a63":"#7fbfa6","#353144":"#4f8f78","#8b7fb3":"#e0f3ea"}}},"sheep":{"black":{"label":"Black sheep","map":{"#f4efe4":"#4a4442","#ddd3c0":"#2f2b2a","#f2d7c0":"#d9c3b0"}},"pink":{"label":"Cotton candy","map":{"#f4efe4":"#f8d3da","#ddd3c0":"#eeb0be"}},"cream":{"label":"Cream wool","map":{"#f4efe4":"#f1dfb8","#ddd3c0":"#d9c193","#f2d7c0":"#8c6a52"}}},"camel":{"white":{"label":"White camel","map":{"#d9b07a":"#efe6d6","#b98d58":"#cfc2ad","#efd6ad":"#fbf6ec"}},"dark":{"label":"Dark desert","map":{"#d9b07a":"#8c6249","#b98d58":"#6b4a36","#efd6ad":"#c9a989"}},"royal":{"label":"Royal blanket","map":{"#c96a5a":"#4f5f86","#e9c15a":"#f0c64e"}}},"giraffe":{"reticulated":{"label":"Reticulated","map":{"#f1c76b":"#f6e6c4","#b8743a":"#9a4f2a"}},"white":{"label":"White giraffe","map":{"#f1c76b":"#f6f1e6","#b8743a":"#e3d6c2","#9a5a2a":"#c9b9a6"}},"mint":{"label":"Mint","map":{"#f1c76b":"#bfe3c4","#b8743a":"#6fa58c"}}},"hamster":{"white":{"label":"Winter white","map":{"#e3a25f":"#e9e4dc","#c7844a":"#c9c2b8"}},"choc":{"label":"Chocolate","map":{"#e3a25f":"#9a6644","#c7844a":"#7a4c30"}},"grey":{"label":"Grey dwarf","map":{"#e3a25f":"#aaa49c","#c7844a":"#857e76"}}},"penguin":{"blue":{"label":"Little blue","map":{"#3f4b5e":"#5f88b8","#2e3848":"#456c9c"}},"chick":{"label":"Fluffy chick","map":{"#3f4b5e":"#9c9890","#2e3848":"#7d7972"}},"rosy":{"label":"Rosy","map":{"#3f4b5e":"#c98b98","#2e3848":"#a96b78"}}},"parrot":{"bluegold":{"label":"Blue and gold","map":{"#d9473f":"#4a8ad0","#b23630":"#356fb0","#3f7fc4":"#2d5f9c"}},"green":{"label":"Green macaw","map":{"#d9473f":"#5fa85a","#b23630":"#478a44"}},"hyacinth":{"label":"Hyacinth","map":{"#d9473f":"#5256ab","#b23630":"#3d408c","#3f7fc4":"#383b80","#f7efe4":"#f2d36a"}}}};
@@ -2117,8 +2311,11 @@ const SLOTS = { outfit: 'Costumes', head: 'Head', face: 'Eyes', neck: 'Neck' };
 const EMOTE_SLOTS = { emoteF: 'While focusing', emoteN: 'While napping' };
 const FREE_ITEMS = ['f_none', 'f_think', 'n_zz'];
 const ownsItem = id => FREE_ITEMS.includes(id) || (S.wardrobe || []).includes(id);
+// Dress up was retired on 2026-11-26 at the owner's request: no costumes, items or coats are drawn any more.
+// Animals keep their own colours, and still read a book with a thinking bubble while you focus.
+const LOOKS_RETIRED = true;
 function cleanLook(l) {
-  if (!l || typeof l !== 'object') return null;
+  if (LOOKS_RETIRED || !l || typeof l !== 'object') return null;
   const o = {};
   [...Object.keys(SLOTS), ...Object.keys(EMOTE_SLOTS)].forEach(sl => { if (WARDROBE[l[sl]] && WARDROBE[l[sl]].slot === sl) o[sl] = l[sl]; });
   if (typeof l.coat === 'string' && /^[a-z]{1,16}$/.test(l.coat)) o.coat = l.coat;
@@ -2251,6 +2448,12 @@ function renderDress() {
     </div>
     <div class="row dress-foot">${prev ? `<span class="muted" style="font-size:.84rem">Preview only. Nothing is bought, saved or shown to anyone.</span><button class="btn" data-dreset>Clear</button><button class="btn primary" data-dclose>Done</button>` : pending ? `<span class="muted" style="font-size:.84rem">Trying on ${esc(itemLabel(pending[0], pending[1]))}. You have ${S.coins} coins.</span><button class="btn" data-dcancel>Take it off</button><button class="btn primary" data-dbuy ${S.coins < itemPrice(pending[0], pending[1]) ? 'disabled' : ''}>${icon('i-coin')}Buy for ${itemPrice(pending[0], pending[1])}</button>` : `<span class="muted" style="font-size:.84rem">Outfits and emotes work on every animal. Coats belong to one animal.</span><button class="btn primary" data-dclose>Done</button>`}</div>`;
 }
+// coins spent on costumes, items and coats before dress up was retired, given back once
+function looksRefund(s) {
+  const items = (s.wardrobe || []).filter(id => WARDROBE[id] && !FREE_ITEMS.includes(id)).reduce((a, id) => a + WARDROBE[id].cost, 0);
+  const coats = Object.values(s.pets || {}).reduce((a, p) => a + (p && Array.isArray(p.coats) ? p.coats.length : 0), 0) * COAT_COST;
+  return items + coats;
+}
 function setLook(k, look) {
   S.pets[k].look = cleanLook(look); save();
   renderZoo(); renderAll(); if (k === S.active) publishPond();
@@ -2333,7 +2536,7 @@ function defaultState() {
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
-    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
+    settings: { focus: 30, rest: 5, defFocus: 30, defRest: 5, defPeb: 30, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
     rocks: [exampleRock()], crossLog: [], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
@@ -2371,6 +2574,7 @@ function unionState(newer, older) {
   Object.entries(o.challenge || {}).forEach(([id, c]) => { m.challenge = m.challenge || {}; const r = m.challenge[id] || { days: [] }; r.days = set(r.days, c.days); m.challenge[id] = r; });
   ['name', 'uni', 'major', 'bio'].forEach(f => { if (m.profile && !m.profile[f] && o.profile && o.profile[f]) m.profile[f] = o.profile[f]; });
   if (o.onboarded) m.onboarded = true;
+  if (o.looksRefunded) m.looksRefunded = true;
   return m;
 }
 function mergeAccount(remote, local, uid) {
@@ -2414,6 +2618,10 @@ function mergeState(s) {
   Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });
   // demo speed and the sample week are gone; drop their leftovers
   m.settings.demo = false;
+  // the default focus length is set in Customize; students who never set one start at 30 minutes
+  if (!(m.settings.defFocus >= 1)) m.settings.defFocus = 30;
+  if (!(m.settings.defRest >= 1)) m.settings.defRest = 5;
+  if (!(m.settings.defPeb >= 1)) m.settings.defPeb = 30;
   if (Array.isArray(m.sessions)) m.sessions = m.sessions.filter(x => !x.sample);
   // a rock is finished once it has crossedAt; older versions only knew "every pebble ticked"
   (m.rocks || []).forEach(r => { if (!r.crossedAt && r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done)) r.crossedAt = Math.max(0, ...r.pebbles.map(p => +p.doneAt || 0)) || Date.now(); });
@@ -2803,6 +3011,7 @@ async function connect(u) {
     const before = S;
     S = mergeState(mergeAccount(remote, S, id));
     S.ownerUid = id;
+    try { applyLooksRefund(); } catch (e) {}
     if (!S.profile.name && u.displayName) S.profile.name = clampStr(u.displayName.split(' ')[0], 40);
     if (S !== before && !before.ownerUid && remote && (before.sessions.length || before.rocks.some(r => !r.example))) toast('Your progress from this device was added to your account.');
     applyTheme();
@@ -3239,6 +3448,77 @@ function bindFocus() {
   $('#heroPet').onclick = () => { makeHappy(2200); say(pick(LINES.pet)); };
 }
 function chimePrime() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume?.(); } catch (e) {} }
+
+/* ---------- focus page layout: each part can sit at the top, left, right, bottom, or be hidden ---------- */
+const FS_PARTS = { stats: 'Today numbers', timer: 'Timer and controls', log: "Today's log", ripples: 'Ripples for you', challenge: 'Monthly challenge', notes: 'Notes to self', pebble: 'Just one pebble', sounds: 'Sounds' };
+const FS_PLACES = { top: 'Top, full width', left: 'Left side', right: 'Right side', bottom: 'Bottom, full width', hidden: 'Hidden' };
+const FS_DEFAULT = { order: ['stats', 'timer', 'log', 'ripples', 'challenge', 'notes', 'pebble', 'sounds'], place: { stats: 'top', timer: 'left', log: 'left', ripples: 'left', challenge: 'right', notes: 'right', pebble: 'right', sounds: 'right' } };
+const FS_SPLIT = 62;
+function fsLayout() {
+  const l = S.settings.focusLayout || {}, order = (Array.isArray(l.order) ? l.order : []).filter((k, i, a) => FS_PARTS[k] && a.indexOf(k) === i);
+  FS_DEFAULT.order.forEach(k => { if (!order.includes(k)) order.splice(Math.min(order.length, FS_DEFAULT.order.indexOf(k)), 0, k); });
+  const place = {};
+  order.forEach(k => { const p = l.place && l.place[k]; place[k] = FS_PLACES[p] && !(k === 'timer' && p === 'hidden') ? p : FS_DEFAULT.place[k]; });
+  return { order, place };
+}
+const fsSplit = () => Math.min(75, Math.max(30, +S.settings.focusSplit || FS_SPLIT));
+function applyFocusLayout() {
+  const g = $('#fsGrid'); if (!g) return;
+  const { order, place } = fsLayout(), zone = { top: '#fsTop', left: '#fsLeft', right: '#fsRight', bottom: '#fsBottom', hidden: '#fsHidden' };
+  order.forEach(k => { const el = $(`[data-fs="${k}"]`); if (el) $(zone[place[k]]).appendChild(el); });
+  const has = z => order.some(k => place[k] === z);
+  const L = has('left'), R = has('right');
+  g.classList.toggle('one', !(L && R)); $('#fsLeft').hidden = !L; $('#fsRight').hidden = !R; $('#fsSplit').hidden = !(L && R);
+  g.style.setProperty('--fs-cols', `minmax(0,${fsSplit()}fr) 14px minmax(260px,${100 - fsSplit()}fr)`);
+  $('#fsTop').hidden = !has('top'); $('#fsBottom').hidden = !has('bottom');
+  $$('[data-fswiden]').forEach(b => {
+    const wide = ['top', 'bottom'].includes(place[b.dataset.fswiden]), what = b.dataset.fswiden === 'notes' ? 'notes' : 'the timer';
+    b.innerHTML = icon(wide ? 'i-shrink' : 'i-expand'); b.title = wide ? `Put ${what} back on its side` : `Make ${what} full width`; b.setAttribute('aria-label', b.title);
+  });
+  $$('[data-fs]').forEach(el => el.classList.toggle('fs-wide', ['top', 'bottom'].includes(place[el.dataset.fs])));
+  try { growPad(); } catch (e) {}
+}
+function setFsLayout(order, place) { S.settings.focusLayout = { order, place }; save(); applyFocusLayout(); renderFsSettings(); }
+function renderFsSettings() {
+  const box = $('#fsList'); if (!box) return;
+  const { order, place } = fsLayout();
+  box.innerHTML = order.map((k, i) => `<li class="${place[k] === 'hidden' ? 'off' : ''}"><span class="fs-nm">${esc(FS_PARTS[k])}</span>
+    <select class="inp fs-place" data-fsplace="${k}" aria-label="Where ${esc(FS_PARTS[k])} sits">${Object.entries(FS_PLACES).filter(([p]) => !(k === 'timer' && p === 'hidden')).map(([p, t]) => `<option value="${p}" ${place[k] === p ? 'selected' : ''}>${t}</option>`).join('')}</select>
+    <button type="button" class="icon-btn sm" data-fsmove="${k}:-1" aria-label="Move ${esc(FS_PARTS[k])} up" ${i ? '' : 'disabled'}><svg style="transform:rotate(-90deg)"><use href="#i-chev"/></svg></button><button type="button" class="icon-btn sm" data-fsmove="${k}:1" aria-label="Move ${esc(FS_PARTS[k])} down" ${i < order.length - 1 ? '' : 'disabled'}><svg style="transform:rotate(90deg)"><use href="#i-chev"/></svg></button></li>`).join('');
+  $('#fsSplitRange').value = fsSplit(); $('#fsSplitVal').textContent = fsSplit() + '%';
+}
+function bindFocusLayout() {
+  $('#fsList').addEventListener('change', e => { const s = e.target.closest('[data-fsplace]'); if (!s) return; const { order, place } = fsLayout(); place[s.dataset.fsplace] = s.value; setFsLayout(order, place); });
+  $('#fsList').addEventListener('click', e => {
+    const b = e.target.closest('[data-fsmove]'); if (!b) return;
+    const [k, d] = b.dataset.fsmove.split(':'), { order, place } = fsLayout(), i = order.indexOf(k), j = i + +d;
+    if (j < 0 || j >= order.length) return;
+    [order[i], order[j]] = [order[j], order[i]]; setFsLayout(order, place);
+    $(`[data-fsmove="${k}:${d}"]`)?.focus();
+  });
+  $('#fsReset').onclick = () => { delete S.settings.focusLayout; delete S.settings.focusSplit; delete S.settings.fsBack; save(); applyFocusLayout(); renderFsSettings(); toast('The Focus page is back to how it started.'); };
+  $('#fsSplitRange').oninput = e => { S.settings.focusSplit = +e.target.value; applyFocusLayout(); $('#fsSplitVal').textContent = fsSplit() + '%'; };
+  $('#fsSplitRange').onchange = () => save();
+  // the quick widen buttons on the timer and on notes: full width at the top or bottom, and back again
+  $('#v-focus').addEventListener('click', e => {
+    const b = e.target.closest('[data-fswiden]'); if (!b) return;
+    const k = b.dataset.fswiden, { order, place } = fsLayout();
+    if (['top', 'bottom'].includes(place[k])) place[k] = (S.settings.fsBack || {})[k] || FS_DEFAULT.place[k];
+    else { S.settings.fsBack = { ...(S.settings.fsBack || {}), [k]: place[k] }; place[k] = k === 'timer' ? 'top' : 'bottom'; }
+    setFsLayout(order, place);
+    if (k === 'notes') setTimeout(() => $('[data-fs="notes"]').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+  });
+  // drag the line between the two sides to make either one wider
+  const sp = $('#fsSplit'), grid = $('#fsGrid');
+  let drag = null;
+  sp.addEventListener('pointerdown', e => { const r = grid.getBoundingClientRect(); drag = { left: r.left, w: r.width }; try { sp.setPointerCapture(e.pointerId); } catch (er) {} sp.classList.add('drag'); e.preventDefault(); });
+  sp.addEventListener('pointermove', e => { if (!drag) return; S.settings.focusSplit = Math.round(Math.min(75, Math.max(30, (e.clientX - drag.left) / drag.w * 100))); applyFocusLayout(); });
+  const end = () => { if (!drag) return; drag = null; sp.classList.remove('drag'); save(); renderFsSettings(); };
+  sp.addEventListener('pointerup', end); sp.addEventListener('pointercancel', end);
+  sp.addEventListener('dblclick', () => { delete S.settings.focusSplit; save(); applyFocusLayout(); renderFsSettings(); });
+  sp.addEventListener('keydown', e => { const d = e.key === 'ArrowLeft' ? -2 : e.key === 'ArrowRight' ? 2 : 0; if (!d) return; e.preventDefault(); S.settings.focusSplit = Math.min(75, Math.max(30, fsSplit() + d)); applyFocusLayout(); save(); });
+  applyFocusLayout();
+}
 /* ---------- sounds: made in the browser with Web Audio, no files ---------- */
 const SOUNDS = {
   rain: { label: 'Rain', note: 'Soft rain on the lily pads', cost: 0, icon: '<path d="M7 4c-2 3-3 4.6-3 6a3 3 0 0 0 6 0c0-1.4-1-3-3-6zM16 9c-2 3-3 4.6-3 6a3 3 0 0 0 6 0c0-1.4-1-3-3-6z"/>' },
@@ -3386,26 +3666,25 @@ function renderSounds() {
   const box = $('#sndList'); if (!box) return;
   const ss = S.sounds;
   if (!SOUNDS[ss.pick]) ss.pick = 'rain';
+  // small tiles: tap one you own to play or stop it, tap a locked one to see its price
   box.innerHTML = Object.entries(SOUNDS).map(([k, s]) => {
     const own = sndOwned(k), on = SND.playing === k, sel = ss.pick === k;
-    return `<div class="snd ${sel ? 'sel' : ''} ${own ? '' : 'locked'}">
-      <button class="snd-main" data-snd="${k}" ${own ? '' : 'disabled'} aria-pressed="${on}" aria-label="${on ? 'Stop' : 'Play'} ${s.label}">
-        <span class="snd-ic ${on ? 'on' : ''}"><svg viewBox="0 0 24 24" aria-hidden="true">${s.icon}</svg></span>
-        <span class="snd-t"><b>${s.label}</b><small>${on ? (k === 'quran' ? `Playing ${esc(SURAHS[ss.quran.surah - 1])}` : 'Playing now') : s.note}</small></span>
-        ${own ? `<span class="snd-act">${icon(on ? 'i-pause' : 'i-play')}</span>` : ''}
-      </button>
-      ${own ? '' : `<button class="btn small ${S.coins >= s.cost ? 'primary' : ''}" data-sndbuy="${k}" ${S.coins >= s.cost ? '' : 'disabled'}>${icon('i-coin')}${s.cost}</button>`}
-    </div>`;
+    return `<button type="button" class="snd-tile ${sel ? 'sel' : ''} ${on ? 'on' : ''} ${own ? '' : 'locked'}" data-snd="${k}" aria-pressed="${on}" title="${esc(s.note)}" aria-label="${own ? (on ? 'Stop ' : 'Play ') + s.label : s.label + ', ' + s.cost + ' coins'}">
+      <span class="snd-ic ${on ? 'on' : ''}"><svg viewBox="0 0 24 24" aria-hidden="true">${s.icon}</svg></span><b>${s.label}</b>
+      <small>${own ? (on ? 'Playing' : k === 'quran' || k === 'link' ? 'Free' : 'Yours') : `${icon('i-coin')}${s.cost}`}</small>
+    </button>`;
   }).join('');
-  const ex = $('#sndExtra');
-  if (ss.pick === 'quran') ex.innerHTML = `<div class="snd-opts"><label class="f">Reciter<select class="inp" id="qReciter">${Object.entries(RECITERS).map(([k, r]) => `<option value="${k}" ${ss.quran.reciter === k ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label><label class="f">Surah<select class="inp" id="qSurah">${SURAHS.map((n, i) => `<option value="${i + 1}" ${ss.quran.surah === i + 1 ? 'selected' : ''}>${i + 1}. ${n}</option>`).join('')}</select></label></div><p class="muted" style="font-size:.78rem; margin:6px 0 0">Plays on to the next surah by itself.</p>`;
+  const ex = $('#sndExtra'), cur = SOUNDS[ss.pick];
+  const nowLine = SND.playing ? `<p class="snd-now">${icon('i-play')}<span>${SND.playing === 'quran' ? `Quran · ${esc(SURAHS[ss.quran.surah - 1])}` : esc(SOUNDS[SND.playing].label + ' · ' + SOUNDS[SND.playing].note)}</span></p>` : '';
+  if (!sndOwned(ss.pick)) ex.innerHTML = `<div class="snd-buy"><span><b>${esc(cur.label)}</b> <span class="muted">· ${esc(cur.note)}</span></span><button class="btn small ${S.coins >= cur.cost ? 'primary' : ''}" data-sndbuy="${ss.pick}" ${S.coins >= cur.cost ? '' : 'disabled'}>${icon('i-coin')}${S.coins >= cur.cost ? 'Buy for ' + cur.cost : (cur.cost - S.coins) + ' more coins'}</button></div>`;
+  else if (ss.pick === 'quran') ex.innerHTML = `<div class="snd-opts"><label class="f">Reciter<select class="inp" id="qReciter">${Object.entries(RECITERS).map(([k, r]) => `<option value="${k}" ${ss.quran.reciter === k ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label><label class="f">Surah<select class="inp" id="qSurah">${SURAHS.map((n, i) => `<option value="${i + 1}" ${ss.quran.surah === i + 1 ? 'selected' : ''}>${i + 1}. ${n}</option>`).join('')}</select></label></div><p class="muted" style="font-size:.78rem; margin:6px 0 0">Plays on to the next surah by itself.</p>`;
   else if (ss.pick === 'link') ex.innerHTML = `<form class="snd-opts link" id="sndLinkForm"><input class="inp" id="sndLink" type="url" maxlength="500" placeholder="Paste a YouTube, Spotify or SoundCloud link" value="${esc(ss.link || '')}" aria-label="Sound link"><button class="btn small primary" type="submit">${icon('i-play')}Play</button></form>`;
-  else ex.innerHTML = '';
+  else ex.innerHTML = nowLine;
   $('#sndVol').value = Math.round(ss.vol * 100);
   $('#sndWith').setAttribute('aria-checked', !!ss.withFocus);
 }
 function bindSounds() {
-  $('#sndList').addEventListener('click', e => {
+  $('#soundCard').addEventListener('click', e => {
     const b = e.target.closest('[data-sndbuy]');
     if (b) {
       const k = b.dataset.sndbuy, s = SOUNDS[k];
@@ -3416,6 +3695,7 @@ function bindSounds() {
     const p = e.target.closest('[data-snd]');
     if (p) {
       const k = p.dataset.snd;
+      if (!sndOwned(k)) { S.sounds.pick = k; renderSounds(); return; }
       if (SND.playing === k) { sndStop(); return; }
       S.sounds.pick = k; save(); sndPlay(k);
     }
@@ -3530,7 +3810,7 @@ function rockCard(r) {
         <div class="crossing">${crossingSVG(r)}</div>
         ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(pebLi).join('')}</ul>` : `<p class="muted">${done ? 'Finished without pebbles. Nice and simple.' : 'No pebbles yet. Add the smallest first step you can think of, let Claude break it down, or just finish the rock when it is done.'}</p>`}
         ${draft ? aiBox(r.id, draft) : ''}
-        <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="15" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
+        <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="${S.settings.defPeb || 30}" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
         ${finishAsk === r.id ? `<div class="confirm-row"><span>Mark the ${n - d} ${n - d === 1 ? 'pebble' : 'pebbles'} left as done and cross the rock?</span><button class="btn small primary" data-finishyes>Yes, cross it</button><button class="btn small" data-finishno>Not yet</button></div>` : ''}
         <div class="row">${done ? `<button class="btn small" data-reopen>Not done yet</button>` : `<button class="btn small primary" data-finish>${icon('i-check')}Finish rock</button><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button>`}<button class="btn small" data-editrock>${icon('i-edit')}Edit</button><span class="rock-colors" role="group" aria-label="Rock colour">${['', ...EV_COLORS].map(c => `<button type="button" class="rc ${(okColor(r.color) || '') === c ? 'on' : ''}" data-rockc="${c}" title="${c ? 'Colour' : 'Course colour'}" style="background:${c || courseColor(r.courseId)}">${c ? '' : '<small>A</small>'}</button>`).join('')}</span><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
       </div>` : ''}
@@ -3739,7 +4019,7 @@ function bindPebbles() {
     const f = e.target.closest('[data-addpeb]'); if (!f) return; e.preventDefault();
     const r = S.rocks.find(x => x.id === f.closest('[data-rock]').dataset.rock); const t = f.t.value.trim(); if (!t) return;
     if (r.crossedAt) { uncrossRock(r); toast('New pebble added, so the rock is open again.'); }
-    r.pebbles.push({ id: uid(), text: clampStr(t, 120), mins: Math.min(120, Math.max(1, +f.m.value || 15)), done: false });
+    r.pebbles.push({ id: uid(), text: clampStr(t, 120), mins: Math.min(120, Math.max(1, +f.m.value || S.settings.defPeb || 30)), done: false });
     save(); renderRocks(); renderNextPebble();
     const nf = $(`[data-rock="${CSS.escape(r.id)}"] [data-addpeb] input`); nf && nf.focus();
   });
@@ -3800,14 +4080,19 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 let calMonth = dayKey().slice(0, 7), calDay = dayKey(), calEdit = null, calRock = null, evColor = '';
 const EV_COLORS = ['#d9675a', '#e9905a', '#e8b84a', '#8fb069', '#4f9a94', '#5b7fa0', '#8a6aa0', '#d77fa1', '#8f6340', '#5f6b76'];
 const okColor = c => typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c : '';
-const itemColor = it => okColor(it.color) || courseColor(it.courseId);
+// important and urgent things always wear their own colour so they stand out from everything else
+const PRIO = { important: { label: 'Important', color: '#e39b2d' }, urgent: { label: 'Urgent', color: '#d8434f' } };
+const prioOf = it => PRIO[it.prio] ? it.prio : '';
+const itemColor = it => prioOf(it) ? PRIO[it.prio].color : okColor(it.color) || courseColor(it.courseId);
+const prioMark = it => prioOf(it) === 'urgent' ? '<i class="pr-mark" aria-hidden="true">!</i>' : prioOf(it) === 'important' ? '<i class="pr-mark" aria-hidden="true">★</i>' : '';
+let evPrio = '';
 
 // an event without a time is anchored at 9 in the morning, so "1 day before" lands the morning before
 const evAt = e => { const d = keyToDate(e.date); const [h, m] = (e.time || '09:00').split(':').map(Number); d.setHours(h || 0, m || 0, 0, 0); return +d; };
 const fmtClock = t => (t ? new Date(`2000-01-01T${t}`).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '');
 function calItems() {
   const ev = (S.events || []).map(e => ({ ...e, kind: 'event' }));
-  const rocks = S.rocks.filter(r => r.due && !r.example && !rockDone(r)).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, color: r.color, type: 'deadline', remind: 1440 }));
+  const rocks = S.rocks.filter(r => r.due && !r.example && !rockDone(r)).map(r => ({ id: 'rock-' + r.id, rockId: r.id, kind: 'rock', title: r.title, date: r.due, time: '', courseId: r.courseId, color: r.color, prio: r.prio || '', type: 'deadline', remind: 1440 }));
   return [...ev, ...rocks].sort((a, b) => evAt(a) - evAt(b));
 }
 function whenText(it) {
@@ -3819,7 +4104,8 @@ function whenText(it) {
   const d = keyToDate(it.date); return `${WD[d.getDay()]} ${d.getDate()} ${MO[d.getMonth()]}${t}`;
 }
 function chipHTML(it) {
-  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}" style="--c:${itemColor(it)}" data-calev="${esc(it.id)}" title="${esc(it.title)}">${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
+  const pr = prioOf(it);
+  return `<button class="cal-ev ${it.kind === 'rock' ? 'rock' : ''} t-${it.type}${pr ? ' pr-' + pr : ''}" style="--c:${itemColor(it)}" data-calev="${esc(it.id)}" title="${pr ? PRIO[pr].label + ': ' : ''}${esc(it.title)}">${prioMark(it)}${it.time ? `<small>${esc(fmtClock(it.time))}</small> ` : ''}${esc(it.title)}</button>`;
 }
 function renderCal() {
   if (!$('#calGrid')) return;
@@ -3831,7 +4117,8 @@ function renderCal() {
   let cells = '';
   for (let i = 0; i < weeks * 7; i++) {
     const d = addDays(start, i), k = dayKey(d), list = byDay[k] || [], out = d.getMonth() !== m - 1;
-    cells += `<div class="cal-day${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${itemColor(it)}"></i>`).join('')}</span>` : ''}</div>`;
+    const top = list.some(it => prioOf(it) === 'urgent') ? ' has-urgent' : list.some(it => prioOf(it) === 'important') ? ' has-important' : '';
+    cells += `<div class="cal-day${top}${out ? ' out' : ''}${k === today ? ' today' : ''}${k === calDay ? ' sel' : ''}" data-calday="${k}" role="button" tabindex="0" aria-label="${d.getDate()} ${MO[d.getMonth()]}, ${list.length} item${list.length === 1 ? '' : 's'}"><span class="n">${d.getDate()}</span>${list.slice(0, 3).map(chipHTML).join('')}${list.length > 3 ? `<span class="more">+${list.length - 3} more</span>` : ''}${list.length ? `<span class="dots">${list.slice(0, 4).map(it => `<i style="background:${itemColor(it)}"></i>`).join('')}</span>` : ''}</div>`;
   }
   $('#calGrid').innerHTML = cells;
   // the selected day
@@ -3845,7 +4132,8 @@ function renderCal() {
 }
 function itemRow(it) {
   const n = Math.round((keyToDate(it.date) - keyToDate(dayKey())) / 864e5);
-  return `<li><span class="bar" style="background:${itemColor(it)}"></span><span class="nm"><b>${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
+  const pr = prioOf(it);
+  return `<li class="${pr ? 'pr-row pr-' + pr : ''}" style="--c:${itemColor(it)}"><span class="bar" style="background:${itemColor(it)}"></span><span class="nm"><b>${prioMark(it)}${esc(it.title)}</b><span>${esc(whenText(it))} · ${esc(courseName(it.courseId))} · ${it.kind === 'rock' ? 'Rock in Pebbles' : EV_TYPES[it.type] || 'Other'}</span></span>${pr ? `<span class="pill pr-pill">${PRIO[pr].label}</span>` : ''}${n >= 0 && n <= 2 ? `<span class="pill soon">${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : 'Soon'}</span>` : ''}<button class="btn small" data-calev="${esc(it.id)}">${it.kind === 'rock' ? 'Open' : 'Edit'}</button></li>`;
 }
 function renderCalAlerts() {
   const b = $('#calAlerts'); if (!b) return;
@@ -3858,10 +4146,15 @@ function renderEvColors() {
     + EV_COLORS.map(c => `<button type="button" class="ev-c ${evColor === c ? 'on' : ''}" data-evc="${c}" aria-pressed="${evColor === c}" aria-label="Colour ${c}"><i style="background:${c}"></i></button>`).join('')
     + `<label class="ev-c pick ${evColor && !EV_COLORS.includes(evColor) ? 'on' : ''}" title="Pick any colour"><i style="background:${evColor && !EV_COLORS.includes(evColor) ? evColor : 'conic-gradient(#d9675a,#e8b84a,#8fb069,#5b7fa0,#8a6aa0,#d9675a)'}"></i>Any<input type="color" id="evPick" value="${evColor || '#5b7fa0'}" class="sr"></label>`;
 }
+function renderEvPrio() {
+  $('#evPrio').innerHTML = [['', 'Normal', ''], ['important', 'Important', PRIO.important.color], ['urgent', 'Urgent', PRIO.urgent.color]]
+    .map(([v, t, c]) => `<button type="button" class="ev-pr ${v ? 'pr-' + v : ''}" data-evp="${v}" aria-pressed="${evPrio === v}">${c ? `<i style="background:${c}"></i>` : ''}${t}</button>`).join('');
+  $('#evColors').classList.toggle('dim', !!evPrio);
+}
 function openEvForm(it) {
   calEdit = it && it.kind === 'event' ? it.id : null;
   calRock = it && it.kind === 'rock' ? it.rockId : null;
-  evColor = okColor(it && it.color);
+  evColor = okColor(it && it.color); evPrio = it && PRIO[it.prio] ? it.prio : '';
   const f = $('#evForm'), e = it || { title: '', date: calDay, time: '', courseId: S.lastCourse || '', type: 'deadline', remind: 1440 };
   $('#evFormTitle').textContent = calRock ? 'Edit rock' : calEdit ? 'Edit' : 'Add to your calendar';
   $$('#evForm .ev-only').forEach(x => x.hidden = !!calRock); $('#evOpenRock').hidden = !calRock;
@@ -3870,7 +4163,7 @@ function openEvForm(it) {
   $('#evRemind').innerHTML = REMIND_OPTS.map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
   $('#evTitle').value = e.title; $('#evDate').value = e.date; $('#evTime').value = e.time || ''; $('#evCourse').value = e.courseId || ''; $('#evType').value = e.type || 'deadline'; $('#evRemind').value = String(e.remind ?? 1440);
   $('#evDel').hidden = !calEdit;
-  renderEvColors();
+  renderEvColors(); renderEvPrio();
   f.hidden = false; $('#evTitle').focus();
 }
 function closeEvForm() { $('#evForm').hidden = true; calEdit = null; calRock = null; }
@@ -3924,6 +4217,7 @@ function bindCal() {
   $('#evColors').addEventListener('click', e => { const b = e.target.closest('[data-evc]'); if (!b) return; evColor = okColor(b.dataset.evc); renderEvColors(); });
   $('#evColors').addEventListener('input', e => { if (e.target.id === 'evPick') { evColor = okColor(e.target.value); renderEvColors(); } });
   $('#evCourse').addEventListener('change', renderEvColors);
+  $('#evPrio').addEventListener('click', e => { const b = e.target.closest('[data-evp]'); if (!b) return; evPrio = PRIO[b.dataset.evp] ? b.dataset.evp : ''; renderEvPrio(); });
   $('#evOpenRock').onclick = () => { if (!calRock) return; S.openRock = calRock; save(); closeEvForm(); go('pebbles'); };
   $('#evForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -3931,10 +4225,10 @@ function bindCal() {
     if (!title || !date) return;
     if (calRock) {
       const r = S.rocks.find(x => x.id === calRock);
-      if (r) { r.title = clampStr(title, 120); r.due = date; r.courseId = $('#evCourse').value; r.color = evColor; }
+      if (r) { r.title = clampStr(title, 120); r.due = date; r.courseId = $('#evCourse').value; r.color = evColor; r.prio = evPrio; }
       calDay = date; calMonth = date.slice(0, 7); closeEvForm(); save(); renderCal(); renderRocks(); toast('Rock saved.'); return;
     }
-    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value, color: evColor };
+    const data = { title: clampStr(title, 100), date, time: $('#evTime').value || '', courseId: $('#evCourse').value, type: EV_TYPES[$('#evType').value] ? $('#evType').value : 'other', remind: +$('#evRemind').value, color: evColor, prio: evPrio };
     S.events = S.events || [];
     if (calEdit) { const x = S.events.find(v => v.id === calEdit); if (x) Object.assign(x, data); }
     else S.events.push({ id: uid(), createdAt: Date.now(), ...data });
@@ -4626,6 +4920,10 @@ function surveyCardHTML() {
    Add an entry at the top for every update students should hear about. It shows once as a
    "What's new" card, in the bell, and on the guide page. bell:false keeps it on the guide only. */
 const UPDATES = [
+  { id: 'nov26animals', at: Date.UTC(2026, 10, 26, 3, 0), title: 'Five new animals, and prettier old friends', text: 'Say hello to the hedgehog (65 coins), cow (85), barn owl (130), koala (145) and red panda (190). The duckling and capybara have softer, brighter colours, and the axolotl was redrawn with feathery gills. Dress up has left Grind, and any coins you spent on it are back with you.', go: 'sanctuary', animal: 'redpanda' },
+  { id: 'nov26layout', at: Date.UTC(2026, 10, 26, 2, 50), title: 'Arrange your Focus page', text: 'Open Customize and use Focus page layout to put each part at the top, left, right or bottom, hide what you do not need, and change the order. Make Notes to self or the timer full width with the arrows button, or drag the line between the two sides. Sounds are now small tiles.', go: 'focus' },
+  { id: 'nov26cal', at: Date.UTC(2026, 10, 26, 2, 40), title: 'Important and urgent in your calendar', text: 'Mark a deadline as Important (amber) or Urgent (red) and it stands out in the month and in Coming up, so you never miss it.', go: 'cal' },
+  { id: 'nov26len', at: Date.UTC(2026, 10, 26, 2, 30), title: 'Your own default focus length', text: 'Focus now starts at 30 minutes. Set your own starting focus, rest and new pebble lengths in Customize under Default lengths.', go: 'focus' },
   { id: 'survey', at: Date.UTC(2026, 10, 22, 14, 30), title: 'A one-minute survey', text: 'Help us decide what Grind offers next. Five quick taps about how you study and which extras you would like. Grind itself stays free, and you can answer without signing in.', go: 'survey' },
   { id: 'weekhours', at: Date.UTC(2026, 10, 6, 17, 20), title: 'Your hours, week by week', text: 'The journal now shows how many hours you studied each week and each month. A new week starts every Monday, and you can compare this week with last week, your average and your best.', go: 'stats' },
   { id: 'courseedit', at: Date.UTC(2026, 10, 6, 17, 10), title: 'Rename and recolour your courses', text: 'Made a typo or want a new colour? Open your profile and click the pencil on any course. Your sessions, rocks and calendar follow the change.', go: 'profile' },
@@ -4962,15 +5260,13 @@ function renderZoo() {
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
-      <div class="row">${action}${owned ? `${a.plain ? '' : `<button class="btn small" data-dress="${k}">Dress up</button>`}<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}${NET.isOwner && ownerPreview && !a.plain ? `<button class="btn small owner-btn" data-preview="${k}">${icon('i-wand')}Preview looks</button>` : ''}</div>
+      <div class="row">${action}${owned ? `<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
     </article>`;
   }).join('');
 }
 function bindZoo() {
   $('#ownerPrevBtn').onclick = () => { ownerPreview = !ownerPreview; renderZoo(); };
   $('#zoo').addEventListener('click', e => {
-    const dr = e.target.closest('[data-dress]'); if (dr) { openDress(dr.dataset.dress); return; }
-    const pv = e.target.closest('[data-preview]'); if (pv && NET.isOwner) { openDress(pv.dataset.preview, true); return; }
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
@@ -5186,6 +5482,8 @@ function renderDrawer() {
   $$('#modeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === curMode));
   $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
   $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
+  try { renderFsSettings(); } catch (e) {}
+  [['#defFocus', 'defFocus'], ['#defRest', 'defRest'], ['#defPeb', 'defPeb']].forEach(([id, k]) => { if (document.activeElement !== $(id)) $(id).value = S.settings[k]; });
   [['#swSound', 'sound'], ['#swNoteSound', 'noteSound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
   $('#dataWhere').textContent = NET.db && NET.canWrite ? `Your progress is saved to your account and on this device. The pond, ripples, circles and posts are shared with everyone${NET.web ? ' who signs in' : ' invited'}.` : 'Your progress is saved in this browser on this device. Export it to keep a copy.';
   $('#acctRow').innerHTML = !NET.web ? '' : NET.db ? `<span class="muted" style="font-size:.84rem">Signed in${NET.userName ? ' as ' + esc(NET.userName) : ''}</span><button class="btn small quiet" id="signOutBtn">Sign out</button>` : '<button class="btn small primary" id="signInBtn2">Sign in with Google</button>';
@@ -5208,6 +5506,18 @@ function bindDrawer() {
   $('#fxSeg').onclick = e => { const b = e.target.closest('[data-fx]'); if (!b) return; S.settings.fx = b.dataset.fx; save(); renderDrawer(); if (REDUCED) FX.forEach(o => { fxSize(o); fxSeed(o); fxDraw(o, 0); }); };
   $('#skySeg').onclick = e => { const b = e.target.closest('[data-sky]'); if (!b) return; S.settings.sky = b.dataset.sky; save(); applySky(); renderDrawer(); };
   const sw = (id, k, after) => { $(id).onclick = () => { S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
+  // default lengths: saved on change; the timer follows right away when nothing is running
+  [['#defFocus', 'defFocus', 180], ['#defRest', 'defRest', 60], ['#defPeb', 'defPeb', 120]].forEach(([id, k, max]) => {
+    $(id).onchange = e => {
+      const v = Math.min(max, Math.max(1, Math.round(+e.target.value) || S.settings[k]));
+      S.settings[k] = v; e.target.value = v;
+      if (!S.timer && k === 'defFocus') S.settings.focus = v;
+      if (!S.timer && k === 'defRest') S.settings.rest = v;
+      save(); syncRanges(); renderPresetsRow(); renderTimer();
+      if (k === 'defPeb' && currentView === 'pebbles') renderRocks();
+      toast(k === 'defFocus' ? `Focus now starts at ${v} minutes.` : k === 'defRest' ? `Rest now starts at ${v} minutes.` : `New pebbles now start at ${v} minutes.`);
+    };
+  });
   sw('#swSound', 'sound'); sw('#swNoteSound', 'noteSound', () => { if (S.settings.noteSound) notePing(); }); sw('#swAuto', 'autoRest');
   $('#exportBtn').onclick = async () => {
     const data = JSON.stringify(S, null, 2);
@@ -5330,6 +5640,12 @@ function renderAll() {
   if (currentView === 'pond') renderPond(true);
 }
 
+function applyLooksRefund() {
+  if (S.looksRefunded) return;
+  const r = looksRefund(S); S.looksRefunded = true;
+  if (r) { S.coins += r; setTimeout(() => { toast(`Dress up has left Grind, so the <b>${r} coins</b> you spent on outfits and coats are back with you.`); renderChips(); }, 1500); }
+  save();
+}
 function boot() {
   document.body.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { signIn(); return; } const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); } });
   $('#focusStage').insertAdjacentHTML('afterbegin', sceneSVG('focus'));
@@ -5337,12 +5653,17 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindFocusLayout, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
   $('#v-profile').addEventListener('click', e => { const b = e.target.closest('[data-peer]'); if (b) openPeer(b.dataset.peer === 'me-self' ? (NET.uid || 'me') : b.dataset.peer); });
   if (S.timer) mode = S.timer.phase;
+  // focus starts at your default length every time you open Grind
+  if (!S.timer) { S.settings.focus = S.settings.defFocus; S.settings.rest = S.settings.defRest; }
+  // dress up is gone: give back what was spent on it, once
+  // (a device that was signed in waits until the account is loaded, so the refund lands on the combined copy)
+  if (!S.ownerUid) applyLooksRefund();
   checkUnlocks();
   renderAll();
   const startView = (location.hash || '').replace('#', '') || 'focus';

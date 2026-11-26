@@ -145,26 +145,25 @@ function renderSounds() {
   const box = $('#sndList'); if (!box) return;
   const ss = S.sounds;
   if (!SOUNDS[ss.pick]) ss.pick = 'rain';
+  // small tiles: tap one you own to play or stop it, tap a locked one to see its price
   box.innerHTML = Object.entries(SOUNDS).map(([k, s]) => {
     const own = sndOwned(k), on = SND.playing === k, sel = ss.pick === k;
-    return `<div class="snd ${sel ? 'sel' : ''} ${own ? '' : 'locked'}">
-      <button class="snd-main" data-snd="${k}" ${own ? '' : 'disabled'} aria-pressed="${on}" aria-label="${on ? 'Stop' : 'Play'} ${s.label}">
-        <span class="snd-ic ${on ? 'on' : ''}"><svg viewBox="0 0 24 24" aria-hidden="true">${s.icon}</svg></span>
-        <span class="snd-t"><b>${s.label}</b><small>${on ? (k === 'quran' ? `Playing ${esc(SURAHS[ss.quran.surah - 1])}` : 'Playing now') : s.note}</small></span>
-        ${own ? `<span class="snd-act">${icon(on ? 'i-pause' : 'i-play')}</span>` : ''}
-      </button>
-      ${own ? '' : `<button class="btn small ${S.coins >= s.cost ? 'primary' : ''}" data-sndbuy="${k}" ${S.coins >= s.cost ? '' : 'disabled'}>${icon('i-coin')}${s.cost}</button>`}
-    </div>`;
+    return `<button type="button" class="snd-tile ${sel ? 'sel' : ''} ${on ? 'on' : ''} ${own ? '' : 'locked'}" data-snd="${k}" aria-pressed="${on}" title="${esc(s.note)}" aria-label="${own ? (on ? 'Stop ' : 'Play ') + s.label : s.label + ', ' + s.cost + ' coins'}">
+      <span class="snd-ic ${on ? 'on' : ''}"><svg viewBox="0 0 24 24" aria-hidden="true">${s.icon}</svg></span><b>${s.label}</b>
+      <small>${own ? (on ? 'Playing' : k === 'quran' || k === 'link' ? 'Free' : 'Yours') : `${icon('i-coin')}${s.cost}`}</small>
+    </button>`;
   }).join('');
-  const ex = $('#sndExtra');
-  if (ss.pick === 'quran') ex.innerHTML = `<div class="snd-opts"><label class="f">Reciter<select class="inp" id="qReciter">${Object.entries(RECITERS).map(([k, r]) => `<option value="${k}" ${ss.quran.reciter === k ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label><label class="f">Surah<select class="inp" id="qSurah">${SURAHS.map((n, i) => `<option value="${i + 1}" ${ss.quran.surah === i + 1 ? 'selected' : ''}>${i + 1}. ${n}</option>`).join('')}</select></label></div><p class="muted" style="font-size:.78rem; margin:6px 0 0">Plays on to the next surah by itself.</p>`;
+  const ex = $('#sndExtra'), cur = SOUNDS[ss.pick];
+  const nowLine = SND.playing ? `<p class="snd-now">${icon('i-play')}<span>${SND.playing === 'quran' ? `Quran · ${esc(SURAHS[ss.quran.surah - 1])}` : esc(SOUNDS[SND.playing].label + ' · ' + SOUNDS[SND.playing].note)}</span></p>` : '';
+  if (!sndOwned(ss.pick)) ex.innerHTML = `<div class="snd-buy"><span><b>${esc(cur.label)}</b> <span class="muted">· ${esc(cur.note)}</span></span><button class="btn small ${S.coins >= cur.cost ? 'primary' : ''}" data-sndbuy="${ss.pick}" ${S.coins >= cur.cost ? '' : 'disabled'}>${icon('i-coin')}${S.coins >= cur.cost ? 'Buy for ' + cur.cost : (cur.cost - S.coins) + ' more coins'}</button></div>`;
+  else if (ss.pick === 'quran') ex.innerHTML = `<div class="snd-opts"><label class="f">Reciter<select class="inp" id="qReciter">${Object.entries(RECITERS).map(([k, r]) => `<option value="${k}" ${ss.quran.reciter === k ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label><label class="f">Surah<select class="inp" id="qSurah">${SURAHS.map((n, i) => `<option value="${i + 1}" ${ss.quran.surah === i + 1 ? 'selected' : ''}>${i + 1}. ${n}</option>`).join('')}</select></label></div><p class="muted" style="font-size:.78rem; margin:6px 0 0">Plays on to the next surah by itself.</p>`;
   else if (ss.pick === 'link') ex.innerHTML = `<form class="snd-opts link" id="sndLinkForm"><input class="inp" id="sndLink" type="url" maxlength="500" placeholder="Paste a YouTube, Spotify or SoundCloud link" value="${esc(ss.link || '')}" aria-label="Sound link"><button class="btn small primary" type="submit">${icon('i-play')}Play</button></form>`;
-  else ex.innerHTML = '';
+  else ex.innerHTML = nowLine;
   $('#sndVol').value = Math.round(ss.vol * 100);
   $('#sndWith').setAttribute('aria-checked', !!ss.withFocus);
 }
 function bindSounds() {
-  $('#sndList').addEventListener('click', e => {
+  $('#soundCard').addEventListener('click', e => {
     const b = e.target.closest('[data-sndbuy]');
     if (b) {
       const k = b.dataset.sndbuy, s = SOUNDS[k];
@@ -175,6 +174,7 @@ function bindSounds() {
     const p = e.target.closest('[data-snd]');
     if (p) {
       const k = p.dataset.snd;
+      if (!sndOwned(k)) { S.sounds.pick = k; renderSounds(); return; }
       if (SND.playing === k) { sndStop(); return; }
       S.sounds.pick = k; save(); sndPlay(k);
     }

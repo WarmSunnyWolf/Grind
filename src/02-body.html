@@ -41,6 +41,10 @@
   <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L15 9M13.5 7.5l3 3"/><path d="M18 3v3M16.5 4.5h3M20.5 9.5v2M19.5 10.5h2M10 3.5v2M9 4.5h2"/></g></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
   <symbol id="i-friend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19c1-3.2 3.3-4.8 6.2-4.8s5.2 1.6 6.2 4.8M17.5 8v6M14.5 11h6"/></g></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></g></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M7.5 8.5L4 12l3.5 3.5M16.5 8.5L20 12l-3.5 3.5"/></g></symbol>
+  <symbol id="i-shrink" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h6M21 12h-6M6 8.5L9.5 12 6 15.5M18 8.5L14.5 12l3.5 3.5M12 5v14"/></g></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M13 4v16M13 12h7.5"/></g></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></g></symbol>
   <symbol id="i-leafpip" viewBox="0 0 24 24"><path d="M4 20C3 11 9 4.5 20 4c.6 10-5.6 16.4-16 16z" fill="currentColor"/></symbol>
 </svg>
@@ -89,7 +93,7 @@
               <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
               <span class="eyebrow">How to spend</span>
-              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>Outfits and costumes</span><b>40 to 450</b></li><li><span>Fur coats and emotes</span><b>120 to 200</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
@@ -101,10 +105,12 @@
 
       <!-- FOCUS -->
       <section class="view on" id="v-focus" aria-labelledby="viewTitle">
-        <div class="today-strip" id="todayStats" aria-label="What you studied today"></div>
-        <div class="grid g-focus">
-          <div class="stack">
+        <div class="fs-zone fs-top" id="fsTop"><div class="today-strip" id="todayStats" data-fs="stats" aria-label="What you studied today"></div></div>
+        <div class="grid g-focus" id="fsGrid">
+          <div class="stack fs-col" id="fsLeft">
+           <div class="fs-block stack" data-fs="timer">
             <div class="stage focus-stage" id="focusStage">
+              <button type="button" class="fs-widen stage-widen" data-fswiden="timer" title="Make the timer wider" aria-label="Make the timer wider"><svg><use href="#i-expand"/></svg></button>
               <div class="timer-ov">
                 <span class="phase" id="phaseLabel">Ready when you are</span>
                 <span class="clock" id="clock" aria-live="off">25:00</span>
@@ -144,39 +150,43 @@
                 <button class="btn big quiet" id="skipBtn" hidden><svg><use href="#i-skip"/></svg><span>Skip rest</span></button>
               </div>
             </div>
-            <div class="card">
+           </div>
+            <div class="card" data-fs="log">
               <div class="card-h"><h2>Today's log</h2><span class="hand muted" id="todayDate"></span></div>
               <ul class="done-list" id="todayList"></ul>
             </div>
-            <div class="card">
+            <div class="card" data-fs="ripples">
               <div class="card-h"><h2>Ripples for you</h2><button class="btn small quiet" data-go="pond">Visit the pond</button></div>
               <ul class="ripple-feed" id="rippleMini"></ul>
             </div>
           </div>
-          <div class="stack">
-            <div class="card ch-card" id="chCard" hidden></div>
-            <div class="card note-pad">
-              <div class="card-h"><h2>Notes to self</h2><span class="row" style="gap:8px"><span class="muted" id="padState" style="font-size:.78rem">Saved</span><button class="btn small quiet" id="padPicBtn" type="button" title="Add a picture"><svg><use href="#i-upload"/></svg>Picture</button></span></div>
+          <div class="fs-split" id="fsSplit" role="separator" aria-orientation="vertical" aria-label="Drag to make either side wider" tabindex="0" title="Drag to make either side wider. Double click to reset."><i></i></div>
+          <div class="stack fs-col" id="fsRight">
+            <div class="card ch-card" id="chCard" data-fs="challenge" hidden></div>
+            <div class="card note-pad" data-fs="notes">
+              <div class="card-h"><h2>Notes to self</h2><span class="row" style="gap:8px"><span class="muted" id="padState" style="font-size:.78rem">Saved</span><button class="btn small quiet" id="padPicBtn" type="button" title="Add a picture"><svg><use href="#i-upload"/></svg>Picture</button><button class="icon-btn sm fs-widen" type="button" data-fswiden="notes" title="Make notes wider" aria-label="Make notes wider"><svg><use href="#i-expand"/></svg></button></span></div>
               <textarea id="notePad" maxlength="2000" rows="3" placeholder="A quote, a reminder, a little push. Whatever you want to see while you study. You can also add a picture." aria-label="Notes to self"></textarea>
               <div class="pad-imgs" id="padImgs"></div>
               <input type="file" id="padPicFile" accept="image/*" hidden>
             </div>
-            <div class="card">
+            <div class="card" data-fs="pebble">
               <div class="card-h"><h2>Just one pebble</h2><button class="btn small quiet" data-go="pebbles">All rocks</button></div>
               <div id="nextPebble"></div>
             </div>
-            <div class="card" id="soundCard">
-              <div class="card-h"><h2>Sounds</h2><span class="muted" style="font-size:.8rem">Quran and your own link are free</span></div>
-              <div class="snd-list" id="sndList"></div>
+            <div class="card" id="soundCard" data-fs="sounds">
+              <div class="card-h"><h2>Sounds</h2><span class="muted" style="font-size:.78rem">Quran and your own link are free</span></div>
+              <div class="snd-grid" id="sndList"></div>
               <div id="sndExtra"></div>
               <div class="snd-embed" id="sndEmbed"></div>
               <div class="snd-foot">
-                <label class="snd-vol"><span class="eyebrow">Volume</span><input type="range" id="sndVol" min="0" max="100" value="50" aria-label="Sound volume"></label>
-                <div class="toggle"><span>Play with each focus session</span><button class="switch" role="switch" id="sndWith" aria-checked="true" aria-label="Play sounds with focus sessions"></button></div>
+                <label class="snd-vol"><svg aria-hidden="true"><use href="#i-sound"/></svg><input type="range" id="sndVol" min="0" max="100" value="50" aria-label="Sound volume"></label>
+                <label class="snd-with"><span>With focus</span><button class="switch" role="switch" id="sndWith" aria-checked="true" aria-label="Play sounds with each focus session" title="Play sounds with each focus session"></button></label>
               </div>
             </div>
           </div>
         </div>
+        <div class="fs-zone fs-bottom" id="fsBottom"></div>
+        <div id="fsHidden" hidden></div>
         <div class="card note-pad pad-wide" id="padWide" hidden><div class="card-h"><h2>From your notes</h2><span class="muted" style="font-size:.8rem">Wide pictures show here so you can read them. Click the gear to change the size.</span></div><div class="pad-imgs" id="padWideImgs"></div></div>
       </section>
 
@@ -223,7 +233,8 @@
             <label class="f">Course<select class="inp" id="evCourse"></select></label>
             <label class="f ev-only">Type<select class="inp" id="evType"></select></label>
             <label class="f ev-only">Remind me<select class="inp" id="evRemind"></select></label>
-            <div class="f" style="grid-column:1/-1">Colour<div class="ev-colors" id="evColors"></div></div>
+            <div class="f" style="grid-column:1/-1">How important is it?<div class="seg ev-prio" role="group" id="evPrio" aria-label="How important is it"></div></div>
+            <div class="f" style="grid-column:1/-1">Colour<span class="muted" style="display:block; font-size:.78rem; font-weight:400">Important and urgent things always show in amber and red so you never miss them.</span><div class="ev-colors" id="evColors"></div></div>
           </div>
           <div class="row" style="margin-top:14px"><button class="btn primary" type="submit"><svg><use href="#i-check"/></svg>Save</button><button class="btn" type="button" id="evOpenRock" hidden><svg><use href="#i-pebble"/></svg>Open in Pebbles</button><button class="btn quiet" type="button" id="evDel" hidden><svg><use href="#i-trash"/></svg>Delete</button></div>
         </form>
@@ -292,8 +303,8 @@
       <section class="view" id="v-challenge"><div id="chBody" class="stack"></div></section>
 
       <section class="view" id="v-sanctuary">
-        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Twenty-nine animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
-        <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Click <b>Preview looks</b> on any animal to try every costume, coat and emote on it. Nothing is bought or saved, and students see nothing different.</div>
+        <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Thirty-four animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
+        <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Every animal shows here, including hidden and challenge ones. Students see nothing different.</div>
         <div class="zoo" id="zoo"></div>
       </section>
 
@@ -359,7 +370,7 @@
           </article>
           <article class="card g-sec" id="g-3">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-timer"/></svg></span><div><span class="eyebrow">Step 3</span><h2>Time a study session</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Pictures show whole and big, and text in screenshots stays sharp.</li><li>Click the <b>gear</b> on a picture to make it Small, Medium, Large, or <b>Wide</b> so it stretches across the page under the timer (wide screenshots start this way), show the whole picture or fill the frame, pick round or square corners, turn the frame on or off, add a caption, or move it earlier or later. Click the picture itself to open it full screen, and click again to zoom in. Everything saves as you go and follows you to every device you sign in on.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins.</p>
+            <ol class="g-steps"><li>Open <b>Focus</b> and choose what you are studying from the course list.</li><li>Set <b>Focus length</b> (1 to 180 minutes) and <b>Rest length</b> (1 to 60). Drag the slider, or click the number and type it. Quick picks set 20 minutes, 30 minutes, 1 hour or 2 hours in one tap. Focus opens at 30 minutes; change your own starting lengths for focus, rest and new pebbles in <b>Customize</b> under <b>Default lengths</b>.</li><li>Click <b>Start focusing</b>. Pause any time, or <b>Stop and nap</b> to end early. The minutes you did still count.</li><li>The bar at the top of Focus shows how much you studied today, your sessions, pebbles and this week, so you never need to scroll for it.</li><li>Use <b>Notes to self</b> on the right for a quote, a reminder or anything you like. The box grows as you write, and <b>Picture</b> adds up to three pictures, like a photo of a quote or a mood board. You can also paste a picture straight in. Pictures show whole and big, and text in screenshots stays sharp.</li><li>Click the <b>gear</b> on a picture to make it Small, Medium, Large, or <b>Wide</b> so it stretches across the page under the timer (wide screenshots start this way), show the whole picture or fill the frame, pick round or square corners, turn the frame on or off, add a caption, or move it earlier or later. Click the picture itself to open it full screen, and click again to zoom in. Everything saves as you go and follows you to every device you sign in on.</li><li>Want more room? Click the <b>arrows</b> on Notes to self, or on the timer, to make it full width, and click again to put it back. You can also drag the thin line between the two sides to make either side wider.</li><li>Arrange the whole page in <b>Customize</b> under <b>Focus page layout</b>: put each part at the top, left, right or bottom, hide what you do not use, and change the order with the arrows.</li></ol><p class="g-tip">Your animal is awake while you focus, naps when you stop, and smiles when you finish. It never gets hurt or leaves. Want background sound? Tap Rain or <b>Quran</b> in the <b>Sounds</b> card, or choose <b>Your own link</b> and paste a YouTube video or playlist, Spotify or SoundCloud link. These are free. Ocean, forest, fireplace and café can be bought with coins: tap one to see its price.</p>
             <div class="row"><button class="btn small" data-go="focus">Show me the timer</button></div>
           </article>
           <article class="card g-sec" id="g-4">
@@ -369,7 +380,7 @@
           </article>
           <article class="card g-sec" id="g-4b">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-cal"/></svg></span><div><span class="eyebrow">Step 5</span><h2>Plan deadlines in the calendar</h2></div></div>
-            <ol class="g-steps"><li>Open <b>Calendar</b> to see the whole month. Click <b>Add</b>, or double click a day, and type what it is, like "DSP midterm".</li><li>Pick the date, a time if it has one, the course, and when to be reminded: from 1 hour to 1 week before.</li><li>When it is close, a reminder pops up and stays in the <b>bell</b>. Click <b>Also alert me on this device</b> to get alerts even when Grind is in another tab. Rocks with a due date show up on the calendar by themselves.</li></ol>
+            <ol class="g-steps"><li>Open <b>Calendar</b> to see the whole month. Click <b>Add</b>, or double click a day, and type what it is, like "DSP midterm".</li><li>Pick the date, a time if it has one, the course, and when to be reminded: from 1 hour to 1 week before.</li><li>When it is close, a reminder pops up and stays in the <b>bell</b>. Click <b>Also alert me on this device</b> to get alerts even when Grind is in another tab. Rocks with a due date show up on the calendar by themselves.</li><li>Under <b>How important is it?</b> mark anything <b>Important</b> (amber with a star) or <b>Urgent</b> (red with an exclamation mark). They stand out in the month, in Coming up, and the day gets a coloured line on top.</li></ol>
             <div class="row"><button class="btn small" data-go="cal">Show me the calendar</button></div>
           </article>
           <article class="card g-sec" id="g-5">
@@ -389,7 +400,7 @@
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), hamster (55), kitty (60), sheep (70) and spider (90) to the penguin (110), the panda (140), the camel (150), the parrot (170), the swan (180), the giraffe (210), the dragon (230), the wolf (240), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up</b> on any of your animals. Try on full costumes (chef, wizard, pirate, superhero, royal), hats, glasses and neckwear, give it a new fur coat, and pick an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), hamster (55), kitty (60), hedgehog (65), sheep (70), cow (85) and spider (90) to the penguin (110), the barn owl (130), the panda (140), the koala (145), the camel (150), the parrot (170), the swan (180), the red panda (190), the giraffe (210), the dragon (230), the wolf (240), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -399,7 +410,7 @@
           </article>
           <article class="card g-sec" id="g-10">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-gear"/></svg></span><div><span class="eyebrow">Step 11</span><h2>Make it yours</h2></div></div>
-            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. Under <b>Light or dark</b>, choose Light, Dark or Match my device, and every theme follows. You can also choose your own colours, the weather and the sky.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
+            <ol class="g-steps"><li>Click <b>Customize</b> to pick a theme: Enchanted Pond, Midnight, Sakura, Ocean or Forest. Under <b>Light or dark</b>, choose Light, Dark or Match my device, and every theme follows. You can also choose your own colours, the weather and the sky.</li><li>Set your <b>Default lengths</b> for focus, rest and new pebbles, and arrange the Focus page under <b>Focus page layout</b>.</li><li>Turn the end chime and automatic rest on or off.</li><li>Export your data or sign out from the same panel.</li></ol>
             <div class="row"><button class="btn small" data-guide-custom>Show me Customize</button></div>
           </article>
           <article class="card g-sec g-share" id="g-11">
@@ -504,6 +515,20 @@
   <section><span class="eyebrow">Your own colors</span><div class="colors"><label>Accent<input type="color" id="cAccent"></label><label>Paper<input type="color" id="cBg"></label><label>Water<input type="color" id="cWater"></label></div><button class="btn small quiet" id="cReset" style="align-self:flex-start">Clear my colors</button></section>
   <section><span class="eyebrow">Pond weather</span><div class="seg" role="group" id="fxSeg"><button data-fx="fireflies">Fireflies</button><button data-fx="rain">Rain</button><button data-fx="petals">Petals</button><button data-fx="still">Still</button></div></section>
   <section><span class="eyebrow">Sky</span><div class="seg" role="group" id="skySeg"><button data-sky="auto">Follow clock</button><button data-sky="day">Day</button><button data-sky="dusk">Dusk</button><button data-sky="night">Night</button></div></section>
+  <section id="fsSettings"><span class="eyebrow">Focus page layout</span>
+    <span class="muted" style="font-size:.8rem">Choose where each part sits, or hide it. Use the arrows to change the order. On the Focus page you can also drag the line between the two sides.</span>
+    <ul class="fs-list" id="fsList"></ul>
+    <label class="fs-width"><span>Left side width</span><input type="range" id="fsSplitRange" min="30" max="75" step="1" aria-label="Width of the left side"><b id="fsSplitVal"></b></label>
+    <button class="btn small quiet" id="fsReset" style="align-self:flex-start" type="button">Reset the layout</button>
+  </section>
+  <section><span class="eyebrow">Default lengths</span>
+    <div class="def-lens">
+      <label class="def-len"><span>Focus</span><span class="def-in"><input class="inp num" id="defFocus" type="number" inputmode="numeric" min="1" max="180" aria-label="Default focus length in minutes"><small>min</small></span></label>
+      <label class="def-len"><span>Rest</span><span class="def-in"><input class="inp num" id="defRest" type="number" inputmode="numeric" min="1" max="60" aria-label="Default rest length in minutes"><small>min</small></span></label>
+      <label class="def-len"><span>New pebble</span><span class="def-in"><input class="inp num" id="defPeb" type="number" inputmode="numeric" min="1" max="120" aria-label="Default length of a new pebble in minutes"><small>min</small></span></label>
+    </div>
+    <span class="muted" style="font-size:.8rem">Focus opens at these lengths every time. Quick picks and the slider still change one session.</span>
+  </section>
   <section><span class="eyebrow">Session</span>
     <div class="toggle"><span>Soft chime when a session ends</span><button class="switch" role="switch" id="swSound" aria-checked="true" aria-label="Chime"></button></div>
     <div class="toggle"><span>Sound when a notification arrives</span><button class="switch" role="switch" id="swNoteSound" aria-checked="true" aria-label="Notification sound"></button></div>
@@ -539,7 +564,6 @@
   <div id="newsBody"></div>
   <div class="row" style="justify-content:space-between"><a href="#guide" class="muted" data-go="guide" data-newsclose style="font-size:.85rem">See every update in the guide</a><button class="btn primary" data-newsclose>Got it</button></div>
 </div></div>
-<div class="modal" id="dressModal" role="dialog" aria-modal="true" aria-label="Dress up"><div class="modal-box dress-box" id="dressBox"></div></div>
 <div class="modal" id="icsModal" role="dialog" aria-modal="true" aria-labelledby="icsTitle"><div class="modal-box">
   <div class="row" style="justify-content:space-between; flex-wrap:nowrap"><h2 id="icsTitle">Import from Blackboard</h2><button class="icon-btn" data-icsclose aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
   <ol class="g-steps"><li>In Blackboard, open <b>Calendar</b>, click the gear, and choose <b>Share Calendar</b>. Click <b>Copy</b>.</li><li>Paste the link below and click <b>Import</b>.</li></ol>
