@@ -115,6 +115,7 @@ async function connect(u) {
     const before = S;
     S = mergeState(mergeAccount(remote, S, id));
     S.ownerUid = id;
+    try { applyLooksRefund(); } catch (e) {}
     if (!S.profile.name && u.displayName) S.profile.name = clampStr(u.displayName.split(' ')[0], 40);
     if (S !== before && !before.ownerUid && remote && (before.sessions.length || before.rocks.some(r => !r.example))) toast('Your progress from this device was added to your account.');
     applyTheme();

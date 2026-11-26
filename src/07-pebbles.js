@@ -95,7 +95,7 @@ function rockCard(r) {
         <div class="crossing">${crossingSVG(r)}</div>
         ${r.pebbles.length ? `<ul class="peb-list">${r.pebbles.map(pebLi).join('')}</ul>` : `<p class="muted">${done ? 'Finished without pebbles. Nice and simple.' : 'No pebbles yet. Add the smallest first step you can think of, let Claude break it down, or just finish the rock when it is done.'}</p>`}
         ${draft ? aiBox(r.id, draft) : ''}
-        <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="15" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
+        <form class="add-peb" data-addpeb><input class="inp" name="t" maxlength="120" placeholder="Add a pebble, like “read pages 10 to 14”" aria-label="New pebble"><input class="inp" name="m" type="number" min="1" max="120" value="${S.settings.defPeb || 30}" style="max-width:80px" aria-label="Minutes"><button class="btn" type="submit">${icon('i-plus')}Add</button></form>
         ${finishAsk === r.id ? `<div class="confirm-row"><span>Mark the ${n - d} ${n - d === 1 ? 'pebble' : 'pebbles'} left as done and cross the rock?</span><button class="btn small primary" data-finishyes>Yes, cross it</button><button class="btn small" data-finishno>Not yet</button></div>` : ''}
         <div class="row">${done ? `<button class="btn small" data-reopen>Not done yet</button>` : `<button class="btn small primary" data-finish>${icon('i-check')}Finish rock</button><button class="btn small" data-ai>${icon('i-wand')}Break it down</button><button class="btn small" data-focusrock ${d === n ? 'disabled' : ''}>${icon('i-play')}Focus on next pebble</button>`}<button class="btn small" data-editrock>${icon('i-edit')}Edit</button><span class="rock-colors" role="group" aria-label="Rock colour">${['', ...EV_COLORS].map(c => `<button type="button" class="rc ${(okColor(r.color) || '') === c ? 'on' : ''}" data-rockc="${c}" title="${c ? 'Colour' : 'Course colour'}" style="background:${c || courseColor(r.courseId)}">${c ? '' : '<small>A</small>'}</button>`).join('')}</span><span style="flex:1"></span><span data-delwrap><button class="btn small quiet" data-delrock>${icon('i-trash')}Remove rock</button></span></div>
       </div>` : ''}
@@ -304,7 +304,7 @@ function bindPebbles() {
     const f = e.target.closest('[data-addpeb]'); if (!f) return; e.preventDefault();
     const r = S.rocks.find(x => x.id === f.closest('[data-rock]').dataset.rock); const t = f.t.value.trim(); if (!t) return;
     if (r.crossedAt) { uncrossRock(r); toast('New pebble added, so the rock is open again.'); }
-    r.pebbles.push({ id: uid(), text: clampStr(t, 120), mins: Math.min(120, Math.max(1, +f.m.value || 15)), done: false });
+    r.pebbles.push({ id: uid(), text: clampStr(t, 120), mins: Math.min(120, Math.max(1, +f.m.value || S.settings.defPeb || 30)), done: false });
     save(); renderRocks(); renderNextPebble();
     const nf = $(`[data-rock="${CSS.escape(r.id)}"] [data-addpeb] input`); nf && nf.focus();
   });

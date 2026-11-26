@@ -40,7 +40,7 @@ function defaultState() {
     pets: { frog: { name: '', bond: 0 }, duckling: { name: '', bond: 0 }, capybara: { name: '', bond: 0 } },
     unlocked: ['frog', 'duckling', 'capybara'],
     coins: 20, coinsEarned: 20, bestStreak: 0,
-    settings: { focus: 25, rest: 5, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
+    settings: { focus: 30, rest: 5, defFocus: 30, defRest: 5, defPeb: 30, preset: 'auto', custom: {}, fx: 'fireflies', sky: 'auto', sound: true, noteSound: true, autoRest: true, demo: false },
     semesters: [{ id: semId, name: 'This semester', courses: [] }],
     currentSem: semId,
     rocks: [exampleRock()], crossLog: [], events: [], wardrobe: [], sessions: [], pebLog: [], friends: [], circles: [], localPosts: [],
@@ -78,6 +78,7 @@ function unionState(newer, older) {
   Object.entries(o.challenge || {}).forEach(([id, c]) => { m.challenge = m.challenge || {}; const r = m.challenge[id] || { days: [] }; r.days = set(r.days, c.days); m.challenge[id] = r; });
   ['name', 'uni', 'major', 'bio'].forEach(f => { if (m.profile && !m.profile[f] && o.profile && o.profile[f]) m.profile[f] = o.profile[f]; });
   if (o.onboarded) m.onboarded = true;
+  if (o.looksRefunded) m.looksRefunded = true;
   return m;
 }
 function mergeAccount(remote, local, uid) {
@@ -121,6 +122,10 @@ function mergeState(s) {
   Object.entries(m.pets || {}).forEach(([k, p]) => { if (p && p.name === OLD_NAMES[k]) p.name = ''; });
   // demo speed and the sample week are gone; drop their leftovers
   m.settings.demo = false;
+  // the default focus length is set in Customize; students who never set one start at 30 minutes
+  if (!(m.settings.defFocus >= 1)) m.settings.defFocus = 30;
+  if (!(m.settings.defRest >= 1)) m.settings.defRest = 5;
+  if (!(m.settings.defPeb >= 1)) m.settings.defPeb = 30;
   if (Array.isArray(m.sessions)) m.sessions = m.sessions.filter(x => !x.sample);
   // a rock is finished once it has crossedAt; older versions only knew "every pebble ticked"
   (m.rocks || []).forEach(r => { if (!r.crossedAt && r.pebbles && r.pebbles.length && r.pebbles.every(p => p.done)) r.crossedAt = Math.max(0, ...r.pebbles.map(p => +p.doneAt || 0)) || Date.now(); });

@@ -36,15 +36,13 @@ function renderZoo() {
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
-      <div class="row">${action}${owned ? `${a.plain ? '' : `<button class="btn small" data-dress="${k}">Dress up</button>`}<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}${NET.isOwner && ownerPreview && !a.plain ? `<button class="btn small owner-btn" data-preview="${k}">${icon('i-wand')}Preview looks</button>` : ''}</div>
+      <div class="row">${action}${owned ? `<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
     </article>`;
   }).join('');
 }
 function bindZoo() {
   $('#ownerPrevBtn').onclick = () => { ownerPreview = !ownerPreview; renderZoo(); };
   $('#zoo').addEventListener('click', e => {
-    const dr = e.target.closest('[data-dress]'); if (dr) { openDress(dr.dataset.dress); return; }
-    const pv = e.target.closest('[data-preview]'); if (pv && NET.isOwner) { openDress(pv.dataset.preview, true); return; }
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
@@ -260,6 +258,8 @@ function renderDrawer() {
   $$('#modeSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === curMode));
   $$('#fxSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.fx === S.settings.fx));
   $$('#skySeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.sky === S.settings.sky));
+  try { renderFsSettings(); } catch (e) {}
+  [['#defFocus', 'defFocus'], ['#defRest', 'defRest'], ['#defPeb', 'defPeb']].forEach(([id, k]) => { if (document.activeElement !== $(id)) $(id).value = S.settings[k]; });
   [['#swSound', 'sound'], ['#swNoteSound', 'noteSound'], ['#swAuto', 'autoRest']].forEach(([id, k]) => $(id).setAttribute('aria-checked', !!S.settings[k]));
   $('#dataWhere').textContent = NET.db && NET.canWrite ? `Your progress is saved to your account and on this device. The pond, ripples, circles and posts are shared with everyone${NET.web ? ' who signs in' : ' invited'}.` : 'Your progress is saved in this browser on this device. Export it to keep a copy.';
   $('#acctRow').innerHTML = !NET.web ? '' : NET.db ? `<span class="muted" style="font-size:.84rem">Signed in${NET.userName ? ' as ' + esc(NET.userName) : ''}</span><button class="btn small quiet" id="signOutBtn">Sign out</button>` : '<button class="btn small primary" id="signInBtn2">Sign in with Google</button>';
@@ -282,6 +282,18 @@ function bindDrawer() {
   $('#fxSeg').onclick = e => { const b = e.target.closest('[data-fx]'); if (!b) return; S.settings.fx = b.dataset.fx; save(); renderDrawer(); if (REDUCED) FX.forEach(o => { fxSize(o); fxSeed(o); fxDraw(o, 0); }); };
   $('#skySeg').onclick = e => { const b = e.target.closest('[data-sky]'); if (!b) return; S.settings.sky = b.dataset.sky; save(); applySky(); renderDrawer(); };
   const sw = (id, k, after) => { $(id).onclick = () => { S.settings[k] = !S.settings[k]; save(); renderDrawer(); after && after(); }; };
+  // default lengths: saved on change; the timer follows right away when nothing is running
+  [['#defFocus', 'defFocus', 180], ['#defRest', 'defRest', 60], ['#defPeb', 'defPeb', 120]].forEach(([id, k, max]) => {
+    $(id).onchange = e => {
+      const v = Math.min(max, Math.max(1, Math.round(+e.target.value) || S.settings[k]));
+      S.settings[k] = v; e.target.value = v;
+      if (!S.timer && k === 'defFocus') S.settings.focus = v;
+      if (!S.timer && k === 'defRest') S.settings.rest = v;
+      save(); syncRanges(); renderPresetsRow(); renderTimer();
+      if (k === 'defPeb' && currentView === 'pebbles') renderRocks();
+      toast(k === 'defFocus' ? `Focus now starts at ${v} minutes.` : k === 'defRest' ? `Rest now starts at ${v} minutes.` : `New pebbles now start at ${v} minutes.`);
+    };
+  });
   sw('#swSound', 'sound'); sw('#swNoteSound', 'noteSound', () => { if (S.settings.noteSound) notePing(); }); sw('#swAuto', 'autoRest');
   $('#exportBtn').onclick = async () => {
     const data = JSON.stringify(S, null, 2);
@@ -404,6 +416,12 @@ function renderAll() {
   if (currentView === 'pond') renderPond(true);
 }
 
+function applyLooksRefund() {
+  if (S.looksRefunded) return;
+  const r = looksRefund(S); S.looksRefunded = true;
+  if (r) { S.coins += r; setTimeout(() => { toast(`Dress up has left Grind, so the <b>${r} coins</b> you spent on outfits and coats are back with you.`); renderChips(); }, 1500); }
+  save();
+}
 function boot() {
   document.body.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { signIn(); return; } const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); } });
   $('#focusStage').insertAdjacentHTML('afterbegin', sceneSVG('focus'));
@@ -411,12 +429,17 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindFocusLayout, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
   $('#v-profile').addEventListener('click', e => { const b = e.target.closest('[data-peer]'); if (b) openPeer(b.dataset.peer === 'me-self' ? (NET.uid || 'me') : b.dataset.peer); });
   if (S.timer) mode = S.timer.phase;
+  // focus starts at your default length every time you open Grind
+  if (!S.timer) { S.settings.focus = S.settings.defFocus; S.settings.rest = S.settings.defRest; }
+  // dress up is gone: give back what was spent on it, once
+  // (a device that was signed in waits until the account is loaded, so the refund lands on the combined copy)
+  if (!S.ownerUid) applyLooksRefund();
   checkUnlocks();
   renderAll();
   const startView = (location.hash || '').replace('#', '') || 'focus';

@@ -302,3 +302,74 @@ function bindFocus() {
   $('#heroPet').onclick = () => { makeHappy(2200); say(pick(LINES.pet)); };
 }
 function chimePrime() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume?.(); } catch (e) {} }
+
+/* ---------- focus page layout: each part can sit at the top, left, right, bottom, or be hidden ---------- */
+const FS_PARTS = { stats: 'Today numbers', timer: 'Timer and controls', log: "Today's log", ripples: 'Ripples for you', challenge: 'Monthly challenge', notes: 'Notes to self', pebble: 'Just one pebble', sounds: 'Sounds' };
+const FS_PLACES = { top: 'Top, full width', left: 'Left side', right: 'Right side', bottom: 'Bottom, full width', hidden: 'Hidden' };
+const FS_DEFAULT = { order: ['stats', 'timer', 'log', 'ripples', 'challenge', 'notes', 'pebble', 'sounds'], place: { stats: 'top', timer: 'left', log: 'left', ripples: 'left', challenge: 'right', notes: 'right', pebble: 'right', sounds: 'right' } };
+const FS_SPLIT = 62;
+function fsLayout() {
+  const l = S.settings.focusLayout || {}, order = (Array.isArray(l.order) ? l.order : []).filter((k, i, a) => FS_PARTS[k] && a.indexOf(k) === i);
+  FS_DEFAULT.order.forEach(k => { if (!order.includes(k)) order.splice(Math.min(order.length, FS_DEFAULT.order.indexOf(k)), 0, k); });
+  const place = {};
+  order.forEach(k => { const p = l.place && l.place[k]; place[k] = FS_PLACES[p] && !(k === 'timer' && p === 'hidden') ? p : FS_DEFAULT.place[k]; });
+  return { order, place };
+}
+const fsSplit = () => Math.min(75, Math.max(30, +S.settings.focusSplit || FS_SPLIT));
+function applyFocusLayout() {
+  const g = $('#fsGrid'); if (!g) return;
+  const { order, place } = fsLayout(), zone = { top: '#fsTop', left: '#fsLeft', right: '#fsRight', bottom: '#fsBottom', hidden: '#fsHidden' };
+  order.forEach(k => { const el = $(`[data-fs="${k}"]`); if (el) $(zone[place[k]]).appendChild(el); });
+  const has = z => order.some(k => place[k] === z);
+  const L = has('left'), R = has('right');
+  g.classList.toggle('one', !(L && R)); $('#fsLeft').hidden = !L; $('#fsRight').hidden = !R; $('#fsSplit').hidden = !(L && R);
+  g.style.setProperty('--fs-cols', `minmax(0,${fsSplit()}fr) 14px minmax(260px,${100 - fsSplit()}fr)`);
+  $('#fsTop').hidden = !has('top'); $('#fsBottom').hidden = !has('bottom');
+  $$('[data-fswiden]').forEach(b => {
+    const wide = ['top', 'bottom'].includes(place[b.dataset.fswiden]), what = b.dataset.fswiden === 'notes' ? 'notes' : 'the timer';
+    b.innerHTML = icon(wide ? 'i-shrink' : 'i-expand'); b.title = wide ? `Put ${what} back on its side` : `Make ${what} full width`; b.setAttribute('aria-label', b.title);
+  });
+  $$('[data-fs]').forEach(el => el.classList.toggle('fs-wide', ['top', 'bottom'].includes(place[el.dataset.fs])));
+  try { growPad(); } catch (e) {}
+}
+function setFsLayout(order, place) { S.settings.focusLayout = { order, place }; save(); applyFocusLayout(); renderFsSettings(); }
+function renderFsSettings() {
+  const box = $('#fsList'); if (!box) return;
+  const { order, place } = fsLayout();
+  box.innerHTML = order.map((k, i) => `<li class="${place[k] === 'hidden' ? 'off' : ''}"><span class="fs-nm">${esc(FS_PARTS[k])}</span>
+    <select class="inp fs-place" data-fsplace="${k}" aria-label="Where ${esc(FS_PARTS[k])} sits">${Object.entries(FS_PLACES).filter(([p]) => !(k === 'timer' && p === 'hidden')).map(([p, t]) => `<option value="${p}" ${place[k] === p ? 'selected' : ''}>${t}</option>`).join('')}</select>
+    <button type="button" class="icon-btn sm" data-fsmove="${k}:-1" aria-label="Move ${esc(FS_PARTS[k])} up" ${i ? '' : 'disabled'}><svg style="transform:rotate(-90deg)"><use href="#i-chev"/></svg></button><button type="button" class="icon-btn sm" data-fsmove="${k}:1" aria-label="Move ${esc(FS_PARTS[k])} down" ${i < order.length - 1 ? '' : 'disabled'}><svg style="transform:rotate(90deg)"><use href="#i-chev"/></svg></button></li>`).join('');
+  $('#fsSplitRange').value = fsSplit(); $('#fsSplitVal').textContent = fsSplit() + '%';
+}
+function bindFocusLayout() {
+  $('#fsList').addEventListener('change', e => { const s = e.target.closest('[data-fsplace]'); if (!s) return; const { order, place } = fsLayout(); place[s.dataset.fsplace] = s.value; setFsLayout(order, place); });
+  $('#fsList').addEventListener('click', e => {
+    const b = e.target.closest('[data-fsmove]'); if (!b) return;
+    const [k, d] = b.dataset.fsmove.split(':'), { order, place } = fsLayout(), i = order.indexOf(k), j = i + +d;
+    if (j < 0 || j >= order.length) return;
+    [order[i], order[j]] = [order[j], order[i]]; setFsLayout(order, place);
+    $(`[data-fsmove="${k}:${d}"]`)?.focus();
+  });
+  $('#fsReset').onclick = () => { delete S.settings.focusLayout; delete S.settings.focusSplit; delete S.settings.fsBack; save(); applyFocusLayout(); renderFsSettings(); toast('The Focus page is back to how it started.'); };
+  $('#fsSplitRange').oninput = e => { S.settings.focusSplit = +e.target.value; applyFocusLayout(); $('#fsSplitVal').textContent = fsSplit() + '%'; };
+  $('#fsSplitRange').onchange = () => save();
+  // the quick widen buttons on the timer and on notes: full width at the top or bottom, and back again
+  $('#v-focus').addEventListener('click', e => {
+    const b = e.target.closest('[data-fswiden]'); if (!b) return;
+    const k = b.dataset.fswiden, { order, place } = fsLayout();
+    if (['top', 'bottom'].includes(place[k])) place[k] = (S.settings.fsBack || {})[k] || FS_DEFAULT.place[k];
+    else { S.settings.fsBack = { ...(S.settings.fsBack || {}), [k]: place[k] }; place[k] = k === 'timer' ? 'top' : 'bottom'; }
+    setFsLayout(order, place);
+    if (k === 'notes') setTimeout(() => $('[data-fs="notes"]').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+  });
+  // drag the line between the two sides to make either one wider
+  const sp = $('#fsSplit'), grid = $('#fsGrid');
+  let drag = null;
+  sp.addEventListener('pointerdown', e => { const r = grid.getBoundingClientRect(); drag = { left: r.left, w: r.width }; try { sp.setPointerCapture(e.pointerId); } catch (er) {} sp.classList.add('drag'); e.preventDefault(); });
+  sp.addEventListener('pointermove', e => { if (!drag) return; S.settings.focusSplit = Math.round(Math.min(75, Math.max(30, (e.clientX - drag.left) / drag.w * 100))); applyFocusLayout(); });
+  const end = () => { if (!drag) return; drag = null; sp.classList.remove('drag'); save(); renderFsSettings(); };
+  sp.addEventListener('pointerup', end); sp.addEventListener('pointercancel', end);
+  sp.addEventListener('dblclick', () => { delete S.settings.focusSplit; save(); applyFocusLayout(); renderFsSettings(); });
+  sp.addEventListener('keydown', e => { const d = e.key === 'ArrowLeft' ? -2 : e.key === 'ArrowRight' ? 2 : 0; if (!d) return; e.preventDefault(); S.settings.focusSplit = Math.min(75, Math.max(30, fsSplit() + d)); applyFocusLayout(); save(); });
+  applyFocusLayout();
+}
