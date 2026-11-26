@@ -36,13 +36,15 @@ function renderZoo() {
       <p class="lore">${esc(a.lore)}</p>
       <div class="state-row" role="group" aria-label="Preview faces">${['awake', 'sleeping', 'happy'].map(s => `<button class="btn small ${st === s ? 'primary' : 'quiet'}" data-face="${k}:${s}">${s === 'sleeping' ? 'Napping' : s[0].toUpperCase() + s.slice(1)}</button>`).join('')}</div>
       ${owned ? `<div class="row" style="justify-content:space-between"><span class="bond" title="Bond grows with every focus minute">${[0, 1, 2, 3, 4].map(i => `<svg style="color:${i < lv ? 'var(--moss)' : 'var(--line-2)'}"><use href="#i-leafpip"/></svg>`).join('')}</span><span class="muted" style="font-size:.78rem">${BOND_NAMES[lv]} · ${fmtMin(p.bond || 0)}</span></div>` : ''}
-      <div class="row">${action}${owned ? `<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}</div>
+      <div class="row">${action}${owned ? `${a.plain ? '' : `<button class="btn small" data-dress="${k}">Dress up and colours</button>`}<button class="btn small quiet" data-rename="${k}">Rename</button>` : ''}${NET.isOwner && ownerPreview && !a.plain ? `<button class="btn small owner-btn" data-preview="${k}">${icon('i-wand')}Preview looks</button>` : ''}</div>
     </article>`;
   }).join('');
 }
 function bindZoo() {
   $('#ownerPrevBtn').onclick = () => { ownerPreview = !ownerPreview; renderZoo(); };
   $('#zoo').addEventListener('click', e => {
+    const dr = e.target.closest('[data-dress]'); if (dr) { openDress(dr.dataset.dress); return; }
+    const pv = e.target.closest('[data-preview]'); if (pv && NET.isOwner) { openDress(pv.dataset.preview, true); return; }
     const f = e.target.closest('[data-face]'); if (f) { const [k, s] = f.dataset.face.split(':'); previewState[k] = s; renderZoo(); return; }
     const u = e.target.closest('[data-use]'); if (u) { S.active = u.dataset.use; previewState[S.active] = 'happy'; save(); renderAll(); toast(`${esc(petName())} is your study companion now.`, `<span style="width:30px;height:30px;flex:none">${avatarSVG(S.active, 'happy')}</span>`); publishPond(); return; }
     const t = e.target.closest('[data-treat]'); if (t) { const k = t.dataset.treat; if (S.coins < 5) return; S.coins -= 5; S.pets[k].bond = (S.pets[k].bond || 0) + 10; previewState[k] = 'happy'; save(); renderZoo(); renderChips(); toast(`${esc(S.pets[k].name)} loved the treat.`); setTimeout(() => { previewState[k] = 'awake'; renderZoo(); }, 2600); return; }
@@ -416,12 +418,6 @@ function renderAll() {
   if (currentView === 'pond') renderPond(true);
 }
 
-function applyLooksRefund() {
-  if (S.looksRefunded) return;
-  const r = looksRefund(S); S.looksRefunded = true;
-  if (r) { S.coins += r; setTimeout(() => { toast(`Dress up has left Grind, so the <b>${r} coins</b> you spent on outfits and coats are back with you.`); renderChips(); }, 1500); }
-  save();
-}
 function boot() {
   document.body.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { signIn(); return; } const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); } });
   $('#focusStage').insertAdjacentHTML('afterbegin', sceneSVG('focus'));
@@ -429,7 +425,7 @@ function boot() {
   makeFX($('#focusStage')); makeFX($('#pondStage'));
   applySky(); applyTheme();
   // one broken feature should never stop the rest of the page from loading
-  [bindFocus, bindFocusLayout, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
+  [bindFocus, bindFocusLayout, bindPebbles, bindPond, bindTogether, bindCommons, bindZoo, bindStats, bindProfile, bindDrawer, bindWelcome, bindFeedback, bindSurvey, bindGuide, bindSounds, bindNotes, bindCal, bindDress, bindActivity, bindChallenge].forEach(f => { try { f(); } catch (e) { console.error(e); } });
   $('#visSeg').onclick = e => { const b = e.target.closest('[data-vis]'); if (!b || b.dataset.vis === S.profile.visibility) return; S.profile.visibility = b.dataset.vis; save(); renderFriends(); publishPond(); toast({ me: 'Only you can see your stats now.', friends: 'Only your friends can see your stats now.', everyone: 'Everyone who signs in can see your stats now.' }[b.dataset.vis]); };
   $('#peerModal').addEventListener('click', e => { if (e.target.id === 'peerModal' || e.target.closest('[data-peerclose]')) closePeer(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePeer(); });
@@ -437,9 +433,6 @@ function boot() {
   if (S.timer) mode = S.timer.phase;
   // focus starts at your default length every time you open Grind
   if (!S.timer) { S.settings.focus = S.settings.defFocus; S.settings.rest = S.settings.defRest; }
-  // dress up is gone: give back what was spent on it, once
-  // (a device that was signed in waits until the account is loaded, so the refund lands on the combined copy)
-  if (!S.ownerUid) applyLooksRefund();
   checkUnlocks();
   renderAll();
   const startView = (location.hash || '').replace('#', '') || 'focus';
