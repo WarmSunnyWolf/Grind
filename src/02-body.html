@@ -93,7 +93,7 @@
               <ul class="coin-rules"><li><span>Finish a focus session</span><b>1 per 5 min + 2</b></li><li><span>Stop a session early</span><b>1 per 5 min</b></li><li><span>Finish a pebble</span><b>3</b></li><li><span>Cross a whole rock</span><b>10</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">A full 25 minute session gives 7 coins. A 50 minute session gives 12.</p>
               <span class="eyebrow">How to spend</span>
-              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
+              <ul class="coin-rules"><li><span>New animals in Sanctuary</span><b>40 to 320</b></li><li><span>Outfits and accessories</span><b>40 to 450</b></li><li><span>Animal colours and emotes</span><b>120 to 200</b></li><li><span>Study sounds on Focus</span><b>30 to 80</b></li><li><span>A treat for your animal</span><b>5</b></li></ul>
               <p class="muted" style="font-size:.82rem; margin:6px 0 12px">The turtle, axolotl and heron cannot be bought. They join after a 7, 14 and 30 day streak.</p>
               <div class="row"><button class="btn small primary" data-coingo="sanctuary">See animals</button><button class="btn small" data-coingo="focus">See sounds</button></div>
             </div></span>
@@ -304,7 +304,7 @@
 
       <section class="view" id="v-sanctuary">
         <div class="row" style="justify-content:space-between"><p class="muted" style="max-width:62ch">Thirty-four animals live around the pond, dinosaurs included. Pick a companion to study with, give it a name, and treat it with coins. Some only trust you after a long streak. Your animals never get hurt or leave, they just nap.</p><button type="button" class="btn" id="ownerPrevBtn" hidden aria-pressed="false">Owner preview</button></div>
-        <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Every animal shows here, including hidden and challenge ones. Students see nothing different.</div>
+        <div class="card flat owner-note" id="ownerPrevNote" hidden><b>Owner preview is on.</b> Only you see this. Every animal shows here, including hidden and challenge ones. Click <b>Preview looks</b> on any animal to try every outfit, colour and emote on it. Nothing is bought or saved, and students see nothing different.</div>
         <div class="zoo" id="zoo"></div>
       </section>
 
@@ -400,7 +400,7 @@
           </article>
           <article class="card g-sec" id="g-8">
             <div class="g-head"><span class="g-ic"><svg><use href="#i-leaf"/></svg></span><div><span class="eyebrow">Step 9</span><h2>Earn coins and new animals</h2></div></div>
-            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), hamster (55), kitty (60), hedgehog (65), sheep (70), cow (85) and spider (90) to the penguin (110), the barn owl (130), the panda (140), the koala (145), the camel (150), the parrot (170), the swan (180), the red panda (190), the giraffe (210), the dragon (230), the wolf (240), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
+            <ol class="g-steps"><li>Finishing a session earns about one coin for every five minutes, plus two for finishing. Each pebble gives 3 and each crossed rock gives 10.</li><li>In <b>Sanctuary</b>, adopt new friends with coins, from the rabbit (40), butterfly (50), hamster (55), kitty (60), hedgehog (65), sheep (70), cow (85) and spider (90) to the penguin (110), the barn owl (130), the panda (140), the koala (145), the camel (150), the parrot (170), the swan (180), the red panda (190), the giraffe (210), the dragon (230), the wolf (240), and four dinosaurs from the triceratops (220) to the T. rex (320). The turtle, axolotl and heron arrive after 7, 14 and 30 days in a row.</li><li>Treat an animal for 5 coins to grow your bond, and click <b>Study with</b> to change companions.</li><li>Click <b>Dress up and colours</b> on any of your animals. Try on outfits (chef, wizard, pirate, superhero, royal, fairy), hats like the strawberry hat and study headphones, golden glasses or heart sunglasses, a scarf, bow tie or pearls, pick a new colour for your animal, and choose an emote for when it studies or naps. Everything can be tried on before you buy, and classmates see it in the pond.</li><li>Tap the <b>coin</b> count at the top any time to see how many you have and how earning works.</li></ol>
             <div class="row"><button class="btn small" data-go="sanctuary">Show me the animals</button></div>
           </article>
           <article class="card g-sec" id="g-9">
@@ -542,6 +542,7 @@
   </section>
 </aside>
 
+<div class="modal" id="dressModal" role="dialog" aria-modal="true" aria-label="Dress up"><div class="modal-box dress-box" id="dressBox"></div></div>
 <div class="modal" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle">
   <form class="modal-box" id="welcomeForm">
     <div><span class="hand" style="color:var(--rose); font-size:1.7rem">Welcome to the pond</span><h2 id="wTitle" style="font-size:1.7rem">Pick a companion to study with</h2><p class="muted" style="margin-top:6px">It stays awake while you focus and naps while you rest. If you stop early it just takes a nap. It never gets hurt.</p></div>
