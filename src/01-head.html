@@ -100,8 +100,9 @@ p{margin:0}
 .card.flat{background:transparent; border-style:dashed}
 .card-h{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap}
 .grid{display:grid; gap:18px}
-.g-focus{grid-template-columns:var(--fs-cols, minmax(0,62fr) 14px minmax(260px,38fr)); column-gap:6px}
-.g-focus.one{grid-template-columns:minmax(0,1fr)}
+.g-focus{grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr)}
+#fsGrid{grid-template-columns:var(--fs-cols, minmax(0,62fr) 14px minmax(260px,38fr)); column-gap:6px}
+#fsGrid.one{grid-template-columns:minmax(0,1fr)}
 .fs-zone{display:flex; flex-direction:column; gap:18px}
 .fs-top{margin-bottom:16px}
 .fs-bottom{margin-top:18px}
@@ -724,7 +725,7 @@ table.data td.n{text-align:right; font-variant-numeric:tabular-nums}
 
 /* ---------- responsive ---------- */
 @media (max-width:1020px){
-  .g-focus{grid-template-columns:minmax(0,1fr)} .fs-split{display:none} .fs-widen{display:none!important} .fs-wide .focus-stage{aspect-ratio:16/9}
+  .g-focus, #fsGrid{grid-template-columns:minmax(0,1fr)} .fs-split{display:none} .fs-widen{display:none!important} .fs-wide .focus-stage{aspect-ratio:16/9}
   .g-3{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:860px){
